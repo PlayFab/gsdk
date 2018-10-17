@@ -1,0 +1,34 @@
+version 'unspecified'
+
+apply plugin: 'java'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile project(':gameserverSDK')
+}
+
+task copyTask(type: Copy) {
+    from 'Dockerfile'
+    into 'build/libs'
+}
+
+jar {
+    from {
+        (configurations.runtime).collect {
+            it.isDirectory() ? it : zipTree(it)
+        }
+    }
+
+    manifest {
+        attributes(
+                'Main-Class': 'com.microsoft.azure.gaming.testRunnerGame.Main'
+        )
+    }
+}
+
+build.finalizedBy(copyTask)

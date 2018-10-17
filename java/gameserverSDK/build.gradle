@@ -1,0 +1,12 @@
+apply plugin: 'java'
+apply plugin: 'idea'
+
+repositories {
+   mavenCentral()
+}
+	
+ dependencies {
+   compile 'com.google.code.gson:gson:2.8.0'
+   compile 'org.apache.httpcomponents:fluent-hc:4.5.3'
+   compile "com.github.rholder:guava-retrying:2.0.0"
+ }
