@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\..\packages\openssl.1.0.1.21\build\native\openssl.props" Condition="Exists('..\..\packages\openssl.1.0.1.21\build\native\openssl.props')" />
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>15.0</VCProjectVersion>
+    <ProjectGuid>{3E4DF9A7-08A4-4188-9C86-B60605F3710B}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>cppWindowsTestApp</RootNamespace>
+    <ProjectName>cppWindowsTestApp</ProjectName>
+    <OutputSubDir>GSDKCPPWindowsTestApp</OutputSubDir>
+    <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\$(OutputSubDir)\</OutDir>
+    <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level4</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(SolutionDir)cppsdk</AdditionalIncludeDirectories>
+      <PrecompiledHeaderFile>cppWindowsTestAppPch.h</PrecompiledHeaderFile>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <MinimalRebuild>false</MinimalRebuild>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>GSDK_CPP_Windows.lib;jsoncpp.lib;libcurl.lib;XPlatCppWindows.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(TFS_BinariesDirectory)\$(Configuration)\$(Platform)\GSDKCPPWindows\;$(SolutionDir)$(Platform)\$(Configuration)\GSDKCPPWindows;$(SolutionDir)packages\curl.7.30.0.2\build\native\lib\v110\x64\Debug\dynamic;$(SolutionDir)packages\jsoncpp-vc140-static-32_64.1.8.0\lib\native\libs\x64\static\Debug;$(SolutionDir)packages\com.playfab.xplatcppsdk.v141.2.0.180424\build\native\lib\x64\v141\Debug</AdditionalLibraryDirectories>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level4</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_CONSOLE;WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(SolutionDir)cppsdk</AdditionalIncludeDirectories>
+      <PrecompiledHeaderFile>cppWindowsTestAppPch.h</PrecompiledHeaderFile>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <MinimalRebuild>false</MinimalRebuild>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>GSDK_CPP_Windows.lib;jsoncpp.lib;libcurl.lib;XPlatCppWindows.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(TFS_BinariesDirectory)\$(Configuration)\$(Platform)\GSDKCPPWindows\;$(SolutionDir)$(Platform)\$(Configuration)\GSDKCPPWindows;$(SolutionDir)packages\curl.7.30.0.2\build\native\lib\v110\x64\Release\dynamic;$(SolutionDir)packages\jsoncpp-vc140-static-32_64.1.8.0\lib\native\libs\x64\static\Release;$(SolutionDir)packages\com.playfab.xplatcppsdk.v141.2.0.180424\build\native\lib\x64\v141\Release</AdditionalLibraryDirectories>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="cppWindowsTestAppPch.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="cppWindowsTestApp.cpp" />
+    <ClCompile Include="cppWindowsTestAppPch.cpp">
+      <PrecompiledHeader>Create</PrecompiledHeader>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\cppsdk\GSDK_CPP_Windows.vcxproj">
+      <Project>{92f6ec5f-b66c-4572-a74d-79329aff3129}</Project>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+    <Import Project="..\..\packages\curl.redist.7.30.0.2\build\native\curl.redist.targets" Condition="Exists('..\..\packages\curl.redist.7.30.0.2\build\native\curl.redist.targets')" />
+    <Import Project="..\..\packages\libssh2.redist.1.4.3.1\build\native\libssh2.redist.targets" Condition="Exists('..\..\packages\libssh2.redist.1.4.3.1\build\native\libssh2.redist.targets')" />
+    <Import Project="..\..\packages\openssl.redist.1.0.1.25\build\native\openssl.redist.targets" Condition="Exists('..\..\packages\openssl.redist.1.0.1.25\build\native\openssl.redist.targets')" />
+    <Import Project="..\..\packages\zlib.redist.1.2.8.1\build\native\zlib.redist.targets" Condition="Exists('..\..\packages\zlib.redist.1.2.8.1\build\native\zlib.redist.targets')" />
+    <Import Project="..\..\packages\zlib.1.2.8.1\build\native\zlib.targets" Condition="Exists('..\..\packages\zlib.1.2.8.1\build\native\zlib.targets')" />
+    <Import Project="..\..\packages\openssl.1.0.1.21\build\native\openssl.targets" Condition="Exists('..\..\packages\openssl.1.0.1.21\build\native\openssl.targets')" />
+    <Import Project="..\..\packages\libssh2.1.4.3.1\build\native\libssh2.targets" Condition="Exists('..\..\packages\libssh2.1.4.3.1\build\native\libssh2.targets')" />
+    <Import Project="..\..\packages\curl.7.30.0.2\build\native\curl.targets" Condition="Exists('..\..\packages\curl.7.30.0.2\build\native\curl.targets')" />
+    <Import Project="..\..\packages\jsoncpp-vc140-static-32_64.1.8.0\build\native\jsoncpp-vc140-static-32_64.targets" Condition="Exists('..\..\packages\jsoncpp-vc140-static-32_64.1.8.0\build\native\jsoncpp-vc140-static-32_64.targets')" />
+    <Import Project="..\..\packages\com.playfab.xplatcppsdk.v141.2.0.180424\build\native\com.playfab.xplatcppsdk.v141.targets" Condition="Exists('..\..\packages\com.playfab.xplatcppsdk.v141.2.0.180424\build\native\com.playfab.xplatcppsdk.v141.targets')" />
+  </ImportGroup>
+  <Target Name="CopyDependencies" AfterTargets="AfterBuild">
+    <ItemGroup>
+      <Dependency Include="$(TFS_BinariesDirectory)\$(Configuration)\$(Platform)\GSDKCPPWindows\*.dll" />
+      <Dependency Include="$(SolutionDir)$(Platform)\$(Configuration)\GSDKCPPWindows\*.dll" />
+    </ItemGroup>
+    <Copy SourceFiles="@(Dependency)" DestinationFolder="$(OutDir)" SkipUnchangedFiles="true" />
+  </Target>
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\..\packages\curl.redist.7.30.0.2\build\native\curl.redist.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\curl.redist.7.30.0.2\build\native\curl.redist.targets'))" />
+    <Error Condition="!Exists('..\..\packages\libssh2.redist.1.4.3.1\build\native\libssh2.redist.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\libssh2.redist.1.4.3.1\build\native\libssh2.redist.targets'))" />
+    <Error Condition="!Exists('..\..\packages\openssl.redist.1.0.1.25\build\native\openssl.redist.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\openssl.redist.1.0.1.25\build\native\openssl.redist.targets'))" />
+    <Error Condition="!Exists('..\..\packages\zlib.redist.1.2.8.1\build\native\zlib.redist.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\zlib.redist.1.2.8.1\build\native\zlib.redist.targets'))" />
+    <Error Condition="!Exists('..\..\packages\zlib.1.2.8.1\build\native\zlib.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\zlib.1.2.8.1\build\native\zlib.targets'))" />
+    <Error Condition="!Exists('..\..\packages\openssl.1.0.1.21\build\native\openssl.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\openssl.1.0.1.21\build\native\openssl.props'))" />
+    <Error Condition="!Exists('..\..\packages\openssl.1.0.1.21\build\native\openssl.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\openssl.1.0.1.21\build\native\openssl.targets'))" />
+    <Error Condition="!Exists('..\..\packages\libssh2.1.4.3.1\build\native\libssh2.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\libssh2.1.4.3.1\build\native\libssh2.targets'))" />
+    <Error Condition="!Exists('..\..\packages\curl.7.30.0.2\build\native\curl.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\curl.7.30.0.2\build\native\curl.targets'))" />
+    <Error Condition="!Exists('..\..\packages\jsoncpp-vc140-static-32_64.1.8.0\build\native\jsoncpp-vc140-static-32_64.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\jsoncpp-vc140-static-32_64.1.8.0\build\native\jsoncpp-vc140-static-32_64.targets'))" />
+    <Error Condition="!Exists('..\..\packages\com.playfab.xplatcppsdk.v141.2.0.180424\build\native\com.playfab.xplatcppsdk.v141.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\com.playfab.xplatcppsdk.v141.2.0.180424\build\native\com.playfab.xplatcppsdk.v141.targets'))" />
+  </Target>
+</Project>

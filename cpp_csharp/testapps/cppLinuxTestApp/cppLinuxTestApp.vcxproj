@@ -1,0 +1,78 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{521c0810-6512-47ee-9142-92445dc35912}</ProjectGuid>
+    <Keyword>Linux</Keyword>
+    <RootNamespace>cppLinuxTestApp</RootNamespace>
+    <MinimumVisualStudioVersion>15.0</MinimumVisualStudioVersion>
+    <ApplicationType>Linux</ApplicationType>
+    <ApplicationTypeRevision>1.0</ApplicationTypeRevision>
+    <TargetLinuxPlatform>Generic</TargetLinuxPlatform>
+    <LinuxProjectType>{D51BCBC9-82E9-4017-911E-C93873C4EA2B}</LinuxProjectType>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings" />
+  <ImportGroup Label="Shared" />
+  <ImportGroup Label="PropertySheets" />
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <AdditionalSourcesToCopyMapping>
+    </AdditionalSourcesToCopyMapping>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <AdditionalSourcesToCopyMapping />
+  </PropertyGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\cppsdk\GSDK_CPP_Linux.vcxproj">
+      <Project>{f34f32a5-802c-4abf-9e17-dc009e02df97}</Project>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>$(StlIncludeDirectories);%(AdditionalIncludeDirectories);$(SolutionDir)GSDK_CPP;../GSDK_CPP_Linux;../GSDK_CPP_Linux/include</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>GSDK_LINUX</PreprocessorDefinitions>
+      <AdditionalOptions>-I $(RemoteProjectDir)/../GSDK_CPP_Linux -I $(RemoteProjectDir)/../GSDK_CPP_Linux/include %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+    <Link>
+      <LibraryDependencies>curl;jsoncpp;pthread;</LibraryDependencies>
+      <AdditionalDependencies>$(StlAdditionalDependencies);%(AdditionalDependencies);$(RemoteRootDir)/x64/Debug/GSDKCPPLinux/libGSDK_CPP_Linux.a;</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories);</AdditionalLibraryDirectories>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>$(StlIncludeDirectories);%(AdditionalIncludeDirectories);$(SolutionDir)GSDK_CPP;../GSDK_CPP_Linux;../GSDK_CPP_Linux/include</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>GSDK_LINUX</PreprocessorDefinitions>
+      <AdditionalOptions>-I $(RemoteProjectDir)/../GSDK_CPP_Linux -I $(RemoteProjectDir)/../GSDK_CPP_Linux/include %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+    <Link>
+      <LibraryDependencies>curl;jsoncpp;pthread;</LibraryDependencies>
+      <AdditionalDependencies>$(StlAdditionalDependencies);%(AdditionalDependencies);$(RemoteRootDir)/x64/Release/GSDK_CPP_Linux/libGSDK_CPP_Linux.a;</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories);</AdditionalLibraryDirectories>
+    </Link>
+  </ItemDefinitionGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets" />
+</Project>
