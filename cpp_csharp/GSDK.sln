@@ -29,8 +29,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "cppLinuxRunnerGame", "testa
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GSDK_CPP_UnitTests", "unittests\GSDK_CPP_UnitTests.vcxproj", "{5D3FDED4-6F0B-4797-BDD8-43B4D9994A42}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "cppWindowsLegacyGSDKRunnerGame", "testapps\cppWindowsLegacyGSDKRunnerGame\cppWindowsLegacyGSDKRunnerGame.vcxproj", "{A11046A5-CC01-46C0-8BF2-833E6498DAE2}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -513,48 +511,6 @@ Global
 		{5D3FDED4-6F0B-4797-BDD8-43B4D9994A42}.ReleaseStatic|x64.Build.0 = Release|x64
 		{5D3FDED4-6F0B-4797-BDD8-43B4D9994A42}.ReleaseStatic|x86.ActiveCfg = Release|x64
 		{5D3FDED4-6F0B-4797-BDD8-43B4D9994A42}.ReleaseStatic|x86.Build.0 = Release|x64
-		{A11046A5-CC01-46C0-8BF2-833E6498DAE2}.Debug|Any CPU.ActiveCfg = Debug|x64
-		{A11046A5-CC01-46C0-8BF2-833E6498DAE2}.Debug|ARM.ActiveCfg = Debug|x64
-		{A11046A5-CC01-46C0-8BF2-833E6498DAE2}.Debug|x64.ActiveCfg = Debug|x64
-		{A11046A5-CC01-46C0-8BF2-833E6498DAE2}.Debug|x64.Build.0 = Debug|x64
-		{A11046A5-CC01-46C0-8BF2-833E6498DAE2}.Debug|x86.ActiveCfg = Debug|x64
-		{A11046A5-CC01-46C0-8BF2-833E6498DAE2}.DebugMT|Any CPU.ActiveCfg = Release|x64
-		{A11046A5-CC01-46C0-8BF2-833E6498DAE2}.DebugMT|Any CPU.Build.0 = Release|x64
-		{A11046A5-CC01-46C0-8BF2-833E6498DAE2}.DebugMT|ARM.ActiveCfg = Release|x64
-		{A11046A5-CC01-46C0-8BF2-833E6498DAE2}.DebugMT|ARM.Build.0 = Release|x64
-		{A11046A5-CC01-46C0-8BF2-833E6498DAE2}.DebugMT|x64.ActiveCfg = Debug|x64
-		{A11046A5-CC01-46C0-8BF2-833E6498DAE2}.DebugMT|x64.Build.0 = Debug|x64
-		{A11046A5-CC01-46C0-8BF2-833E6498DAE2}.DebugMT|x86.ActiveCfg = Release|x64
-		{A11046A5-CC01-46C0-8BF2-833E6498DAE2}.DebugMT|x86.Build.0 = Release|x64
-		{A11046A5-CC01-46C0-8BF2-833E6498DAE2}.DebugStatic|Any CPU.ActiveCfg = Release|x64
-		{A11046A5-CC01-46C0-8BF2-833E6498DAE2}.DebugStatic|Any CPU.Build.0 = Release|x64
-		{A11046A5-CC01-46C0-8BF2-833E6498DAE2}.DebugStatic|ARM.ActiveCfg = Release|x64
-		{A11046A5-CC01-46C0-8BF2-833E6498DAE2}.DebugStatic|ARM.Build.0 = Release|x64
-		{A11046A5-CC01-46C0-8BF2-833E6498DAE2}.DebugStatic|x64.ActiveCfg = Debug|x64
-		{A11046A5-CC01-46C0-8BF2-833E6498DAE2}.DebugStatic|x64.Build.0 = Debug|x64
-		{A11046A5-CC01-46C0-8BF2-833E6498DAE2}.DebugStatic|x86.ActiveCfg = Release|x64
-		{A11046A5-CC01-46C0-8BF2-833E6498DAE2}.DebugStatic|x86.Build.0 = Release|x64
-		{A11046A5-CC01-46C0-8BF2-833E6498DAE2}.Release|Any CPU.ActiveCfg = Release|x64
-		{A11046A5-CC01-46C0-8BF2-833E6498DAE2}.Release|ARM.ActiveCfg = Release|x64
-		{A11046A5-CC01-46C0-8BF2-833E6498DAE2}.Release|x64.ActiveCfg = Release|x64
-		{A11046A5-CC01-46C0-8BF2-833E6498DAE2}.Release|x64.Build.0 = Release|x64
-		{A11046A5-CC01-46C0-8BF2-833E6498DAE2}.Release|x86.ActiveCfg = Release|x64
-		{A11046A5-CC01-46C0-8BF2-833E6498DAE2}.ReleaseMT|Any CPU.ActiveCfg = Release|x64
-		{A11046A5-CC01-46C0-8BF2-833E6498DAE2}.ReleaseMT|Any CPU.Build.0 = Release|x64
-		{A11046A5-CC01-46C0-8BF2-833E6498DAE2}.ReleaseMT|ARM.ActiveCfg = Release|x64
-		{A11046A5-CC01-46C0-8BF2-833E6498DAE2}.ReleaseMT|ARM.Build.0 = Release|x64
-		{A11046A5-CC01-46C0-8BF2-833E6498DAE2}.ReleaseMT|x64.ActiveCfg = Release|x64
-		{A11046A5-CC01-46C0-8BF2-833E6498DAE2}.ReleaseMT|x64.Build.0 = Release|x64
-		{A11046A5-CC01-46C0-8BF2-833E6498DAE2}.ReleaseMT|x86.ActiveCfg = Release|x64
-		{A11046A5-CC01-46C0-8BF2-833E6498DAE2}.ReleaseMT|x86.Build.0 = Release|x64
-		{A11046A5-CC01-46C0-8BF2-833E6498DAE2}.ReleaseStatic|Any CPU.ActiveCfg = Release|x64
-		{A11046A5-CC01-46C0-8BF2-833E6498DAE2}.ReleaseStatic|Any CPU.Build.0 = Release|x64
-		{A11046A5-CC01-46C0-8BF2-833E6498DAE2}.ReleaseStatic|ARM.ActiveCfg = Release|x64
-		{A11046A5-CC01-46C0-8BF2-833E6498DAE2}.ReleaseStatic|ARM.Build.0 = Release|x64
-		{A11046A5-CC01-46C0-8BF2-833E6498DAE2}.ReleaseStatic|x64.ActiveCfg = Release|x64
-		{A11046A5-CC01-46C0-8BF2-833E6498DAE2}.ReleaseStatic|x64.Build.0 = Release|x64
-		{A11046A5-CC01-46C0-8BF2-833E6498DAE2}.ReleaseStatic|x86.ActiveCfg = Release|x64
-		{A11046A5-CC01-46C0-8BF2-833E6498DAE2}.ReleaseStatic|x86.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
