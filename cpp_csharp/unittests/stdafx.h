@@ -7,6 +7,9 @@
 
 #include "targetver.h"
 
+// Headers for CppUnitTest
+#include "CppUnitTest.h"
+
 // TODO: reference additional headers your program requires here
 #define WIN32_LEAN_AND_MEAN
 #include "windows.h"
