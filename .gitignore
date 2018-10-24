@@ -321,3 +321,6 @@ gradle-app.setting
 ## End Android
 
 /cpp_csharp/csharpsdk/resources/*
+
+# Don't check in the generated nuget package that Jenkins creates
+/cpp_csharp/**/*.nupkg
