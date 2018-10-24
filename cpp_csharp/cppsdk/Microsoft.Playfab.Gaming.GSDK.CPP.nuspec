@@ -2,9 +2,9 @@
 <package>
     <metadata>
         <id>Microsoft.Playfab.Gaming.GSDK.CPP</id>
-        <version>0.0.5-beta</version>
-        <authors>xcloud</authors>
-        <owners>xcloud</owners>
+        <version>0.0.0.0</version> <!-- Gets overriden by Jenkins -->
+        <authors>PlayFab</authors>
+        <owners>PlayFab</owners>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
         <description>Enables Thunderhead game servers to interact with PlayFab control systems and accept players.</description>
         <releaseNotes>Release of the C++ Game Server SDK for use with Thunderhead.</releaseNotes>
