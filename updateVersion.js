@@ -1,7 +1,7 @@
 var fileName = process.argv[2]; 
 console.log("Begin updating version");
 
-var versionRe = new RegExp("([0-9]+)\.([0-9]+)\.([0-9][0-9][0-9][0-9][0-9][0-9])([\w-]*)");
+var versionRe = new RegExp("([0-9]+)\.([0-9]+)\.([0-9][0-9][0-9][0-9][0-9][0-9])([a-zA-Z0-9-_]*)");
 var now = new Date();
 var todaysDate = (now.getUTCFullYear()%100).toString().padStart(2, "0") + (now.getMonth()+1).toString().padStart(2, "0") + (now.getUTCDate()).toString().padStart(2, "0");
 
