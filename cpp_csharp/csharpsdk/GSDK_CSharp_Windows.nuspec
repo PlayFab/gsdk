@@ -2,9 +2,9 @@
 <package >
     <metadata>
         <id>Microsoft.Playfab.Gaming.GSDK.CSharp</id>
-        <version>0.0.0-beta</version>
-        <authors>xcloud</authors>
-        <owners>xcloud</owners>
+        <version>0.0.0-beta</version> <!-- Gets Overriden by Jenkins -->
+        <authors>PlayFab</authors>
+        <owners>PlayFab</owners>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
         <description>Enables Thunderhead game servers to interact with PlayFab control systems and accept players.</description>
         <releaseNotes>Release of the C# Game Server SDK for use with Thunderhead.</releaseNotes>
@@ -12,6 +12,7 @@
         <tags>GSDK Thunderhead Playfab</tags>
     </metadata>
     <files>
+        <file src="Microsoft.Playfab.Gaming.GSDK.CSharp.dll" target="lib/net20" />
         <file src="GSDK_CPP_CSharpWrapper.dll" target="runtimes/win-x64/native" />
         <file src="libcurl.dll" target="runtimes/win-x64/native" />
         <file src="libeay32.dll" target="runtimes/win-x64/native" />
