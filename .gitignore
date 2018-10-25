@@ -320,6 +320,11 @@ gradle-app.setting
 
 ## End Android
 
+# Maven
+/java/gameserverSDK/target/*
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+
 /cpp_csharp/csharpsdk/resources/*
 
 # Don't check in the generated nuget package that Jenkins creates

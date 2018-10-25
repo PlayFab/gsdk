@@ -14,12 +14,12 @@ import java.util.Map;
 /**
  * Grabs configuration values from a json config file
  */
-public class JsonFileConfiguration extends ConfigurationBase {
-    public static final String CONFIG_FILE_VARIABLE_NAME = "GSDK_CONFIG_FILE";
+class JsonFileConfiguration extends ConfigurationBase {
+    protected static final String CONFIG_FILE_VARIABLE_NAME = "GSDK_CONFIG_FILE";
 
     private JsonConfigurationFields configValues;
 
-    public JsonFileConfiguration(){
+    protected JsonFileConfiguration(){
         Path configFilePath = Paths.get(System.getenv(CONFIG_FILE_VARIABLE_NAME));
         try {
             // Gson doesn't have a way of populating "this" object with json, so we use a helper inner class

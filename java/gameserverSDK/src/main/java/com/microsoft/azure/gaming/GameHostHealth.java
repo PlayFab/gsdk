@@ -1,7 +1,7 @@
 package com.microsoft.azure.gaming;
 
 /**
- * Created by briantre on 6/16/2017.
+ * Whether a game server is healthy or unhealthy.
  */
 public enum GameHostHealth {
     Healthy,

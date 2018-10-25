@@ -6,22 +6,58 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.*;
 
 /**
- * The SDK game hosts can use to integrate with XCloud.
- *
- * Microsoft Copyright.
+ * The SDK game hosts can use to integrate with PlayFab Multiplayer Servers.
  */
 public class GameserverSDK {
-    // Keys for the map returned by getConfigSettings
+    /**
+     * Key to use in the map returned by getConfigSettings to retrieve the agent url
+     */
     public static final String HEARTBEAT_ENDPOINT_KEY = "gsmsBaseUrl";
+
+    /**
+     * Key to use in the map returned by getConfigSettings to retrieve the game server instance id
+     */
     public static final String SERVER_ID_KEY = "instanceId";
+
+    /**
+     * Key to use in the map returned by getConfigSettings to retrieve the log folder that is uploaded to Azure blob
+     * storage once the container exits
+     */
     public static final String LOG_FOLDER_KEY = "logFolder";
+
+    /**
+     * Key to use in the map returned by getConfigSettings to retrieve the folder which contains all game
+     * certificate files
+     */
     public static final String CERTIFICATE_FOLDER_KEY = "certificateFolder";
+
+    /**
+     * Key to use in the map returned by getConfigSettings to retrieve the PlayFab title Id for this game server
+     */
     public static final String TITLE_ID_KEY = "titleId";
+
+    /**
+     * Key to use in the map returned by getConfigSettings to retrieve the PlayFab build Id for this game server
+     */
     public static final String BUILD_ID_KEY = "buildId";
+
+    /**
+     * Key to use in the map returned by getConfigSettings to retrieve the region this game server is running in
+     */
     public static final String REGION_KEY = "region";
 
-    // These two keys are only available in the map after allocation (once readyForPlayers returns true)
+    /**
+     * Key to use in the map returned by getConfigSettings to retrieve the session cookie passed in to this
+     * game server from the allocate call. Note that this key will only appear in the map after allocation,
+     * once readyForPlayers returns true.
+     */
     public static final String SESSION_COOKIE_KEY = "sessionCookie";
+
+    /**
+     * Key to use in the map returned by getConfigSettings to retrieve the session id for this game server, as
+     * specified in the allocate call. Note that this key will only appear in the map after allocation, once
+     * readyForPlayers returns true.
+     */
     public static final String SESSION_ID_KEY = "sessionId";
 
     private static boolean isInitialized = false;
@@ -100,8 +136,8 @@ public class GameserverSDK {
     }
 
     /**
-     * Tells the agent how many players are connected to this game host
-     * @param players
+     * Tells the agent which players are connected to this game host
+     * @param players the updated list of players that are currently connected
      */
     public static void updateConnectedPlayers(List<ConnectedPlayer> players){
         heartbeatThread.setConnectedPlayers(players);
@@ -140,6 +176,11 @@ public class GameserverSDK {
         Logger.Instance().Log(message);
     }
 
+    /**
+     * Returns a path to the directory where the game server can save any custom log files.
+     * All files in this path will be zipped and uploaded to Azure Blob Storage once the container exits
+     * @return path to the folder where all logs should be saved
+     */
     public static String getLogsDirectory(){
         return gsdkConfiguration.getLogFolder();
     }

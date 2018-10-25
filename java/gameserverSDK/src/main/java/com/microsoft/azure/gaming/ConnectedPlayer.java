@@ -1,7 +1,7 @@
 package com.microsoft.azure.gaming;
 
 /**
- * Created by briantre on 6/16/2017.
+ * Describes a player that is connected to the game server.
  */
 public class ConnectedPlayer {
     private String playerId;

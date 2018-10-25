@@ -4,16 +4,16 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Grabs all configuration values from environment variables
+ * Grabs all configuration values for the GSDK from environment variables
  */
-public class EnvironmentVariableConfiguration extends ConfigurationBase {
+class EnvironmentVariableConfiguration extends ConfigurationBase {
     private final String heartbeatEndpoint;
     private final String serverId;
     private final String logFolder;
     private final String certFolder;
     private final Map<String, String> buildMetadata;
 
-    public EnvironmentVariableConfiguration(){
+    protected EnvironmentVariableConfiguration(){
         this.heartbeatEndpoint = System.getenv(HEARTBEAT_ENDPOINT_VARIABLE_NAME);
         this.serverId = System.getenv(SERVER_ID_VARIABLE_NAME);
         this.logFolder = System.getenv(LOG_FOLDER_VARIABLE_NAME);

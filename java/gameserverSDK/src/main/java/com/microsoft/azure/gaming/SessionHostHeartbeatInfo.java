@@ -5,10 +5,8 @@ import java.util.List;
 
 /**
  * Encapsulates the Heartbeat response we receive from the Agent.
- *
- * Created by hamonciv on 7/17/2017.
  */
-public class SessionHostHeartbeatInfo {
+class SessionHostHeartbeatInfo {
     /**
      * The current game state. For example - StandingBy, Active, etc.
      */
@@ -44,55 +42,55 @@ public class SessionHostHeartbeatInfo {
      */
     private ZonedDateTime nextScheduledMaintenanceUtc;
 
-    public SessionHostStatus getCurrentGameState() { return currentGameState; }
+    protected SessionHostStatus getCurrentGameState() { return currentGameState; }
 
-    public void setCurrentGameState(SessionHostStatus newSessionHostStatus)
+    protected void setCurrentGameState(SessionHostStatus newSessionHostStatus)
     {
         this.currentGameState = newSessionHostStatus;
     }
 
-    public Integer getNextHeartbeatIntervalMs()
+    protected Integer getNextHeartbeatIntervalMs()
     {
         return nextHeartbeatIntervalMs;
     }
 
-    public void setNextHeartbeatIntervalMs(Integer newHeartbeatIntervalMs)
+    protected void setNextHeartbeatIntervalMs(Integer newHeartbeatIntervalMs)
     {
         this.nextHeartbeatIntervalMs = newHeartbeatIntervalMs;
     }
 
-    public Operation getOperation() {
+    protected Operation getOperation() {
         return operation;
     }
 
-    public void setOperation(Operation newOperation) {
+    protected void setOperation(Operation newOperation) {
         this.operation = newOperation;
     }
 
 
-    public GameHostHealth getCurrentGameHealth() { return currentGameHealth; }
+    protected GameHostHealth getCurrentGameHealth() { return currentGameHealth; }
 
-    public void setCurrentGameHealth(GameHostHealth currentGameHealth) {
+    protected void setCurrentGameHealth(GameHostHealth currentGameHealth) {
         this.currentGameHealth = currentGameHealth;
     }
 
-    public List<ConnectedPlayer> getCurrentPlayers() { return this.currentPlayers; }
+    protected List<ConnectedPlayer> getCurrentPlayers() { return this.currentPlayers; }
 
-    public void setConnectedPlayers(List<ConnectedPlayer> players) {
+    protected void setConnectedPlayers(List<ConnectedPlayer> players) {
         this.currentPlayers = players;
     }
 
-    public SessionConfig getSessionConfig() {
+    protected SessionConfig getSessionConfig() {
         return sessionConfig;
     }
 
-    public void setSessionConfig(SessionConfig sessionConfig) {
+    protected void setSessionConfig(SessionConfig sessionConfig) {
         this.sessionConfig = sessionConfig;
     }
 
-    public ZonedDateTime getNextScheduledMaintenanceUtc() { return nextScheduledMaintenanceUtc; }
+    protected ZonedDateTime getNextScheduledMaintenanceUtc() { return nextScheduledMaintenanceUtc; }
 
-    public void setNextScheduledMaintenanceUtc(ZonedDateTime nextScheduledMaintenanceUtc)
+    protected void setNextScheduledMaintenanceUtc(ZonedDateTime nextScheduledMaintenanceUtc)
     {
         this.nextScheduledMaintenanceUtc = nextScheduledMaintenanceUtc;
     }

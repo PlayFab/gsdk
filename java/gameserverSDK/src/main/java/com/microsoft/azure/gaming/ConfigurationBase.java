@@ -3,12 +3,12 @@ package com.microsoft.azure.gaming;
 /**
  * Contains shared code between JsonFileConfiguration and EnvironmentConfiguration
  */
-public abstract class ConfigurationBase implements Configuration {
+abstract class ConfigurationBase implements Configuration {
     private final String titleId;
     private final String buildId;
     private final String region;
 
-    public ConfigurationBase()
+    protected ConfigurationBase()
     {
         // These are always set as environment variables, even with the new gsdk config json file
         this.titleId = System.getenv(TITLE_ID_VARIABLE_NAME);

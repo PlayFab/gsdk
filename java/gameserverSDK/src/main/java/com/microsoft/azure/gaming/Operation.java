@@ -3,12 +3,13 @@ package com.microsoft.azure.gaming;
 import com.google.gson.annotations.SerializedName;
 
 /**
- * Created by hamonciv on 7/17/2017.
+ * Operations that the agent asks the GSDK to perform.
+ *
  * Note: The order needs to match the VM Agent and C++/C# GSDK.
  * Also make sure to keep these Uppercase, since Java string to
  * enum parsing is case-sensitive
  */
-public enum Operation {
+enum Operation {
     @SerializedName(value = "invalid", alternate = {"Invalid", "INVALID"})
     INVALID,
 

@@ -15,10 +15,8 @@ import static java.nio.file.StandardOpenOption.*;
 
 /**
  * Class that provides a simple logging interface.
- *
- * Created by hamonciv on 7/17/2017.
  */
-public class Logger {
+class Logger {
     private static String logFolder = null;
     private Path logFile = null;
 
@@ -49,14 +47,14 @@ public class Logger {
         System.out.println("Logging GSDK output to: " + this.logFile);
     }
 
-    public static void SetLogFolder(String folder) { logFolder = folder; }
+    protected static void SetLogFolder(String folder) { logFolder = folder; }
 
-    public static Logger Instance()
+    protected static Logger Instance()
     {
         return SingletonHelper.INSTANCE;
     }
 
-    public void Log(String message)
+    protected void Log(String message)
     {
         try(BufferedOutputStream bos = new BufferedOutputStream(
                 Files.newOutputStream(this.logFile, CREATE, APPEND));
@@ -70,16 +68,16 @@ public class Logger {
         }
     }
 
-    public void LogError(String message)
+    protected void LogError(String message)
     {
         this.Log("ERROR: " + message);
     }
 
-    public void LogWarning(String message){
+    protected void LogWarning(String message){
         this.Log("WARNING: " + message);
     }
 
-    public void LogError(Exception ex)
+    protected void LogError(Exception ex)
     {
         try(BufferedOutputStream bos = new BufferedOutputStream(
             Files.newOutputStream(this.logFile, CREATE, APPEND));

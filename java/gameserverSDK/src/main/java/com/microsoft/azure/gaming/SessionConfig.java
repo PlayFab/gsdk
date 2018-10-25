@@ -5,14 +5,14 @@ import java.util.Map;
 import java.util.UUID;
 
 /**
- * Created by hamonciv on 7/28/2017.
+ * Configuration for a game session
  */
-public class SessionConfig {
+class SessionConfig {
     private UUID sessionId;
 
     private String sessionCookie;
 
-    public UUID getSessionId() {
+    protected UUID getSessionId() {
         return sessionId;
     }
 
@@ -21,7 +21,7 @@ public class SessionConfig {
     }
 
 
-    public String getSessionCookie() {
+    protected String getSessionCookie() {
         return sessionCookie;
     }
 
@@ -29,7 +29,7 @@ public class SessionConfig {
         this.sessionCookie = sessionCookie;
     }
 
-    public Map<String, String> ToMap()
+    protected Map<String, String> ToMap()
     {
         HashMap<String, String> properties = new HashMap<String, String>();
         properties.put("sessionId", this.getSessionId().toString());

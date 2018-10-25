@@ -3,9 +3,11 @@ package com.microsoft.azure.gaming;
 import java.util.Map;
 
 /**
- * Created by briantre on 7/28/17.
+ * Various properties that can be configured for the GSDK.
+ * As long as it implements this interface, the GSDK can accept configurations
+ * from various sources, such as environment variables, json files, etc.
  */
-public interface Configuration {
+interface Configuration {
     String getHeartbeatEndpoint();
     String getServerId();
     String getLogFolder();
