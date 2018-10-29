@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <package >
     <metadata>
-        <id>Microsoft.Playfab.Gaming.GSDK.CSharp</id>
+        <id>com.playfab.csharpgsdk</id>
         <version>0.0.0-beta</version> <!-- Gets Overriden by Jenkins -->
         <authors>PlayFab</authors>
         <owners>PlayFab</owners>
