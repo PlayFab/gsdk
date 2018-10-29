@@ -11,25 +11,33 @@
         </ClCompile>
     </ItemDefinitionGroup>
 
-    <ItemDefinitionGroup Label="x64 and Release" Condition="'$(Platform.ToLower())' == 'x64' And $(Configuration.ToLower().IndexOf('debug')) == -1">
+    <ItemDefinitionGroup Label="x64 Release Static" Condition="'$(Platform.ToLower())' == 'x64' And $(Configuration.ToLower().IndexOf('debug')) == -1 And '%(ClCompile.RuntimeLibrary)' == 'MultiThreaded'">
         <Link>
-            <AdditionalDependencies>$(MSBuildThisFileDirectory)lib\Windows\x64\Release\GSDK_CPP_Windows.lib;$(MSBuildThisFileDirectory)..\..\..\curl.7.30.0.2\build\native\lib\v110\x64\Release\dynamic\libcurl.lib;%(AdditionalDependencies)</AdditionalDependencies>
+            <AdditionalDependencies>$(MSBuildThisFileDirectory)lib\Windows\x64\Release\static\GSDK_CPP_Windows.lib;$(MSBuildThisFileDirectory)..\..\..\curl.7.30.0.2\build\native\lib\v110\x64\Release\dynamic\libcurl.lib;%(AdditionalDependencies)</AdditionalDependencies>
         </Link>
     </ItemDefinitionGroup>
 
-    <ItemDefinitionGroup Label="x64 and Debug" Condition="'$(Platform.ToLower())' == 'x64' And $(Configuration.ToLower().IndexOf('debug')) &gt; -1">
+    <ItemDefinitionGroup Label="x64 Debug Static" Condition="'$(Platform.ToLower())' == 'x64' And $(Configuration.ToLower().IndexOf('debug')) &gt; -1 And '%(ClCompile.RuntimeLibrary)' == 'MultiThreadedDebug'">
         <Link>
-            <AdditionalDependencies>$(MSBuildThisFileDirectory)lib\Windows\x64\Debug\GSDK_CPP_Windows.lib;$(MSBuildThisFileDirectory)..\..\..\curl.7.30.0.2\build\native\lib\v110\x64\Debug\dynamic\libcurl.lib;%(AdditionalDependencies)</AdditionalDependencies>
+            <AdditionalDependencies>$(MSBuildThisFileDirectory)lib\Windows\x64\Debug\static\GSDK_CPP_Windows.lib;$(MSBuildThisFileDirectory)..\..\..\curl.7.30.0.2\build\native\lib\v110\x64\Debug\dynamic\libcurl.lib;%(AdditionalDependencies)</AdditionalDependencies>
+        </Link>
+    </ItemDefinitionGroup>
+
+    <ItemDefinitionGroup Label="x64 Release Static" Condition="'$(Platform.ToLower())' == 'x64' And $(Configuration.ToLower().IndexOf('debug')) == -1 And '%(ClCompile.RuntimeLibrary)' == 'MultiThreadedDLL'">
+        <Link>
+            <AdditionalDependencies>$(MSBuildThisFileDirectory)lib\Windows\x64\Release\dynamic\GSDK_CPP_Windows.lib;$(MSBuildThisFileDirectory)..\..\..\curl.7.30.0.2\build\native\lib\v110\x64\Release\dynamic\libcurl.lib;%(AdditionalDependencies)</AdditionalDependencies>
+        </Link>
+    </ItemDefinitionGroup>
+
+    <ItemDefinitionGroup Label="x64 Debug Static" Condition="'$(Platform.ToLower())' == 'x64' And $(Configuration.ToLower().IndexOf('debug')) &gt; -1 And '%(ClCompile.RuntimeLibrary)' == 'MultiThreadedDebugDLL'">
+        <Link>
+            <AdditionalDependencies>$(MSBuildThisFileDirectory)lib\Windows\x64\Debug\dynamic\GSDK_CPP_Windows.lib;$(MSBuildThisFileDirectory)..\..\..\curl.7.30.0.2\build\native\lib\v110\x64\Debug\dynamic\libcurl.lib;%(AdditionalDependencies)</AdditionalDependencies>
         </Link>
     </ItemDefinitionGroup>
 
     <Target Name="playfabgsdk_VerifyBuildPreconditions" BeforeTargets="PrepareForBuild" Condition="'$(EnablePlayfabGSDK.ToLower())'=='true'">
         <Error Condition="'$(Platform.ToLower())' != 'x64'" 
                Text="The Playfab GSDK only supports x64, please update your project's platform in the Configuration Manager." />
-        <Error Condition="$(Configuration.ToLower().IndexOf('debug')) == -1 And '%(ClCompile.RuntimeLibrary)' != 'MultiThreaded'" 
-               Text="The Playfab GSDK depends on the statically linked MultiThreaded C runtime library (/MT), please update your project's runtime library in Project Properties->C/C++->Code Generation->Runtime Library, and set it to: Multi-threaded." />
-        <Error Condition="$(Configuration.ToLower().IndexOf('debug')) &gt; -1 And '%(ClCompile.RuntimeLibrary)' != 'MultiThreadedDebug'" 
-               Text="The Playfab GSDK depends on the statically linked MultiThreaded C runtime library (/MTd), please update your project's runtime library in Project Properties->C/C++->Code Generation->Runtime Library, and set it to: Multi-threaded Debug." />
     </Target>
 
     <Target Name="playfabgsdk_AfterBuild" AfterTargets="AfterBuild" Condition="'$(EnablePlayfabGSDK.ToLower())'=='true' And '$(Platform.ToLower())' == 'x64'">
@@ -42,12 +50,20 @@
             <PlayfabGSDKCopyToOutput Include="$(MSBuildThisFileDirectory)..\..\..\openssl.redist.1.0.1.25\build\native\bin\v110\$(Platform)\$(Configuration)\dynamic\ssleay32.dll" />
         </ItemGroup>
 
-        <ItemGroup Label="Debug" Condition="$(Configuration.ToLower().IndexOf('debug')) &gt; -1">
-            <PlayfabGSDKCopyToOutput Include="$(MSBuildThisFileDirectory)lib\Windows\x64\Debug\GSDK_CPP_Windows.pdb" />
+        <ItemGroup Label="DebugStatic" Condition="$(Configuration.ToLower().IndexOf('debug')) &gt; -1 And '%(ClCompile.RuntimeLibrary)' == 'MultiThreaded'">
+            <PlayfabGSDKCopyToOutput Include="$(MSBuildThisFileDirectory)lib\Windows\x64\Debug\static\GSDK_CPP_Windows.pdb" />
         </ItemGroup>
 
-        <ItemGroup Label="Release" Condition="$(Configuration.ToLower().IndexOf('debug')) == -1">
-            <PlayfabGSDKCopyToOutput Include="$(MSBuildThisFileDirectory)lib\Windows\x64\Release\GSDK_CPP_Windows.pdb" />
+        <ItemGroup Label="ReleaseStatic" Condition="$(Configuration.ToLower().IndexOf('debug')) == -1 And '%(ClCompile.RuntimeLibrary)' == 'MultiThreadedDebug'">
+            <PlayfabGSDKCopyToOutput Include="$(MSBuildThisFileDirectory)lib\Windows\x64\Release\static\GSDK_CPP_Windows.pdb" />
+        </ItemGroup>
+
+        <ItemGroup Label="DebugStatic" Condition="$(Configuration.ToLower().IndexOf('debug')) &gt; -1 And '%(ClCompile.RuntimeLibrary)' == 'MultiThreadedDLL'">
+            <PlayfabGSDKCopyToOutput Include="$(MSBuildThisFileDirectory)lib\Windows\x64\Debug\dynamic\GSDK_CPP_Windows.pdb" />
+        </ItemGroup>
+
+        <ItemGroup Label="ReleaseStatic" Condition="$(Configuration.ToLower().IndexOf('debug')) == -1 And '%(ClCompile.RuntimeLibrary)' == 'MultiThreadedDebugDLL'">
+            <PlayfabGSDKCopyToOutput Include="$(MSBuildThisFileDirectory)lib\Windows\x64\Release\dynamic\GSDK_CPP_Windows.pdb" />
         </ItemGroup>
 
         <Copy SourceFiles="@(PlayfabGSDKCopyToOutput)" DestinationFolder="$(OutDir)" SkipUnchangedFiles="true" />

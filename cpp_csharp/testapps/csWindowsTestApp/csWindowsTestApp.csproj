@@ -11,8 +11,9 @@
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-	<OutputSubDir>GSDKCSharpWindowsTestApp</OutputSubDir>
-	<OutputPath>$(SolutionDir)$(Platform)\$(Configuration)\$(OutputSubDir)</OutputPath>  </PropertyGroup>
+    <OutputSubDir>GSDKCSharpWindowsTestApp</OutputSubDir>
+    <OutputPath>$(SolutionDir)$(Platform)\$(Configuration)\$(OutputSubDir)</OutputPath>
+  </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>

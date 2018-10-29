@@ -33,7 +33,7 @@ class interop_gsdkPINVOKE {
     static ExceptionArgumentDelegate argumentNullDelegate = new ExceptionArgumentDelegate(SetPendingArgumentNullException);
     static ExceptionArgumentDelegate argumentOutOfRangeDelegate = new ExceptionArgumentDelegate(SetPendingArgumentOutOfRangeException);
 
-    [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper_d.dll", EntryPoint="SWIGRegisterExceptionCallbacks_interop_gsdk")]
+    [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper.dll", EntryPoint="SWIGRegisterExceptionCallbacks_interop_gsdk")]
     public static extern void SWIGRegisterExceptionCallbacks_interop_gsdk(
                                 ExceptionDelegate applicationDelegate,
                                 ExceptionDelegate arithmeticDelegate,
@@ -47,7 +47,7 @@ class interop_gsdkPINVOKE {
                                 ExceptionDelegate overflowDelegate, 
                                 ExceptionDelegate systemExceptionDelegate);
 
-    [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper_d.dll", EntryPoint="SWIGRegisterExceptionArgumentCallbacks_interop_gsdk")]
+    [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper.dll", EntryPoint="SWIGRegisterExceptionArgumentCallbacks_interop_gsdk")]
     public static extern void SWIGRegisterExceptionCallbacksArgument_interop_gsdk(
                                 ExceptionArgumentDelegate argumentDelegate,
                                 ExceptionArgumentDelegate argumentNullDelegate,
@@ -169,7 +169,7 @@ class interop_gsdkPINVOKE {
     public delegate string SWIGStringDelegate(string message);
     static SWIGStringDelegate stringDelegate = new SWIGStringDelegate(CreateString);
 
-    [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper_d.dll", EntryPoint="SWIGRegisterStringCallback_interop_gsdk")]
+    [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper.dll", EntryPoint="SWIGRegisterStringCallback_interop_gsdk")]
     public static extern void SWIGRegisterStringCallback_interop_gsdk(SWIGStringDelegate stringDelegate);
 
     static string CreateString(string cString) {
@@ -188,253 +188,253 @@ class interop_gsdkPINVOKE {
   }
 
 
-  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper_d.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_interop_ConnectedPlayer_m_playerId_set___")]
+  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_interop_ConnectedPlayer_m_playerId_set___")]
   public static extern void interop_ConnectedPlayer_m_playerId_set(global::System.Runtime.InteropServices.HandleRef jarg1, string jarg2);
 
-  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper_d.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_interop_ConnectedPlayer_m_playerId_get___")]
+  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_interop_ConnectedPlayer_m_playerId_get___")]
   public static extern string interop_ConnectedPlayer_m_playerId_get(global::System.Runtime.InteropServices.HandleRef jarg1);
 
-  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper_d.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_new_interop_ConnectedPlayer___")]
+  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_new_interop_ConnectedPlayer___")]
   public static extern global::System.IntPtr new_interop_ConnectedPlayer(string jarg1);
 
-  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper_d.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_delete_interop_ConnectedPlayer___")]
+  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_delete_interop_ConnectedPlayer___")]
   public static extern void delete_interop_ConnectedPlayer(global::System.Runtime.InteropServices.HandleRef jarg1);
 
-  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper_d.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_delete_interop_GSDKInitializationException___")]
+  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_delete_interop_GSDKInitializationException___")]
   public static extern void delete_interop_GSDKInitializationException(global::System.Runtime.InteropServices.HandleRef jarg1);
 
-  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper_d.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_interop_GSDK_readyForPlayers___")]
+  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_interop_GSDK_readyForPlayers___")]
   public static extern bool interop_GSDK_readyForPlayers();
 
-  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper_d.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_interop_GSDK_getConfigSettings___")]
+  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_interop_GSDK_getConfigSettings___")]
   public static extern global::System.IntPtr interop_GSDK_getConfigSettings();
 
-  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper_d.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_interop_GSDK_start__SWIG_0___")]
+  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_interop_GSDK_start__SWIG_0___")]
   public static extern void interop_GSDK_start__SWIG_0(bool jarg1);
 
-  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper_d.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_interop_GSDK_start__SWIG_1___")]
+  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_interop_GSDK_start__SWIG_1___")]
   public static extern void interop_GSDK_start__SWIG_1();
 
-  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper_d.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_interop_GSDK_updateConnectedPlayers___")]
+  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_interop_GSDK_updateConnectedPlayers___")]
   public static extern void interop_GSDK_updateConnectedPlayers(global::System.Runtime.InteropServices.HandleRef jarg1);
 
-  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper_d.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_interop_GSDK_registerShutdownCallback___")]
+  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_interop_GSDK_registerShutdownCallback___")]
   public static extern void interop_GSDK_registerShutdownCallback(global::System.Runtime.InteropServices.HandleRef jarg1);
 
-  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper_d.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_interop_GSDK_registerHealthCallback___")]
+  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_interop_GSDK_registerHealthCallback___")]
   public static extern void interop_GSDK_registerHealthCallback(global::System.Runtime.InteropServices.HandleRef jarg1);
 
-  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper_d.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_interop_GSDK_registerMaintenanceCallback___")]
+  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_interop_GSDK_registerMaintenanceCallback___")]
   public static extern void interop_GSDK_registerMaintenanceCallback(global::System.Runtime.InteropServices.HandleRef jarg1);
 
-  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper_d.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_interop_GSDK_logMessage___")]
+  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_interop_GSDK_logMessage___")]
   public static extern uint interop_GSDK_logMessage(string jarg1);
 
-  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper_d.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_interop_GSDK_getLogsDirectory___")]
+  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_interop_GSDK_getLogsDirectory___")]
   public static extern string interop_GSDK_getLogsDirectory();
 
-  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper_d.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_interop_GSDK_HEARTBEAT_ENDPOINT_KEY_get___")]
+  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_interop_GSDK_HEARTBEAT_ENDPOINT_KEY_get___")]
   public static extern string interop_GSDK_HEARTBEAT_ENDPOINT_KEY_get();
 
-  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper_d.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_interop_GSDK_SERVER_ID_KEY_get___")]
+  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_interop_GSDK_SERVER_ID_KEY_get___")]
   public static extern string interop_GSDK_SERVER_ID_KEY_get();
 
-  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper_d.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_interop_GSDK_LOG_FOLDER_KEY_get___")]
+  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_interop_GSDK_LOG_FOLDER_KEY_get___")]
   public static extern string interop_GSDK_LOG_FOLDER_KEY_get();
 
-  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper_d.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_interop_GSDK_CERTIFICATE_FOLDER_KEY_get___")]
+  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_interop_GSDK_CERTIFICATE_FOLDER_KEY_get___")]
   public static extern string interop_GSDK_CERTIFICATE_FOLDER_KEY_get();
 
-  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper_d.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_interop_GSDK_TITLE_ID_KEY_get___")]
+  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_interop_GSDK_TITLE_ID_KEY_get___")]
   public static extern string interop_GSDK_TITLE_ID_KEY_get();
 
-  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper_d.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_interop_GSDK_BUILD_ID_KEY_get___")]
+  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_interop_GSDK_BUILD_ID_KEY_get___")]
   public static extern string interop_GSDK_BUILD_ID_KEY_get();
 
-  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper_d.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_interop_GSDK_REGION_KEY_get___")]
+  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_interop_GSDK_REGION_KEY_get___")]
   public static extern string interop_GSDK_REGION_KEY_get();
 
-  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper_d.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_interop_GSDK_SESSION_COOKIE_KEY_get___")]
+  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_interop_GSDK_SESSION_COOKIE_KEY_get___")]
   public static extern string interop_GSDK_SESSION_COOKIE_KEY_get();
 
-  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper_d.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_interop_GSDK_SESSION_ID_KEY_get___")]
+  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_interop_GSDK_SESSION_ID_KEY_get___")]
   public static extern string interop_GSDK_SESSION_ID_KEY_get();
 
-  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper_d.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_new_interop_GSDK___")]
+  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_new_interop_GSDK___")]
   public static extern global::System.IntPtr new_interop_GSDK();
 
-  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper_d.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_delete_interop_GSDK___")]
+  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_delete_interop_GSDK___")]
   public static extern void delete_interop_GSDK(global::System.Runtime.InteropServices.HandleRef jarg1);
 
-  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper_d.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_interop_ConnectedPlayerVector_Clear___")]
+  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_interop_ConnectedPlayerVector_Clear___")]
   public static extern void interop_ConnectedPlayerVector_Clear(global::System.Runtime.InteropServices.HandleRef jarg1);
 
-  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper_d.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_interop_ConnectedPlayerVector_Add___")]
+  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_interop_ConnectedPlayerVector_Add___")]
   public static extern void interop_ConnectedPlayerVector_Add(global::System.Runtime.InteropServices.HandleRef jarg1, global::System.Runtime.InteropServices.HandleRef jarg2);
 
-  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper_d.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_interop_ConnectedPlayerVector_size___")]
+  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_interop_ConnectedPlayerVector_size___")]
   public static extern uint interop_ConnectedPlayerVector_size(global::System.Runtime.InteropServices.HandleRef jarg1);
 
-  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper_d.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_interop_ConnectedPlayerVector_capacity___")]
+  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_interop_ConnectedPlayerVector_capacity___")]
   public static extern uint interop_ConnectedPlayerVector_capacity(global::System.Runtime.InteropServices.HandleRef jarg1);
 
-  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper_d.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_interop_ConnectedPlayerVector_reserve___")]
+  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_interop_ConnectedPlayerVector_reserve___")]
   public static extern void interop_ConnectedPlayerVector_reserve(global::System.Runtime.InteropServices.HandleRef jarg1, uint jarg2);
 
-  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper_d.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_new_interop_ConnectedPlayerVector__SWIG_0___")]
+  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_new_interop_ConnectedPlayerVector__SWIG_0___")]
   public static extern global::System.IntPtr new_interop_ConnectedPlayerVector__SWIG_0();
 
-  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper_d.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_new_interop_ConnectedPlayerVector__SWIG_1___")]
+  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_new_interop_ConnectedPlayerVector__SWIG_1___")]
   public static extern global::System.IntPtr new_interop_ConnectedPlayerVector__SWIG_1(global::System.Runtime.InteropServices.HandleRef jarg1);
 
-  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper_d.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_new_interop_ConnectedPlayerVector__SWIG_2___")]
+  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_new_interop_ConnectedPlayerVector__SWIG_2___")]
   public static extern global::System.IntPtr new_interop_ConnectedPlayerVector__SWIG_2(int jarg1);
 
-  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper_d.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_interop_ConnectedPlayerVector_getitemcopy___")]
+  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_interop_ConnectedPlayerVector_getitemcopy___")]
   public static extern global::System.IntPtr interop_ConnectedPlayerVector_getitemcopy(global::System.Runtime.InteropServices.HandleRef jarg1, int jarg2);
 
-  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper_d.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_interop_ConnectedPlayerVector_getitem___")]
+  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_interop_ConnectedPlayerVector_getitem___")]
   public static extern global::System.IntPtr interop_ConnectedPlayerVector_getitem(global::System.Runtime.InteropServices.HandleRef jarg1, int jarg2);
 
-  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper_d.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_interop_ConnectedPlayerVector_setitem___")]
+  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_interop_ConnectedPlayerVector_setitem___")]
   public static extern void interop_ConnectedPlayerVector_setitem(global::System.Runtime.InteropServices.HandleRef jarg1, int jarg2, global::System.Runtime.InteropServices.HandleRef jarg3);
 
-  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper_d.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_interop_ConnectedPlayerVector_AddRange___")]
+  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_interop_ConnectedPlayerVector_AddRange___")]
   public static extern void interop_ConnectedPlayerVector_AddRange(global::System.Runtime.InteropServices.HandleRef jarg1, global::System.Runtime.InteropServices.HandleRef jarg2);
 
-  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper_d.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_interop_ConnectedPlayerVector_GetRange___")]
+  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_interop_ConnectedPlayerVector_GetRange___")]
   public static extern global::System.IntPtr interop_ConnectedPlayerVector_GetRange(global::System.Runtime.InteropServices.HandleRef jarg1, int jarg2, int jarg3);
 
-  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper_d.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_interop_ConnectedPlayerVector_Insert___")]
+  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_interop_ConnectedPlayerVector_Insert___")]
   public static extern void interop_ConnectedPlayerVector_Insert(global::System.Runtime.InteropServices.HandleRef jarg1, int jarg2, global::System.Runtime.InteropServices.HandleRef jarg3);
 
-  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper_d.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_interop_ConnectedPlayerVector_InsertRange___")]
+  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_interop_ConnectedPlayerVector_InsertRange___")]
   public static extern void interop_ConnectedPlayerVector_InsertRange(global::System.Runtime.InteropServices.HandleRef jarg1, int jarg2, global::System.Runtime.InteropServices.HandleRef jarg3);
 
-  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper_d.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_interop_ConnectedPlayerVector_RemoveAt___")]
+  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_interop_ConnectedPlayerVector_RemoveAt___")]
   public static extern void interop_ConnectedPlayerVector_RemoveAt(global::System.Runtime.InteropServices.HandleRef jarg1, int jarg2);
 
-  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper_d.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_interop_ConnectedPlayerVector_RemoveRange___")]
+  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_interop_ConnectedPlayerVector_RemoveRange___")]
   public static extern void interop_ConnectedPlayerVector_RemoveRange(global::System.Runtime.InteropServices.HandleRef jarg1, int jarg2, int jarg3);
 
-  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper_d.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_interop_ConnectedPlayerVector_Repeat___")]
+  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_interop_ConnectedPlayerVector_Repeat___")]
   public static extern global::System.IntPtr interop_ConnectedPlayerVector_Repeat(global::System.Runtime.InteropServices.HandleRef jarg1, int jarg2);
 
-  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper_d.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_interop_ConnectedPlayerVector_Reverse__SWIG_0___")]
+  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_interop_ConnectedPlayerVector_Reverse__SWIG_0___")]
   public static extern void interop_ConnectedPlayerVector_Reverse__SWIG_0(global::System.Runtime.InteropServices.HandleRef jarg1);
 
-  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper_d.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_interop_ConnectedPlayerVector_Reverse__SWIG_1___")]
+  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_interop_ConnectedPlayerVector_Reverse__SWIG_1___")]
   public static extern void interop_ConnectedPlayerVector_Reverse__SWIG_1(global::System.Runtime.InteropServices.HandleRef jarg1, int jarg2, int jarg3);
 
-  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper_d.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_interop_ConnectedPlayerVector_SetRange___")]
+  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_interop_ConnectedPlayerVector_SetRange___")]
   public static extern void interop_ConnectedPlayerVector_SetRange(global::System.Runtime.InteropServices.HandleRef jarg1, int jarg2, global::System.Runtime.InteropServices.HandleRef jarg3);
 
-  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper_d.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_delete_interop_ConnectedPlayerVector___")]
+  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_delete_interop_ConnectedPlayerVector___")]
   public static extern void delete_interop_ConnectedPlayerVector(global::System.Runtime.InteropServices.HandleRef jarg1);
 
-  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper_d.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_new_interop_ConfigSettingMap__SWIG_0___")]
+  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_new_interop_ConfigSettingMap__SWIG_0___")]
   public static extern global::System.IntPtr new_interop_ConfigSettingMap__SWIG_0();
 
-  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper_d.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_new_interop_ConfigSettingMap__SWIG_1___")]
+  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_new_interop_ConfigSettingMap__SWIG_1___")]
   public static extern global::System.IntPtr new_interop_ConfigSettingMap__SWIG_1(global::System.Runtime.InteropServices.HandleRef jarg1);
 
-  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper_d.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_interop_ConfigSettingMap_size___")]
+  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_interop_ConfigSettingMap_size___")]
   public static extern uint interop_ConfigSettingMap_size(global::System.Runtime.InteropServices.HandleRef jarg1);
 
-  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper_d.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_interop_ConfigSettingMap_empty___")]
+  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_interop_ConfigSettingMap_empty___")]
   public static extern bool interop_ConfigSettingMap_empty(global::System.Runtime.InteropServices.HandleRef jarg1);
 
-  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper_d.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_interop_ConfigSettingMap_Clear___")]
+  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_interop_ConfigSettingMap_Clear___")]
   public static extern void interop_ConfigSettingMap_Clear(global::System.Runtime.InteropServices.HandleRef jarg1);
 
-  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper_d.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_interop_ConfigSettingMap_getitem___")]
+  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_interop_ConfigSettingMap_getitem___")]
   public static extern string interop_ConfigSettingMap_getitem(global::System.Runtime.InteropServices.HandleRef jarg1, string jarg2);
 
-  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper_d.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_interop_ConfigSettingMap_setitem___")]
+  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_interop_ConfigSettingMap_setitem___")]
   public static extern void interop_ConfigSettingMap_setitem(global::System.Runtime.InteropServices.HandleRef jarg1, string jarg2, string jarg3);
 
-  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper_d.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_interop_ConfigSettingMap_ContainsKey___")]
+  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_interop_ConfigSettingMap_ContainsKey___")]
   public static extern bool interop_ConfigSettingMap_ContainsKey(global::System.Runtime.InteropServices.HandleRef jarg1, string jarg2);
 
-  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper_d.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_interop_ConfigSettingMap_Add___")]
+  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_interop_ConfigSettingMap_Add___")]
   public static extern void interop_ConfigSettingMap_Add(global::System.Runtime.InteropServices.HandleRef jarg1, string jarg2, string jarg3);
 
-  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper_d.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_interop_ConfigSettingMap_Remove___")]
+  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_interop_ConfigSettingMap_Remove___")]
   public static extern bool interop_ConfigSettingMap_Remove(global::System.Runtime.InteropServices.HandleRef jarg1, string jarg2);
 
-  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper_d.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_interop_ConfigSettingMap_create_iterator_begin___")]
+  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_interop_ConfigSettingMap_create_iterator_begin___")]
   public static extern global::System.IntPtr interop_ConfigSettingMap_create_iterator_begin(global::System.Runtime.InteropServices.HandleRef jarg1);
 
-  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper_d.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_interop_ConfigSettingMap_get_next_key___")]
+  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_interop_ConfigSettingMap_get_next_key___")]
   public static extern string interop_ConfigSettingMap_get_next_key(global::System.Runtime.InteropServices.HandleRef jarg1, global::System.IntPtr jarg2);
 
-  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper_d.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_interop_ConfigSettingMap_destroy_iterator___")]
+  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_interop_ConfigSettingMap_destroy_iterator___")]
   public static extern void interop_ConfigSettingMap_destroy_iterator(global::System.Runtime.InteropServices.HandleRef jarg1, global::System.IntPtr jarg2);
 
-  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper_d.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_delete_interop_ConfigSettingMap___")]
+  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_delete_interop_ConfigSettingMap___")]
   public static extern void delete_interop_ConfigSettingMap(global::System.Runtime.InteropServices.HandleRef jarg1);
 
-  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper_d.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_interop_ShutdownCallback_OnShutdown___")]
+  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_interop_ShutdownCallback_OnShutdown___")]
   public static extern void interop_ShutdownCallback_OnShutdown(global::System.Runtime.InteropServices.HandleRef jarg1);
 
-  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper_d.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_delete_interop_ShutdownCallback___")]
+  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_delete_interop_ShutdownCallback___")]
   public static extern void delete_interop_ShutdownCallback(global::System.Runtime.InteropServices.HandleRef jarg1);
 
-  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper_d.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_new_interop_ShutdownCallback___")]
+  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_new_interop_ShutdownCallback___")]
   public static extern global::System.IntPtr new_interop_ShutdownCallback();
 
-  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper_d.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_interop_ShutdownCallback_director_connect___")]
+  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_interop_ShutdownCallback_director_connect___")]
   public static extern void interop_ShutdownCallback_director_connect(global::System.Runtime.InteropServices.HandleRef jarg1, interop_ShutdownCallback.SwigDelegateinterop_ShutdownCallback_0 delegate0);
 
-  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper_d.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_interop_HealthCallback_OnHealthCheck___")]
+  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_interop_HealthCallback_OnHealthCheck___")]
   public static extern bool interop_HealthCallback_OnHealthCheck(global::System.Runtime.InteropServices.HandleRef jarg1);
 
-  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper_d.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_delete_interop_HealthCallback___")]
+  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_delete_interop_HealthCallback___")]
   public static extern void delete_interop_HealthCallback(global::System.Runtime.InteropServices.HandleRef jarg1);
 
-  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper_d.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_new_interop_HealthCallback___")]
+  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_new_interop_HealthCallback___")]
   public static extern global::System.IntPtr new_interop_HealthCallback();
 
-  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper_d.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_interop_HealthCallback_director_connect___")]
+  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_interop_HealthCallback_director_connect___")]
   public static extern void interop_HealthCallback_director_connect(global::System.Runtime.InteropServices.HandleRef jarg1, interop_HealthCallback.SwigDelegateinterop_HealthCallback_0 delegate0);
 
-  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper_d.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_interop_MaintenanceCallback_OnMaintenanceScheduled___")]
+  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_interop_MaintenanceCallback_OnMaintenanceScheduled___")]
   public static extern void interop_MaintenanceCallback_OnMaintenanceScheduled(global::System.Runtime.InteropServices.HandleRef jarg1, long jarg2);
 
-  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper_d.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_delete_interop_MaintenanceCallback___")]
+  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_delete_interop_MaintenanceCallback___")]
   public static extern void delete_interop_MaintenanceCallback(global::System.Runtime.InteropServices.HandleRef jarg1);
 
-  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper_d.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_new_interop_MaintenanceCallback___")]
+  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_new_interop_MaintenanceCallback___")]
   public static extern global::System.IntPtr new_interop_MaintenanceCallback();
 
-  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper_d.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_interop_MaintenanceCallback_director_connect___")]
+  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_interop_MaintenanceCallback_director_connect___")]
   public static extern void interop_MaintenanceCallback_director_connect(global::System.Runtime.InteropServices.HandleRef jarg1, interop_MaintenanceCallback.SwigDelegateinterop_MaintenanceCallback_0 delegate0);
 
-  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper_d.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_readyForPlayers___")]
+  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_readyForPlayers___")]
   public static extern bool readyForPlayers();
 
-  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper_d.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_getConfigSettings___")]
+  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_getConfigSettings___")]
   public static extern global::System.IntPtr getConfigSettings();
 
-  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper_d.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_start___")]
+  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_start___")]
   public static extern void start();
 
-  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper_d.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_updateConnectedPlayers___")]
+  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_updateConnectedPlayers___")]
   public static extern void updateConnectedPlayers(global::System.Runtime.InteropServices.HandleRef jarg1);
 
-  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper_d.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_registerShutdownCallback___")]
+  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_registerShutdownCallback___")]
   public static extern void registerShutdownCallback(global::System.Runtime.InteropServices.HandleRef jarg1);
 
-  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper_d.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_registerHealthCallback___")]
+  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_registerHealthCallback___")]
   public static extern void registerHealthCallback(global::System.Runtime.InteropServices.HandleRef jarg1);
 
-  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper_d.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_registerMaintenanceCallback___")]
+  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_registerMaintenanceCallback___")]
   public static extern void registerMaintenanceCallback(global::System.Runtime.InteropServices.HandleRef jarg1);
 
-  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper_d.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_logMessage___")]
+  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_logMessage___")]
   public static extern void logMessage(string jarg1);
 
-  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper_d.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_getLogsDirectory___")]
+  [global::System.Runtime.InteropServices.DllImport("GSDK_CPP_CSharpWrapper.dll", EntryPoint="CSharp_MicrosoftfPlayfabfGaming_getLogsDirectory___")]
   public static extern string getLogsDirectory();
 }
 

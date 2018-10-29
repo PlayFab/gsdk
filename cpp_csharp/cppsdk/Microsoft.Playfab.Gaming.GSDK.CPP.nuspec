@@ -15,7 +15,6 @@
             <dependency id="com.playfab.xplatcppsdk.v141" version="2.0.180424"/>
             <dependency id="curl" version="7.30.0.2"/>
             <dependency id="curl.redist" version="7.30.0.2"/>
-            <dependency id="jsoncpp-vc140-static-32_64" version="1.8.0"/>
             <dependency id="libssh2" version="1.4.3.1"/>
             <dependency id="libssh2.redist" version="1.4.3.1"/>
             <dependency id="openssl" version="1.0.1.21"/>
@@ -28,23 +27,41 @@
         <!-- Include header files -->
         <file src="gsdk.h" target="\build\native\include" />
         
-        <!-- Release x64 -->
-        <file src="..\x64\Release\GSDKCPPWindows\GSDK_CPP_Windows.lib" target="\build\native\lib\Windows\x64\Release" />
-        <file src="..\x64\Release\GSDKCPPWindows\GSDK_CPP_Windows.pdb" target="\build\native\lib\Windows\x64\Release" />
-        <file src="..\x64\Release\GSDKCPPWindows\libcurl.dll" target="\build\native\lib\Windows\x64\Release" />
-        <file src="..\x64\Release\GSDKCPPWindows\libeay32.dll" target="\build\native\lib\Windows\x64\Release" />
-        <file src="..\x64\Release\GSDKCPPWindows\libssh2.dll" target="\build\native\lib\Windows\x64\Release" />
-        <file src="..\x64\Release\GSDKCPPWindows\ssleay32.dll" target="\build\native\lib\Windows\x64\Release" />
-        <file src="..\x64\Release\GSDKCPPWindows\zlib.dll" target="\build\native\lib\Windows\x64\Release" />
+        <!-- Release x64 Static -->
+        <file src="..\x64\Release\GSDKCPPWindows\GSDK_CPP_Windows.lib" target="\build\native\lib\Windows\x64\Release\static" />
+        <file src="..\x64\Release\GSDKCPPWindows\GSDK_CPP_Windows.pdb" target="\build\native\lib\Windows\x64\Release\static" />
+        <file src="..\x64\Release\GSDKCPPWindows\libcurl.dll" target="\build\native\lib\Windows\x64\Release\static" />
+        <file src="..\x64\Release\GSDKCPPWindows\libeay32.dll" target="\build\native\lib\Windows\x64\Release\static" />
+        <file src="..\x64\Release\GSDKCPPWindows\libssh2.dll" target="\build\native\lib\Windows\x64\Release\static" />
+        <file src="..\x64\Release\GSDKCPPWindows\ssleay32.dll" target="\build\native\lib\Windows\x64\Release\static" />
+        <file src="..\x64\Release\GSDKCPPWindows\zlib.dll" target="\build\native\lib\Windows\x64\Release\static" />
 
-        <!-- Debug x64 -->
-        <file src="..\x64\Debug\GSDKCPPWindows\GSDK_CPP_Windows.lib" target="\build\native\lib\Windows\x64\Debug" />
-        <file src="..\x64\Debug\GSDKCPPWindows\GSDK_CPP_Windows.pdb" target="\build\native\lib\Windows\x64\Debug" />
-        <file src="..\x64\Debug\GSDKCPPWindows\libcurl.dll" target="\build\native\lib\Windows\x64\Debug" />
-        <file src="..\x64\Debug\GSDKCPPWindows\libeay32.dll" target="\build\native\lib\Windows\x64\Debug" />
-        <file src="..\x64\Debug\GSDKCPPWindows\libssh2.dll" target="\build\native\lib\Windows\x64\Debug" />
-        <file src="..\x64\Debug\GSDKCPPWindows\ssleay32.dll" target="\build\native\lib\Windows\x64\Debug" />
-        <file src="..\x64\Debug\GSDKCPPWindows\zlib.dll" target="\build\native\lib\Windows\x64\Debug" />
+        <!-- Release x64 Dynamic -->
+        <file src="..\x64\ReleaseDynamic\GSDKCPPWindows\GSDK_CPP_Windows.lib" target="\build\native\lib\Windows\x64\Release\dynamic" />
+        <file src="..\x64\ReleaseDynamic\GSDKCPPWindows\GSDK_CPP_Windows.pdb" target="\build\native\lib\Windows\x64\Release\dynamic" />
+        <file src="..\x64\ReleaseDynamic\GSDKCPPWindows\libcurl.dll" target="\build\native\lib\Windows\x64\Release\dynamic" />
+        <file src="..\x64\ReleaseDynamic\GSDKCPPWindows\libeay32.dll" target="\build\native\lib\Windows\x64\Release\dynamic" />
+        <file src="..\x64\ReleaseDynamic\GSDKCPPWindows\libssh2.dll" target="\build\native\lib\Windows\x64\Release\dynamic" />
+        <file src="..\x64\ReleaseDynamic\GSDKCPPWindows\ssleay32.dll" target="\build\native\lib\Windows\x64\Release\dynamic" />
+        <file src="..\x64\ReleaseDynamic\GSDKCPPWindows\zlib.dll" target="\build\native\lib\Windows\x64\Release\dynamic" />
+
+        <!-- Debug x64 Static -->
+        <file src="..\x64\Debug\GSDKCPPWindows\GSDK_CPP_Windows.lib" target="\build\native\lib\Windows\x64\Debug\static" />
+        <file src="..\x64\Debug\GSDKCPPWindows\GSDK_CPP_Windows.pdb" target="\build\native\lib\Windows\x64\Debug\static" />
+        <file src="..\x64\Debug\GSDKCPPWindows\libcurl.dll" target="\build\native\lib\Windows\x64\Debug\static" />
+        <file src="..\x64\Debug\GSDKCPPWindows\libeay32.dll" target="\build\native\lib\Windows\x64\Debug\static" />
+        <file src="..\x64\Debug\GSDKCPPWindows\libssh2.dll" target="\build\native\lib\Windows\x64\Debug\static" />
+        <file src="..\x64\Debug\GSDKCPPWindows\ssleay32.dll" target="\build\native\lib\Windows\x64\Debug\static" />
+        <file src="..\x64\Debug\GSDKCPPWindows\zlib.dll" target="\build\native\lib\Windows\x64\Debug\static" />
+
+        <!-- Debug x64 Dynamic -->
+        <file src="..\x64\DebugDynamic\GSDKCPPWindows\GSDK_CPP_Windows.lib" target="\build\native\lib\Windows\x64\Debug\dynamic" />
+        <file src="..\x64\DebugDynamic\GSDKCPPWindows\GSDK_CPP_Windows.pdb" target="\build\native\lib\Windows\x64\Debug\dynamic" />
+        <file src="..\x64\DebugDynamic\GSDKCPPWindows\libcurl.dll" target="\build\native\lib\Windows\x64\Debug\dynamic" />
+        <file src="..\x64\DebugDynamic\GSDKCPPWindows\libeay32.dll" target="\build\native\lib\Windows\x64\Debug\dynamic" />
+        <file src="..\x64\DebugDynamic\GSDKCPPWindows\libssh2.dll" target="\build\native\lib\Windows\x64\Debug\dynamic" />
+        <file src="..\x64\DebugDynamic\GSDKCPPWindows\ssleay32.dll" target="\build\native\lib\Windows\x64\Debug\dynamic" />
+        <file src="..\x64\DebugDynamic\GSDKCPPWindows\zlib.dll" target="\build\native\lib\Windows\x64\Debug\dynamic" />
 
         <!-- vs targets file -->
         <file src="Microsoft.Playfab.Gaming.GSDK.CPP.targets" target="build\native\Microsoft.Playfab.Gaming.GSDK.CPP.targets" />
