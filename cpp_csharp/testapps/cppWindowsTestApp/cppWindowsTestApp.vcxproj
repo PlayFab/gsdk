@@ -103,8 +103,8 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>GSDK_CPP_Windows.lib;libcurl.lib;XPlatCppWindows.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(TFS_BinariesDirectory)\$(Configuration)\$(Platform)\GSDKCPPWindows\;$(SolutionDir)$(Platform)\$(Configuration)\GSDKCPPWindows;$(SolutionDir)packages\curl.7.30.0.2\build\native\lib\v110\x64\Debug\dynamic;$(SolutionDir)packages\com.playfab.xplatcppsdk.v141.2.0.180424\build\native\lib\x64\v141\Debug</AdditionalLibraryDirectories>
+      <AdditionalDependencies>GSDK_CPP_Windows.lib;jsoncpp.lib;libcurl.lib;XPlatCppWindows.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(TFS_BinariesDirectory)\$(Configuration)\$(Platform)\GSDKCPPWindows\;$(SolutionDir)$(Platform)\$(Configuration)\GSDKCPPWindows;$(SolutionDir)packages\curl.7.30.0.2\build\native\lib\v110\x64\Debug\dynamic;$(SolutionDir)packages\jsoncpp-vc140-static-32_64.1.8.0\lib\native\libs\x64\static\Debug;$(SolutionDir)packages\com.playfab.xplatcppsdk.v141.2.0.180424\build\native\lib\x64\v141\Debug</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='DebugDynamic|x64'">
@@ -148,8 +148,8 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>GSDK_CPP_Windows.lib;libcurl.lib;XPlatCppWindows.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(TFS_BinariesDirectory)\$(Configuration)\$(Platform)\GSDKCPPWindows\;$(SolutionDir)$(Platform)\$(Configuration)\GSDKCPPWindows;$(SolutionDir)packages\curl.7.30.0.2\build\native\lib\v110\x64\Release\dynamic;$(SolutionDir)packages\com.playfab.xplatcppsdk.v141.2.0.180424\build\native\lib\x64\v141\Release</AdditionalLibraryDirectories>
+      <AdditionalDependencies>GSDK_CPP_Windows.lib;jsoncpp.lib;libcurl.lib;XPlatCppWindows.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(TFS_BinariesDirectory)\$(Configuration)\$(Platform)\GSDKCPPWindows\;$(SolutionDir)$(Platform)\$(Configuration)\GSDKCPPWindows;$(SolutionDir)packages\curl.7.30.0.2\build\native\lib\v110\x64\Release\dynamic;$(SolutionDir)packages\jsoncpp-vc140-static-32_64.1.8.0\lib\native\libs\x64\static\Release;$(SolutionDir)packages\com.playfab.xplatcppsdk.v141.2.0.180424\build\native\lib\x64\v141\Release</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseDynamic|x64'">
@@ -203,7 +203,8 @@
     <Import Project="..\..\packages\openssl.1.0.1.21\build\native\openssl.targets" Condition="Exists('..\..\packages\openssl.1.0.1.21\build\native\openssl.targets')" />
     <Import Project="..\..\packages\libssh2.1.4.3.1\build\native\libssh2.targets" Condition="Exists('..\..\packages\libssh2.1.4.3.1\build\native\libssh2.targets')" />
     <Import Project="..\..\packages\curl.7.30.0.2\build\native\curl.targets" Condition="Exists('..\..\packages\curl.7.30.0.2\build\native\curl.targets')" />
-    <Import Project="..\..\packages\com.playfab.xplatcppsdk.v141.2.0.180424\build\native\com.playfab.xplatcppsdk.v141.targets" Condition="Exists('..\..\packages\com.playfab.xplatcppsdk.v141.2.0.180424\build\native\com.playfab.xplatcppsdk.v141.targets')" />
+    <Import Project="..\..\packages\jsoncpp-vc140-static-32_64.1.8.0\build\native\jsoncpp-vc140-static-32_64.targets" Condition="Exists('..\..\packages\jsoncpp-vc140-static-32_64.1.8.0\build\native\jsoncpp-vc140-static-32_64.targets') AND '$(Configuration)' != 'DebugDynamic'  AND '$(Configuration)' != 'ReleaseDynamic'" />
+    <Import Project="..\..\packages\com.playfab.xplatcppsdk.v141.2.0.180424\build\native\com.playfab.xplatcppsdk.v141.targets" Condition="Exists('..\..\packages\com.playfab.xplatcppsdk.v141.2.0.180424\build\native\com.playfab.xplatcppsdk.v141.targets') AND '$(Configuration)' != 'DebugDynamic' AND '$(Configuration)' != 'ReleaseDynamic'" />
   </ImportGroup>
   <Target Name="CopyDependencies" AfterTargets="AfterBuild">
     <ItemGroup>
@@ -225,6 +226,7 @@
     <Error Condition="!Exists('..\..\packages\openssl.1.0.1.21\build\native\openssl.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\openssl.1.0.1.21\build\native\openssl.targets'))" />
     <Error Condition="!Exists('..\..\packages\libssh2.1.4.3.1\build\native\libssh2.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\libssh2.1.4.3.1\build\native\libssh2.targets'))" />
     <Error Condition="!Exists('..\..\packages\curl.7.30.0.2\build\native\curl.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\curl.7.30.0.2\build\native\curl.targets'))" />
+    <Error Condition="!Exists('..\..\packages\jsoncpp-vc140-static-32_64.1.8.0\build\native\jsoncpp-vc140-static-32_64.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\jsoncpp-vc140-static-32_64.1.8.0\build\native\jsoncpp-vc140-static-32_64.targets'))" />
     <Error Condition="!Exists('..\..\packages\com.playfab.xplatcppsdk.v141.2.0.180424\build\native\com.playfab.xplatcppsdk.v141.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\com.playfab.xplatcppsdk.v141.2.0.180424\build\native\com.playfab.xplatcppsdk.v141.targets'))" />
   </Target>
 </Project>

@@ -16,7 +16,7 @@
         <tags>GSDK, C++, Thunderhead, Playfab, native</tags>
         <!-- Dependent nuget packages -->
         <dependencies>
-            <dependency id="com.playfab.xplatcppsdk.v141" version="2.0.180424"/>
+            <!--dependency id="com.playfab.xplatcppsdk.v141" version="2.0.180424"/--> <!--Add back in when PlayFab CPP nuget can handle dynamic CRT-->
             <dependency id="curl" version="7.30.0.2"/>
             <dependency id="curl.redist" version="7.30.0.2"/>
             <dependency id="libssh2" version="1.4.3.1"/>
