@@ -1,10 +1,14 @@
 <?xml version="1.0"?>
 <package >
     <metadata>
-        <id>Microsoft.Playfab.Gaming.GSDK.CSharp</id>
+        <id>com.playfab.csharpgsdk</id>
         <version>0.0.0-beta</version> <!-- Gets Overriden by Jenkins -->
+        <title>PlayFab CSharp Gameserver SDK</title>
         <authors>PlayFab</authors>
         <owners>PlayFab</owners>
+        <licenseUrl>http://www.apache.org/licenses/LICENSE-2.0</licenseUrl> <!-- Switch to LICENSE file in GSDK repo once it's public-->
+        <!--projectUrl>https://github.com/PlayFab/gsdk</projectUrl--> <!--Comment back in when GSDK repo is public-->
+        <iconUrl>https://playfab.com/assets/img/playfab-mark.png</iconUrl>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
         <description>Enables Thunderhead game servers to interact with PlayFab control systems and accept players.</description>
         <releaseNotes>Release of the C# Game Server SDK for use with Thunderhead.</releaseNotes>

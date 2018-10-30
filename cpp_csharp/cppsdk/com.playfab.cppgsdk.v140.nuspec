@@ -1,10 +1,14 @@
 <?xml version="1.0"?>
 <package>
     <metadata>
-        <id>Microsoft.Playfab.Gaming.GSDK.CPP</id>
+        <id>com.playfab.cppgsdk.v140</id>
         <version>0.0.0.0</version> <!-- Gets overriden by Jenkins -->
+        <title>PlayFab C++ Gameserver SDK</title>
         <authors>PlayFab</authors>
         <owners>PlayFab</owners>
+        <licenseUrl>http://www.apache.org/licenses/LICENSE-2.0</licenseUrl> <!-- Switch to LICENSE file in GSDK repo once it's public-->
+        <!--projectUrl>https://github.com/PlayFab/gsdk</projectUrl--> <!--Comment back in when GSDK repo is public-->
+        <iconUrl>https://playfab.com/assets/img/playfab-mark.png</iconUrl>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
         <description>Enables Thunderhead game servers to interact with PlayFab control systems and accept players.</description>
         <releaseNotes>Release of the C++ Game Server SDK for use with Thunderhead.</releaseNotes>
@@ -64,6 +68,6 @@
         <file src="..\x64\DebugDynamic\GSDKCPPWindows\zlib.dll" target="\build\native\lib\Windows\x64\Debug\dynamic" />
 
         <!-- vs targets file -->
-        <file src="Microsoft.Playfab.Gaming.GSDK.CPP.targets" target="build\native\Microsoft.Playfab.Gaming.GSDK.CPP.targets" />
+        <file src="com.playfab.cppgsdk.v140.targets" target="build\native\com.playfab.cppgsdk.v140.targets" />
     </files>
 </package>

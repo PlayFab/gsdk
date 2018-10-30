@@ -231,11 +231,9 @@
     <None Include="gsdkSampleConfigWindows.json">
       <DeploymentContent>true</DeploymentContent>
     </None>
-    <None Include="Microsoft.Playfab.Gaming.GSDK.CPP.nuspec" />
-    <None Include="Microsoft.Playfab.Gaming.GSDK.CPP.targets" />
-    <None Include="packages.config">
-      <SubType>Designer</SubType>
-    </None>
+    <None Include="com.playfab.cppgsdk.v140.nuspec" />
+    <None Include="com.playfab.cppgsdk.v140.targets" />
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

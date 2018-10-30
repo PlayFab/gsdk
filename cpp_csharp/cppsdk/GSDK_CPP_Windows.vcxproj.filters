@@ -68,7 +68,7 @@
   <ItemGroup>
     <None Include="packages.config" />
     <None Include="gsdkSampleConfigWindows.json" />
-    <None Include="Microsoft.Playfab.Gaming.GSDK.CPP.nuspec" />
-    <None Include="Microsoft.Playfab.Gaming.GSDK.CPP.targets" />
+    <None Include="com.playfab.cppgsdk.v140.targets" />
+    <None Include="com.playfab.cppgsdk.v140.nuspec" />
   </ItemGroup>
 </Project>
