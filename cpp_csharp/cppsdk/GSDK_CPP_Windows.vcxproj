@@ -2,8 +2,16 @@
 <Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="..\packages\openssl.1.0.1.21\build\native\openssl.props" Condition="Exists('..\packages\openssl.1.0.1.21\build\native\openssl.props')" />
   <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="DebugDynamic|x64">
+      <Configuration>DebugDynamic</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
     <ProjectConfiguration Include="Debug|x64">
       <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="ReleaseDynamic|x64">
+      <Configuration>ReleaseDynamic</Configuration>
       <Platform>x64</Platform>
     </ProjectConfiguration>
     <ProjectConfiguration Include="Release|x64">
@@ -26,8 +34,23 @@
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v141</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
+    <DebugType>full</DebugType>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DebugDynamic|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+    <DebugType>full</DebugType>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+    <DebugType>pdbonly</DebugType>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseDynamic|x64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v141</PlatformToolset>
@@ -42,17 +65,29 @@
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='DebugDynamic|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseDynamic|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DebugDynamic|x64'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>true</LinkIncremental>
   </PropertyGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseDynamic|x64'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)'=='Debug'">
     <ClCompile>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <WarningLevel>Level4</WarningLevel>
@@ -72,8 +107,6 @@
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
-    <ProjectReference />
-    <ProjectReference />
     <Lib>
       <AdditionalDependencies>
       </AdditionalDependencies>
@@ -81,7 +114,34 @@
       </AdditionalLibraryDirectories>
     </Lib>
   </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+  <ItemDefinitionGroup Condition="'$(Configuration)'=='DebugDynamic'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level4</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_DEBUG;_LIB;GSDK_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <PrecompiledHeaderFile>gsdkCommonPch.h</PrecompiledHeaderFile>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(SolutionDir)packages\curl.7.30.0.2\build\native\include</AdditionalIncludeDirectories>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <MinimalRebuild>false</MinimalRebuild>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <DisableSpecificWarnings>4251</DisableSpecificWarnings>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+    <Lib>
+      <AdditionalDependencies>
+      </AdditionalDependencies>
+      <AdditionalLibraryDirectories>
+      </AdditionalLibraryDirectories>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)'=='Release'">
     <ClCompile>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <WarningLevel>Level4</WarningLevel>
@@ -100,8 +160,32 @@
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
-    <ProjectReference />
-    <ProjectReference />
+    <Lib>
+      <AdditionalDependencies>
+      </AdditionalDependencies>
+      <AdditionalLibraryDirectories>
+      </AdditionalLibraryDirectories>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)'=='ReleaseDynamic'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level4</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_LIB;GSDK_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <PrecompiledHeaderFile>gsdkCommonPch.h</PrecompiledHeaderFile>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(SolutionDir)packages\curl.7.30.0.2\build\native\include</AdditionalIncludeDirectories>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <MinimalRebuild>false</MinimalRebuild>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <DisableSpecificWarnings>4251</DisableSpecificWarnings>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
     <Lib>
       <AdditionalDependencies>
       </AdditionalDependencies>
@@ -111,6 +195,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="gsdkConfig.h" />
+    <ClInclude Include="json\json-forwards.h" />
+    <ClInclude Include="json\json.h" />
     <ClInclude Include="ManualResetEvent.h" />
     <ClInclude Include="gsdk.h" />
     <ClInclude Include="gsdkCommonPch.h" />
@@ -121,13 +207,16 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="gsdkConfig.cpp" />
+    <ClCompile Include="jsoncpp.cpp" />
     <ClCompile Include="ManualResetEvent.cpp" />
     <ClCompile Include="gsdk.cpp" />
     <ClCompile Include="gsdkLog.cpp" />
     <ClCompile Include="gsdkUtils.cpp" />
     <ClCompile Include="gsdkWindowsPch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='DebugDynamic|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='ReleaseDynamic|x64'">Create</PrecompiledHeader>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -135,7 +224,9 @@
       <DeploymentContent>true</DeploymentContent>
     </None>
     <None Include="com.playfab.cppgsdk.v140.nuspec" />
-    <None Include="com.playfab.cppgsdk.v140.targets" />
+    <None Include="com.playfab.cppgsdk.v140.targets">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
@@ -148,7 +239,6 @@
     <Import Project="..\packages\openssl.1.0.1.21\build\native\openssl.targets" Condition="Exists('..\packages\openssl.1.0.1.21\build\native\openssl.targets')" />
     <Import Project="..\packages\libssh2.1.4.3.1\build\native\libssh2.targets" Condition="Exists('..\packages\libssh2.1.4.3.1\build\native\libssh2.targets')" />
     <Import Project="..\packages\curl.7.30.0.2\build\native\curl.targets" Condition="Exists('..\packages\curl.7.30.0.2\build\native\curl.targets')" />
-    <Import Project="..\packages\jsoncpp-vc140-static-32_64.1.8.0\build\native\jsoncpp-vc140-static-32_64.targets" Condition="Exists('..\packages\jsoncpp-vc140-static-32_64.1.8.0\build\native\jsoncpp-vc140-static-32_64.targets')" />
     <Import Project="..\packages\com.playfab.xplatcppsdk.v141.2.0.180424\build\native\com.playfab.xplatcppsdk.v141.targets" Condition="Exists('..\packages\com.playfab.xplatcppsdk.v141.2.0.180424\build\native\com.playfab.xplatcppsdk.v141.targets')" />
   </ImportGroup>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
@@ -164,16 +254,36 @@
     <Error Condition="!Exists('..\packages\openssl.1.0.1.21\build\native\openssl.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\openssl.1.0.1.21\build\native\openssl.targets'))" />
     <Error Condition="!Exists('..\packages\libssh2.1.4.3.1\build\native\libssh2.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\libssh2.1.4.3.1\build\native\libssh2.targets'))" />
     <Error Condition="!Exists('..\packages\curl.7.30.0.2\build\native\curl.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\curl.7.30.0.2\build\native\curl.targets'))" />
-    <Error Condition="!Exists('..\packages\jsoncpp-vc140-static-32_64.1.8.0\build\native\jsoncpp-vc140-static-32_64.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\jsoncpp-vc140-static-32_64.1.8.0\build\native\jsoncpp-vc140-static-32_64.targets'))" />
     <Error Condition="!Exists('..\packages\com.playfab.xplatcppsdk.v141.2.0.180424\build\native\com.playfab.xplatcppsdk.v141.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\com.playfab.xplatcppsdk.v141.2.0.180424\build\native\com.playfab.xplatcppsdk.v141.targets'))" />
   </Target>
   <Target Name="CopyDependencies" AfterTargets="AfterBuild">
-    <ItemGroup>
+    <ItemGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
       <Dependency Include="..\packages\curl.redist.7.30.0.2\build\native\bin\v110\$(Platform)\$(Configuration)\dynamic\libcurl.dll" />
       <Dependency Include="..\packages\libssh2.redist.1.4.3.1\build\native\bin\v110\$(Platform)\$(Configuration)\dynamic\cdecl\libssh2.dll" />
       <Dependency Include="..\packages\zlib.redist.1.2.8.1\build\native\bin\v110\$(Platform)\$(Configuration)\dynamic\cdecl\zlib.dll" />
       <Dependency Include="..\packages\openssl.redist.1.0.1.25\build\native\bin\v110\$(Platform)\$(Configuration)\dynamic\libeay32.dll" />
       <Dependency Include="..\packages\openssl.redist.1.0.1.25\build\native\bin\v110\$(Platform)\$(Configuration)\dynamic\ssleay32.dll" />
+    </ItemGroup>
+    <ItemGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseDynamic|x64'">
+      <Dependency Include="..\packages\curl.redist.7.30.0.2\build\native\bin\v110\$(Platform)\Release\dynamic\libcurl.dll" />
+      <Dependency Include="..\packages\libssh2.redist.1.4.3.1\build\native\bin\v110\$(Platform)\Release\dynamic\cdecl\libssh2.dll" />
+      <Dependency Include="..\packages\zlib.redist.1.2.8.1\build\native\bin\v110\$(Platform)\Release\dynamic\cdecl\zlib.dll" />
+      <Dependency Include="..\packages\openssl.redist.1.0.1.25\build\native\bin\v110\$(Platform)\Release\dynamic\libeay32.dll" />
+      <Dependency Include="..\packages\openssl.redist.1.0.1.25\build\native\bin\v110\$(Platform)\Release\dynamic\ssleay32.dll" />
+    </ItemGroup>
+    <ItemGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+      <Dependency Include="..\packages\curl.redist.7.30.0.2\build\native\bin\v110\$(Platform)\$(Configuration)\dynamic\libcurl.dll" />
+      <Dependency Include="..\packages\libssh2.redist.1.4.3.1\build\native\bin\v110\$(Platform)\$(Configuration)\dynamic\cdecl\libssh2.dll" />
+      <Dependency Include="..\packages\zlib.redist.1.2.8.1\build\native\bin\v110\$(Platform)\$(Configuration)\dynamic\cdecl\zlib.dll" />
+      <Dependency Include="..\packages\openssl.redist.1.0.1.25\build\native\bin\v110\$(Platform)\$(Configuration)\dynamic\libeay32.dll" />
+      <Dependency Include="..\packages\openssl.redist.1.0.1.25\build\native\bin\v110\$(Platform)\$(Configuration)\dynamic\ssleay32.dll" />
+    </ItemGroup>
+    <ItemGroup Condition="'$(Configuration)|$(Platform)'=='DebugDynamic|x64'">
+      <Dependency Include="..\packages\curl.redist.7.30.0.2\build\native\bin\v110\$(Platform)\Debug\dynamic\libcurl.dll" />
+      <Dependency Include="..\packages\libssh2.redist.1.4.3.1\build\native\bin\v110\$(Platform)\Debug\dynamic\cdecl\libssh2.dll" />
+      <Dependency Include="..\packages\zlib.redist.1.2.8.1\build\native\bin\v110\$(Platform)\Debug\dynamic\cdecl\zlib.dll" />
+      <Dependency Include="..\packages\openssl.redist.1.0.1.25\build\native\bin\v110\$(Platform)\Debug\dynamic\libeay32.dll" />
+      <Dependency Include="..\packages\openssl.redist.1.0.1.25\build\native\bin\v110\$(Platform)\Debug\dynamic\ssleay32.dll" />
     </ItemGroup>
     <Copy SourceFiles="@(Dependency)" DestinationFolder="$(OutDir)" SkipUnchangedFiles="true" />
   </Target>
