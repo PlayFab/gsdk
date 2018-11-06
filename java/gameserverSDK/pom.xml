@@ -4,7 +4,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.playfab</groupId>
   <artifactId>gameserverSDK</artifactId>
-  <version>1.2.3.4</version>
+  <version>0.2.181106</version>
   <name>Java Playfab GSDK</name>
   <description>Enables Playfab multiplayer game servers to interact with PlayFab control systems and accept players.</description>
   <url>http://api.playfab.com/</url>
