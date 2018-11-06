@@ -40,9 +40,12 @@ namespace Microsoft
                     gameCerts["cert1"] = "thumbprint1";
                     gameCerts["cert2"] = "thumbprint2";
                     std::unordered_map<std::string, std::string> metadata = std::unordered_map<std::string, std::string>();
-                    gameCerts["key1"] = "value1";
-                    gameCerts["key2"] = "value2";
-                    GSDKInternal::testConfiguration = std::make_unique<TestConfig>(heartbeatEndpoint, serverId, logFolder, certFolder, gameCerts, titleId, buildId, region, metadata);
+                    metadata["key1"] = "value1";
+                    metadata["key2"] = "value2";
+                    std::unordered_map<std::string, std::string> ports = std::unordered_map<std::string, std::string>();
+                    ports["port1"] = "1111";
+                    ports["port2"] = "2222";
+                    GSDKInternal::testConfiguration = std::make_unique<TestConfig>(heartbeatEndpoint, serverId, logFolder, certFolder, gameCerts, titleId, buildId, region, metadata, ports);
                     GSDK::start();
                     const std::unordered_map<std::string, std::string> &config = GSDK::getConfigSettings();
                     Assert::AreEqual(heartbeatEndpoint, config.at("gsmsBaseUrl"), L"Ensuring heartbeat endpoint was set.");
@@ -57,6 +60,8 @@ namespace Microsoft
                     Assert::AreEqual(region, config.at("region"), L"Ensuring region was set.");
                     Assert::AreEqual(std::string("value1"), config.at("key1"), L"Ensuring key1 was set.");
                     Assert::AreEqual(std::string("value2"), config.at("key2"), L"Ensuring key2 was set.");
+                    Assert::AreEqual(std::string("1111"), config.at("port1"), L"Ensuring port1 was set.");
+                    Assert::AreEqual(std::string("2222"), config.at("port2"), L"Ensuring port2 was set.");
                 }
 
                 TEST_METHOD(LogFolderNotSetInitializesFine)

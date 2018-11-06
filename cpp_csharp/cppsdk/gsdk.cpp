@@ -62,6 +62,12 @@ namespace Microsoft
                     m_configSettings[it->first] = it->second;
                 }
 
+                std::unordered_map<std::string, std::string> ports = config->getGamePorts();
+                for (auto it = ports.begin(); it != ports.end(); ++it)
+                {
+                    m_configSettings[it->first] = it->second;
+                }
+
                 m_configSettings[GSDK::HEARTBEAT_ENDPOINT_KEY] = config->getHeartbeatEndpoint();
                 m_configSettings[GSDK::SERVER_ID_KEY] = config->getServerId();
                 m_configSettings[GSDK::LOG_FOLDER_KEY] = config->getLogFolder();

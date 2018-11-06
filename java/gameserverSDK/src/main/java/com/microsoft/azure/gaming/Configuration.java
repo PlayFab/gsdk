@@ -16,6 +16,7 @@ interface Configuration {
     String getBuildId();
     String getRegion();
     Map<String, String> getBuildMetadata();
+    Map<String, String> getGamePorts();
     void validate() throws GameserverSDKInitializationException;
 
 

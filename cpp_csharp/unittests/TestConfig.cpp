@@ -9,7 +9,8 @@ Microsoft::Azure::Gaming::TestConfig::TestConfig(   const std::string & heartbea
                                                     const std::string & titleId,
                                                     const std::string & buildId,
                                                     const std::string & region,
-                                                    const std::unordered_map<std::string, std::string> & metadata)
+                                                    const std::unordered_map<std::string, std::string> & metadata,
+                                                    const std::unordered_map<std::string, std::string> & ports)
 {
     m_heartbeatEndpoint = heartbeatEndpoint;
     m_serverId = serverId;
@@ -20,6 +21,7 @@ Microsoft::Azure::Gaming::TestConfig::TestConfig(   const std::string & heartbea
     m_buildId = buildId;
     m_region = region;
     m_metadata = metadata;
+    m_ports = ports;
 }
 
 const std::string &Microsoft::Azure::Gaming::TestConfig::getHeartbeatEndpoint()
@@ -75,4 +77,9 @@ bool Microsoft::Azure::Gaming::TestConfig::shouldHeartbeat()
 const std::unordered_map<std::string, std::string> &Microsoft::Azure::Gaming::TestConfig::getBuildMetadata()
 {
     return m_metadata;
+}
+
+const std::unordered_map<std::string, std::string> &Microsoft::Azure::Gaming::TestConfig::getGamePorts()
+{
+    return m_ports;
 }

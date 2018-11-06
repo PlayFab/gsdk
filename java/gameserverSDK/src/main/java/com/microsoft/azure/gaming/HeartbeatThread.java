@@ -73,6 +73,7 @@ class HeartbeatThread implements Runnable {
 
         configSettings = Collections.synchronizedMap(new HashMap<String, String>());
         configSettings.putAll(config.getBuildMetadata());
+        configSettings.putAll(config.getGamePorts());
         configSettings.put(GameserverSDK.HEARTBEAT_ENDPOINT_KEY, config.getHeartbeatEndpoint());
         configSettings.put(GameserverSDK.SERVER_ID_KEY, config.getServerId());
         configSettings.put(GameserverSDK.LOG_FOLDER_KEY, config.getLogFolder());

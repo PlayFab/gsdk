@@ -19,6 +19,7 @@ namespace Microsoft
                 virtual const std::string &getBuildId() = 0;
                 virtual const std::string &getRegion() = 0;
                 virtual const std::unordered_map<std::string, std::string> &getBuildMetadata() = 0;
+                virtual const std::unordered_map<std::string, std::string> &getGamePorts() = 0;
                 virtual bool shouldLog() = 0;
                 virtual bool shouldHeartbeat() = 0;
 
@@ -60,6 +61,7 @@ namespace Microsoft
                 const std::string &getCertificateFolder();
                 const std::unordered_map<std::string, std::string> &getGameCertificates();
                 const std::unordered_map<std::string, std::string> &getBuildMetadata();
+                const std::unordered_map<std::string, std::string> &getGamePorts();
 
             private:
                 std::string m_heartbeatEndpoint;
@@ -68,6 +70,7 @@ namespace Microsoft
                 std::string m_certFolder;
                 std::unordered_map<std::string, std::string> m_gameCerts;
                 std::unordered_map<std::string, std::string> m_metadata;
+                std::unordered_map<std::string, std::string> m_ports;
             };
 
             class JsonFileConfiguration : public ConfigurationBase
@@ -81,6 +84,7 @@ namespace Microsoft
                 const std::string &getCertificateFolder();
                 const std::unordered_map<std::string, std::string> &getGameCertificates();
                 const std::unordered_map<std::string, std::string> &getBuildMetadata();
+                const std::unordered_map<std::string, std::string> &getGamePorts();
 
             private:
                 std::string m_heartbeatEndpoint;
@@ -89,6 +93,7 @@ namespace Microsoft
                 std::string m_certFolder;
                 std::unordered_map<std::string, std::string> m_gameCerts;
                 std::unordered_map<std::string, std::string> m_metadata;
+                std::unordered_map<std::string, std::string> m_ports;
             };
         }
     }
