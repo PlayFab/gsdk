@@ -52,6 +52,9 @@ class JsonFileConfiguration extends ConfigurationBase {
     public Map<String, String> getBuildMetadata() { return configValues.getBuildMetadata(); }
 
     @Override
+    public Map<String, String> getGamePorts() { return configValues.getGamePorts(); }
+
+    @Override
     public void validate() throws GameserverSDKInitializationException {
         if((this.getHeartbeatEndpoint() == null || this.getHeartbeatEndpoint().isEmpty()) &&
                 (this.getServerId() == null || this.getServerId().isEmpty())){
@@ -92,6 +95,9 @@ class JsonFileConfiguration extends ConfigurationBase {
         @SerializedName(value = "buildMetadata", alternate = {"BuildMetadata", "BUILDMETADATA", "buildmetadata"})
         Map<String, String> buildMetadata;
 
+            @SerializedName(value = "gamePorts", alternate = {"GamePorts", "GAMEPORTS", "gameports"})
+        Map<String, String> gamePorts;
+
         public String getHeartbeatEndpoint() {
             return heartbeatEndpoint;
         }
@@ -107,5 +113,7 @@ class JsonFileConfiguration extends ConfigurationBase {
         public String getCertificateFolder() { return certificateFolder; }
 
         public Map<String, String> getBuildMetadata() { return buildMetadata; }
+
+        public Map<String, String> getGamePorts() { return gamePorts; }
     }
 }

@@ -76,6 +76,11 @@ const std::unordered_map<std::string, std::string> &Microsoft::Azure::Gaming::En
     return m_metadata;
 }
 
+const std::unordered_map<std::string, std::string> &Microsoft::Azure::Gaming::EnvironmentVariableConfiguration::getGamePorts()
+{
+    return m_ports;
+}
+
 Microsoft::Azure::Gaming::JsonFileConfiguration::JsonFileConfiguration(const std::string &file_name) : Microsoft::Azure::Gaming::ConfigurationBase::ConfigurationBase()
 {
     std::ifstream is(file_name, std::ifstream::in);
@@ -120,6 +125,15 @@ Microsoft::Azure::Gaming::JsonFileConfiguration::JsonFileConfiguration(const std
                     m_metadata[i.key().asCString()] = (*i).asCString();
                 }
             }
+
+            if (configFile.isMember("gamePorts"))
+            {
+                Json::Value ports = configFile["gamePorts"];
+                for (Json::ValueIterator i = ports.begin(); i != ports.end(); ++i)
+                {
+                    m_ports[i.key().asCString()] = (*i).asCString();
+                }
+            }
         }
         else
         {
@@ -161,4 +175,9 @@ const std::unordered_map<std::string, std::string> &Microsoft::Azure::Gaming::Js
 const std::unordered_map<std::string, std::string> &Microsoft::Azure::Gaming::JsonFileConfiguration::getBuildMetadata()
 {
     return m_metadata;
+}
+
+const std::unordered_map<std::string, std::string> &Microsoft::Azure::Gaming::JsonFileConfiguration::getGamePorts()
+{
+    return m_ports;
 }

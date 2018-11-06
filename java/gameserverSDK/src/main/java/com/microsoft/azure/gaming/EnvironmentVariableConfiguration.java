@@ -12,15 +12,17 @@ class EnvironmentVariableConfiguration extends ConfigurationBase {
     private final String logFolder;
     private final String certFolder;
     private final Map<String, String> buildMetadata;
+    private final Map<String, String> gamePorts;
 
     protected EnvironmentVariableConfiguration(){
         this.heartbeatEndpoint = System.getenv(HEARTBEAT_ENDPOINT_VARIABLE_NAME);
         this.serverId = System.getenv(SERVER_ID_VARIABLE_NAME);
         this.logFolder = System.getenv(LOG_FOLDER_VARIABLE_NAME);
 
-        // Certificate and metadata support was added once we moved to a json config
+        // These fields were added once we moved to a json config
         certFolder = "";
         buildMetadata = new HashMap<String, String>();
+        gamePorts = new HashMap<String, String>();
     }
     @Override
     public String getHeartbeatEndpoint() {
@@ -42,6 +44,9 @@ class EnvironmentVariableConfiguration extends ConfigurationBase {
 
     @Override
     public Map<String, String> getBuildMetadata() { return this.buildMetadata; }
+
+    @Override
+    public Map<String, String> getGamePorts() { return this.gamePorts; }
 
     @Override
     public void validate() throws GameserverSDKInitializationException {

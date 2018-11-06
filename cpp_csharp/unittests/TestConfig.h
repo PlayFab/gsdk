@@ -19,7 +19,8 @@ namespace Microsoft
                             const std::string & titleId = std::string(),
                             const std::string & buildId = std::string(),
                             const std::string & region = std::string(),
-                            const std::unordered_map<std::string, std::string> & metadata = std::unordered_map<std::string, std::string>());
+                            const std::unordered_map<std::string, std::string> & metadata = std::unordered_map<std::string, std::string>(),
+                            const std::unordered_map<std::string, std::string> & ports = std::unordered_map<std::string, std::string>());
 
                 const std::string &getHeartbeatEndpoint();
                 const std::string &getServerId();
@@ -30,6 +31,7 @@ namespace Microsoft
                 const std::string &getBuildId();
                 const std::string &getRegion();
                 const std::unordered_map<std::string, std::string> &getBuildMetadata();
+                const std::unordered_map<std::string, std::string> &getGamePorts();
                 bool shouldLog();
                 bool shouldHeartbeat();
 
@@ -40,6 +42,7 @@ namespace Microsoft
                 std::string m_certFolder;
                 std::unordered_map<std::string, std::string> m_gameCerts;
                 std::unordered_map<std::string, std::string> m_metadata;
+                std::unordered_map<std::string, std::string> m_ports;
                 std::string m_titleId;
                 std::string m_buildId;
                 std::string m_region;
