@@ -1,18 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="..\packages\openssl.1.0.1.21\build\native\openssl.props" Condition="Exists('..\packages\openssl.1.0.1.21\build\native\openssl.props')" />
   <ItemGroup Label="ProjectConfigurations">
-    <ProjectConfiguration Include="Debug|Win32">
-      <Configuration>Debug</Configuration>
-      <Platform>Win32</Platform>
-    </ProjectConfiguration>
     <ProjectConfiguration Include="Debug|x64">
       <Configuration>Debug</Configuration>
       <Platform>x64</Platform>
-    </ProjectConfiguration>
-    <ProjectConfiguration Include="Release|Win32">
-      <Configuration>Release</Configuration>
-      <Platform>Win32</Platform>
     </ProjectConfiguration>
     <ProjectConfiguration Include="Release|x64">
       <Configuration>Release</Configuration>
@@ -58,17 +49,7 @@
     <UseDebugLibraries>true</UseDebugLibraries>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-    <ConfigurationType>DynamicLibrary</ConfigurationType>
-    <UseDebugLibraries>true</UseDebugLibraries>
-    <CharacterSet>Unicode</CharacterSet>
-  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
-    <ConfigurationType>DynamicLibrary</ConfigurationType>
-    <UseDebugLibraries>false</UseDebugLibraries>
-    <CharacterSet>Unicode</CharacterSet>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <CharacterSet>Unicode</CharacterSet>
@@ -108,20 +89,7 @@
     <RunCodeAnalysis>false</RunCodeAnalysis>
     <RemoteProjectDir>$(RemoteRootDir)/$(ProjectName)</RemoteProjectDir>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <LinkIncremental>true</LinkIncremental>
-    <TargetName>$(TargetDebugName)</TargetName>
-    <IncludePath>.\;Legacy;$(InstalledJdkPath.Trim())\include\win32;$(InstalledJdkPath.Trim())\include;$(IncludePath)</IncludePath>
-    <CodeAnalysisRuleSet>NativeRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <RunCodeAnalysis>false</RunCodeAnalysis>
-    <RemoteProjectDir>$(RemoteRootDir)/$(ProjectName)</RemoteProjectDir>
-  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <LinkIncremental>false</LinkIncremental>
-    <IncludePath>.\;Legacy;$(InstalledJdkPath.Trim())\include\win32;$(InstalledJdkPath.Trim())\include;$(IncludePath)</IncludePath>
-    <TargetName>$(TargetReleaseName)</TargetName>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
     <IncludePath>.\;Legacy;$(InstalledJdkPath.Trim())\include\win32;$(InstalledJdkPath.Trim())\include;$(IncludePath)</IncludePath>
     <TargetName>$(TargetReleaseName)</TargetName>
@@ -150,37 +118,8 @@
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <PreprocessorDefinitions>_WINDLL;GSDK;BUILD_TARGET_SRA;BUILD_TARGET_WIN;_STATIC;%(PreprocessorDefinitions);_MS_WINDOWS;WIN32;VS140;VERBOSELOGGING;_NO_ASYNCRTIMP;_NO_PPLXIMP</PreprocessorDefinitions>
-      <AdditionalDependencies>GSDK_CPP_Windows.lib;jsoncpp.lib;libcurl.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(TFS_BinariesDirectory)\$(Configuration)\$(Platform)\GSDKCPPWindows\;$(SolutionDir)$(Platform)\$(Configuration)\GSDKCPPWindows;$(SolutionDir)packages\curl.7.30.0.2\build\native\lib\v110\x64\Debug\dynamic;$(SolutionDir)packages\jsoncpp-vc140-static-32_64.1.8.0\lib\native\libs\x64\static\Debug</AdditionalLibraryDirectories>
-    </Link>
-    <ProjectReference>
-      <LinkLibraryDependencies>false</LinkLibraryDependencies>
-    </ProjectReference>
-  </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <ClCompile>
-      <WarningLevel>Level4</WarningLevel>
-      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>_WINDLL;GSDK;BUILD_TARGET_SRA;BUILD_TARGET_WIN;_STATIC;%(PreprocessorDefinitions);_MS_WINDOWS;WIN32;VS140;VERBOSELOGGING;_NO_ASYNCRTIMP;_NO_PPLXIMP</PreprocessorDefinitions>
-      <PrecompiledHeader>Use</PrecompiledHeader>
-      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(SolutionDir)cppsdk;$(SolutionDir)cppsdk/include;..\src\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <EnablePREfast>false</EnablePREfast>
-      <CompileAs>Default</CompileAs>
-      <MinimalRebuild>$(CustomMinimalRebuild)</MinimalRebuild>
-      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
-      <TreatWarningAsError>false</TreatWarningAsError>
-      <CompileAsWinRT>false</CompileAsWinRT>
-      <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <EnableParallelCodeGeneration>true</EnableParallelCodeGeneration>
-    </ClCompile>
-    <Link>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
-      <SubSystem>Windows</SubSystem>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>GSDK_CPP_Windows.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories);$(TFS_BinariesDirectory)\$(Configuration)\$(Platform)\GSDKCPPWindows\;$(SolutionDir)$(Platform)\$(Configuration)\GSDKCPPWindows;$(OutDir)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>GSDK_CPP_Windows.lib;libcurl_debug.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(TFS_BinariesDirectory)\$(Configuration)\$(Platform)\GSDKCPPWindows\;$(SolutionDir)$(Platform)\$(Configuration)\GSDKCPPWindows;$(SolutionDir)dependencies\libcurl-vc15-x64-debug-dll-ssl-dll-ipv6-sspi\lib</AdditionalLibraryDirectories>
     </Link>
     <ProjectReference>
       <LinkLibraryDependencies>false</LinkLibraryDependencies>
@@ -209,37 +148,8 @@
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>GSDK_CPP_Windows.lib;jsoncpp.lib;libcurl.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(TFS_BinariesDirectory)\$(Configuration)\$(Platform)\GSDKCPPWindows\;$(SolutionDir)$(Platform)\$(Configuration)\GSDKCPPWindows;$(SolutionDir)packages\curl.7.30.0.2\build\native\lib\v110\x64\Release\dynamic;$(SolutionDir)packages\jsoncpp-vc140-static-32_64.1.8.0\lib\native\libs\x64\static\Release</AdditionalLibraryDirectories>
-      <SubSystem>Windows</SubSystem>
-    </Link>
-    <ProjectReference>
-      <LinkLibraryDependencies>true</LinkLibraryDependencies>
-    </ProjectReference>
-  </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <ClCompile>
-      <WarningLevel>Level4</WarningLevel>
-      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <Optimization>MaxSpeed</Optimization>
-      <FunctionLevelLinking>true</FunctionLevelLinking>
-      <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>_MBCS;GSDKDLL_EXPORTS;GSDK;BUILD_TARGET_SRA;BUILD_TARGET_WIN;VERBOSELOGGING;_STATIC;%(PreprocessorDefinitions);_MS_WINDOWS;WIN32;VS140;_NO_ASYNCRTIMP;_NO_PPLXIMP</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(SolutionDir)cppsdk;$(SolutionDir)cppsdk/include;..\src\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <EnablePREfast>false</EnablePREfast>
-      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
-      <CompileAsWinRT>false</CompileAsWinRT>
-      <MinimalRebuild>$(CustomMinimalRebuild)</MinimalRebuild>
-      <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <PrecompiledHeader>Use</PrecompiledHeader>
-      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-    </ClCompile>
-    <Link>
-      <GenerateDebugInformation>false</GenerateDebugInformation>
-      <EnableCOMDATFolding>true</EnableCOMDATFolding>
-      <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories);$(TFS_BinariesDirectory)\$(Configuration)\$(Platform)\GSDKCPPWindows\;$(SolutionDir)$(Platform)\$(Configuration)\GSDKCPPWindows;$(OutDir)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>GSDK_CPP_Windows.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>GSDK_CPP_Windows.lib;libcurl.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(TFS_BinariesDirectory)\$(Configuration)\$(Platform)\GSDKCPPWindows\;$(SolutionDir)$(Platform)\$(Configuration)\GSDKCPPWindows;$(SolutionDir)dependencies\libcurl-vc15-x64-release-dll-ssl-dll-ipv6-sspi\lib</AdditionalLibraryDirectories>
       <SubSystem>Windows</SubSystem>
     </Link>
     <ProjectReference>
@@ -259,56 +169,34 @@
     </ClCompile-->
     <ClCompile Include="Gsdk_abi_csharpWrap.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="Gsdk_abi.i">
       <FileType>Document</FileType>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">set cSharpOutputDirectory=$(ProjectDir)..\csharpsdk
 REM Swig will not create the output directory if it doesn't exist
 if not exist "%cSharpOutputDirectory%" mkdir "%cSharpOutputDirectory%"
 del "%cSharpOutputDirectory%\interop_*.cs"
 "$(SolutionDir)packages\swigwintools.3.0.12\tools\swigwin-3.0.12\swig.exe" -verbose -c++ -csharp -namespace Microsoft.Playfab.Gaming -dllimport GSDK_CPP_CSharpWrapper_d.dll -o "$(ProjectDir)%(Filename)_csharpWrap.cpp" -outdir "%cSharpOutputDirectory%" "%(FullPath)"</Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">set cSharpOutputDirectory=$(ProjectDir)..\csharpsdk
-REM Swig will not create the output directory if it doesn't exist
-if not exist "%cSharpOutputDirectory%" mkdir "%cSharpOutputDirectory%"
-del "%cSharpOutputDirectory%\interop_*.cs"
-"$(SolutionDir)packages\swigwintools.3.0.12\tools\swigwin-3.0.12\swig.exe" -c++ -csharp -namespace Microsoft.Playfab.Gaming -dllimport GSDK_CPP_CSharpWrapper_d.dll -o "$(ProjectDir)%(Filename)_csharpWrap.cpp" -outdir "%cSharpOutputDirectory%" "%(FullPath)"</Command>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Running SWIG for %(Identity)</Message>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Running SWIG for %(Identity)</Message>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)\%(Filename)_wrap.h;$(ProjectDir)\%(Filename)_wrap.cpp;%(Outputs)</Outputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir)\%(Filename)_wrap.h;$(ProjectDir)\%(Filename)_wrap.cpp;%(Outputs)</Outputs>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)\%(Filename).h</AdditionalInputs>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir)\%(Filename).h</AdditionalInputs>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">set cSharpOutputDirectory=$(ProjectDir)..\csharpsdk
 REM Swig will not create the output directory if it doesn't exist
 if not exist "%cSharpOutputDirectory%" mkdir "%cSharpOutputDirectory%"
 del "%cSharpOutputDirectory%\interop_*.cs"
 "$(SolutionDir)packages\swigwintools.3.0.12\tools\swigwin-3.0.12\swig.exe" -verbose -c++ -csharp -namespace Microsoft.Playfab.Gaming -dllimport GSDK_CPP_CSharpWrapper.dll -o "$(ProjectDir)%(Filename)_csharpWrap.cpp" -outdir "%cSharpOutputDirectory%" "%(FullPath)"</Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">set cSharpOutputDirectory=$(ProjectDir)..\csharpsdk
-REM Swig will not create the output directory if it doesn't exist
-if not exist "%cSharpOutputDirectory%" mkdir "%cSharpOutputDirectory%"
-del "%cSharpOutputDirectory%\interop_*.cs"
-"$(SolutionDir)packages\swigwintools.3.0.12\tools\swigwin-3.0.12\swig.exe" -c++ -csharp -namespace Microsoft.Playfab.Gaming -dllimport GSDK_CPP_CSharpWrapper.dll -o "$(ProjectDir)%(Filename)_csharpWrap.cpp" -outdir "%cSharpOutputDirectory%" "%(FullPath)"</Command>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Running SWIG for %(Identity)</Message>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Running SWIG for %(Identity)</Message>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ProjectDir)\%(Filename)_wrap.h;$(ProjectDir)\%(Filename)_wrap.cpp;%(Outputs)</Outputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(ProjectDir)\%(Filename)_wrap.h;$(ProjectDir)\%(Filename)_wrap.cpp;%(Outputs)</Outputs>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ProjectDir)\%(Filename).h</AdditionalInputs>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(ProjectDir)\%(Filename).h</AdditionalInputs>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
@@ -316,7 +204,9 @@ del "%cSharpOutputDirectory%\interop_*.cs"
       <Project>{2ddcedff-0f14-4057-a556-fee422de2647}</Project>
       <LinkLibraryDependencies>true</LinkLibraryDependencies>
     </ProjectReference-->
-    <None Include="packages.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\cppsdk\GSDK_CPP_Windows.vcxproj">
@@ -324,17 +214,7 @@ del "%cSharpOutputDirectory%\interop_*.cs"
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
-  <ImportGroup Label="ExtensionTargets">
-    <Import Project="..\packages\curl.redist.7.30.0.2\build\native\curl.redist.targets" Condition="Exists('..\packages\curl.redist.7.30.0.2\build\native\curl.redist.targets')" />
-    <Import Project="..\packages\libssh2.redist.1.4.3.1\build\native\libssh2.redist.targets" Condition="Exists('..\packages\libssh2.redist.1.4.3.1\build\native\libssh2.redist.targets')" />
-    <Import Project="..\packages\openssl.redist.1.0.1.25\build\native\openssl.redist.targets" Condition="Exists('..\packages\openssl.redist.1.0.1.25\build\native\openssl.redist.targets')" />
-    <Import Project="..\packages\zlib.redist.1.2.8.1\build\native\zlib.redist.targets" Condition="Exists('..\packages\zlib.redist.1.2.8.1\build\native\zlib.redist.targets')" />
-    <Import Project="..\packages\zlib.1.2.8.1\build\native\zlib.targets" Condition="Exists('..\packages\zlib.1.2.8.1\build\native\zlib.targets')" />
-    <Import Project="..\packages\openssl.1.0.1.21\build\native\openssl.targets" Condition="Exists('..\packages\openssl.1.0.1.21\build\native\openssl.targets')" />
-    <Import Project="..\packages\libssh2.1.4.3.1\build\native\libssh2.targets" Condition="Exists('..\packages\libssh2.1.4.3.1\build\native\libssh2.targets')" />
-    <Import Project="..\packages\curl.7.30.0.2\build\native\curl.targets" Condition="Exists('..\packages\curl.7.30.0.2\build\native\curl.targets')" />
-    <Import Project="..\packages\jsoncpp-vc140-static-32_64.1.8.0\build\native\jsoncpp-vc140-static-32_64.targets" Condition="Exists('..\packages\jsoncpp-vc140-static-32_64.1.8.0\build\native\jsoncpp-vc140-static-32_64.targets')" />
-  </ImportGroup>
+  <ImportGroup Label="ExtensionTargets" />
   <Target Name="CopyDependencies" AfterTargets="AfterBuild">
     <ItemGroup>
       <Dependency Include="$(TFS_BinariesDirectory)\$(Configuration)\$(Platform)\GSDKCPPWindows\*.dll" />
@@ -350,20 +230,5 @@ del "%cSharpOutputDirectory%\interop_*.cs"
   </Target>
   <Target Name="CleanBuildResourcesFromCSharpSDK" AfterTargets="AfterClean">
     <RemoveDir Directories="$(ProjectDir)..\csharpsdk\resources" />
-  </Target>
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('..\packages\curl.redist.7.30.0.2\build\native\curl.redist.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\curl.redist.7.30.0.2\build\native\curl.redist.targets'))" />
-    <Error Condition="!Exists('..\packages\libssh2.redist.1.4.3.1\build\native\libssh2.redist.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\libssh2.redist.1.4.3.1\build\native\libssh2.redist.targets'))" />
-    <Error Condition="!Exists('..\packages\openssl.redist.1.0.1.25\build\native\openssl.redist.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\openssl.redist.1.0.1.25\build\native\openssl.redist.targets'))" />
-    <Error Condition="!Exists('..\packages\zlib.redist.1.2.8.1\build\native\zlib.redist.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\zlib.redist.1.2.8.1\build\native\zlib.redist.targets'))" />
-    <Error Condition="!Exists('..\packages\zlib.1.2.8.1\build\native\zlib.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\zlib.1.2.8.1\build\native\zlib.targets'))" />
-    <Error Condition="!Exists('..\packages\openssl.1.0.1.21\build\native\openssl.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\openssl.1.0.1.21\build\native\openssl.props'))" />
-    <Error Condition="!Exists('..\packages\openssl.1.0.1.21\build\native\openssl.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\openssl.1.0.1.21\build\native\openssl.targets'))" />
-    <Error Condition="!Exists('..\packages\libssh2.1.4.3.1\build\native\libssh2.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\libssh2.1.4.3.1\build\native\libssh2.targets'))" />
-    <Error Condition="!Exists('..\packages\curl.7.30.0.2\build\native\curl.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\curl.7.30.0.2\build\native\curl.targets'))" />
-    <Error Condition="!Exists('..\packages\jsoncpp-vc140-static-32_64.1.8.0\build\native\jsoncpp-vc140-static-32_64.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\jsoncpp-vc140-static-32_64.1.8.0\build\native\jsoncpp-vc140-static-32_64.targets'))" />
   </Target>
 </Project>

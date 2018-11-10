@@ -14,25 +14,25 @@
 
     <ItemDefinitionGroup Label="x64 Release Static" Condition="'$(EnablePlayfabGSDK.ToLower())'=='true' And '$(Platform.ToLower())' == 'x64' And $(Configuration.ToLower().IndexOf('debug')) == -1 And '$(Linkage-gsdk.ToLower())' == 'static'">
         <Link>
-            <AdditionalDependencies>$(MSBuildThisFileDirectory)lib\Windows\x64\Release\static\GSDK_CPP_Windows.lib;$(MSBuildThisFileDirectory)..\..\..\curl.7.30.0.2\build\native\lib\v110\x64\Release\dynamic\libcurl.lib;%(AdditionalDependencies)</AdditionalDependencies>
+            <AdditionalDependencies>$(MSBuildThisFileDirectory)lib\Windows\x64\Release\static\GSDK_CPP_Windows.lib;$(MSBuildThisFileDirectory)lib\Windows\x64\Release\static\libcurl.lib;%(AdditionalDependencies)</AdditionalDependencies>
         </Link>
     </ItemDefinitionGroup>
 
     <ItemDefinitionGroup Label="x64 Debug Static" Condition="'$(EnablePlayfabGSDK.ToLower())'=='true' And '$(Platform.ToLower())' == 'x64' And $(Configuration.ToLower().IndexOf('debug')) &gt; -1 And '$(Linkage-gsdk.ToLower())' == 'static'">
         <Link>
-            <AdditionalDependencies>$(MSBuildThisFileDirectory)lib\Windows\x64\Debug\static\GSDK_CPP_Windows.lib;$(MSBuildThisFileDirectory)..\..\..\curl.7.30.0.2\build\native\lib\v110\x64\Debug\dynamic\libcurl.lib;%(AdditionalDependencies)</AdditionalDependencies>
+            <AdditionalDependencies>$(MSBuildThisFileDirectory)lib\Windows\x64\Debug\static\GSDK_CPP_Windows.lib;$(MSBuildThisFileDirectory)lib\Windows\x64\Debug\static\libcurl_debug.lib;%(AdditionalDependencies)</AdditionalDependencies>
         </Link>
     </ItemDefinitionGroup>
 
     <ItemDefinitionGroup Label="x64 Release Dynamic" Condition="'$(EnablePlayfabGSDK.ToLower())'=='true' And '$(Platform.ToLower())' == 'x64' And $(Configuration.ToLower().IndexOf('debug')) == -1 And '$(Linkage-gsdk.ToLower())' == 'dynamic'">
         <Link>
-            <AdditionalDependencies>$(MSBuildThisFileDirectory)lib\Windows\x64\Release\dynamic\GSDK_CPP_Windows.lib;$(MSBuildThisFileDirectory)..\..\..\curl.7.30.0.2\build\native\lib\v110\x64\Release\dynamic\libcurl.lib;%(AdditionalDependencies)</AdditionalDependencies>
+            <AdditionalDependencies>$(MSBuildThisFileDirectory)lib\Windows\x64\Release\dynamic\GSDK_CPP_Windows.lib;$(MSBuildThisFileDirectory)lib\Windows\x64\Release\dynamic\libcurl.lib;%(AdditionalDependencies)</AdditionalDependencies>
         </Link>
     </ItemDefinitionGroup>
 
     <ItemDefinitionGroup Label="x64 Debug Dynamic" Condition="'$(EnablePlayfabGSDK.ToLower())'=='true' And '$(Platform.ToLower())' == 'x64' And $(Configuration.ToLower().IndexOf('debug')) &gt; -1 And '$(Linkage-gsdk.ToLower())' == 'dynamic'">
         <Link>
-            <AdditionalDependencies>$(MSBuildThisFileDirectory)lib\Windows\x64\Debug\dynamic\GSDK_CPP_Windows.lib;$(MSBuildThisFileDirectory)..\..\..\curl.7.30.0.2\build\native\lib\v110\x64\Debug\dynamic\libcurl.lib;%(AdditionalDependencies)</AdditionalDependencies>
+            <AdditionalDependencies>$(MSBuildThisFileDirectory)lib\Windows\x64\Debug\dynamic\GSDK_CPP_Windows.lib;$(MSBuildThisFileDirectory)lib\Windows\x64\Debug\dynamic\libcurl_debug.lib;%(AdditionalDependencies)</AdditionalDependencies>
         </Link>
     </ItemDefinitionGroup>
 
@@ -52,27 +52,28 @@
     <Target Name="playfabgsdk_AfterBuild" AfterTargets="AfterBuild" Condition="'$(EnablePlayfabGSDK.ToLower())'=='true' And '$(Platform.ToLower())' == 'x64'">
         <ItemGroup>
             <PlayfabGSDKCopyToOutput Remove="*"/>
-            <PlayfabGSDKCopyToOutput Include="$(MSBuildThisFileDirectory)..\..\..\curl.redist.7.30.0.2\build\native\bin\v110\$(Platform)\$(Configuration)\dynamic\libcurl.dll" />
-            <PlayfabGSDKCopyToOutput Include="$(MSBuildThisFileDirectory)..\..\..\libssh2.redist.1.4.3.1\build\native\bin\v110\$(Platform)\$(Configuration)\dynamic\cdecl\libssh2.dll" />
-            <PlayfabGSDKCopyToOutput Include="$(MSBuildThisFileDirectory)..\..\..\zlib.redist.1.2.8.1\build\native\bin\v110\$(Platform)\$(Configuration)\dynamic\cdecl\zlib.dll" />
-            <PlayfabGSDKCopyToOutput Include="$(MSBuildThisFileDirectory)..\..\..\openssl.redist.1.0.1.25\build\native\bin\v110\$(Platform)\$(Configuration)\dynamic\libeay32.dll" />
-            <PlayfabGSDKCopyToOutput Include="$(MSBuildThisFileDirectory)..\..\..\openssl.redist.1.0.1.25\build\native\bin\v110\$(Platform)\$(Configuration)\dynamic\ssleay32.dll" />
+            <PlayfabGSDKCopyToOutput Include="$(MSBuildThisFileDirectory)lib\Windows\x64\Release\dynamic\libcrypto-1_1-x64.dll" />
+			<PlayfabGSDKCopyToOutput Include="$(MSBuildThisFileDirectory)lib\Windows\x64\Release\dynamic\libssl-1_1-x64.dll" />
         </ItemGroup>
 
         <ItemGroup Label="DebugStatic" Condition="$(Configuration.ToLower().IndexOf('debug')) &gt; -1 And '$(Linkage-gsdk.ToLower())' == 'static'">
             <PlayfabGSDKCopyToOutput Include="$(MSBuildThisFileDirectory)lib\Windows\x64\Debug\static\GSDK_CPP_Windows.pdb" />
+			<PlayfabGSDKCopyToOutput Include="$(MSBuildThisFileDirectory)lib\Windows\x64\Debug\dynamic\libcurl_debug.dll" />
         </ItemGroup>
 
         <ItemGroup Label="ReleaseStatic" Condition="$(Configuration.ToLower().IndexOf('debug')) == -1 And '$(Linkage-gsdk.ToLower())' == 'static'">
             <PlayfabGSDKCopyToOutput Include="$(MSBuildThisFileDirectory)lib\Windows\x64\Release\static\GSDK_CPP_Windows.pdb" />
+			<PlayfabGSDKCopyToOutput Include="$(MSBuildThisFileDirectory)lib\Windows\x64\Release\dynamic\libcurl.dll" />
         </ItemGroup>
 
         <ItemGroup Label="DebugStatic" Condition="$(Configuration.ToLower().IndexOf('debug')) &gt; -1 And '$(Linkage-gsdk.ToLower())' == 'dynamic'">
             <PlayfabGSDKCopyToOutput Include="$(MSBuildThisFileDirectory)lib\Windows\x64\Debug\dynamic\GSDK_CPP_Windows.pdb" />
+			<PlayfabGSDKCopyToOutput Include="$(MSBuildThisFileDirectory)lib\Windows\x64\Debug\dynamic\libcurl_debug.dll" />
         </ItemGroup>
 
         <ItemGroup Label="ReleaseStatic" Condition="$(Configuration.ToLower().IndexOf('debug')) == -1 And '$(Linkage-gsdk.ToLower())' == 'dynamic'">
             <PlayfabGSDKCopyToOutput Include="$(MSBuildThisFileDirectory)lib\Windows\x64\Release\dynamic\GSDK_CPP_Windows.pdb" />
+			<PlayfabGSDKCopyToOutput Include="$(MSBuildThisFileDirectory)lib\Windows\x64\Release\dynamic\libcurl.dll" />
         </ItemGroup>
 
         <Copy SourceFiles="@(PlayfabGSDKCopyToOutput)" DestinationFolder="$(OutDir)" SkipUnchangedFiles="true" />

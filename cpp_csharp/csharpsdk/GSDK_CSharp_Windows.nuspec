@@ -19,10 +19,8 @@
         <file src="Microsoft.Playfab.Gaming.GSDK.CSharp.dll" target="lib/net20" />
         <file src="GSDK_CPP_CSharpWrapper.dll" target="runtimes/win-x64/native" />
         <file src="libcurl.dll" target="runtimes/win-x64/native" />
-        <file src="libeay32.dll" target="runtimes/win-x64/native" />
-        <file src="libssh2.dll" target="runtimes/win-x64/native" />
-        <file src="ssleay32.dll" target="runtimes/win-x64/native" />
-        <file src="zlib.dll" target="runtimes/win-x64/native" />
+        <file src="libcrypto-1_1-x64.dll" target="runtimes/win-x64/native" />
+        <file src="libssl-1_1-x64.dll" target="runtimes/win-x64/native" />
         <file src="GSDKDependencies.targets" target="build" />
     </files>
 </package>
