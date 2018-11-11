@@ -1,0 +1,33 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <!-- NuGet Package Confguration BEGIN -->
+  <PropertyGroup>
+    <Title>PlayFab CSharp Gameserver SDK</Title>
+    <Company>Microsoft</Company>
+    <Copyright>Copyright (c) 2018 Microsoft</Copyright>
+    <Description>SDK for making calls against Thunderhead</Description>
+    <Authors>PlayFab</Authors>
+    <Version>0.0.0.0-beta</Version>
+    <FileVersion>$(Version)</FileVersion>
+    <PackageTags>GSDK Thunderhead Playfab</PackageTags>
+    <PackageLicenseUrl>http://www.apache.org/licenses/LICENSE-2.0</PackageLicenseUrl>
+    <!--<PackageProjectUrl>https://dev.azure.com/playfab/PlayFab/_git/Thunderhead?path=%2Fsrc%2FCommon%2FSdk.ControlPlane</PackageProjectUrl>-->
+    <PackageDescription>Enables Thunderhead game servers to interact with PlayFab control systems and accept players.</PackageDescription>
+    <PackageReleaseNotes>Release of the C# Game Server SDK for use with Thunderhead.</PackageReleaseNotes>
+    <PackageIconUrl>https://playfab.com/assets/img/playfab-mark.png</PackageIconUrl>
+    <PackageId>com.playfab.csharpgsdk</PackageId>
+    <Platforms>AnyCPU;x64</Platforms>
+  </PropertyGroup>
+  <!-- NuGet Package Confguration END -->
+  <PropertyGroup>
+    <TargetFrameworks>netstandard2.0;netcoreapp2.1</TargetFrameworks>
+  </PropertyGroup>
+  <PropertyGroup>
+    <RootNamespace>Microsoft.Playfab.Gaming.GSDK.CSharp</RootNamespace>
+    <AssemblyName>Microsoft.Playfab.Gaming.GSDK.CSharp</AssemblyName>
+    <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
+  </ItemGroup>
+</Project>
