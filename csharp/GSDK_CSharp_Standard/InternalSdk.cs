@@ -10,7 +10,6 @@ namespace Microsoft.Playfab.Gaming.GSDK.CSharp
 {
     class InternalSdk : IDisposable
     {
-        private bool _debugLogs;
         private string _overrideConfigFileName;
         private GameState _state;
 
@@ -21,7 +20,7 @@ namespace Microsoft.Playfab.Gaming.GSDK.CSharp
         private DateTime _cachedScheduleMaintDate;
         private ManualResetEvent _heartbeatDoneEvent = new ManualResetEvent(false);
         private ManualResetEvent _signalHeartbeatEvent = new ManualResetEvent(false);
-
+        private bool _debug;
 
         public ManualResetEvent TransitionToActiveEvent { get; set; }
         public IDictionary<string, string> ConfigMap { get; private set; }
@@ -47,15 +46,14 @@ namespace Microsoft.Playfab.Gaming.GSDK.CSharp
         public Action<DateTimeOffset> MaintenanceCallback { get; set; }
 
 
-        public InternalSdk(bool debugLogs = false, string configFileName = null)
+        public InternalSdk(string configFileName = null)
         {
-            _debugLogs = debugLogs;
             _overrideConfigFileName = configFileName;
             ConnectedPlayers = new List<ConnectedPlayer>();
             TransitionToActiveEvent = new ManualResetEvent(false);
         }
 
-        public Task StartAsync(bool shouldLog = true)
+        public Task StartAsync(bool debugLogs = false)
         {
             // If we already initialized everything, no need to do it again
             if (_heartbeatTask != null)
@@ -63,9 +61,12 @@ namespace Microsoft.Playfab.Gaming.GSDK.CSharp
                 return Task.CompletedTask;
             }
 
+            _debug = debugLogs;
+
+
             if (_configuration == null)
             {
-                _configuration = GetConfiguration(shouldLog);
+                _configuration = GetConfiguration();
             }
 
             if (ConfigMap == null)
@@ -95,7 +96,7 @@ namespace Microsoft.Playfab.Gaming.GSDK.CSharp
             return Task.CompletedTask;
         }
 
-        private Configuration GetConfiguration(bool shouldLog = true)
+        private Configuration GetConfiguration()
         {
             string fileName;
 
@@ -112,7 +113,7 @@ namespace Microsoft.Playfab.Gaming.GSDK.CSharp
 
             if (!string.IsNullOrWhiteSpace(fileName) && File.Exists(fileName))
             {
-                localConfig = new JsonFileConfiguration(fileName, shouldLog);
+                localConfig = new JsonFileConfiguration(fileName);
             }
             else
             {
@@ -158,7 +159,7 @@ namespace Microsoft.Playfab.Gaming.GSDK.CSharp
             {
                 if (_signalHeartbeatEvent.WaitOne(1000))
                 {
-                    if (_debugLogs)
+                    if (_debug)
                     {
                         Logger.Log("State transition signaled an early heartbeat.");
                     }
@@ -193,9 +194,9 @@ namespace Microsoft.Playfab.Gaming.GSDK.CSharp
                 HeartbeatResponse response = await _webClient.SendHeartbeatAsync(payload);
                 await UpdateStateFromHeartbeatAsync(response);
 
-                if (_debugLogs)
+                if (_debug)
                 {
-                    Logger.Log($"Heartbeat succeeded.");
+                    Logger.Log($"Heartbeat request: {{ state = {payload.CurrentGameState} }} response: {{ operation = {response.Operation} }}");
                 }
             }
             catch (Exception ex)

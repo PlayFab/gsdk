@@ -16,7 +16,7 @@ namespace Microsoft.Playfab.Gaming.GSDK.CSharp.Test
 
             await ConfigFileWrapper.WrapAsync(testConfig, (fileName) =>
             {
-                Action a = () => new JsonFileConfiguration(fileName, false);
+                Action a = () => new JsonFileConfiguration(fileName);
 
                 a.Should()
                     .Throw<GSDKInitializationException>()
@@ -33,7 +33,7 @@ namespace Microsoft.Playfab.Gaming.GSDK.CSharp.Test
 
             await ConfigFileWrapper.WrapAsync(testConfig, (fileName) =>
             {
-                Action a = () => new JsonFileConfiguration(fileName, false);
+                Action a = () => new JsonFileConfiguration(fileName);
                 a.Should()
                     .Throw<GSDKInitializationException>()
                     .WithMessage($"*{fileName}*");
@@ -54,7 +54,7 @@ namespace Microsoft.Playfab.Gaming.GSDK.CSharp.Test
 
             await ConfigFileWrapper.WrapAsync(testConfig, (fileName) =>
             {
-                new JsonFileConfiguration(fileName, false);
+                new JsonFileConfiguration(fileName);
                 return Task.CompletedTask;
             });
         }
@@ -73,7 +73,7 @@ namespace Microsoft.Playfab.Gaming.GSDK.CSharp.Test
 
             await ConfigFileWrapper.WrapAsync(testConfig, (fileName) =>
             {
-                Configuration c = new JsonFileConfiguration(fileName, false);
+                Configuration c = new JsonFileConfiguration(fileName);
                 c.GameCertificates.Should().NotBeNull();
                 c.GameCertificates.Should().HaveCount(0);
 
@@ -97,7 +97,7 @@ namespace Microsoft.Playfab.Gaming.GSDK.CSharp.Test
 
             await ConfigFileWrapper.WrapAsync(testConfig, (fileName) =>
                     {
-                        Configuration c = new JsonFileConfiguration(fileName, false);
+                        Configuration c = new JsonFileConfiguration(fileName);
 
                         c.GameCertificates.Should().NotBeNull();
                         c.GameCertificates.Should().HaveCount(2);
@@ -121,7 +121,7 @@ namespace Microsoft.Playfab.Gaming.GSDK.CSharp.Test
 
             await ConfigFileWrapper.WrapAsync(testConfig, (fileName) =>
             {
-                Configuration c = new JsonFileConfiguration(fileName, false);
+                Configuration c = new JsonFileConfiguration(fileName);
                 c.GamePorts.Should().NotBeNull();
                 c.GamePorts.Should().HaveCount(0);
 
@@ -145,7 +145,7 @@ namespace Microsoft.Playfab.Gaming.GSDK.CSharp.Test
 
             await ConfigFileWrapper.WrapAsync(testConfig, (fileName) =>
                     {
-                        Configuration c = new JsonFileConfiguration(fileName, false);
+                        Configuration c = new JsonFileConfiguration(fileName);
 
                         c.GamePorts.Should().NotBeNull();
                         c.GamePorts.Should().HaveCount(2);

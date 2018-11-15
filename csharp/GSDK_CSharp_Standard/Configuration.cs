@@ -59,10 +59,8 @@ namespace Microsoft.Playfab.Gaming.GSDK.CSharp
             return _shouldLog;
         }
 
-        public JsonFileConfiguration(string fileName, bool shouldLog = true) : base()
+        public JsonFileConfiguration(string fileName) : base()
         {
-            _shouldLog = shouldLog;
-
             try
             {
                 using (StreamReader reader = File.OpenText(fileName))
@@ -76,6 +74,7 @@ namespace Microsoft.Playfab.Gaming.GSDK.CSharp
                     GameCertificates = config.GameCertificates ?? new Dictionary<string, string>();
                     GamePorts = config.GamePorts ?? new Dictionary<string, string>();
                     BuildMetadata = config.BuildMetadata ?? new Dictionary<string, string>();
+                    _shouldLog = config.ShouldLog.HasValue && config.ShouldLog.Value;
                 }
             }
             catch (Exception ex)
@@ -107,5 +106,8 @@ namespace Microsoft.Playfab.Gaming.GSDK.CSharp
 
         [JsonProperty(PropertyName = "gamePorts", Required = Required.Default)]
         public IDictionary<string, string> GamePorts { get; set; }
+
+        [JsonProperty(PropertyName = "shouldLog", Required = Required.Default)]
+        public bool? ShouldLog { get; set; }
     }
 }

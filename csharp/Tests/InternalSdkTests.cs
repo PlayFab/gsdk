@@ -35,13 +35,13 @@ namespace Microsoft.Playfab.Gaming.GSDK.CSharp.Test
         [TestMethod]
         public async Task Start_InvalidConfiguration_Throws()
         {
-            var testConfig = new { };
+            var testConfig = new { ShouldLog = false };
 
             await ConfigFileWrapper.WrapAsync(testConfig, (fileName) =>
             {
                 Func<Task> a = async () =>
                 {
-                    var sdk = new InternalSdk(true, fileName);
+                    var sdk = new InternalSdk(fileName);
                     await sdk.StartAsync(false);
                 };
 
@@ -58,6 +58,7 @@ namespace Microsoft.Playfab.Gaming.GSDK.CSharp.Test
         {
             var testConfig = new
             {
+                ShouldLog = false,
                 heartbeatEndpoint = "heartbeatendpoint",
                 sessionHostId = "serverid",
                 gameCertificates = new Dictionary<string, string>
@@ -80,7 +81,7 @@ namespace Microsoft.Playfab.Gaming.GSDK.CSharp.Test
 
             await ConfigFileWrapper.WrapAsync(testConfig, async (fileName) =>
             {
-                using (var sdk = new InternalSdk(true, fileName))
+                using (var sdk = new InternalSdk(fileName))
                 {
                     await sdk.StartAsync(false);
 
@@ -98,13 +99,14 @@ namespace Microsoft.Playfab.Gaming.GSDK.CSharp.Test
         {
             var testConfig = new
             {
+                ShouldLog = false,
                 heartbeatEndpoint = "heartbeatendpoint",
                 sessionHostId = "serverid",
             };
 
             await ConfigFileWrapper.WrapAsync(testConfig, async (fileName) =>
             {
-                var sdk = new Mock<InternalSdk>(true, fileName);
+                var sdk = new Mock<InternalSdk>(fileName);
 
                 try
                 {
@@ -125,13 +127,14 @@ namespace Microsoft.Playfab.Gaming.GSDK.CSharp.Test
         {
             var testConfig = new
             {
+                ShouldLog = false,
                 heartbeatEndpoint = "heartbeatendpoint",
                 sessionHostId = "serverid",
             };
 
             await ConfigFileWrapper.WrapAsync(testConfig, async (fileName) =>
             {
-                var sdk = new Mock<InternalSdk>(true, fileName);
+                var sdk = new Mock<InternalSdk>(fileName);
 
                 try
                 {
@@ -152,6 +155,7 @@ namespace Microsoft.Playfab.Gaming.GSDK.CSharp.Test
         {
             var testConfig = new
             {
+                ShouldLog = false,
                 heartbeatEndpoint = "heartbeatendpoint",
                 sessionHostId = "serverid",
             };
@@ -164,7 +168,7 @@ namespace Microsoft.Playfab.Gaming.GSDK.CSharp.Test
 
             await ConfigFileWrapper.WrapAsync(testConfig, async (fileName) =>
             {
-                using (var sdk = new InternalSdk(true, fileName))
+                using (var sdk = new InternalSdk(fileName))
                 {
                     await sdk.StartAsync(false);
 
@@ -180,6 +184,7 @@ namespace Microsoft.Playfab.Gaming.GSDK.CSharp.Test
         {
             var testConfig = new
             {
+                ShouldLog = false,
                 heartbeatEndpoint = "heartbeatendpoint",
                 sessionHostId = "serverid",
             };
@@ -192,7 +197,7 @@ namespace Microsoft.Playfab.Gaming.GSDK.CSharp.Test
 
             await ConfigFileWrapper.WrapAsync(testConfig, async (fileName) =>
             {
-                using (var sdk = new InternalSdk(true, fileName))
+                using (var sdk = new InternalSdk(fileName))
                 {
                     await sdk.StartAsync(false);
                     Thread.Sleep(2000);
@@ -207,6 +212,7 @@ namespace Microsoft.Playfab.Gaming.GSDK.CSharp.Test
         {
             var testConfig = new
             {
+                ShouldLog = false,
                 heartbeatEndpoint = "heartbeatendpoint",
                 sessionHostId = "serverid",
             };
@@ -223,7 +229,7 @@ namespace Microsoft.Playfab.Gaming.GSDK.CSharp.Test
                 DateTimeOffset maintDate = DateTime.MinValue;
                 var evt = new ManualResetEvent(false);
 
-                using (var sdk = new InternalSdk(true, fileName))
+                using (var sdk = new InternalSdk(fileName))
                 {
                     sdk.MaintenanceCallback = (dt) =>
                     {
@@ -248,6 +254,7 @@ namespace Microsoft.Playfab.Gaming.GSDK.CSharp.Test
         {
             var testConfig = new
             {
+                ShouldLog = false,
                 heartbeatEndpoint = "heartbeatendpoint",
                 sessionHostId = "serverid",
             };
@@ -263,7 +270,7 @@ namespace Microsoft.Playfab.Gaming.GSDK.CSharp.Test
             {
                 int invocationCount = 0;
 
-                using (var sdk = new InternalSdk(true, fileName))
+                using (var sdk = new InternalSdk(fileName))
                 {
                     sdk.MaintenanceCallback = (dt) =>
                     {
@@ -284,6 +291,7 @@ namespace Microsoft.Playfab.Gaming.GSDK.CSharp.Test
         {
             var testConfig = new
             {
+                ShouldLog = false,
                 heartbeatEndpoint = "heartbeatendpoint",
                 sessionHostId = "serverid",
             };
@@ -301,7 +309,7 @@ namespace Microsoft.Playfab.Gaming.GSDK.CSharp.Test
 
             await ConfigFileWrapper.WrapAsync(testConfig, async (fileName) =>
             {
-                using (var sdk = new InternalSdk(true, fileName))
+                using (var sdk = new InternalSdk(fileName))
                 {
                     await sdk.StartAsync(false);
 
@@ -317,6 +325,7 @@ namespace Microsoft.Playfab.Gaming.GSDK.CSharp.Test
         {
             var testConfig = new
             {
+                ShouldLog = false,
                 heartbeatEndpoint = "heartbeatendpoint",
                 sessionHostId = "serverid",
             };
@@ -331,7 +340,7 @@ namespace Microsoft.Playfab.Gaming.GSDK.CSharp.Test
             {
                 bool shutdownInvoked = false;
 
-                using (var sdk = new InternalSdk(true, fileName))
+                using (var sdk = new InternalSdk(fileName))
                 {
                     sdk.ShutdownCallback = () => { shutdownInvoked = true; };
 
@@ -350,6 +359,7 @@ namespace Microsoft.Playfab.Gaming.GSDK.CSharp.Test
 
             var testConfig = new
             {
+                ShouldLog = false,
                 heartbeatEndpoint = "heartbeatendpoint",
                 sessionHostId = "serverid",
             };
@@ -362,7 +372,7 @@ namespace Microsoft.Playfab.Gaming.GSDK.CSharp.Test
 
             await ConfigFileWrapper.WrapAsync(testConfig, async (fileName) =>
             {
-                using (var sdk = new InternalSdk(true, fileName))
+                using (var sdk = new InternalSdk(fileName))
                 {
                     sdk.HealthCallback = () => { return false; };
 
@@ -384,6 +394,7 @@ namespace Microsoft.Playfab.Gaming.GSDK.CSharp.Test
 
             var testConfig = new
             {
+                ShouldLog = false,
                 heartbeatEndpoint = "heartbeatendpoint",
                 sessionHostId = "serverid",
             };
@@ -396,7 +407,7 @@ namespace Microsoft.Playfab.Gaming.GSDK.CSharp.Test
 
             await ConfigFileWrapper.WrapAsync(testConfig, async (fileName) =>
             {
-                using (var sdk = new InternalSdk(true, fileName))
+                using (var sdk = new InternalSdk(fileName))
                 {
                     sdk.HealthCallback = () => { return true; };
 

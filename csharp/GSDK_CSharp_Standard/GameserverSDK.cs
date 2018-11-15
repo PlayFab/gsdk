@@ -86,7 +86,7 @@ namespace Microsoft.Playfab.Gaming.GSDK.CSharp
         /// Kicks off communication threads, heartbeats, etc.
         /// Called implicitly by ReadyForPlayers if not called beforehand.
         /// </summary>
-        public static void Start(bool debugLogs = false)
+        public static void Start(bool debugLogs= false)
         {
             Task.WhenAll(_internalSdk.StartAsync(!debugLogs))
                 .Wait();
