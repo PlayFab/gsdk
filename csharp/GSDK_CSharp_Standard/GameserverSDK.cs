@@ -33,6 +33,15 @@ namespace Microsoft.Playfab.Gaming.GSDK.CSharp
         // These two keys are only available after allocation (once readyForPlayers returns true)
         public const string SessionCookieKey = "sessionCookie";
         public const string SessionIdKey = "sessionId";
+        public const string HeartbeatEndpointKey = "gsmsBaseUrl";
+        public const string ServerIdKey = "instanceId";
+        public const string LogFolderKey = "logFolder";
+        public const string CertificateFolderKey = "certificateFolder";
+        public const string TitleIdKey = "titleId";
+        public const string BuildIdKey = "buildId";
+        public const string RegionKey = "region";
+
+        public const string GsdkConfigFileEnvVarKey = "GSDK_CONFIG_FILE";
 
         private static InternalSdk _internalSdk = new InternalSdk();
 
@@ -48,6 +57,9 @@ namespace Microsoft.Playfab.Gaming.GSDK.CSharp
         /// </returns>
         public static bool ReadyForPlayers()
         {
+            Task.WhenAll(_internalSdk.StartAsync())
+                .Wait();
+
             if (_internalSdk.State != GameState.Active)
             {
                 _internalSdk.TransitionToActiveEvent.Reset();
@@ -64,6 +76,9 @@ namespace Microsoft.Playfab.Gaming.GSDK.CSharp
         /// <returns>Optional</returns>
         public static IDictionary<string, string> getConfigSettings()
         {
+            Task.WhenAll(_internalSdk.StartAsync())
+                .Wait();
+
             return _internalSdk.ConfigMap;
         }
 
@@ -73,16 +88,19 @@ namespace Microsoft.Playfab.Gaming.GSDK.CSharp
         /// </summary>
         public static void Start(bool debugLogs = false)
         {
-            Task.WhenAll(_internalSdk.StartAsync())
+            Task.WhenAll(_internalSdk.StartAsync(!debugLogs))
                 .Wait();
         }
 
         /// <summary>
-        /// Tells the Xcloud service information on who is connected.
+        /// Tells the PlayFab service information on who is connected.
         /// </summary>
         /// <param name="currentlyConnectedPlayers"></param>
         public static void UpdateConnectedPlayers(IList<ConnectedPlayer> currentlyConnectedPlayers)
         {
+            Task.WhenAll(_internalSdk.StartAsync())
+                .Wait();
+
             _internalSdk.ConnectedPlayers = currentlyConnectedPlayers;
         }
 
@@ -92,6 +110,9 @@ namespace Microsoft.Playfab.Gaming.GSDK.CSharp
         /// <param name="callback">The callback</param>
         public static void RegisterShutdownCallback(Action callback)
         {
+            Task.WhenAll(_internalSdk.StartAsync())
+                .Wait();
+
             _internalSdk.ShutdownCallback = callback;
         }
 
@@ -102,6 +123,9 @@ namespace Microsoft.Playfab.Gaming.GSDK.CSharp
         /// <param name="callback">The callback</param>
         public static void RegisterHealthCallback(Func<bool> callback)
         {
+            Task.WhenAll(_internalSdk.StartAsync())
+                .Wait();
+
             _internalSdk.HealthCallback = callback;
         }
 
@@ -112,6 +136,9 @@ namespace Microsoft.Playfab.Gaming.GSDK.CSharp
         /// <param name="callback">The callback</param>
         public static void RegisterMaintenanceCallback(Action<DateTimeOffset> callback)
         {
+            Task.WhenAll(_internalSdk.StartAsync())
+                .Wait();
+
             _internalSdk.MaintenanceCallback = callback;
         }
 
@@ -122,7 +149,10 @@ namespace Microsoft.Playfab.Gaming.GSDK.CSharp
         /// <returns>A path to the directory to place logs in</returns>
         public static string GetLogsDirectory()
         {
-            if (_internalSdk.ConfigMap.TryGetValue(InternalSdk.LogFolderKey, out string folder))
+            Task.WhenAll(_internalSdk.StartAsync())
+                .Wait();
+
+            if (_internalSdk.ConfigMap.TryGetValue(GameserverSDK.LogFolderKey, out string folder))
             {
                 return folder;
             }

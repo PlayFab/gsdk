@@ -10,14 +10,6 @@ namespace Microsoft.Playfab.Gaming.GSDK.CSharp
 {
     class InternalSdk : IDisposable
     {
-        public const string HeartbeatEndpointKey = "gsmsBaseUrl";
-        public const string ServerIdKey = "instanceId";
-        public const string LogFolderKey = "logFolder";
-        public const string CertificateFolderKey = "certificateFolder";
-        public const string TitleIdKey = "titleId";
-        public const string BuildIdKey = "buildId";
-        public const string RegionKey = "region";
-
         private bool _debugLogs;
         private string _overrideConfigFileName;
         private GameState _state;
@@ -65,6 +57,12 @@ namespace Microsoft.Playfab.Gaming.GSDK.CSharp
 
         public Task StartAsync(bool shouldLog = true)
         {
+            // If we already initialized everything, no need to do it again
+            if (_heartbeatTask != null)
+            {
+                return Task.CompletedTask;
+            }
+
             if (_configuration == null)
             {
                 _configuration = GetConfiguration(shouldLog);
@@ -75,14 +73,14 @@ namespace Microsoft.Playfab.Gaming.GSDK.CSharp
                 ConfigMap = CreateConfigMap(_configuration);
             }
 
-            Logger = LoggerFactory.CreateInstance(ConfigMap[LogFolderKey]);
+            Logger = LoggerFactory.CreateInstance(ConfigMap[GameserverSDK.LogFolderKey]);
             if (_configuration.ShouldLog())
             {
                 Logger.Start();
             }
 
-            string gsmsBaseUrl = ConfigMap[HeartbeatEndpointKey];
-            string instanceId = ConfigMap[ServerIdKey];
+            string gsmsBaseUrl = ConfigMap[GameserverSDK.HeartbeatEndpointKey];
+            string instanceId = ConfigMap[GameserverSDK.ServerIdKey];
 
             Logger.Log($"VM Agent Endpoint: {gsmsBaseUrl}");
             Logger.Log($"Instance Id: {instanceId}");
@@ -94,7 +92,7 @@ namespace Microsoft.Playfab.Gaming.GSDK.CSharp
             TransitionToActiveEvent.Reset();
 
             _heartbeatTask = Task.Run(HeartbeatAsync);
-            return Task.FromResult(0);
+            return Task.CompletedTask;
         }
 
         private Configuration GetConfiguration(bool shouldLog = true)
@@ -107,7 +105,7 @@ namespace Microsoft.Playfab.Gaming.GSDK.CSharp
             }
             else
             {
-                fileName = Environment.GetEnvironmentVariable("GSDK_CONFIG_FILE");
+                fileName = Environment.GetEnvironmentVariable(GameserverSDK.GsdkConfigFileEnvVarKey);
             }
 
             Configuration localConfig;
@@ -143,13 +141,13 @@ namespace Microsoft.Playfab.Gaming.GSDK.CSharp
                 finalConfig[port.Key] = port.Value;
             }
 
-            finalConfig[HeartbeatEndpointKey] = localConfig.HeartbeatEndpoint;
-            finalConfig[ServerIdKey] = localConfig.ServerId;
-            finalConfig[LogFolderKey] = localConfig.LogFolder;
-            finalConfig[CertificateFolderKey] = localConfig.CertificateFolder;
-            finalConfig[TitleIdKey] = localConfig.TitleId;
-            finalConfig[BuildIdKey] = localConfig.BuildId;
-            finalConfig[RegionKey] = localConfig.Region;
+            finalConfig[GameserverSDK.HeartbeatEndpointKey] = localConfig.HeartbeatEndpoint;
+            finalConfig[GameserverSDK.ServerIdKey] = localConfig.ServerId;
+            finalConfig[GameserverSDK.LogFolderKey] = localConfig.LogFolder;
+            finalConfig[GameserverSDK.CertificateFolderKey] = localConfig.CertificateFolder;
+            finalConfig[GameserverSDK.TitleIdKey] = localConfig.TitleId;
+            finalConfig[GameserverSDK.BuildIdKey] = localConfig.BuildId;
+            finalConfig[GameserverSDK.RegionKey] = localConfig.Region;
 
             return finalConfig;
         }
@@ -268,7 +266,7 @@ namespace Microsoft.Playfab.Gaming.GSDK.CSharp
 
             TransitionToActiveEvent.Set();
 
-            return Task.FromResult(0);
+            return Task.CompletedTask;
         }
 
         #region IDisposable Support

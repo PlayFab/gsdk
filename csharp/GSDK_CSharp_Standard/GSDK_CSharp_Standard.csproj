@@ -10,7 +10,7 @@
     <FileVersion>$(Version)</FileVersion>
     <PackageTags>GSDK Thunderhead Playfab</PackageTags>
     <PackageLicenseUrl>http://www.apache.org/licenses/LICENSE-2.0</PackageLicenseUrl>
-    <!--<PackageProjectUrl>https://dev.azure.com/playfab/PlayFab/_git/Thunderhead?path=%2Fsrc%2FCommon%2FSdk.ControlPlane</PackageProjectUrl>-->
+    <PackageProjectUrl>https://github.com/PlayFab/gsdk</PackageProjectUrl>
     <PackageDescription>Enables Thunderhead game servers to interact with PlayFab control systems and accept players.</PackageDescription>
     <PackageReleaseNotes>Release of the C# Game Server SDK for use with Thunderhead.</PackageReleaseNotes>
     <PackageIconUrl>https://playfab.com/assets/img/playfab-mark.png</PackageIconUrl>

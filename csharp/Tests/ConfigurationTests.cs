@@ -22,7 +22,7 @@ namespace Microsoft.Playfab.Gaming.GSDK.CSharp.Test
                     .Throw<GSDKInitializationException>()
                     .WithMessage($"*{fileName}*");
 
-                return Task.FromResult(0);
+                return Task.CompletedTask;
             });
         }
 
@@ -38,7 +38,7 @@ namespace Microsoft.Playfab.Gaming.GSDK.CSharp.Test
                     .Throw<GSDKInitializationException>()
                     .WithMessage($"*{fileName}*");
 
-                return Task.FromResult(0);
+                return Task.CompletedTask;
             });
         }
 
@@ -55,7 +55,7 @@ namespace Microsoft.Playfab.Gaming.GSDK.CSharp.Test
             await ConfigFileWrapper.WrapAsync(testConfig, (fileName) =>
             {
                 new JsonFileConfiguration(fileName, false);
-                return Task.FromResult(0);
+                return Task.CompletedTask;
             });
         }
 
@@ -77,7 +77,7 @@ namespace Microsoft.Playfab.Gaming.GSDK.CSharp.Test
                 c.GameCertificates.Should().NotBeNull();
                 c.GameCertificates.Should().HaveCount(0);
 
-                return Task.FromResult(0);
+                return Task.CompletedTask;
             });
         }
 
@@ -102,7 +102,7 @@ namespace Microsoft.Playfab.Gaming.GSDK.CSharp.Test
                         c.GameCertificates.Should().NotBeNull();
                         c.GameCertificates.Should().HaveCount(2);
 
-                        return Task.FromResult(0);
+                        return Task.CompletedTask;
                     });
         }
 
@@ -125,7 +125,7 @@ namespace Microsoft.Playfab.Gaming.GSDK.CSharp.Test
                 c.GamePorts.Should().NotBeNull();
                 c.GamePorts.Should().HaveCount(0);
 
-                return Task.FromResult(0);
+                return Task.CompletedTask;
             });
         }
 
@@ -150,9 +150,20 @@ namespace Microsoft.Playfab.Gaming.GSDK.CSharp.Test
                         c.GamePorts.Should().NotBeNull();
                         c.GamePorts.Should().HaveCount(2);
 
-                        return Task.FromResult(0);
+                        return Task.CompletedTask;
                     });
         }
 
+        [TestMethod]
+        public void ReadConfiguration_EnvConfigMissingReqProps_Throws()
+        {
+            Environment.SetEnvironmentVariable("HEARTBEAT_ENDPOINT", string.Empty);
+            Environment.SetEnvironmentVariable("SESSION_HOST_ID", string.Empty);
+
+            Action a = () => new EnvironmentVariableConfiguration();
+
+            a.Should().Throw<GSDKInitializationException>()
+                .WithMessage($"*Heartbeat*");
+        }
     }
 }

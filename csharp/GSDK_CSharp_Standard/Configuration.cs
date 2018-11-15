@@ -1,7 +1,7 @@
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using Newtonsoft.Json;
 
 namespace Microsoft.Playfab.Gaming.GSDK.CSharp
 {
@@ -42,6 +42,11 @@ namespace Microsoft.Playfab.Gaming.GSDK.CSharp
             HeartbeatEndpoint = Environment.GetEnvironmentVariable(HEARTBEAT_ENDPOINT_ENV_VAR);
             ServerId = Environment.GetEnvironmentVariable(SERVER_ID_ENV_VAR);
             LogFolder = Environment.GetEnvironmentVariable(LOG_FOLDER_ENV_VAR);
+
+            if (string.IsNullOrWhiteSpace(HeartbeatEndpoint) || string.IsNullOrWhiteSpace(ServerId))
+            {
+                throw new GSDKInitializationException("Heartbeat endpoint and Server id are required configuration values.");
+            }
         }
     }
 
