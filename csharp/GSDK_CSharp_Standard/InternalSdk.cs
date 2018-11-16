@@ -245,6 +245,9 @@ namespace Microsoft.Playfab.Gaming.GSDK.CSharp
                         {
                             State = GameState.Active;
                         }
+
+                        TransitionToActiveEvent.Set();
+
                         break;
                     }
                 case GameOperation.Terminate:
@@ -255,6 +258,8 @@ namespace Microsoft.Playfab.Gaming.GSDK.CSharp
                             ShutdownCallback?.Invoke();
                         }
 
+                        TransitionToActiveEvent.Set();
+
                         break;
                     }
                 default:
@@ -264,8 +269,6 @@ namespace Microsoft.Playfab.Gaming.GSDK.CSharp
                     }
 
             }
-
-            TransitionToActiveEvent.Set();
 
             return Task.CompletedTask;
         }

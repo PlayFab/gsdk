@@ -367,6 +367,7 @@ namespace Microsoft.Playfab.Gaming.GSDK.CSharp.Test
             _clientMock.Setup(x => x.SendHeartbeatAsync(It.IsAny<HeartbeatRequest>()))
                 .ReturnsAsync(new HeartbeatResponse
                 {
+                    Operation = GameOperation.Active,
                 })
                 .Callback<HeartbeatRequest>(x => request = x);
 
@@ -402,6 +403,7 @@ namespace Microsoft.Playfab.Gaming.GSDK.CSharp.Test
             _clientMock.Setup(x => x.SendHeartbeatAsync(It.IsAny<HeartbeatRequest>()))
                 .ReturnsAsync(new HeartbeatResponse
                 {
+                    Operation = GameOperation.Active,
                 })
                 .Callback<HeartbeatRequest>(x => request = x);
 
