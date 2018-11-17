@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup Label="Default initializers for properties">
+        <!-- Developers that received this nuget package as a dependency but don't intend to use the GSDK can set this to false -->
+        <EnablePlayfabGSDK Condition="'$(EnablePlayfabGSDK)' == ''">true</EnablePlayfabGSDK>
+        <Linkage-gsdk Condition="'$(Linkage-gsdk)' == ''">dynamic</Linkage-gsdk>
+    </PropertyGroup>
+
+    <ItemDefinitionGroup>
+        <ClCompile>
+            <AdditionalIncludeDirectories>$(MSBuildThisFileDirectory)include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+        </ClCompile>
+    </ItemDefinitionGroup>
+
+    <ItemDefinitionGroup Label="x64 Release Static" Condition="'$(EnablePlayfabGSDK.ToLower())'=='true' And '$(Platform.ToLower())' == 'x64' And $(Configuration.ToLower().IndexOf('debug')) == -1 And '$(Linkage-gsdk.ToLower())' == 'static'">
+        <Link>
+            <AdditionalDependencies>$(MSBuildThisFileDirectory)lib\Windows\x64\Release\static\GSDK_CPP_Windows.lib;$(MSBuildThisFileDirectory)lib\Windows\x64\Release\static\libcurl.lib;%(AdditionalDependencies)</AdditionalDependencies>
+        </Link>
+    </ItemDefinitionGroup>
+
+    <ItemDefinitionGroup Label="x64 Debug Static" Condition="'$(EnablePlayfabGSDK.ToLower())'=='true' And '$(Platform.ToLower())' == 'x64' And $(Configuration.ToLower().IndexOf('debug')) &gt; -1 And '$(Linkage-gsdk.ToLower())' == 'static'">
+        <Link>
+            <AdditionalDependencies>$(MSBuildThisFileDirectory)lib\Windows\x64\Debug\static\GSDK_CPP_Windows.lib;$(MSBuildThisFileDirectory)lib\Windows\x64\Debug\static\libcurl_debug.lib;%(AdditionalDependencies)</AdditionalDependencies>
+        </Link>
+    </ItemDefinitionGroup>
+
+    <ItemDefinitionGroup Label="x64 Release Dynamic" Condition="'$(EnablePlayfabGSDK.ToLower())'=='true' And '$(Platform.ToLower())' == 'x64' And $(Configuration.ToLower().IndexOf('debug')) == -1 And '$(Linkage-gsdk.ToLower())' == 'dynamic'">
+        <Link>
+            <AdditionalDependencies>$(MSBuildThisFileDirectory)lib\Windows\x64\Release\dynamic\GSDK_CPP_Windows.lib;$(MSBuildThisFileDirectory)lib\Windows\x64\Release\dynamic\libcurl.lib;%(AdditionalDependencies)</AdditionalDependencies>
+        </Link>
+    </ItemDefinitionGroup>
+
+    <ItemDefinitionGroup Label="x64 Debug Dynamic" Condition="'$(EnablePlayfabGSDK.ToLower())'=='true' And '$(Platform.ToLower())' == 'x64' And $(Configuration.ToLower().IndexOf('debug')) &gt; -1 And '$(Linkage-gsdk.ToLower())' == 'dynamic'">
+        <Link>
+            <AdditionalDependencies>$(MSBuildThisFileDirectory)lib\Windows\x64\Debug\dynamic\GSDK_CPP_Windows.lib;$(MSBuildThisFileDirectory)lib\Windows\x64\Debug\dynamic\libcurl_debug.lib;%(AdditionalDependencies)</AdditionalDependencies>
+        </Link>
+    </ItemDefinitionGroup>
+
+    <Target Name="playfabgsdk_VerifyBuildPreconditions" BeforeTargets="PrepareForBuild" Condition="'$(EnablePlayfabGSDK.ToLower())'=='true'">
+        <Error Condition="'$(Platform.ToLower())' != 'x64'" 
+               Text="The Playfab GSDK only supports x64, please update your project's platform in the Configuration Manager." />
+        <Error Condition="$(Configuration.ToLower().IndexOf('debug')) == -1 And '$(Linkage-gsdk.ToLower())' == 'static' And '%(ClCompile.RuntimeLibrary)' != 'MultiThreaded'"
+               Text="Mismatch between Linkage-gsdk property (static) and RuntimeLibrary (MultiThreadedDLL). Please set the Linkage-gsdk property to 'dynamic' or update your RuntimeLibrary to MultiThreaded." />
+        <Error Condition="$(Configuration.ToLower().IndexOf('debug')) &gt; -1 And '$(Linkage-gsdk.ToLower())' == 'static' And '%(ClCompile.RuntimeLibrary)' != 'MultiThreadedDebug'"
+               Text="Mismatch between Linkage-gsdk property (static) and RuntimeLibrary (MultiThreadedDebugDLL). Please set the Linkage-gsdk property to 'dynamic' or update your RuntimeLibrary to MultiThreadedDebug." />
+        <Error Condition="$(Configuration.ToLower().IndexOf('debug')) == -1 And '$(Linkage-gsdk.ToLower())' == 'dynamic' And '%(ClCompile.RuntimeLibrary)' != 'MultiThreadedDLL'"
+               Text="Mismatch between Linkage-gsdk property (dynamic) and RuntimeLibrary (MultiThreaded). Please set the Linkage-gsdk property to 'static' or update your RuntimeLibrary to MultiThreadedDLL." />
+        <Error Condition="$(Configuration.ToLower().IndexOf('debug')) &gt; -1 And '$(Linkage-gsdk.ToLower())' == 'dynamic' And '%(ClCompile.RuntimeLibrary)' != 'MultiThreadedDebugDLL'"
+               Text="Mismatch between Linkage-gsdk property (dynamic) and RuntimeLibrary (MultiThreadedDebug). Please set the Linkage-gsdk property to 'static' or update your RuntimeLibrary to MultiThreadedDebugDLL." />
+    </Target>
+
+    <Target Name="playfabgsdk_AfterBuild" AfterTargets="AfterBuild" Condition="'$(EnablePlayfabGSDK.ToLower())'=='true' And '$(Platform.ToLower())' == 'x64'">
+        <ItemGroup>
+            <PlayfabGSDKCopyToOutput Remove="*"/>
+            <PlayfabGSDKCopyToOutput Include="$(MSBuildThisFileDirectory)lib\Windows\x64\Release\dynamic\libcrypto-1_1-x64.dll" />
+			<PlayfabGSDKCopyToOutput Include="$(MSBuildThisFileDirectory)lib\Windows\x64\Release\dynamic\libssl-1_1-x64.dll" />
+        </ItemGroup>
+
+        <ItemGroup Label="DebugStatic" Condition="$(Configuration.ToLower().IndexOf('debug')) &gt; -1 And '$(Linkage-gsdk.ToLower())' == 'static'">
+            <PlayfabGSDKCopyToOutput Include="$(MSBuildThisFileDirectory)lib\Windows\x64\Debug\static\GSDK_CPP_Windows.pdb" />
+			<PlayfabGSDKCopyToOutput Include="$(MSBuildThisFileDirectory)lib\Windows\x64\Debug\dynamic\libcurl_debug.dll" />
+        </ItemGroup>
+
+        <ItemGroup Label="ReleaseStatic" Condition="$(Configuration.ToLower().IndexOf('debug')) == -1 And '$(Linkage-gsdk.ToLower())' == 'static'">
+            <PlayfabGSDKCopyToOutput Include="$(MSBuildThisFileDirectory)lib\Windows\x64\Release\static\GSDK_CPP_Windows.pdb" />
+			<PlayfabGSDKCopyToOutput Include="$(MSBuildThisFileDirectory)lib\Windows\x64\Release\dynamic\libcurl.dll" />
+        </ItemGroup>
+
+        <ItemGroup Label="DebugStatic" Condition="$(Configuration.ToLower().IndexOf('debug')) &gt; -1 And '$(Linkage-gsdk.ToLower())' == 'dynamic'">
+            <PlayfabGSDKCopyToOutput Include="$(MSBuildThisFileDirectory)lib\Windows\x64\Debug\dynamic\GSDK_CPP_Windows.pdb" />
+			<PlayfabGSDKCopyToOutput Include="$(MSBuildThisFileDirectory)lib\Windows\x64\Debug\dynamic\libcurl_debug.dll" />
+        </ItemGroup>
+
+        <ItemGroup Label="ReleaseStatic" Condition="$(Configuration.ToLower().IndexOf('debug')) == -1 And '$(Linkage-gsdk.ToLower())' == 'dynamic'">
+            <PlayfabGSDKCopyToOutput Include="$(MSBuildThisFileDirectory)lib\Windows\x64\Release\dynamic\GSDK_CPP_Windows.pdb" />
+			<PlayfabGSDKCopyToOutput Include="$(MSBuildThisFileDirectory)lib\Windows\x64\Release\dynamic\libcurl.dll" />
+        </ItemGroup>
+
+        <Copy SourceFiles="@(PlayfabGSDKCopyToOutput)" DestinationFolder="$(OutDir)" SkipUnchangedFiles="true" />
+    </Target>
+</Project>

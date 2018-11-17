@@ -161,6 +161,18 @@ namespace Microsoft.Playfab.Gaming.GSDK.CSharp
         }
 
         /// <summary>
+        /// After allocation, returns a list of the initial players that have access to this game server, used by PlayFab's Matchmaking offering
+        /// </summary>
+        /// <returns>A list of player ids of the initial players that will connect</returns>
+        public static IList<string> GetInitialPlayers()
+        {
+            Task.WhenAll(_internalSdk.StartAsync())
+                .Wait();
+
+            return _internalSdk.InitialPlayers;
+        }
+
+        /// <summary>
         /// Adds a custom log message to the GSDK log output
         /// </summary>
         /// <param name="message">The message to be logged</param>

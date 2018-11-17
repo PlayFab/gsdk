@@ -18,13 +18,25 @@ namespace Microsoft.Playfab.Gaming.GSDK.CSharp
     class HeartbeatResponse
     {
         [JsonProperty(PropertyName = "sessionConfig")]
-        public IDictionary<string, string> SessionConfig { get; set; }
+        public SessionConfig SessionConfig { get; set; }
 
         [JsonProperty(PropertyName = "nextScheduledMaintenanceUtc")]
         public string NextScheduledMaintenanceUtc { get; set; }
 
         [JsonProperty(PropertyName = "operation", ItemConverterType = typeof(StringEnumConverter))]
         public GameOperation Operation { get; set; }
+    }
+
+    class SessionConfig
+    {
+        [JsonProperty(PropertyName = "sessionId")]
+        public Guid SessionId { get; set; }
+
+        [JsonProperty(PropertyName = "sessionCookie")]
+        public string SessionCookie { get; set; }
+
+        [JsonProperty(PropertyName = "initialPlayers")]
+        public List<string> InitialPlayers { get; set; }
     }
 
     interface IHttpClient

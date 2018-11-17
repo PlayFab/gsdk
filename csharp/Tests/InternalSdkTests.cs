@@ -287,7 +287,7 @@ namespace Microsoft.Playfab.Gaming.GSDK.CSharp.Test
         }
 
         [TestMethod]
-        public async Task GameState_SessionConfigReturned_ConfigMapUdpated()
+        public async Task GameState_SessionConfigReturnedNoPlayers_ConfigMapUpdated()
         {
             var testConfig = new
             {
@@ -300,10 +300,10 @@ namespace Microsoft.Playfab.Gaming.GSDK.CSharp.Test
                 .ReturnsAsync(new HeartbeatResponse
                 {
                     Operation = GameOperation.Continue,
-                    SessionConfig = new Dictionary<string, string>
+                    SessionConfig = new SessionConfig()
                     {
-                        { "one", "two" },
-                        { "buckle", "shoe" }
+                        SessionId = Guid.NewGuid(),
+                        SessionCookie = "awesomeCookie"
                     }
                 });
 
@@ -313,9 +313,51 @@ namespace Microsoft.Playfab.Gaming.GSDK.CSharp.Test
                 {
                     await sdk.StartAsync(false);
 
-                    sdk.ConfigMap.Should().NotContainKey("buckle");
+                    sdk.ConfigMap.Should().NotContainKey("sessionCookie");
                     Thread.Sleep(2000);
-                    sdk.ConfigMap.Should().ContainKey("buckle");
+                    sdk.ConfigMap.Should().ContainKey("sessionCookie");
+                    sdk.InitialPlayers.Should().BeEmpty("Initial Player List not returned");
+                }
+            });
+        }
+
+        [TestMethod]
+        public async Task GameState_SessionConfigReturnedWithPlayers_ConfigMapUpdated()
+        {
+            var testConfig = new
+            {
+                ShouldLog = false,
+                heartbeatEndpoint = "heartbeatendpoint",
+                sessionHostId = "serverid",
+            };
+
+            List<string> playerList = new List<string>
+            {
+                "player1", "player2", "player3"
+            };
+
+            _clientMock.Setup(x => x.SendHeartbeatAsync(It.IsAny<HeartbeatRequest>()))
+                .ReturnsAsync(new HeartbeatResponse
+                {
+                    Operation = GameOperation.Continue,
+                    SessionConfig = new SessionConfig()
+                    {
+                        SessionId = Guid.NewGuid(),
+                        SessionCookie = "awesomeCookie",
+                        InitialPlayers = playerList
+                    }
+                });
+
+            await ConfigFileWrapper.WrapAsync(testConfig, async (fileName) =>
+            {
+                using (var sdk = new InternalSdk(fileName))
+                {
+                    await sdk.StartAsync(false);
+
+                    sdk.ConfigMap.Should().NotContainKey("sessionCookie");
+                    Thread.Sleep(2000);
+                    sdk.ConfigMap.Should().ContainKey("sessionCookie");
+                    sdk.InitialPlayers.Should().Contain(playerList, "Initial Player List returned");
                 }
             });
         }
