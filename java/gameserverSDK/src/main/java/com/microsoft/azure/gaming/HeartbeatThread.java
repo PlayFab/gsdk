@@ -39,6 +39,7 @@ class HeartbeatThread implements Runnable {
     private List<ConnectedPlayer> connectedPlayers;
     private Map<String, String> configSettings;
     private int heartbeatInterval;
+    private List<String> initialPlayers;
     private Runnable shutdownCallback;
     private Supplier<GameHostHealth> healthCallback;
     private Consumer<ZonedDateTime> maintenanceCallback;
@@ -62,6 +63,7 @@ class HeartbeatThread implements Runnable {
 
         this.setState(initialState);
         this.setConnectedPlayers(null);
+        this.setInitialPlayers(null);
         this.lastScheduledMaintenanceUtc = null;
         this.transitionToActive.drainPermits();
         this.signalHeartbeat.drainPermits();
@@ -120,6 +122,12 @@ class HeartbeatThread implements Runnable {
     }
 
     protected synchronized List<ConnectedPlayer> getConnectedPlayers() { return this.connectedPlayers; }
+
+    protected synchronized void setInitialPlayers(List<String> initPlayers) {
+        this.initialPlayers = initPlayers;
+    }
+
+    protected synchronized List<String> getInitialPlayers() { return this.initialPlayers; }
 
     protected synchronized void registerShutdownCallback(Runnable callback)
     {
@@ -187,7 +195,12 @@ class HeartbeatThread implements Runnable {
                 SessionConfig responseConfig = sessionInfo.getSessionConfig();
                 if (responseConfig != null)
                 {
-                    configSettings.putAll(responseConfig.ToMap());
+                    configSettings.putAll(responseConfig.ToMapAllStrings());
+
+                    if (responseConfig.getInitialPlayers() != null && !responseConfig.getInitialPlayers().isEmpty())
+                    {
+                        this.setInitialPlayers(responseConfig.getInitialPlayers());
+                    }
                 }
 
                 // If there's a scheduled maintenance that we haven't notified about, do so now

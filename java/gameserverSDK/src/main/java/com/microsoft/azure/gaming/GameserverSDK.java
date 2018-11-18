@@ -192,4 +192,11 @@ public class GameserverSDK {
     public static String getCertificateDirectory(){
         return gsdkConfiguration.getCertificateFolder();
     }
+
+    /**
+     * After allocation, returns a list of the initial players that have access to this game server,
+     * used by PlayFab's Matchmaking offering
+     * @return A list of player ids of the initial players that will connect
+     */
+    public static List<String> getInitialPlayers() { return heartbeatThread.getInitialPlayers(); }
 }
