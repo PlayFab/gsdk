@@ -6,8 +6,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{B46BC815-DE1D-4F2D-B9A1-7CBB75E8D5DE}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>WinTestRunnerGameFramework</RootNamespace>
-    <AssemblyName>WinTestRunnerGameFramework</AssemblyName>
+    <RootNamespace>WinTestRunnerGame</RootNamespace>
+    <AssemblyName>WinTestRunnerGame</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -60,7 +60,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="testassetfile.txt" />
+    <Content Include="testassetfile.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
