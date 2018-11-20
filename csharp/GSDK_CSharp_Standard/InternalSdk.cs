@@ -40,6 +40,8 @@ namespace Microsoft.Playfab.Gaming.GSDK.CSharp
 
         public IList<ConnectedPlayer> ConnectedPlayers { get; set; }
 
+        public IList<string> InitialPlayers { get; set; }
+
         // Keep an instance of the callbacks around so they don't get garbage collected
         public Action ShutdownCallback { get; set; }
         public Func<bool> HealthCallback { get; set; }
@@ -50,6 +52,7 @@ namespace Microsoft.Playfab.Gaming.GSDK.CSharp
         {
             _overrideConfigFileName = configFileName;
             ConnectedPlayers = new List<ConnectedPlayer>();
+            InitialPlayers = new List<string>();
             TransitionToActiveEvent = new ManualResetEvent(false);
         }
 
@@ -210,9 +213,12 @@ namespace Microsoft.Playfab.Gaming.GSDK.CSharp
         {
             if (response.SessionConfig != null)
             {
-                foreach (KeyValuePair<string, string> item in response.SessionConfig)
+                ConfigMap.AddIfNotNullOrEmpty("sessionCookie", response.SessionConfig?.SessionCookie);
+                ConfigMap.AddIfNotNullOrEmpty("sessionId", response.SessionConfig?.SessionId.ToString());
+
+                if (response.SessionConfig?.InitialPlayers != null && response.SessionConfig.InitialPlayers.Any())
                 {
-                    ConfigMap[item.Key] = item.Value;
+                    InitialPlayers = response.SessionConfig.InitialPlayers;
                 }
             }
 

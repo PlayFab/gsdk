@@ -1,6 +1,7 @@
 package com.microsoft.azure.gaming;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -11,6 +12,8 @@ class SessionConfig {
     private UUID sessionId;
 
     private String sessionCookie;
+
+    private List<String> initialPlayers;
 
     protected UUID getSessionId() {
         return sessionId;
@@ -29,7 +32,16 @@ class SessionConfig {
         this.sessionCookie = sessionCookie;
     }
 
-    protected Map<String, String> ToMap()
+
+    protected List<String> getInitialPlayers() {
+        return initialPlayers;
+    }
+
+    public void setInitialPlayers(List<String> initialPlayers) {
+        this.initialPlayers = initialPlayers;
+    }
+
+    protected Map<String, String> ToMapAllStrings()
     {
         HashMap<String, String> properties = new HashMap<String, String>();
         properties.put("sessionId", this.getSessionId().toString());

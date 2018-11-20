@@ -1,0 +1,57 @@
+<?xml version="1.0"?>
+<package>
+    <metadata>
+        <id>com.playfab.cppgsdk.v140</id>
+        <version>0.0.0.0</version> <!-- Gets overriden by Jenkins -->
+        <title>PlayFab C++ Gameserver SDK</title>
+        <authors>PlayFab</authors>
+        <owners>PlayFab</owners>
+        <licenseUrl>http://www.apache.org/licenses/LICENSE-2.0</licenseUrl> <!-- Switch to LICENSE file in GSDK repo once it's public-->
+        <!--projectUrl>https://github.com/PlayFab/gsdk</projectUrl--> <!--Comment back in when GSDK repo is public-->
+        <iconUrl>https://playfab.com/assets/img/playfab-mark.png</iconUrl>
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <description>Enables Thunderhead game servers to interact with PlayFab control systems and accept players.</description>
+        <releaseNotes>Release of the C++ Game Server SDK for use with Thunderhead.</releaseNotes>
+        <copyright>Microsoft Copyright</copyright>
+        <tags>GSDK, C++, Thunderhead, Playfab, native</tags>
+    </metadata>
+    <files>
+        <!-- Include header files -->
+        <file src="gsdk.h" target="\build\native\include" />
+        
+        <!-- Release x64 Static -->
+        <file src="..\x64\Release\GSDKCPPWindows\GSDK_CPP_Windows.lib" target="\build\native\lib\Windows\x64\Release\static" />
+        <file src="..\x64\Release\GSDKCPPWindows\GSDK_CPP_Windows.pdb" target="\build\native\lib\Windows\x64\Release\static" />
+        <file src="..\x64\Release\GSDKCPPWindows\libcurl.dll" target="\build\native\lib\Windows\x64\Release\static" />
+        <file src="..\x64\Release\GSDKCPPWindows\libcurl.lib" target="\build\native\lib\Windows\x64\Release\static" />
+        <file src="..\x64\Release\GSDKCPPWindows\libcrypto-1_1-x64.dll" target="\build\native\lib\Windows\x64\Release\static" />
+        <file src="..\x64\Release\GSDKCPPWindows\libssl-1_1-x64.dll" target="\build\native\lib\Windows\x64\Release\static" />
+
+        <!-- Release x64 Dynamic -->
+        <file src="..\x64\ReleaseDynamic\GSDKCPPWindows\GSDK_CPP_Windows.lib" target="\build\native\lib\Windows\x64\Release\dynamic" />
+        <file src="..\x64\ReleaseDynamic\GSDKCPPWindows\GSDK_CPP_Windows.pdb" target="\build\native\lib\Windows\x64\Release\dynamic" />
+        <file src="..\x64\ReleaseDynamic\GSDKCPPWindows\libcurl.dll" target="\build\native\lib\Windows\x64\Release\dynamic" />
+        <file src="..\x64\ReleaseDynamic\GSDKCPPWindows\libcurl.lib" target="\build\native\lib\Windows\x64\Release\dynamic" />
+        <file src="..\x64\ReleaseDynamic\GSDKCPPWindows\libcrypto-1_1-x64.dll" target="\build\native\lib\Windows\x64\Release\dynamic" />
+        <file src="..\x64\ReleaseDynamic\GSDKCPPWindows\libssl-1_1-x64.dll" target="\build\native\lib\Windows\x64\Release\dynamic" />
+
+        <!-- Debug x64 Static -->
+        <file src="..\x64\Debug\GSDKCPPWindows\GSDK_CPP_Windows.lib" target="\build\native\lib\Windows\x64\Debug\static" />
+        <file src="..\x64\Debug\GSDKCPPWindows\GSDK_CPP_Windows.pdb" target="\build\native\lib\Windows\x64\Debug\static" />
+        <file src="..\x64\Debug\GSDKCPPWindows\libcurl_debug.dll" target="\build\native\lib\Windows\x64\Debug\static" />
+        <file src="..\x64\Debug\GSDKCPPWindows\libcurl_debug.lib" target="\build\native\lib\Windows\x64\Debug\static" />
+        <file src="..\x64\Debug\GSDKCPPWindows\libcrypto-1_1-x64.dll" target="\build\native\lib\Windows\x64\Debug\static" />
+        <file src="..\x64\Debug\GSDKCPPWindows\libssl-1_1-x64.dll" target="\build\native\lib\Windows\x64\Debug\static" />
+
+        <!-- Debug x64 Dynamic -->
+        <file src="..\x64\DebugDynamic\GSDKCPPWindows\GSDK_CPP_Windows.lib" target="\build\native\lib\Windows\x64\Debug\dynamic" />
+        <file src="..\x64\DebugDynamic\GSDKCPPWindows\GSDK_CPP_Windows.pdb" target="\build\native\lib\Windows\x64\Debug\dynamic" />
+        <file src="..\x64\DebugDynamic\GSDKCPPWindows\libcurl_debug.dll" target="\build\native\lib\Windows\x64\Debug\dynamic" />
+        <file src="..\x64\DebugDynamic\GSDKCPPWindows\libcurl_debug.lib" target="\build\native\lib\Windows\x64\Debug\dynamic" />
+        <file src="..\x64\DebugDynamic\GSDKCPPWindows\libcrypto-1_1-x64.dll" target="\build\native\lib\Windows\x64\Debug\dynamic" />
+        <file src="..\x64\DebugDynamic\GSDKCPPWindows\libssl-1_1-x64.dll" target="\build\native\lib\Windows\x64\Debug\dynamic" />
+
+        <!-- vs targets file -->
+        <file src="com.playfab.cppgsdk.v140.targets" target="build\native\com.playfab.cppgsdk.v140.targets" />
+    </files>
+</package>

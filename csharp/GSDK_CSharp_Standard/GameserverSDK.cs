@@ -79,7 +79,7 @@ namespace Microsoft.Playfab.Gaming.GSDK.CSharp
             Task.WhenAll(_internalSdk.StartAsync())
                 .Wait();
 
-            return _internalSdk.ConfigMap;
+            return new Dictionary<string, string>(_internalSdk.ConfigMap);
         }
 
         /// <summary>
@@ -158,6 +158,18 @@ namespace Microsoft.Playfab.Gaming.GSDK.CSharp
             }
 
             return string.Empty;
+        }
+
+        /// <summary>
+        /// After allocation, returns a list of the initial players that have access to this game server, used by PlayFab's Matchmaking offering
+        /// </summary>
+        /// <returns>A list of player ids of the initial players that will connect</returns>
+        public static IList<string> GetInitialPlayers()
+        {
+            Task.WhenAll(_internalSdk.StartAsync())
+                .Wait();
+
+            return new List<string>(_internalSdk.InitialPlayers);
         }
 
         /// <summary>
