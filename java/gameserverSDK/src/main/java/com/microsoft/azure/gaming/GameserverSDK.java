@@ -186,6 +186,14 @@ public class GameserverSDK {
     }
 
     /**
+     * Returns a path to the directory shared by all game servers on the VM to store user generated content and other data.
+     * @return path to the folder shared by all game servers on the VM.
+     */
+    public static String getSharedContentDirectory(){
+        return gsdkConfiguration.getSharedContentDirectory();
+    }
+
+    /**
      * Returns a path to the directory where game certificate files can be found
      * @return path to the certificate files
      */

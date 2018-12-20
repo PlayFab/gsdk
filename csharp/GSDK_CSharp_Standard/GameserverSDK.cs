@@ -36,6 +36,7 @@ namespace Microsoft.Playfab.Gaming.GSDK.CSharp
         public const string HeartbeatEndpointKey = "gsmsBaseUrl";
         public const string ServerIdKey = "instanceId";
         public const string LogFolderKey = "logFolder";
+        public const string SharedContentFolderKey = "sharedContentFolder";
         public const string CertificateFolderKey = "certificateFolder";
         public const string TitleIdKey = "titleId";
         public const string BuildIdKey = "buildId";
@@ -153,6 +154,23 @@ namespace Microsoft.Playfab.Gaming.GSDK.CSharp
                 .Wait();
 
             if (_internalSdk.ConfigMap.TryGetValue(GameserverSDK.LogFolderKey, out string folder))
+            {
+                return folder;
+            }
+
+            return string.Empty;
+        }
+
+        /// <summary>
+        /// Returns the directory whose contents are shared among all game servers within a VM.
+        /// </summary>
+        /// <returns>A path to the directory where shared content can be stored (temporarily). </returns>
+        public static string GetSharedContentDirectory()
+        {
+            Task.WhenAll(_internalSdk.StartAsync())
+                .Wait();
+
+            if (_internalSdk.ConfigMap.TryGetValue(GameserverSDK.SharedContentFolderKey, out string folder))
             {
                 return folder;
             }

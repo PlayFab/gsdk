@@ -42,6 +42,7 @@ Microsoft::Azure::Gaming::EnvironmentVariableConfiguration::EnvironmentVariableC
     m_heartbeatEndpoint = cGSDKUtils::getEnvironmentVariable(Configuration::HEARTBEAT_ENDPOINT_ENV_VAR);
     m_serverId = cGSDKUtils::getEnvironmentVariable(Configuration::SERVER_ID_ENV_VAR);
     m_logFolder = cGSDKUtils::getEnvironmentVariable(Configuration::LOG_FOLDER_ENV_VAR);
+	m_sharedContentFolder = cGSDKUtils::getEnvironmentVariable(Configuration::SHARED_CONTENT_FOLDER_ENV_VAR);
 
     // Game cert support was added once we switched to a json config, so we don't have values for them
 }
@@ -60,6 +61,12 @@ const std::string &Microsoft::Azure::Gaming::EnvironmentVariableConfiguration::g
 {
     return m_logFolder;
 }
+
+const std::string &Microsoft::Azure::Gaming::EnvironmentVariableConfiguration::getSharedContentFolder()
+{
+	return m_sharedContentFolder;
+}
+
 
 const std::string &Microsoft::Azure::Gaming::EnvironmentVariableConfiguration::getCertificateFolder()
 {
@@ -98,6 +105,7 @@ Microsoft::Azure::Gaming::JsonFileConfiguration::JsonFileConfiguration(const std
             m_heartbeatEndpoint = configFile["heartbeatEndpoint"].asString();
             m_serverId = configFile["sessionHostId"].asString();
             m_logFolder = configFile["logFolder"].asString();
+			m_sharedContentFolder = configFile["sharedContentFolder"].asString();
 
             if (configFile.isMember("certificateFolder"))
             {
@@ -160,6 +168,11 @@ const std::string &Microsoft::Azure::Gaming::JsonFileConfiguration::getServerId(
 const std::string &Microsoft::Azure::Gaming::JsonFileConfiguration::getLogFolder()
 {
     return m_logFolder;
+}
+
+const std::string &Microsoft::Azure::Gaming::JsonFileConfiguration::getSharedContentFolder()
+{
+	return m_sharedContentFolder;
 }
 
 const std::string &Microsoft::Azure::Gaming::JsonFileConfiguration::getCertificateFolder()

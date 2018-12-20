@@ -44,6 +44,7 @@ public class Main {
     private static boolean isShutdown = false;
     private static boolean delayShutdown = false;
     private static String logsDirectory = "";
+    private static String sharedContentDirectory = "";
     private static String certificateDirectory = "";
     private static String testCertificate = "";
     private static ArrayList<ConnectedPlayer> players = new ArrayList<ConnectedPlayer>();
@@ -95,8 +96,9 @@ public class Main {
             assetFileTar = getAssetText(AssetFileTarPath);
             assetFileTarGz = getAssetText(AssetFileTarGzPath);
 
-            // Get our cert and log folders
+            // Get the various folder names.
             logsDirectory = GameserverSDK.getLogsDirectory();
+            sharedContentDirectory = GameserverSDK.getSharedContentDirectory();
             certificateDirectory = GameserverSDK.getCertificateDirectory();
 
             // Get our cert
@@ -151,6 +153,7 @@ public class Main {
                 config.put("assetFileTar", assetFileTar);
                 config.put("assetFileTarGz", assetFileTarGz);
                 config.put("logFolder", logsDirectory);
+                config.put("sharedContentFolder", sharedContentDirectory);
                 config.put("certificateFolder", certificateDirectory);
                 config.put("testCertificate", testCertificate);
 

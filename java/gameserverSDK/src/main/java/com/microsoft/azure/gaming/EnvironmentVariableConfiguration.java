@@ -10,6 +10,7 @@ class EnvironmentVariableConfiguration extends ConfigurationBase {
     private final String heartbeatEndpoint;
     private final String serverId;
     private final String logFolder;
+    private final String sharedContentFolder;
     private final String certFolder;
     private final Map<String, String> buildMetadata;
     private final Map<String, String> gamePorts;
@@ -18,6 +19,7 @@ class EnvironmentVariableConfiguration extends ConfigurationBase {
         this.heartbeatEndpoint = System.getenv(HEARTBEAT_ENDPOINT_VARIABLE_NAME);
         this.serverId = System.getenv(SERVER_ID_VARIABLE_NAME);
         this.logFolder = System.getenv(LOG_FOLDER_VARIABLE_NAME);
+        this.sharedContentFolder = System.getenv(SHARED_CONTENT_FOLDER_VARIABLE_NAME);
 
         // These fields were added once we moved to a json config
         certFolder = "";
@@ -37,6 +39,11 @@ class EnvironmentVariableConfiguration extends ConfigurationBase {
     @Override
     public String getLogFolder() {
         return this.logFolder;
+    }
+
+    @Override
+    public String getSharedContentFolder() {
+        return this.sharedContentFolder;
     }
 
     @Override
