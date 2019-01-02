@@ -4,6 +4,7 @@
 Microsoft::Azure::Gaming::TestConfig::TestConfig(   const std::string & heartbeatEndpoint,
                                                     const std::string & serverId,
                                                     const std::string & logFolder,
+                                                    const std::string & sharedContentFolder,
                                                     const std::string & certFolder,
                                                     const std::unordered_map<std::string, std::string> & gameCerts,
                                                     const std::string & titleId,
@@ -15,6 +16,7 @@ Microsoft::Azure::Gaming::TestConfig::TestConfig(   const std::string & heartbea
     m_heartbeatEndpoint = heartbeatEndpoint;
     m_serverId = serverId;
     m_logFolder = logFolder;
+    m_sharedContentFolder = sharedContentFolder;
     m_certFolder = certFolder;
     m_gameCerts = gameCerts;
     m_titleId = titleId;
@@ -37,6 +39,11 @@ const std::string &Microsoft::Azure::Gaming::TestConfig::getServerId()
 const std::string &Microsoft::Azure::Gaming::TestConfig::getLogFolder()
 {
     return m_logFolder;
+}
+
+const std::string &Microsoft::Azure::Gaming::TestConfig::getSharedContentFolder()
+{
+    return m_sharedContentFolder;
 }
 
 const std::string &Microsoft::Azure::Gaming::TestConfig::getCertificateFolder()

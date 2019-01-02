@@ -32,6 +32,7 @@ namespace Microsoft
                     std::string heartbeatEndpoint = "testEndpoint";
                     std::string serverId = "testServerId";
                     std::string logFolder = "testLogFolder";
+                    std::string sharedContentFolder = "testSharedContentFolder";
                     std::string certFolder = "testCertFolder";
                     std::string titleId = "testTitleId";
                     std::string buildId = "testBuildId";
@@ -45,13 +46,15 @@ namespace Microsoft
                     std::unordered_map<std::string, std::string> ports = std::unordered_map<std::string, std::string>();
                     ports["port1"] = "1111";
                     ports["port2"] = "2222";
-                    GSDKInternal::testConfiguration = std::make_unique<TestConfig>(heartbeatEndpoint, serverId, logFolder, certFolder, gameCerts, titleId, buildId, region, metadata, ports);
+                    GSDKInternal::testConfiguration = std::make_unique<TestConfig>(heartbeatEndpoint, serverId, logFolder, sharedContentFolder, certFolder, gameCerts, titleId, buildId, region, metadata, ports);
                     GSDK::start();
                     const std::unordered_map<std::string, std::string> &config = GSDK::getConfigSettings();
                     Assert::AreEqual(heartbeatEndpoint, config.at("gsmsBaseUrl"), L"Ensuring heartbeat endpoint was set.");
                     Assert::AreEqual(serverId, config.at("instanceId"), L"Ensuring server id was set.");
                     Assert::AreEqual(logFolder, config.at("logFolder"), L"Ensuring log folder was set.");
+                    Assert::AreEqual(sharedContentFolder, config.at("sharedContentFolder"), L"Ensuring shared content folder was set.");
                     Assert::AreEqual(logFolder, GSDK::getLogsDirectory(), L"Ensuring  get log folder works.");
+                    Assert::AreEqual(sharedContentFolder, GSDK::getSharedContentDirectory(), L"Ensuring  get log folder works.");
                     Assert::AreEqual(certFolder, config.at("certificateFolder"), L"Ensuring cert folder was set.");
                     Assert::AreEqual(std::string("thumbprint1"), config.at("cert1"), L"Ensuring cert1 thumbprint was set.");
                     Assert::AreEqual(std::string("thumbprint2"), config.at("cert2"), L"Ensuring cert2 thumbprint was set.");
@@ -66,16 +69,23 @@ namespace Microsoft
 
                 TEST_METHOD(LogFolderNotSetInitializesFine)
                 {
-                    GSDKInternal::testConfiguration = std::make_unique<TestConfig>("heartbeatEndpoint", "serverId", "");
+                    GSDKInternal::testConfiguration = std::make_unique<TestConfig>("heartbeatEndpoint", "serverId", "", "sharedContentFolder");
                     GSDK::start();
                     Assert::IsTrue("" == GSDK::getLogsDirectory(), L"Ensuring  get log folder works.");
+                }
+
+                TEST_METHOD(SharedContentFolderNotSetInitializesFine)
+                {
+                    GSDKInternal::testConfiguration = std::make_unique<TestConfig>("heartbeatEndpoint", "serverId", "logFolder", "");
+                    GSDK::start();
+                    Assert::IsTrue("" == GSDK::getSharedContentDirectory(), L"Ensuring  get shared Content folder works.");
                 }
 
                 TEST_METHOD(HeartbeatEndpointNotSetFailsToInitialize)
                 {
                     try
                     {
-                        GSDKInternal::testConfiguration = std::make_unique<TestConfig>("", "serverId", "logFolder");
+                        GSDKInternal::testConfiguration = std::make_unique<TestConfig>("", "serverId", "logFolder", "sharedContentFolder");
                         GSDK::start();
                         Assert::Fail(L"Did not throw an exception even though the heartbeat endpoint was not set.");
                     }
@@ -90,7 +100,7 @@ namespace Microsoft
                 {
                     try
                     {
-                        GSDKInternal::testConfiguration = std::make_unique<TestConfig>("heartbeatEndpoint", "", "logFolder");
+                        GSDKInternal::testConfiguration = std::make_unique<TestConfig>("heartbeatEndpoint", "", "logFolder", "sharedContentFolder");
                         GSDK::start();
                         Assert::Fail(L"Did not throw an exception even though the server id was not set.");
                     }
@@ -102,7 +112,7 @@ namespace Microsoft
 
                 TEST_METHOD(EncodeGameStateAsValidJson)
                 {
-                    GSDKInternal::testConfiguration = std::make_unique<TestConfig>("heartbeatEndpoint", "serverId", "logFolder");
+                    GSDKInternal::testConfiguration = std::make_unique<TestConfig>("heartbeatEndpoint", "serverId", "logFolder", "sharedContentFolder");
                     GSDK::start();
 
                     // Test Initial State
@@ -132,7 +142,7 @@ namespace Microsoft
 
                 TEST_METHOD(DecodeAgentResponseJsonCorrectly)
                 {
-                    GSDKInternal::testConfiguration = std::make_unique<TestConfig>("heartbeatEndpoint", "serverId", "logFolder");
+                    GSDKInternal::testConfiguration = std::make_unique<TestConfig>("heartbeatEndpoint", "serverId", "logFolder", "sharedContentFolder");
                     GSDK::start();
 
                     time_t maintenanceTime;
@@ -160,7 +170,7 @@ namespace Microsoft
 
                 TEST_METHOD(ReturnInitialPlayerListFromJson)
                 {
-                    GSDKInternal::testConfiguration = std::make_unique<TestConfig>("heartbeatEndpoint", "serverId", "logFolder");
+                    GSDKInternal::testConfiguration = std::make_unique<TestConfig>("heartbeatEndpoint", "serverId", "logFolder", "sharedContentFolder");
                     GSDK::start();
 
                     Assert::AreEqual((size_t)0, GSDK::getInitialPlayers().size(), L"InitialPlayer list is empty before allocation.");
@@ -197,7 +207,7 @@ namespace Microsoft
 
                 TEST_METHOD(AgentOperationStateChangesHandledCorrectly)
                 {
-                    GSDKInternal::testConfiguration = std::make_unique<TestConfig>("heartbeatEndpoint", "serverId", "logFolder");
+                    GSDKInternal::testConfiguration = std::make_unique<TestConfig>("heartbeatEndpoint", "serverId", "logFolder", "sharedContentFolder");
                     GSDK::start();
 
                     std::atomic<bool> shutdownCalled = false;

@@ -176,6 +176,7 @@ namespace WinTestRunnerGame
                     config.Add("isShutdown", _isShutdown.ToString());
                     config.Add("assetFileText", _assetFileText);
                     config.Add("logsDirectory", GameserverSDK.GetLogsDirectory());
+                    config.Add("sharedContentDirectory", GameserverSDK.GetSharedContentDirectory());
                     config.Add("installedCertThumbprint", _installedCertThumbprint);
                     config.Add("cmdArgs", _cmdArgs);
 

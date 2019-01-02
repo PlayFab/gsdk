@@ -46,6 +46,9 @@ class JsonFileConfiguration extends ConfigurationBase {
     public String getLogFolder() { return configValues.getLogFolder(); }
 
     @Override
+    public String getSharedContentFolder() { return configValues.getSharedContentFolder(); }
+
+    @Override
     public String getCertificateFolder() { return configValues.getCertificateFolder(); }
 
     @Override
@@ -89,13 +92,16 @@ class JsonFileConfiguration extends ConfigurationBase {
         @SerializedName(value = "logFolder", alternate = {"LogFolder", "LOGFOLDER", "logfolder"})
         String logFolder;
 
+        @SerializedName(value = "sharedContentFolder", alternate = {"SharedContentFolder"})
+        String sharedContentFolder;
+
         @SerializedName(value = "certificateFolder", alternate = {"CertificateFolder", "CERTIFICATEFOLDER", "certificatefolder"})
         String certificateFolder;
 
         @SerializedName(value = "buildMetadata", alternate = {"BuildMetadata", "BUILDMETADATA", "buildmetadata"})
         Map<String, String> buildMetadata;
 
-            @SerializedName(value = "gamePorts", alternate = {"GamePorts", "GAMEPORTS", "gameports"})
+        @SerializedName(value = "gamePorts", alternate = {"GamePorts", "GAMEPORTS", "gameports"})
         Map<String, String> gamePorts;
 
         public String getHeartbeatEndpoint() {
@@ -108,6 +114,10 @@ class JsonFileConfiguration extends ConfigurationBase {
 
         public String getLogFolder() {
             return logFolder;
+        }
+
+        public String getSharedContentFolder() {
+            return sharedContentFolder;
         }
 
         public String getCertificateFolder() { return certificateFolder; }

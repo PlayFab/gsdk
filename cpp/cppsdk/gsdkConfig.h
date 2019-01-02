@@ -14,6 +14,7 @@ namespace Microsoft
                 virtual const std::string &getServerId() = 0;
                 virtual const std::string &getLogFolder() = 0;
                 virtual const std::string &getCertificateFolder() = 0;
+                virtual const std::string &getSharedContentFolder() = 0;
                 virtual const std::unordered_map<std::string, std::string> &getGameCertificates() = 0;
                 virtual const std::string &getTitleId() = 0;
                 virtual const std::string &getBuildId() = 0;
@@ -30,6 +31,7 @@ namespace Microsoft
                 static constexpr const char* TITLE_ID_ENV_VAR = "PF_TITLE_ID";
                 static constexpr const char* BUILD_ID_ENV_VAR = "PF_BUILD_ID";
                 static constexpr const char* REGION_ENV_VAR = "PF_REGION";
+                static constexpr const char* SHARED_CONTENT_FOLDER_ENV_VAR = "SHARED_CONTENT_FOLDER";
             };
 
             class ConfigurationBase : public Configuration
@@ -59,6 +61,7 @@ namespace Microsoft
                 const std::string &getServerId();
                 const std::string &getLogFolder();
                 const std::string &getCertificateFolder();
+                const std::string &getSharedContentFolder();
                 const std::unordered_map<std::string, std::string> &getGameCertificates();
                 const std::unordered_map<std::string, std::string> &getBuildMetadata();
                 const std::unordered_map<std::string, std::string> &getGamePorts();
@@ -68,6 +71,7 @@ namespace Microsoft
                 std::string m_serverId;
                 std::string m_logFolder;
                 std::string m_certFolder;
+                std::string m_sharedContentFolder;
                 std::unordered_map<std::string, std::string> m_gameCerts;
                 std::unordered_map<std::string, std::string> m_metadata;
                 std::unordered_map<std::string, std::string> m_ports;
@@ -82,6 +86,7 @@ namespace Microsoft
                 const std::string &getServerId();
                 const std::string &getLogFolder();
                 const std::string &getCertificateFolder();
+                const std::string &getSharedContentFolder();
                 const std::unordered_map<std::string, std::string> &getGameCertificates();
                 const std::unordered_map<std::string, std::string> &getBuildMetadata();
                 const std::unordered_map<std::string, std::string> &getGamePorts();
@@ -91,6 +96,7 @@ namespace Microsoft
                 std::string m_serverId;
                 std::string m_logFolder;
                 std::string m_certFolder;
+                std::string m_sharedContentFolder;
                 std::unordered_map<std::string, std::string> m_gameCerts;
                 std::unordered_map<std::string, std::string> m_metadata;
                 std::unordered_map<std::string, std::string> m_ports;

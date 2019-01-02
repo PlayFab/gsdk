@@ -148,6 +148,7 @@ namespace Microsoft.Playfab.Gaming.GSDK.CSharp
             finalConfig[GameserverSDK.HeartbeatEndpointKey] = localConfig.HeartbeatEndpoint;
             finalConfig[GameserverSDK.ServerIdKey] = localConfig.ServerId;
             finalConfig[GameserverSDK.LogFolderKey] = localConfig.LogFolder;
+            finalConfig[GameserverSDK.SharedContentFolderKey] = localConfig.SharedContentFolder;
             finalConfig[GameserverSDK.CertificateFolderKey] = localConfig.CertificateFolder;
             finalConfig[GameserverSDK.TitleIdKey] = localConfig.TitleId;
             finalConfig[GameserverSDK.BuildIdKey] = localConfig.BuildId;

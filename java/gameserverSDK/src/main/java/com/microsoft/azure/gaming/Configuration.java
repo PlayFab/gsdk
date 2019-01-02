@@ -11,6 +11,7 @@ interface Configuration {
     String getHeartbeatEndpoint();
     String getServerId();
     String getLogFolder();
+    String getSharedContentFolder();
     String getCertificateFolder();
     String getTitleId();
     String getBuildId();
@@ -26,4 +27,7 @@ interface Configuration {
     final String TITLE_ID_VARIABLE_NAME = "PF_TITLE_ID";
     final String BUILD_ID_VARIABLE_NAME = "PF_BUILD_ID";
     final String REGION_VARIABLE_NAME = "PF_REGION";
+
+    // A folder shared by all game servers on the VM to share user generated content and other data.
+    final String SHARED_CONTENT_FOLDER_VARIABLE_NAME = "SHARED_CONTENT_FOLDER";
 }
