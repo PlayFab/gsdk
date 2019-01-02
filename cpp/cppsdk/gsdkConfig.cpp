@@ -105,7 +105,7 @@ Microsoft::Azure::Gaming::JsonFileConfiguration::JsonFileConfiguration(const std
             m_heartbeatEndpoint = configFile["heartbeatEndpoint"].asString();
             m_serverId = configFile["sessionHostId"].asString();
             m_logFolder = configFile["logFolder"].asString();
-			m_sharedContentFolder = configFile["sharedContentFolder"].asString();
+            m_sharedContentFolder = configFile["sharedContentFolder"].asString();
 
             if (configFile.isMember("certificateFolder"))
             {
@@ -172,7 +172,7 @@ const std::string &Microsoft::Azure::Gaming::JsonFileConfiguration::getLogFolder
 
 const std::string &Microsoft::Azure::Gaming::JsonFileConfiguration::getSharedContentFolder()
 {
-	return m_sharedContentFolder;
+    return m_sharedContentFolder;
 }
 
 const std::string &Microsoft::Azure::Gaming::JsonFileConfiguration::getCertificateFolder()

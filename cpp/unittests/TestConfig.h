@@ -14,6 +14,7 @@ namespace Microsoft
                 TestConfig( const std::string & heartbeatEndpoint,
                             const std::string & serverId,
                             const std::string & logFolder,
+                            const std::string & sharedContentFolder,
                             const std::string & certFolder = std::string(),
                             const std::unordered_map<std::string, std::string> & gameCerts = std::unordered_map<std::string, std::string>(),
                             const std::string & titleId = std::string(),
@@ -25,6 +26,7 @@ namespace Microsoft
                 const std::string &getHeartbeatEndpoint();
                 const std::string &getServerId();
                 const std::string &getLogFolder();
+                const std::string &getSharedContentFolder();
                 const std::string &getCertificateFolder();
                 const std::unordered_map<std::string, std::string> &getGameCertificates();
                 const std::string &getTitleId();
@@ -39,6 +41,7 @@ namespace Microsoft
                 std::string m_heartbeatEndpoint;
                 std::string m_serverId;
                 std::string m_logFolder;
+                std::string m_sharedContentFolder;
                 std::string m_certFolder;
                 std::unordered_map<std::string, std::string> m_gameCerts;
                 std::unordered_map<std::string, std::string> m_metadata;

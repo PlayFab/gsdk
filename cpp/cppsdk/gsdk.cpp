@@ -71,6 +71,7 @@ namespace Microsoft
                 m_configSettings[GSDK::HEARTBEAT_ENDPOINT_KEY] = config->getHeartbeatEndpoint();
                 m_configSettings[GSDK::SERVER_ID_KEY] = config->getServerId();
                 m_configSettings[GSDK::LOG_FOLDER_KEY] = config->getLogFolder();
+                m_configSettings[GSDK::SHARED_CONTENT_FOLDER_KEY] = config->getSharedContentFolder();
                 m_configSettings[GSDK::CERTIFICATE_FOLDER_KEY] = config->getCertificateFolder();
                 m_configSettings[GSDK::TITLE_ID_KEY] = config->getTitleId();
                 m_configSettings[GSDK::BUILD_ID_KEY] = config->getBuildId();
@@ -436,7 +437,25 @@ namespace Microsoft
                 static const std::string empty = "";
 
                 const std::unordered_map<std::string, std::string> &config = GSDK::getConfigSettings();
-                auto it = config.find("logFolder");
+                auto it = config.find(GSDK::LOG_FOLDER_KEY);
+
+                if (it == config.end())
+                {
+                    return empty;
+                }
+                else
+                {
+                    return it->second;
+                }
+            }
+
+            const std::string &GSDK::getSharedContentDirectory()
+            {
+                // Declare as static so that it doesn't live on the stack (since we're returning a reference)
+                static const std::string empty = "";
+
+                const std::unordered_map<std::string, std::string> &config = GSDK::getConfigSettings();
+                auto it = config.find(GSDK::SHARED_CONTENT_FOLDER_KEY);
 
                 if (it == config.end())
                 {

@@ -66,6 +66,9 @@ namespace Microsoft
                 /// <summary>Returns a path to the directory where logs will be mapped to the VM host</summary>
                 static const std::string &getLogsDirectory();
 
+                /// <summary>Returns a path to the directory shared by all game servers to cache data.</summary>
+                static const std::string &getSharedContentDirectory();
+
                 /// <summary>After allocation, returns a list of the initial players that have access to this game server, used by PlayFab's Matchmaking offering</summary>
                 static const std::vector<std::string> &getInitialPlayers();
 
@@ -74,6 +77,7 @@ namespace Microsoft
                 static constexpr const char* HEARTBEAT_ENDPOINT_KEY = "gsmsBaseUrl";
                 static constexpr const char* SERVER_ID_KEY = "instanceId";
                 static constexpr const char* LOG_FOLDER_KEY = "logFolder";
+                static constexpr const char* SHARED_CONTENT_FOLDER_KEY = "sharedContentFolder";
                 static constexpr const char* CERTIFICATE_FOLDER_KEY = "certificateFolder";
                 static constexpr const char* TITLE_ID_KEY = "titleId";
                 static constexpr const char* BUILD_ID_KEY = "buildId";
