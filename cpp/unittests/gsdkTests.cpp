@@ -54,7 +54,7 @@ namespace Microsoft
                     Assert::AreEqual(logFolder, config.at("logFolder"), L"Ensuring log folder was set.");
                     Assert::AreEqual(sharedContentFolder, config.at("sharedContentFolder"), L"Ensuring shared content folder was set.");
                     Assert::AreEqual(logFolder, GSDK::getLogsDirectory(), L"Ensuring  get log folder works.");
-                    Assert::AreEqual(sharedContentFolder, GSDK::getSharedContentDirectory(), L"Ensuring  get log folder works.");
+                    Assert::AreEqual(sharedContentFolder, GSDK::getSharedContentDirectory(), L"Ensuring  get shared content folder works.");
                     Assert::AreEqual(certFolder, config.at("certificateFolder"), L"Ensuring cert folder was set.");
                     Assert::AreEqual(std::string("thumbprint1"), config.at("cert1"), L"Ensuring cert1 thumbprint was set.");
                     Assert::AreEqual(std::string("thumbprint2"), config.at("cert2"), L"Ensuring cert2 thumbprint was set.");
