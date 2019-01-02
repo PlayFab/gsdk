@@ -31,7 +31,7 @@ namespace Microsoft
                 static constexpr const char* TITLE_ID_ENV_VAR = "PF_TITLE_ID";
                 static constexpr const char* BUILD_ID_ENV_VAR = "PF_BUILD_ID";
                 static constexpr const char* REGION_ENV_VAR = "PF_REGION";
-				static constexpr const char* SHARED_CONTENT_FOLDER_ENV_VAR = "SHARED_CONTENT_FOLDER";
+                static constexpr const char* SHARED_CONTENT_FOLDER_ENV_VAR = "SHARED_CONTENT_FOLDER";
             };
 
             class ConfigurationBase : public Configuration

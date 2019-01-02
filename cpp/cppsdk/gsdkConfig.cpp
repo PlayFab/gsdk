@@ -42,7 +42,7 @@ Microsoft::Azure::Gaming::EnvironmentVariableConfiguration::EnvironmentVariableC
     m_heartbeatEndpoint = cGSDKUtils::getEnvironmentVariable(Configuration::HEARTBEAT_ENDPOINT_ENV_VAR);
     m_serverId = cGSDKUtils::getEnvironmentVariable(Configuration::SERVER_ID_ENV_VAR);
     m_logFolder = cGSDKUtils::getEnvironmentVariable(Configuration::LOG_FOLDER_ENV_VAR);
-	m_sharedContentFolder = cGSDKUtils::getEnvironmentVariable(Configuration::SHARED_CONTENT_FOLDER_ENV_VAR);
+    m_sharedContentFolder = cGSDKUtils::getEnvironmentVariable(Configuration::SHARED_CONTENT_FOLDER_ENV_VAR);
 
     // Game cert support was added once we switched to a json config, so we don't have values for them
 }
