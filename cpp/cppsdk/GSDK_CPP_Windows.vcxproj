@@ -101,6 +101,7 @@
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <DisableSpecificWarnings>4251</DisableSpecificWarnings>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <SupportJustMyCode Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</SupportJustMyCode>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -128,6 +129,7 @@
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <DisableSpecificWarnings>4251</DisableSpecificWarnings>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <SupportJustMyCode Condition="'$(Configuration)|$(Platform)'=='DebugDynamic|x64'">false</SupportJustMyCode>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -232,25 +234,25 @@
   <Target Name="CopyDependencies" AfterTargets="AfterBuild">
     <ItemGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
       <Dependency Include="..\dependencies\libcurl-vc15-x64-release-dll-ssl-dll-ipv6-sspi\bin\libcurl.dll" />
-	  <Dependency Include="..\dependencies\libcurl-vc15-x64-release-dll-ssl-dll-ipv6-sspi\lib\libcurl.lib" />
+      <Dependency Include="..\dependencies\libcurl-vc15-x64-release-dll-ssl-dll-ipv6-sspi\lib\libcurl.lib" />
       <Dependency Include="..\dependencies\openssl\libcrypto-1_1-x64.dll" />
       <Dependency Include="..\dependencies\openssl\libssl-1_1-x64.dll" />
     </ItemGroup>
     <ItemGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseDynamic|x64'">
       <Dependency Include="..\dependencies\libcurl-vc15-x64-release-dll-ssl-dll-ipv6-sspi\bin\libcurl.dll" />
-	  <Dependency Include="..\dependencies\libcurl-vc15-x64-release-dll-ssl-dll-ipv6-sspi\lib\libcurl.lib" />
+      <Dependency Include="..\dependencies\libcurl-vc15-x64-release-dll-ssl-dll-ipv6-sspi\lib\libcurl.lib" />
       <Dependency Include="..\dependencies\openssl\libcrypto-1_1-x64.dll" />
       <Dependency Include="..\dependencies\openssl\libssl-1_1-x64.dll" />
     </ItemGroup>
     <ItemGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
       <Dependency Include="..\dependencies\libcurl-vc15-x64-debug-dll-ssl-dll-ipv6-sspi\bin\libcurl_debug.dll" />
-	  <Dependency Include="..\dependencies\libcurl-vc15-x64-debug-dll-ssl-dll-ipv6-sspi\lib\libcurl_debug.lib" />
+      <Dependency Include="..\dependencies\libcurl-vc15-x64-debug-dll-ssl-dll-ipv6-sspi\lib\libcurl_debug.lib" />
       <Dependency Include="..\dependencies\openssl\libcrypto-1_1-x64.dll" />
       <Dependency Include="..\dependencies\openssl\libssl-1_1-x64.dll" />
     </ItemGroup>
     <ItemGroup Condition="'$(Configuration)|$(Platform)'=='DebugDynamic|x64'">
       <Dependency Include="..\dependencies\libcurl-vc15-x64-debug-dll-ssl-dll-ipv6-sspi\bin\libcurl_debug.dll" />
-	  <Dependency Include="..\dependencies\libcurl-vc15-x64-debug-dll-ssl-dll-ipv6-sspi\lib\libcurl_debug.lib" />
+      <Dependency Include="..\dependencies\libcurl-vc15-x64-debug-dll-ssl-dll-ipv6-sspi\lib\libcurl_debug.lib" />
       <Dependency Include="..\dependencies\openssl\libcrypto-1_1-x64.dll" />
       <Dependency Include="..\dependencies\openssl\libssl-1_1-x64.dll" />
     </ItemGroup>
