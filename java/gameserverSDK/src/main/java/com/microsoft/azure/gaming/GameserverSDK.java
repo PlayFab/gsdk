@@ -190,7 +190,7 @@ public class GameserverSDK {
      * @return path to the folder shared by all game servers on the VM.
      */
     public static String getSharedContentDirectory(){
-        return gsdkConfiguration.getSharedContentDirectory();
+        return gsdkConfiguration.getSharedContentFolder();
     }
 
     /**
