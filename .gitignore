@@ -325,7 +325,6 @@ gradle-app.setting
 pom.xml.releaseBackup
 pom.xml.versionsBackup
 
-/cpp_csharp/csharpsdk/resources/*
-
 # Don't check in the generated nuget package that Jenkins creates
-/cpp_csharp/**/*.nupkg
+/cpp/**/*.nupkg
+/csharp/**/*.nupkg
