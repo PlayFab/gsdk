@@ -159,9 +159,14 @@ namespace WinTestRunnerGame
 
                     IDictionary<string, string> config = null;
 
-                    // For each request, "add" a connected player
-                    players.Add(new ConnectedPlayer("gamer" + requestCount));
+                    // For each request, "add" a connected player up to 20 players.
+                    if (players.Count < 20)
+                    {
+                        players.Add(new ConnectedPlayer("gamer" + requestCount));
+                    }
+
                     requestCount++;
+
                     GameserverSDK.UpdateConnectedPlayers(players);
 
                     config = GameserverSDK.getConfigSettings() ?? new Dictionary<string, string>();
