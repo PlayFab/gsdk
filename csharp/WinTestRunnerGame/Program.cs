@@ -159,10 +159,15 @@ namespace WinTestRunnerGame
 
                     IDictionary<string, string> config = null;
 
-                    // For each request, "add" a connected player up to 20 players.
-                    if (players.Count < 20)
+                    // For each request, "add" a connected player, but limit player count to 20.
+                    const int maxPlayers = 20;
+                    if (players.Count < maxPlayers)
                     {
                         players.Add(new ConnectedPlayer("gamer" + requestCount));
+                    }
+                    else
+                    {
+                        GameserverSDK.LogMessage($"Player not added since max of {maxPlayers} is reached. Current request count: {requestCount}.");
                     }
 
                     requestCount++;
