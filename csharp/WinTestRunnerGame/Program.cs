@@ -66,7 +66,7 @@ namespace WinTestRunnerGame
             _listener.Prefixes.Add(address);
             _listener.Start();
 
-            GameserverSDK.Start();
+            GameserverSDK.Start(true);
             GameserverSDK.RegisterShutdownCallback(OnShutdown);
             GameserverSDK.RegisterHealthCallback(GetGameHealth);
             GameserverSDK.RegisterMaintenanceCallback(OnMaintenanceScheduled);
