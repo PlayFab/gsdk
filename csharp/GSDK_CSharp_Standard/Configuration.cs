@@ -24,8 +24,6 @@ namespace Microsoft.Playfab.Gaming.GSDK.CSharp
         public IDictionary<string, string> BuildMetadata { get; set; }
         public IDictionary<string, string> GamePorts { get; set; }
 
-        public virtual bool ShouldLog() { return true; }
-
         protected const string HEARTBEAT_ENDPOINT_ENV_VAR = "HEARTBEAT_ENDPOINT";
         protected const string SERVER_ID_ENV_VAR = "SESSION_HOST_ID";
         protected const string LOG_FOLDER_ENV_VAR = "GSDK_LOG_FOLDER";
@@ -59,13 +57,6 @@ namespace Microsoft.Playfab.Gaming.GSDK.CSharp
 
     class JsonFileConfiguration : Configuration
     {
-        private bool _shouldLog;
-
-        public override bool ShouldLog()
-        {
-            return _shouldLog;
-        }
-
         public JsonFileConfiguration(string fileName) : base()
         {
             try
@@ -82,7 +73,6 @@ namespace Microsoft.Playfab.Gaming.GSDK.CSharp
                     GameCertificates = config.GameCertificates ?? new Dictionary<string, string>();
                     GamePorts = config.GamePorts ?? new Dictionary<string, string>();
                     BuildMetadata = config.BuildMetadata ?? new Dictionary<string, string>();
-                    _shouldLog = config.ShouldLog.HasValue && config.ShouldLog.Value;
                 }
             }
             catch (Exception ex)
@@ -117,8 +107,5 @@ namespace Microsoft.Playfab.Gaming.GSDK.CSharp
 
         [JsonProperty(PropertyName = "gamePorts", Required = Required.Default)]
         public IDictionary<string, string> GamePorts { get; set; }
-
-        [JsonProperty(PropertyName = "shouldLog", Required = Required.Default)]
-        public bool? ShouldLog { get; set; }
     }
 }

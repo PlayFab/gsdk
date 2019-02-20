@@ -78,10 +78,8 @@ namespace Microsoft.Playfab.Gaming.GSDK.CSharp
             }
 
             Logger = LoggerFactory.CreateInstance(ConfigMap[GameserverSDK.LogFolderKey]);
-            if (_configuration.ShouldLog())
-            {
-                Logger.Start();
-            }
+            Logger.Start();
+            
 
             string gsmsBaseUrl = ConfigMap[GameserverSDK.HeartbeatEndpointKey];
             string instanceId = ConfigMap[GameserverSDK.ServerIdKey];
