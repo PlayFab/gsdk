@@ -18,9 +18,9 @@ namespace Microsoft.Playfab.Gaming.GSDK.CSharp
         public string SharedContentFolder { get; set; }
 
         public IDictionary<string, string> GameCertificates { get; set; }
-        public string TitleId { get; set; }
-        public string BuildId { get; set; }
-        public string Region { get; set; }
+        public string TitleId => Environment.GetEnvironmentVariable(TITLE_ID_ENV_VAR);
+        public string BuildId => Environment.GetEnvironmentVariable(BUILD_ID_ENV_VAR);
+        public string Region => Environment.GetEnvironmentVariable(REGION_ENV_VAR);
         public IDictionary<string, string> BuildMetadata { get; set; }
         public IDictionary<string, string> GamePorts { get; set; }
 

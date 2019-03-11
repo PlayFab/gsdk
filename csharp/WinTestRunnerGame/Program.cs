@@ -1,5 +1,12 @@
 ﻿// Copyright (C) Microsoft Corporation. All rights reserved.
 
+using System.Threading.Tasks;
+using PlayFab;
+using PlayFab.AuthenticationModels;
+using PlayFab.MultiplayerModels;
+using PlayFab.ServerModels;
+using EntityKey = PlayFab.AuthenticationModels.EntityKey;
+
 namespace WinTestRunnerGame
 {
     using Microsoft.Playfab.Gaming.GSDK.CSharp;
@@ -13,22 +20,35 @@ namespace WinTestRunnerGame
     using System.Security.Cryptography.X509Certificates;
     using System.Threading;
 
+    public class SessionCookie
+    {
+        /// <summary>
+        /// For test purposes only, do not actually send your secret key in the session cookie
+        /// </summary>
+        public string SecretKey { get; set; }
+        
+        /// <summary>
+        /// The time before automatically shutting down
+        /// </summary>
+        public long TimeoutSecs { get; set; }
+    }
+
     class Program
     {
         const int ListeningPort = 3600;
         const string AssetFilePath = @"C:\Assets\testassetfile.txt";
         const string SessionTimeoutInSecondsName = "SessionTimeoutInSeconds";
 
-        static private HttpListener _listener = new HttpListener();
-        static private bool _isActivated = false;
-        static private bool _isShutdown = false;
-        static private bool _delayShutdown = false;
-        static private string _assetFileText = String.Empty;
-        static private string _installedCertThumbprint = String.Empty;
-        static private string _cmdArgs = String.Empty;
-        static private List<ConnectedPlayer> players = new List<ConnectedPlayer>();
-        static private int requestCount = 0;
-        static private DateTimeOffset _nextMaintenance = DateTimeOffset.MinValue;
+        private static readonly HttpListener _listener = new HttpListener();
+        private static bool _isActivated = false;
+        private static bool _isShutdown = false;
+        private static bool _delayShutdown = false;
+        private static string _assetFileText = String.Empty;
+        private static string _installedCertThumbprint = String.Empty;
+        private static string _cmdArgs = String.Empty;
+        private static List<ConnectedPlayer> players = new List<ConnectedPlayer>();
+        private static int requestCount = 0;
+        private static DateTimeOffset _nextMaintenance = DateTimeOffset.MinValue;
         static DateTimeOffset _sessionTimeoutTimestamp = DateTimeOffset.MaxValue;
         private const string TimeoutSessionCookiePrefix = "timeoutsecs=";
 
@@ -54,6 +74,8 @@ namespace WinTestRunnerGame
         {
             _nextMaintenance = time;
         }
+        
+        
 
         static void Main(string[] args)
         {
@@ -70,6 +92,7 @@ namespace WinTestRunnerGame
             GameserverSDK.RegisterShutdownCallback(OnShutdown);
             GameserverSDK.RegisterHealthCallback(GetGameHealth);
             GameserverSDK.RegisterMaintenanceCallback(OnMaintenanceScheduled);
+            
 
             if (File.Exists(AssetFilePath))
             {
@@ -112,6 +135,13 @@ namespace WinTestRunnerGame
             Thread t = new Thread(ProcessRequests);
             t.Start();
 
+
+            string titleId = initialConfig[GameserverSDK.TitleIdKey];
+            string buildId = initialConfig[GameserverSDK.BuildIdKey];
+            string region = initialConfig[GameserverSDK.RegionKey];
+            
+            GameserverSDK.LogMessage($"Processing requests for title:{titleId} build:{buildId} in region {region}");
+
             GameserverSDK.ReadyForPlayers();
             _isActivated = true;
 
@@ -119,12 +149,59 @@ namespace WinTestRunnerGame
             // If set, this overrides whatever may have been set in the App config above
             initialConfig = GameserverSDK.getConfigSettings();
 
-            if (initialConfig.TryGetValue(GameserverSDK.SessionCookieKey, out string sessionCookie) && sessionCookie.StartsWith(TimeoutSessionCookiePrefix, StringComparison.InvariantCultureIgnoreCase))
+            SessionCookie sessionCookie = new SessionCookie();
+
+            if (initialConfig.TryGetValue(GameserverSDK.SessionCookieKey, out string sessionCookieStr))
             {
-                if (Int64.TryParse(sessionCookie.Substring(TimeoutSessionCookiePrefix.Length), out long timeoutsecs))
+                if (sessionCookieStr.StartsWith(TimeoutSessionCookiePrefix, StringComparison.InvariantCultureIgnoreCase))
                 {
-                    _sessionTimeoutTimestamp = DateTimeOffset.Now.AddSeconds(timeoutsecs);
+                    if (Int64.TryParse(sessionCookieStr.Substring(TimeoutSessionCookiePrefix.Length),
+                        out long timeoutsecs))
+                    {
+
+                        sessionCookie.TimeoutSecs = timeoutsecs;
+                    }
                 }
+                else
+                {
+                    sessionCookie = JsonConvert.DeserializeObject<SessionCookie>(sessionCookieStr);
+                    
+                }
+            }
+
+            if (!string.IsNullOrWhiteSpace(sessionCookie.SecretKey))
+            {
+                GetTitleData(titleId, sessionCookie).Wait();
+            }
+
+            EnforceTimeout(sessionCookie);
+        }
+
+        private static async Task GetTitleData(string titleId, SessionCookie sessionCookie)
+        {
+            PlayFabSettings.TitleId = titleId;
+            PlayFabSettings.DeveloperSecretKey = sessionCookie.SecretKey;
+                
+            var tokenRequest = new GetEntityTokenRequest() { Entity = new EntityKey() { Type = "Title" } };
+            PlayFabResult<GetEntityTokenResponse> tokenResponse =
+                await PlayFabAuthenticationAPI.GetEntityTokenAsync(tokenRequest);
+
+            PlayFabResult<GetTitleDataResult> titleData = await PlayFabServerAPI.GetTitleDataAsync(new GetTitleDataRequest());
+
+
+            GameserverSDK.LogMessage("Title Data:");
+            foreach (KeyValuePair<string,string> titleDataTuple in titleData.Result.Data)
+            {
+                GameserverSDK.LogMessage($"{titleDataTuple.Key}={titleDataTuple.Value}");
+            }
+
+        }
+
+        private static void EnforceTimeout(SessionCookie sessionCookie)
+        {
+            if (sessionCookie.TimeoutSecs != 0)
+            {
+                _sessionTimeoutTimestamp = DateTimeOffset.Now.AddSeconds(sessionCookie.TimeoutSecs);
             }
 
             if (_sessionTimeoutTimestamp != DateTimeOffset.MaxValue)
