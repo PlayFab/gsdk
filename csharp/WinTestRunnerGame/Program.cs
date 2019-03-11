@@ -35,6 +35,8 @@ namespace WinTestRunnerGame
 
     class Program
     {
+        private const bool LogToConsole = false;
+        
         const int ListeningPort = 3600;
         const string AssetFilePath = @"C:\Assets\testassetfile.txt";
         const string SessionTimeoutInSecondsName = "SessionTimeoutInSeconds";
@@ -52,9 +54,18 @@ namespace WinTestRunnerGame
         static DateTimeOffset _sessionTimeoutTimestamp = DateTimeOffset.MaxValue;
         private const string TimeoutSessionCookiePrefix = "timeoutsecs=";
 
+        private static void LogMessage(string message)
+        {
+            GameserverSDK.LogMessage(message);
+            if (LogToConsole)
+            {
+                Console.WriteLine(message);
+            }
+        }
+        
         static void OnShutdown()
         {
-            GameserverSDK.LogMessage("Shutting down...");
+            LogMessage("Shutting down...");
             _isShutdown = true;
 
             if (!_delayShutdown)
@@ -124,12 +135,12 @@ namespace WinTestRunnerGame
                 }
                 else
                 {
-                    GameserverSDK.LogMessage("Could not find installed game cert in LocalMachine\\My. Expected thumbprint is: " + expectedThumbprint);
+                    LogMessage("Could not find installed game cert in LocalMachine\\My. Expected thumbprint is: " + expectedThumbprint);
                 }
             }
             else
             {
-                GameserverSDK.LogMessage("Config did not contain cert! Config is: " + string.Join(";", initialConfig.Select(x => x.Key + "=" + x.Value)));
+                LogMessage("Config did not contain cert! Config is: " + string.Join(";", initialConfig.Select(x => x.Key + "=" + x.Value)));
             }
 
             Thread t = new Thread(ProcessRequests);
@@ -140,61 +151,85 @@ namespace WinTestRunnerGame
             string buildId = initialConfig[GameserverSDK.BuildIdKey];
             string region = initialConfig[GameserverSDK.RegionKey];
             
-            GameserverSDK.LogMessage($"Processing requests for title:{titleId} build:{buildId} in region {region}");
+            LogMessage($"Processing requests for title:{titleId} build:{buildId} in region {region}");
 
             GameserverSDK.ReadyForPlayers();
             _isActivated = true;
 
-            // After allocation, see if the session cookie contained a timeout. We use it for stress testing to make sessions end at random times.
-            // If set, this overrides whatever may have been set in the App config above
             initialConfig = GameserverSDK.getConfigSettings();
 
             SessionCookie sessionCookie = new SessionCookie();
 
             if (initialConfig.TryGetValue(GameserverSDK.SessionCookieKey, out string sessionCookieStr))
             {
+                LogMessage($"Session cookie found: {sessionCookieStr}");
                 if (sessionCookieStr.StartsWith(TimeoutSessionCookiePrefix, StringComparison.InvariantCultureIgnoreCase))
                 {
-                    if (Int64.TryParse(sessionCookieStr.Substring(TimeoutSessionCookiePrefix.Length),
-                        out long timeoutsecs))
+                    if (long.TryParse(sessionCookieStr.Substring(TimeoutSessionCookiePrefix.Length),
+                        out long timeoutSecs))
                     {
 
-                        sessionCookie.TimeoutSecs = timeoutsecs;
+                        sessionCookie.TimeoutSecs = timeoutSecs;
                     }
                 }
                 else
                 {
-                    sessionCookie = JsonConvert.DeserializeObject<SessionCookie>(sessionCookieStr);
-                    
+                    sessionCookie = JsonConvert.DeserializeObject<SessionCookie>(sessionCookieStr);                    
                 }
             }
 
+            // If the session cookie contained a secret key
+            // try to get the title data for this title
             if (!string.IsNullOrWhiteSpace(sessionCookie.SecretKey))
             {
                 GetTitleData(titleId, sessionCookie).Wait();
             }
 
+            // If the session cookie contained a timeout. Shutdown at this time.
+            // this overrides whatever may have been set in the App config above
+            // We use it for stress testing to make sessions end at random times.
             EnforceTimeout(sessionCookie);
         }
 
         private static async Task GetTitleData(string titleId, SessionCookie sessionCookie)
         {
-            PlayFabSettings.TitleId = titleId;
-            PlayFabSettings.DeveloperSecretKey = sessionCookie.SecretKey;
-                
-            var tokenRequest = new GetEntityTokenRequest() { Entity = new EntityKey() { Type = "Title" } };
-            PlayFabResult<GetEntityTokenResponse> tokenResponse =
-                await PlayFabAuthenticationAPI.GetEntityTokenAsync(tokenRequest);
-
-            PlayFabResult<GetTitleDataResult> titleData = await PlayFabServerAPI.GetTitleDataAsync(new GetTitleDataRequest());
-
-
-            GameserverSDK.LogMessage("Title Data:");
-            foreach (KeyValuePair<string,string> titleDataTuple in titleData.Result.Data)
+            try
             {
-                GameserverSDK.LogMessage($"{titleDataTuple.Key}={titleDataTuple.Value}");
-            }
+                PlayFabSettings.TitleId = titleId;
+                PlayFabSettings.DeveloperSecretKey = sessionCookie.SecretKey;
 
+                var tokenRequest = new GetEntityTokenRequest() {Entity = new EntityKey() {Type = "Title"}};
+                PlayFabResult<GetEntityTokenResponse> tokenResponse =
+                    await PlayFabAuthenticationAPI.GetEntityTokenAsync(tokenRequest);
+                
+                if (tokenResponse.Error != null)
+                {
+                    LogMessage($"Error retrieving entity token: {tokenResponse.Error.Error.ToString()}: {tokenResponse.Error.ErrorMessage}");
+                }
+                
+                PlayFabResult<GetTitleDataResult> titleData =
+                    await PlayFabServerAPI.GetTitleDataAsync(new GetTitleDataRequest());
+
+                if (titleData.Error != null)
+                {
+                    LogMessage($"Error retrieving title data: {titleData.Error.Error.ToString()}: {titleData.Error.ErrorMessage}");
+                }
+                else
+                {
+                    LogMessage("Title Data:");
+                    foreach (KeyValuePair<string, string> titleDataTuple in titleData.Result.Data)
+                    {
+                        LogMessage($"{titleDataTuple.Key}={titleDataTuple.Value}");
+                    }                    
+                }
+
+                
+
+            }
+            catch (Exception e)
+            {
+                LogMessage($"Exception calling for titleData {e}");
+            }
         }
 
         private static void EnforceTimeout(SessionCookie sessionCookie)
@@ -212,7 +247,7 @@ namespace WinTestRunnerGame
                 // If we didn't shutdown yet, that means we timed out
                 if (!_isShutdown)
                 {
-                    GameserverSDK.LogMessage($"Session Timeout exceeded at {DateTimeOffset.Now.ToString()}...");
+                    LogMessage($"Session Timeout exceeded at {DateTimeOffset.Now.ToString()}...");
                     OnShutdown();
                 }
             }
@@ -232,7 +267,7 @@ namespace WinTestRunnerGame
                     HttpListenerRequest request = context.Request;
                     HttpListenerResponse response = context.Response;
 
-                    GameserverSDK.LogMessage(string.Format("HTTP:Received {0}", request.Headers.ToString()));
+                    LogMessage(string.Format("HTTP:Received {0}", request.Headers.ToString()));
 
                     IDictionary<string, string> config = null;
 
@@ -244,7 +279,7 @@ namespace WinTestRunnerGame
                     }
                     else
                     {
-                        GameserverSDK.LogMessage($"Player not added since max of {maxPlayers} is reached. Current request count: {requestCount}.");
+                        LogMessage($"Player not added since max of {maxPlayers} is reached. Current request count: {requestCount}.");
                     }
 
                     requestCount++;
@@ -293,11 +328,11 @@ namespace WinTestRunnerGame
                 catch (HttpListenerException httpEx)
                 {
                     // This one is expected if we stopped the listener because we were asked to shutdown
-                    GameserverSDK.LogMessage($"Got HttpListenerException: {httpEx.ToString()}, shutdown value is: {_isShutdown} ");
+                    LogMessage($"Got HttpListenerException: {httpEx.ToString()}, shutdown value is: {_isShutdown} ");
                 }
                 catch (Exception ex)
                 {
-                    GameserverSDK.LogMessage($"Got Exception: {ex.ToString()}");
+                    LogMessage($"Got Exception: {ex.ToString()}");
                 }
             }
         }
