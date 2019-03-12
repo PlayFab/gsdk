@@ -23,11 +23,6 @@ namespace WinTestRunnerGame
     public class SessionCookie
     {
         /// <summary>
-        /// For test purposes only, do not actually send your secret key in the session cookie
-        /// </summary>
-        public string SecretKey { get; set; }
-        
-        /// <summary>
         /// The time before automatically shutting down
         /// </summary>
         public long TimeoutSecs { get; set; }
@@ -38,6 +33,7 @@ namespace WinTestRunnerGame
         const int ListeningPort = 3600;
         const string AssetFilePath = @"C:\Assets\testassetfile.txt";
         const string SessionTimeoutInSecondsName = "SessionTimeoutInSeconds";
+        const string DeveloperSecretKeyName = "DeveloperSecretKey";
 
         private static readonly HttpListener _listener = new HttpListener();
         private static bool _isActivated = false;
@@ -178,11 +174,17 @@ namespace WinTestRunnerGame
                 }
             }
 
-            // If the session cookie contained a secret key
+            // If a secret key was specified
             // try to get the title data for this title
-            if (!string.IsNullOrWhiteSpace(sessionCookie.SecretKey))
+            string secretKey = ConfigurationManager.AppSettings.Get(DeveloperSecretKeyName);
+            if (!string.IsNullOrWhiteSpace(secretKey))
             {
-                GetTitleData(titleId, sessionCookie).Wait();
+                LogMessage("Getting title data");
+                GetTitleData(titleId, secretKey).Wait();
+            }
+            else
+            {
+                LogMessage("Secret Key not specified in app.config. Skipping retrieval of title config");
             }
 
             // If the session cookie contained a timeout. Shutdown at this time.
@@ -191,12 +193,12 @@ namespace WinTestRunnerGame
             EnforceTimeout(sessionCookie);
         }
 
-        private static async Task GetTitleData(string titleId, SessionCookie sessionCookie)
+        private static async Task GetTitleData(string titleId, string secretKey)
         {
             try
             {
                 PlayFabSettings.TitleId = titleId;
-                PlayFabSettings.DeveloperSecretKey = sessionCookie.SecretKey;
+                PlayFabSettings.DeveloperSecretKey = secretKey;
 
                 var tokenRequest = new GetEntityTokenRequest() {Entity = new EntityKey() {Type = "Title"}};
                 PlayFabResult<GetEntityTokenResponse> tokenResponse =
