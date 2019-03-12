@@ -145,12 +145,15 @@ namespace Microsoft.Playfab.Gaming.GSDK.CSharp
 
             finalConfig[GameserverSDK.HeartbeatEndpointKey] = localConfig.HeartbeatEndpoint;
             finalConfig[GameserverSDK.ServerIdKey] = localConfig.ServerId;
+            finalConfig[GameserverSDK.VmIdKey] = localConfig.VmId;
             finalConfig[GameserverSDK.LogFolderKey] = localConfig.LogFolder;
             finalConfig[GameserverSDK.SharedContentFolderKey] = localConfig.SharedContentFolder;
             finalConfig[GameserverSDK.CertificateFolderKey] = localConfig.CertificateFolder;
             finalConfig[GameserverSDK.TitleIdKey] = localConfig.TitleId;
             finalConfig[GameserverSDK.BuildIdKey] = localConfig.BuildId;
             finalConfig[GameserverSDK.RegionKey] = localConfig.Region;
+            finalConfig[GameserverSDK.PublicIpV4AddressKey] = localConfig.PublicIpV4Address;
+            finalConfig[GameserverSDK.FullyQualifiedDomainNameKey] = localConfig.FullyQualifiedDomainName;
 
             return finalConfig;
         }

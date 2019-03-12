@@ -32,7 +32,6 @@ namespace Microsoft.Playfab.Gaming.GSDK.CSharp
     {
         // These two keys are only available after allocation (once readyForPlayers returns true)
         public const string SessionCookieKey = "sessionCookie";
-        public const string SessionIdKey = "sessionId";
         public const string HeartbeatEndpointKey = "gsmsBaseUrl";
         public const string ServerIdKey = "instanceId";
         public const string LogFolderKey = "logFolder";
@@ -41,6 +40,9 @@ namespace Microsoft.Playfab.Gaming.GSDK.CSharp
         public const string TitleIdKey = "titleId";
         public const string BuildIdKey = "buildId";
         public const string RegionKey = "region";
+        public const string VmIdKey = "vmId";
+        public const string PublicIpV4AddressKey = "publicIpV4Address";
+        public const string FullyQualifiedDomainNameKey = "fullyQualifiedDomainName";
 
         public const string GsdkConfigFileEnvVarKey = "GSDK_CONFIG_FILE";
 

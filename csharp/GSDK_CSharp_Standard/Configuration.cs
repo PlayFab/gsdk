@@ -5,10 +5,12 @@ using System.IO;
 
 namespace Microsoft.Playfab.Gaming.GSDK.CSharp
 {
-    class Configuration
+    internal class Configuration
     {
         public string HeartbeatEndpoint { get; protected set; }
         public string ServerId { get; protected set; }
+
+        public string VmId { get; set; }
         public string LogFolder { get; protected set; }
         public string CertificateFolder { get; set; }
 
@@ -17,22 +19,22 @@ namespace Microsoft.Playfab.Gaming.GSDK.CSharp
         /// </summary>
         public string SharedContentFolder { get; set; }
 
+        public string PublicIpV4Address { get; set; }
+
+        public string FullyQualifiedDomainName { get; set; }
+
         public IDictionary<string, string> GameCertificates { get; set; }
-        public string TitleId { get; set; }
-        public string BuildId { get; set; }
-        public string Region { get; set; }
+        public string TitleId => Environment.GetEnvironmentVariable(TITLE_ID_ENV_VAR);
+        public string BuildId => Environment.GetEnvironmentVariable(BUILD_ID_ENV_VAR);
+        public string Region => Environment.GetEnvironmentVariable(REGION_ENV_VAR);
         public IDictionary<string, string> BuildMetadata { get; set; }
         public IDictionary<string, string> GamePorts { get; set; }
+        
+        private const string TITLE_ID_ENV_VAR = "PF_TITLE_ID";
+        private const string BUILD_ID_ENV_VAR = "PF_BUILD_ID";
+        private const string REGION_ENV_VAR = "PF_REGION";
 
-        protected const string HEARTBEAT_ENDPOINT_ENV_VAR = "HEARTBEAT_ENDPOINT";
-        protected const string SERVER_ID_ENV_VAR = "SESSION_HOST_ID";
-        protected const string LOG_FOLDER_ENV_VAR = "GSDK_LOG_FOLDER";
-        protected const string TITLE_ID_ENV_VAR = "PF_TITLE_ID";
-        protected const string BUILD_ID_ENV_VAR = "PF_BUILD_ID";
-        protected const string REGION_ENV_VAR = "PF_REGION";
-        protected const string SHARED_CONTENT_FOLDER_ENV_VAR = "SHARED_CONTENT_FOLDER";
-
-        public Configuration()
+        protected Configuration()
         {
             GameCertificates = new Dictionary<string, string>();
             BuildMetadata = new Dictionary<string, string>();
@@ -40,8 +42,13 @@ namespace Microsoft.Playfab.Gaming.GSDK.CSharp
         }
     }
 
-    class EnvironmentVariableConfiguration : Configuration
+    internal class EnvironmentVariableConfiguration : Configuration
     {
+        private const string HEARTBEAT_ENDPOINT_ENV_VAR = "HEARTBEAT_ENDPOINT";
+        private const string SERVER_ID_ENV_VAR = "SESSION_HOST_ID";
+        private const string LOG_FOLDER_ENV_VAR = "GSDK_LOG_FOLDER";
+        private const string SHARED_CONTENT_FOLDER_ENV_VAR = "SHARED_CONTENT_FOLDER";
+        
         public EnvironmentVariableConfiguration() : base()
         {
             HeartbeatEndpoint = Environment.GetEnvironmentVariable(HEARTBEAT_ENDPOINT_ENV_VAR);
@@ -55,7 +62,7 @@ namespace Microsoft.Playfab.Gaming.GSDK.CSharp
         }
     }
 
-    class JsonFileConfiguration : Configuration
+    internal class JsonFileConfiguration : Configuration
     {
         public JsonFileConfiguration(string fileName) : base()
         {
@@ -67,12 +74,15 @@ namespace Microsoft.Playfab.Gaming.GSDK.CSharp
 
                     HeartbeatEndpoint = config.HeartbeatEndpoint;
                     ServerId = config.SessionHostId;
+                    VmId = config.VmId;
                     LogFolder = config.LogFolder;
                     SharedContentFolder = config.SharedContentFolder;
                     CertificateFolder = config.CertificateFolder;
                     GameCertificates = config.GameCertificates ?? new Dictionary<string, string>();
                     GamePorts = config.GamePorts ?? new Dictionary<string, string>();
                     BuildMetadata = config.BuildMetadata ?? new Dictionary<string, string>();
+                    PublicIpV4Address = config.PublicIpV4Address;
+                    FullyQualifiedDomainName = config.FullyQualifiedDomainName;
                 }
             }
             catch (Exception ex)
@@ -80,32 +90,41 @@ namespace Microsoft.Playfab.Gaming.GSDK.CSharp
                 throw new GSDKInitializationException($"Cannot read configuration file {fileName}", ex);
             }
         }
-    }
+        
+        private class JsonSchema
+        {
+            [JsonProperty(PropertyName = "heartbeatEndpoint", Required = Required.Always)]
+            public string HeartbeatEndpoint { get; set; }
 
-    class JsonSchema
-    {
-        [JsonProperty(PropertyName = "heartbeatEndpoint", Required = Required.Always)]
-        public string HeartbeatEndpoint { get; set; }
+            [JsonProperty(PropertyName = "sessionHostId", Required = Required.Always)]
+            public string SessionHostId { get; set; }
 
-        [JsonProperty(PropertyName = "sessionHostId", Required = Required.Always)]
-        public string SessionHostId { get; set; }
+            [JsonProperty(PropertyName = "vmId", Required = Required.Always)]
+            public string VmId { get; set; }
 
-        [JsonProperty(PropertyName = "logFolder", Required = Required.Default)]
-        public string LogFolder { get; set; }
+            [JsonProperty(PropertyName = "logFolder", Required = Required.Default)]
+            public string LogFolder { get; set; }
 
-        [JsonProperty(PropertyName = "sharedContentFolder", Required = Required.Default)]
-        public string SharedContentFolder { get; set; }
+            [JsonProperty(PropertyName = "sharedContentFolder", Required = Required.Default)]
+            public string SharedContentFolder { get; set; }
 
-        [JsonProperty(PropertyName = "certificateFolder", Required = Required.Default)]
-        public string CertificateFolder { get; set; }
+            [JsonProperty(PropertyName = "certificateFolder", Required = Required.Default)]
+            public string CertificateFolder { get; set; }
 
-        [JsonProperty(PropertyName = "gameCertificates", Required = Required.Default)]
-        public IDictionary<string, string> GameCertificates { get; set; }
+            [JsonProperty(PropertyName = "gameCertificates", Required = Required.Default)]
+            public IDictionary<string, string> GameCertificates { get; set; }
 
-        [JsonProperty(PropertyName = "buildMetadata", Required = Required.Default)]
-        public IDictionary<string, string> BuildMetadata { get; set; }
+            [JsonProperty(PropertyName = "buildMetadata", Required = Required.Default)]
+            public IDictionary<string, string> BuildMetadata { get; set; }
 
-        [JsonProperty(PropertyName = "gamePorts", Required = Required.Default)]
-        public IDictionary<string, string> GamePorts { get; set; }
+            [JsonProperty(PropertyName = "gamePorts", Required = Required.Default)]
+            public IDictionary<string, string> GamePorts { get; set; }
+
+            [JsonProperty(PropertyName = "publicIpV4Address", Required = Required.Always)]
+            public string PublicIpV4Address { get; set; }
+
+            [JsonProperty(PropertyName = "fullyQualifiedDomainName", Required = Required.Always)]
+            public string FullyQualifiedDomainName { get; set; }
+        }
     }
 }
