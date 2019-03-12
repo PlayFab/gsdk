@@ -35,8 +35,6 @@ namespace WinTestRunnerGame
 
     class Program
     {
-        private const bool LogToConsole = false;
-        
         const int ListeningPort = 3600;
         const string AssetFilePath = @"C:\Assets\testassetfile.txt";
         const string SessionTimeoutInSecondsName = "SessionTimeoutInSeconds";
@@ -57,10 +55,7 @@ namespace WinTestRunnerGame
         private static void LogMessage(string message)
         {
             GameserverSDK.LogMessage(message);
-            if (LogToConsole)
-            {
-                Console.WriteLine(message);
-            }
+            Console.WriteLine(message);
         }
         
         static void OnShutdown()
@@ -158,11 +153,16 @@ namespace WinTestRunnerGame
 
             initialConfig = GameserverSDK.getConfigSettings();
 
+            LogMessage("Config Settings");
+            foreach (KeyValuePair<string,string> configTuple in initialConfig)
+            {
+                LogMessage($"\t{configTuple.Key}={configTuple.Value}");
+            }
+            
             SessionCookie sessionCookie = new SessionCookie();
 
             if (initialConfig.TryGetValue(GameserverSDK.SessionCookieKey, out string sessionCookieStr))
             {
-                LogMessage($"Session cookie found: {sessionCookieStr}");
                 if (sessionCookieStr.StartsWith(TimeoutSessionCookiePrefix, StringComparison.InvariantCultureIgnoreCase))
                 {
                     if (long.TryParse(sessionCookieStr.Substring(TimeoutSessionCookiePrefix.Length),
@@ -219,7 +219,7 @@ namespace WinTestRunnerGame
                     LogMessage("Title Data:");
                     foreach (KeyValuePair<string, string> titleDataTuple in titleData.Result.Data)
                     {
-                        LogMessage($"{titleDataTuple.Key}={titleDataTuple.Value}");
+                        LogMessage($"\t{titleDataTuple.Key}={titleDataTuple.Value}");
                     }                    
                 }
 
