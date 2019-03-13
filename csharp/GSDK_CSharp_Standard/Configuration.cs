@@ -99,31 +99,31 @@ namespace Microsoft.Playfab.Gaming.GSDK.CSharp
             [JsonProperty(PropertyName = "sessionHostId", Required = Required.Always)]
             public string SessionHostId { get; set; }
 
-            [JsonProperty(PropertyName = "vmId", Required = Required.Always)]
+            [JsonProperty(PropertyName = "vmId")]
             public string VmId { get; set; }
 
-            [JsonProperty(PropertyName = "logFolder", Required = Required.Default)]
+            [JsonProperty(PropertyName = "logFolder")]
             public string LogFolder { get; set; }
 
-            [JsonProperty(PropertyName = "sharedContentFolder", Required = Required.Default)]
+            [JsonProperty(PropertyName = "sharedContentFolder")]
             public string SharedContentFolder { get; set; }
 
-            [JsonProperty(PropertyName = "certificateFolder", Required = Required.Default)]
+            [JsonProperty(PropertyName = "certificateFolder")]
             public string CertificateFolder { get; set; }
 
-            [JsonProperty(PropertyName = "gameCertificates", Required = Required.Default)]
+            [JsonProperty(PropertyName = "gameCertificates")]
             public IDictionary<string, string> GameCertificates { get; set; }
 
-            [JsonProperty(PropertyName = "buildMetadata", Required = Required.Default)]
+            [JsonProperty(PropertyName = "buildMetadata")]
             public IDictionary<string, string> BuildMetadata { get; set; }
 
-            [JsonProperty(PropertyName = "gamePorts", Required = Required.Default)]
+            [JsonProperty(PropertyName = "gamePorts")]
             public IDictionary<string, string> GamePorts { get; set; }
 
-            [JsonProperty(PropertyName = "publicIpV4Address", Required = Required.Always)]
+            [JsonProperty(PropertyName = "publicIpV4Address")]
             public string PublicIpV4Address { get; set; }
 
-            [JsonProperty(PropertyName = "fullyQualifiedDomainName", Required = Required.Always)]
+            [JsonProperty(PropertyName = "fullyQualifiedDomainName")]
             public string FullyQualifiedDomainName { get; set; }
         }
     }
