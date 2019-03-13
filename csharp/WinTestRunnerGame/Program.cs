@@ -159,18 +159,27 @@ namespace WinTestRunnerGame
 
             if (initialConfig.TryGetValue(GameserverSDK.SessionCookieKey, out string sessionCookieStr))
             {
-                if (sessionCookieStr.StartsWith(TimeoutSessionCookiePrefix, StringComparison.InvariantCultureIgnoreCase))
+                try
                 {
-                    if (long.TryParse(sessionCookieStr.Substring(TimeoutSessionCookiePrefix.Length),
-                        out long timeoutSecs))
-                    {
 
-                        sessionCookie.TimeoutSecs = timeoutSecs;
+                    if (sessionCookieStr.StartsWith(TimeoutSessionCookiePrefix,
+                        StringComparison.InvariantCultureIgnoreCase))
+                    {
+                        if (long.TryParse(sessionCookieStr.Substring(TimeoutSessionCookiePrefix.Length),
+                            out long timeoutSecs))
+                        {
+
+                            sessionCookie.TimeoutSecs = timeoutSecs;
+                        }
+                    }
+                    else
+                    {
+                        sessionCookie = JsonConvert.DeserializeObject<SessionCookie>(sessionCookieStr);
                     }
                 }
-                else
+                catch (Exception e)
                 {
-                    sessionCookie = JsonConvert.DeserializeObject<SessionCookie>(sessionCookieStr);                    
+                    LogMessage(e.ToString());
                 }
             }
 
