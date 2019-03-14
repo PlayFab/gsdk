@@ -32,6 +32,7 @@ namespace Microsoft.Playfab.Gaming.GSDK.CSharp
     {
         // These two keys are only available after allocation (once readyForPlayers returns true)
         public const string SessionCookieKey = "sessionCookie";
+        public const string SessionIdKey = "sessionId";
         public const string HeartbeatEndpointKey = "gsmsBaseUrl";
         public const string ServerIdKey = "instanceId";
         public const string LogFolderKey = "logFolder";
@@ -46,7 +47,7 @@ namespace Microsoft.Playfab.Gaming.GSDK.CSharp
 
         public const string GsdkConfigFileEnvVarKey = "GSDK_CONFIG_FILE";
 
-        private static InternalSdk _internalSdk = new InternalSdk();
+        private static readonly InternalSdk _internalSdk = new InternalSdk();
 
         /// <summary>
         /// Called when the game server is ready to accept clients.
