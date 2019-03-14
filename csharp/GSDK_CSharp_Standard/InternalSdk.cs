@@ -215,8 +215,8 @@ namespace Microsoft.Playfab.Gaming.GSDK.CSharp
         {
             if (response.SessionConfig != null)
             {
-                ConfigMap.AddIfNotNullOrEmpty("sessionCookie", response.SessionConfig?.SessionCookie);
-                ConfigMap.AddIfNotNullOrEmpty("sessionId", response.SessionConfig?.SessionId.ToString());
+                ConfigMap.AddIfNotNullOrEmpty(GameserverSDK.SessionCookieKey, response.SessionConfig?.SessionCookie);
+                ConfigMap.AddIfNotNullOrEmpty(GameserverSDK.SessionIdKey, response.SessionConfig?.SessionId.ToString());
 
                 if (response.SessionConfig?.InitialPlayers != null && response.SessionConfig.InitialPlayers.Any())
                 {
