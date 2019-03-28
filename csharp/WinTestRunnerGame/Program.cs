@@ -305,6 +305,12 @@ namespace WinTestRunnerGame
                         _delayShutdown = true;
                     }
 
+                    // If the server has been allocated, add the list of players to the response.
+                    if (_isActivated)
+                    {
+                        config.Add("initialPlayers", string.Join(",", GameserverSDK.GetInitialPlayers()));
+                    }
+
                     config.Add("isActivated", _isActivated.ToString());
                     config.Add("isShutdown", _isShutdown.ToString());
                     config.Add("assetFileText", _assetFileText);
