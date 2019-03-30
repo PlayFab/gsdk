@@ -105,7 +105,6 @@
     <None Include="gsdkSampleConfigLinux.json">
       <DeploymentContent>true</DeploymentContent>
     </None>
-    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets" />

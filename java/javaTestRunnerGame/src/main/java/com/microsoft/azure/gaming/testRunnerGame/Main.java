@@ -6,7 +6,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.microsoft.azure.gaming.*;
 
-import javax.xml.bind.DatatypeConverter;
+import org.apache.commons.codec.binary.Hex;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Base64;
 
 /**
  * Simple app that lets us test the various Java GSDK methods
@@ -147,6 +148,12 @@ public class Main {
                     delayShutdown = true;
                 }
 
+                // If the server has been allocated, add the list of initialPlayers to the response to validate that the server received the list.
+                if (isActivated)
+                {
+                    config.put("initialPlayers", String.join(",", GameserverSDK.getInitialPlayers()));
+                }
+
                 config.put("isActivated", String.valueOf(isActivated));
                 config.put("isShutdown", String.valueOf(isShutdown));
                 config.put("assetFileText", assetFileText);
@@ -212,7 +219,7 @@ public class Main {
                 byte[] pemData = Files.readAllBytes(certFile.toPath());
                 byte[] certBytes = parseDERFromPEM(pemData, "-----BEGIN CERTIFICATE-----", "-----END CERTIFICATE-----");
                 X509Certificate cert = getCertificateFromDER(certBytes);
-                return DatatypeConverter.printHexBinary(MessageDigest.getInstance("SHA-1").digest(cert.getEncoded())).toLowerCase();
+                return Hex.encodeHexString(MessageDigest.getInstance("SHA-1").digest(cert.getEncoded())).toLowerCase();
             }
         }
 
@@ -224,8 +231,10 @@ public class Main {
         String pemString = new String(pem, Charset.forName("UTF-8"));
         int beginIndex = pemString.indexOf(begin) + begin.length();
         int endIndex = pemString.indexOf(end);
-        String data = pemString.substring(beginIndex, endIndex);
-        return DatatypeConverter.parseBase64Binary(data);
+
+        // Replace new lines to ensure all the characters read conform to base64 RFC.
+        String data = pemString.substring(beginIndex, endIndex).replaceAll(System.lineSeparator(), "");;
+        return Base64.getDecoder().decode(data);
     }
 
     private static X509Certificate getCertificateFromDER(byte[] certBytes) throws CertificateException

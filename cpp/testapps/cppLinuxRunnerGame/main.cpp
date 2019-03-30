@@ -110,6 +110,17 @@ void processRequests()
             delayShutdown = true;
         }
 
+        if (isActivated)
+        {
+            std::string playersJoinedAsString = "";
+            for (auto player : Microsoft::Azure::Gaming::GSDK::getInitialPlayers())
+            {
+                playersJoinedAsString += (playersJoinedAsString.empty() ? "" : ",") + player;
+            }
+
+            config["initialPlayers"] = playersJoinedAsString;
+        }
+
         config["isActivated"] = isActivated? "true" : "false";
         config["isShutdown"] = isShutdown? "true" : "false";
         config["assetFileText"] = assetFileText;

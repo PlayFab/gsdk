@@ -72,18 +72,8 @@ public class GameserverSDK {
 
     // Calling start here so that any method users call will guarantee to have the GSDK initialized
     static {
-        // TODO: Get rid of this check once we fully migrate to JsonFileConfig
-        if (System.getenv(JsonFileConfiguration.CONFIG_FILE_VARIABLE_NAME) != null)
-        {
-            gsdkConfiguration = new JsonFileConfiguration();
-        }
-        else
-        {
-            gsdkConfiguration = new EnvironmentVariableConfiguration();
-        }
-
+        gsdkConfiguration = new JsonFileConfiguration();
         Logger.SetLogFolder(gsdkConfiguration.getLogFolder());
-
         start();
     }
 

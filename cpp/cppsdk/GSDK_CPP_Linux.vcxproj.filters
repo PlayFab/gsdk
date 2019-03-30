@@ -111,7 +111,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="gsdkSampleConfigLinux.json" />
-    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Source Files">

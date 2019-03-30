@@ -287,9 +287,11 @@ namespace Microsoft
                             }
                         }
 
-                        if (sessionConfig.isMember("initialPlayers"))
+                        // Update initial players only if this is the first time populating it.
+                        if (m_initialPlayers.empty() && sessionConfig.isMember("initialPlayers"))
                         {
                             Json::Value players = sessionConfig["initialPlayers"];
+                            
                             for (Json::ArrayIndex i = 0; i < players.size(); ++i)
                             {
                                 m_initialPlayers.push_back(players[i].asCString());
