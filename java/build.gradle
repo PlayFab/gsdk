@@ -2,6 +2,7 @@ subprojects {
     apply plugin: 'java'
     apply plugin: 'eclipse-wtp'
 
+    sourceCompatibility = 1.8
     repositories {
        mavenCentral()
     }
