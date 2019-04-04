@@ -1,16 +1,18 @@
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.IO;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-
 namespace Microsoft.Playfab.Gaming.GSDK.CSharp
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Globalization;
+    using System.IO;
+    using System.Linq;
+    using System.Threading;
+    using System.Threading.Tasks;
+
     class InternalSdk : IDisposable
     {
-        private string _overrideConfigFileName;
+        // Workaround to enable .Net 4.5 and netstandard1.6 (instead of using Task.CompletedTask).
+        private static readonly Task CompletedTask = Task.FromResult(false);
+        private readonly string _overrideConfigFileName;
         private GameState _state;
 
         private Task _heartbeatTask;
@@ -18,8 +20,8 @@ namespace Microsoft.Playfab.Gaming.GSDK.CSharp
         private IHttpClient _webClient;
         private bool _heartbeatRunning;
         private DateTime _cachedScheduleMaintDate;
-        private ManualResetEvent _heartbeatDoneEvent = new ManualResetEvent(false);
-        private ManualResetEvent _signalHeartbeatEvent = new ManualResetEvent(false);
+        private readonly ManualResetEvent _heartbeatDoneEvent = new ManualResetEvent(false);
+        private readonly ManualResetEvent _signalHeartbeatEvent = new ManualResetEvent(false);
         private bool _debug;
 
         public ManualResetEvent TransitionToActiveEvent { get; set; }
@@ -27,7 +29,7 @@ namespace Microsoft.Playfab.Gaming.GSDK.CSharp
         public ILogger Logger { get; private set; }
         public GameState State
         {
-            get { return _state; }
+            get => _state;
             set
             {
                 if (_state != value)
@@ -61,7 +63,7 @@ namespace Microsoft.Playfab.Gaming.GSDK.CSharp
             // If we already initialized everything, no need to do it again
             if (_heartbeatTask != null)
             {
-                return Task.CompletedTask;
+                return CompletedTask;
             }
 
             _debug = debugLogs;
@@ -94,7 +96,7 @@ namespace Microsoft.Playfab.Gaming.GSDK.CSharp
             TransitionToActiveEvent.Reset();
 
             _heartbeatTask = Task.Run(HeartbeatAsync);
-            return Task.CompletedTask;
+            return CompletedTask;
         }
 
         private Configuration GetConfiguration()
@@ -278,7 +280,7 @@ namespace Microsoft.Playfab.Gaming.GSDK.CSharp
 
             }
 
-            return Task.CompletedTask;
+            return CompletedTask;
         }
 
         #region IDisposable Support
