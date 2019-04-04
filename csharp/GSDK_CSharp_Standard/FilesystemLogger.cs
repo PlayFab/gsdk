@@ -4,6 +4,8 @@ using System.IO;
 
 namespace Microsoft.Playfab.Gaming.GSDK.CSharp
 {
+    using System.Reflection;
+
     public class FilesystemLogger : ILogger
     {
         private StreamWriter _logWriter;
@@ -32,9 +34,11 @@ namespace Microsoft.Playfab.Gaming.GSDK.CSharp
                 return;
             }
 
+            // Workaround to enable .Net 4.5 and netstandard1.6 (instead of using Environment.CurrentDirectory).
+            string currentDirectory = typeof(FilesystemLogger).GetTypeInfo().Assembly.Location;
             if (string.IsNullOrWhiteSpace(_logFolder))
             {
-                _logFolder = Environment.CurrentDirectory;
+                _logFolder = currentDirectory;
             }
 
             try
@@ -46,7 +50,7 @@ namespace Microsoft.Playfab.Gaming.GSDK.CSharp
             }
             catch (Exception ex)
             {
-                _logFolder = Environment.CurrentDirectory;
+                _logFolder = currentDirectory;
                 throw ex;
             }
 
