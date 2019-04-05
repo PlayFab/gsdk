@@ -34,8 +34,7 @@ namespace Microsoft.Playfab.Gaming.GSDK.CSharp
                 return;
             }
 
-            // Workaround to enable .Net 4.5 and netstandard1.6 (instead of using Environment.CurrentDirectory).
-            string currentDirectory = typeof(FilesystemLogger).GetTypeInfo().Assembly.Location;
+            string currentDirectory = Directory.GetCurrentDirectory();
             if (string.IsNullOrWhiteSpace(_logFolder))
             {
                 _logFolder = currentDirectory;
