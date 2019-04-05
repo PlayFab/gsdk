@@ -24,11 +24,7 @@
 static int requestCount = 0;
 static time_t nextMaintenance;
 static std::string assetFileTextPath = "testassetfile.txt";
-static std::string assetFileTarPath = "/data/AssetsTar/testassetfile.txt";
-static std::string assetFileTarGzPath = "/data/AssetsTarGz/testassetfile.txt";
 static std::string assetFileText;
-static std::string assetFileTar;
-static std::string assetFileTarGz;
 static std::string installedCertThumbprint;
 static std::string cmdArgs;
 static bool isActivated = false;
@@ -143,8 +139,6 @@ void processRequests()
         config["isActivated"] = isActivated ? "true" : "false";
         config["isShutdown"] = isShutdown ? "true" : "false";
         config["assetFileText"] = assetFileText;
-        config["assetFileTar"] = assetFileTar;
-        config["assetFileTarGz"] = assetFileTarGz;
         config["installedCertThumbprint"] = installedCertThumbprint;
         config["cmdArgs"] = cmdArgs;
 
@@ -337,19 +331,7 @@ int main(int argc, char* argv[])
             getline(assetFileTextStream, assetFileText);
             assetFileTextStream.close();
         }
-
-        std::ifstream assetFileTarStream(assetFileTarPath);
-        if (assetFileTarStream.good()) {
-            getline(assetFileTarStream, assetFileTar);
-            assetFileTarStream.close();
-        }
-
-        std::ifstream assetFileTarGzStream(assetFileTarGzPath);
-        if (assetFileTarGzStream.good()) {
-            getline(assetFileTarGzStream, assetFileTarGz);
-            assetFileTarGzStream.close();
-        }
-
+        
         // Grab cert
         getTestCert();
 
