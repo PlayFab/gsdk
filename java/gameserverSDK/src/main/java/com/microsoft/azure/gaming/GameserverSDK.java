@@ -12,12 +12,12 @@ public class GameserverSDK {
     /**
      * Key to use in the map returned by getConfigSettings to retrieve the agent url
      */
-    public static final String HEARTBEAT_ENDPOINT_KEY = "gsmsBaseUrl";
+    public static final String HEARTBEAT_ENDPOINT_KEY = "heartbeatEndpoint";
 
     /**
      * Key to use in the map returned by getConfigSettings to retrieve the game server instance id
      */
-    public static final String SERVER_ID_KEY = "instanceId";
+    public static final String SERVER_ID_KEY = "serverId";
 
     /**
      * Key to use in the map returned by getConfigSettings to retrieve the log folder that is uploaded to Azure blob
@@ -64,7 +64,7 @@ public class GameserverSDK {
      * Key to use in the map returned by getConfigSettings to retrieve the vm id of the virtual machine that
      * this game server is running on.
      */
-    public static final String VM_ID_KEY = "sessionId";
+    public static final String VM_ID_KEY = "vmId";
 
     private static boolean isInitialized = false;
 

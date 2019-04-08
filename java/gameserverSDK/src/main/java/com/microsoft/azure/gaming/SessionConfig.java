@@ -44,8 +44,8 @@ class SessionConfig {
     protected Map<String, String> ToMapAllStrings()
     {
         HashMap<String, String> properties = new HashMap<String, String>();
-        properties.put("sessionId", this.getSessionId().toString());
-        properties.put("sessionCookie", this.getSessionCookie());
+        properties.put(GameserverSDK.SESSION_ID_KEY, this.getSessionId().toString());
+        properties.put(GameserverSDK.SESSION_COOKIE_KEY, this.getSessionCookie());
         return properties;
     }
 }
