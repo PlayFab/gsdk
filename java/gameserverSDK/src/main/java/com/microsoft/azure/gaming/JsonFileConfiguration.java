@@ -52,6 +52,11 @@ class JsonFileConfiguration extends ConfigurationBase {
     public String getCertificateFolder() { return configValues.getCertificateFolder(); }
 
     @Override
+    public String getVmId() {
+        return configValues.getVmId();
+    }
+
+    @Override
     public Map<String, String> getBuildMetadata() { return configValues.getBuildMetadata(); }
 
     @Override
@@ -104,6 +109,9 @@ class JsonFileConfiguration extends ConfigurationBase {
         @SerializedName(value = "gamePorts", alternate = {"GamePorts", "GAMEPORTS", "gameports"})
         Map<String, String> gamePorts;
 
+        @SerializedName(value = "vmId", alternate = {"VmId"})
+        String vmId;
+
         public String getHeartbeatEndpoint() {
             return heartbeatEndpoint;
         }
@@ -121,6 +129,8 @@ class JsonFileConfiguration extends ConfigurationBase {
         }
 
         public String getCertificateFolder() { return certificateFolder; }
+
+        public String getVmId() { return vmId; }
 
         public Map<String, String> getBuildMetadata() { return buildMetadata; }
 

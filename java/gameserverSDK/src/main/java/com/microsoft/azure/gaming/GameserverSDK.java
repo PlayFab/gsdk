@@ -60,6 +60,12 @@ public class GameserverSDK {
      */
     public static final String SESSION_ID_KEY = "sessionId";
 
+    /**
+     * Key to use in the map returned by getConfigSettings to retrieve the vm id of the virtual machine that
+     * this game server is running on.
+     */
+    public static final String VM_ID_KEY = "sessionId";
+
     private static boolean isInitialized = false;
 
     private static HeartbeatThread heartbeatThread;
@@ -189,6 +195,14 @@ public class GameserverSDK {
      */
     public static String getCertificateDirectory(){
         return gsdkConfiguration.getCertificateFolder();
+    }
+
+    /**
+     * Returns the identity of the virtual machine that the games server is running on.
+     * @return identity of the virtual machine.
+     */
+    public static String getVmId(){
+        return gsdkConfiguration.getVmId();
     }
 
     /**
