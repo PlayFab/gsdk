@@ -128,7 +128,7 @@ namespace Microsoft.Playfab.Gaming.GSDK.CSharp
 
         private IDictionary<string, string> CreateConfigMap(Configuration localConfig)
         {
-            var finalConfig = new Dictionary<string, string>();
+            var finalConfig = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
 
             foreach (KeyValuePair<string, string> certEntry in localConfig.GameCertificates)
             {
