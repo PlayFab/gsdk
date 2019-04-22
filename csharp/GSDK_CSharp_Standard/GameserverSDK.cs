@@ -83,7 +83,7 @@ namespace Microsoft.Playfab.Gaming.GSDK.CSharp
             Task.WhenAll(_internalSdk.StartAsync())
                 .Wait();
 
-            return new Dictionary<string, string>(_internalSdk.ConfigMap);
+            return new Dictionary<string, string>(_internalSdk.ConfigMap, StringComparer.OrdinalIgnoreCase);
         }
 
         /// <summary>

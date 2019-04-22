@@ -1,12 +1,5 @@
 ﻿// Copyright (C) Microsoft Corporation. All rights reserved.
 
-using System.Threading.Tasks;
-using PlayFab;
-using PlayFab.AuthenticationModels;
-using PlayFab.MultiplayerModels;
-using PlayFab.ServerModels;
-using EntityKey = PlayFab.AuthenticationModels.EntityKey;
-
 namespace WinTestRunnerGame
 {
     using Microsoft.Playfab.Gaming.GSDK.CSharp;
@@ -19,6 +12,14 @@ namespace WinTestRunnerGame
     using System.Net;
     using System.Security.Cryptography.X509Certificates;
     using System.Threading;
+    using System.Threading.Tasks;
+    using PlayFab;
+    using PlayFab.AuthenticationModels;
+    using PlayFab.MultiplayerModels;
+    using PlayFab.ServerModels;
+    using EntityKey = PlayFab.AuthenticationModels.EntityKey;
+    using ConnectedPlayer = Microsoft.Playfab.Gaming.GSDK.CSharp.ConnectedPlayer;
+    using System.Reflection;
 
     public class SessionCookie
     {
@@ -30,8 +31,8 @@ namespace WinTestRunnerGame
 
     class Program
     {
-        const int ListeningPort = 3600;
-        const string AssetFilePath = @"C:\Assets\testassetfile.txt";
+        private static int _listeningPort = 3600;
+        const string AssetFilePath = @"testassetfile.txt";
         const string SessionTimeoutInSecondsName = "SessionTimeoutInSeconds";
         const string DeveloperSecretKeyName = "DeveloperSecretKey";
 
@@ -81,125 +82,139 @@ namespace WinTestRunnerGame
 
         static void Main(string[] args)
         {
-            if (args != null && args.Length > 0)
+            try
             {
-                _cmdArgs = string.Join(" ", args);
-            }
-
-            string address = $"http://*:{ListeningPort}/";
-            _listener.Prefixes.Add(address);
-            _listener.Start();
-
-            GameserverSDK.Start(true);
-            GameserverSDK.RegisterShutdownCallback(OnShutdown);
-            GameserverSDK.RegisterHealthCallback(GetGameHealth);
-            GameserverSDK.RegisterMaintenanceCallback(OnMaintenanceScheduled);
-            
-
-            if (File.Exists(AssetFilePath))
-            {
-                _assetFileText = File.ReadAllText(AssetFilePath);
-            }
-
-            // See if we have a configured timeout in the App.config, this was
-            // used in our initial round of stress tests to make sure sessions ended
-            string timeoutstr = ConfigurationManager.AppSettings.Get(SessionTimeoutInSecondsName);
-            if (!string.IsNullOrEmpty(timeoutstr))
-            {
-                // failure to convert is intentionally unhandled
-                long timeoutint = Convert.ToInt64(timeoutstr.Trim());
-
-                _sessionTimeoutTimestamp = DateTimeOffset.Now.AddSeconds(timeoutint);
-            }
-
-            IDictionary<string, string> initialConfig = GameserverSDK.getConfigSettings();
-            if (initialConfig?.ContainsKey("winRunnerTestCert") == true)
-            {
-                string expectedThumbprint = initialConfig["winRunnerTestCert"];
-                X509Store store = new X509Store(StoreName.My, StoreLocation.LocalMachine);
-                store.Open(OpenFlags.ReadOnly);
-                X509Certificate2Collection certificateCollection = store.Certificates.Find(X509FindType.FindByThumbprint, expectedThumbprint, false);
-
-                if (certificateCollection.Count > 0)
+                if (args != null && args.Length > 0)
                 {
-                    _installedCertThumbprint = certificateCollection[0].Thumbprint;
+                    _cmdArgs = string.Join(" ", args);
                 }
-                else
+
+                GameserverSDK.Start(true);
+                GameserverSDK.RegisterShutdownCallback(OnShutdown);
+                GameserverSDK.RegisterHealthCallback(GetGameHealth);
+                GameserverSDK.RegisterMaintenanceCallback(OnMaintenanceScheduled);
+
+                IDictionary<string, string> gsdkConfiguration = GameserverSDK.getConfigSettings();
+                if (gsdkConfiguration.TryGetValue("GamePort", out string listeningPortString))
                 {
-                    LogMessage("Could not find installed game cert in LocalMachine\\My. Expected thumbprint is: " + expectedThumbprint);
+                    _listeningPort = int.Parse(listeningPortString);
                 }
-            }
-            else
-            {
-                LogMessage("Config did not contain cert! Config is: " + string.Join(";", initialConfig.Select(x => x.Key + "=" + x.Value)));
-            }
 
-            Thread t = new Thread(ProcessRequests);
-            t.Start();
+                string address = $"http://*:{_listeningPort}/";
+                _listener.Prefixes.Add(address);
+                _listener.Start();
 
-
-            string titleId = initialConfig[GameserverSDK.TitleIdKey];
-            string buildId = initialConfig[GameserverSDK.BuildIdKey];
-            string region = initialConfig[GameserverSDK.RegionKey];
-            
-            LogMessage($"Processing requests for title:{titleId} build:{buildId} in region {region}");
-
-            GameserverSDK.ReadyForPlayers();
-            _isActivated = true;
-
-            initialConfig = GameserverSDK.getConfigSettings();
-
-            LogMessage("Config Settings");
-            foreach (KeyValuePair<string,string> configTuple in initialConfig)
-            {
-                LogMessage($"\t{configTuple.Key}={configTuple.Value}");
-            }
-            
-            SessionCookie sessionCookie = new SessionCookie();
-
-            if (initialConfig.TryGetValue(GameserverSDK.SessionCookieKey, out string sessionCookieStr))
-            {
-                try
+                string applicationDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+                if (File.Exists(Path.Combine(applicationDirectory, AssetFilePath)))
                 {
+                    _assetFileText = File.ReadAllText(Path.Combine(applicationDirectory, AssetFilePath));
+                }
 
-                    if (sessionCookieStr.StartsWith(TimeoutSessionCookiePrefix,
-                        StringComparison.InvariantCultureIgnoreCase))
+                // See if we have a configured timeout in the App.config, this was
+                // used in our initial round of stress tests to make sure sessions ended
+                string timeoutstr = ConfigurationManager.AppSettings.Get(SessionTimeoutInSecondsName);
+                if (!string.IsNullOrEmpty(timeoutstr))
+                {
+                    // failure to convert is intentionally unhandled
+                    long timeoutint = Convert.ToInt64(timeoutstr.Trim());
+
+                    _sessionTimeoutTimestamp = DateTimeOffset.Now.AddSeconds(timeoutint);
+                }
+
+                IDictionary<string, string> initialConfig = GameserverSDK.getConfigSettings();
+                if (initialConfig?.ContainsKey("winRunnerTestCert") == true)
+                {
+                    string expectedThumbprint = initialConfig["winRunnerTestCert"];
+                    X509Store store = new X509Store(StoreName.My, StoreLocation.LocalMachine);
+                    store.Open(OpenFlags.ReadOnly);
+                    X509Certificate2Collection certificateCollection = store.Certificates.Find(X509FindType.FindByThumbprint, expectedThumbprint, false);
+
+                    if (certificateCollection.Count > 0)
                     {
-                        if (long.TryParse(sessionCookieStr.Substring(TimeoutSessionCookiePrefix.Length),
-                            out long timeoutSecs))
-                        {
-
-                            sessionCookie.TimeoutSecs = timeoutSecs;
-                        }
+                        _installedCertThumbprint = certificateCollection[0].Thumbprint;
                     }
                     else
                     {
-                        sessionCookie = JsonConvert.DeserializeObject<SessionCookie>(sessionCookieStr);
+                        LogMessage("Could not find installed game cert in LocalMachine\\My. Expected thumbprint is: " + expectedThumbprint);
                     }
                 }
-                catch (Exception e)
+                else
                 {
-                    LogMessage(e.ToString());
+                    LogMessage("Config did not contain cert! Config is: " + string.Join(";", initialConfig.Select(x => x.Key + "=" + x.Value)));
                 }
-            }
 
-            // If a secret key was specified
-            // try to get the title data for this title
-            string secretKey = ConfigurationManager.AppSettings.Get(DeveloperSecretKeyName);
-            if (!string.IsNullOrWhiteSpace(secretKey))
-            {
-                LogMessage("Getting title data");
-                GetTitleData(titleId, secretKey).Wait();
-            }
-            else
-            {
-                LogMessage("Secret Key not specified in app.config. Skipping retrieval of title config");
-            }
+                Thread t = new Thread(ProcessRequests);
+                t.Start();
 
-            // If the session cookie contained a timeout. Shutdown at this time.
-            // this overrides whatever may have been set in the App config above
-            // We use it for stress testing to make sessions end at random times.
-            EnforceTimeout(sessionCookie);
+
+                string titleId = initialConfig[GameserverSDK.TitleIdKey];
+                string buildId = initialConfig[GameserverSDK.BuildIdKey];
+                string region = initialConfig[GameserverSDK.RegionKey];
+
+                LogMessage($"Processing requests for title:{titleId} build:{buildId} in region {region}");
+
+                GameserverSDK.ReadyForPlayers();
+                _isActivated = true;
+
+                initialConfig = GameserverSDK.getConfigSettings();
+
+                LogMessage("Config Settings");
+                foreach (KeyValuePair<string, string> configTuple in initialConfig)
+                {
+                    LogMessage($"\t{configTuple.Key}={configTuple.Value}");
+                }
+
+                SessionCookie sessionCookie = new SessionCookie();
+
+                if (initialConfig.TryGetValue(GameserverSDK.SessionCookieKey, out string sessionCookieStr))
+                {
+                    try
+                    {
+
+                        if (sessionCookieStr.StartsWith(TimeoutSessionCookiePrefix,
+                            StringComparison.InvariantCultureIgnoreCase))
+                        {
+                            if (long.TryParse(sessionCookieStr.Substring(TimeoutSessionCookiePrefix.Length),
+                                out long timeoutSecs))
+                            {
+
+                                sessionCookie.TimeoutSecs = timeoutSecs;
+                            }
+                        }
+                        else
+                        {
+                            sessionCookie = JsonConvert.DeserializeObject<SessionCookie>(sessionCookieStr);
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        LogMessage(e.ToString());
+                    }
+                }
+
+                // If a secret key was specified
+                // try to get the title data for this title
+                string secretKey = ConfigurationManager.AppSettings.Get(DeveloperSecretKeyName);
+                if (!string.IsNullOrWhiteSpace(secretKey))
+                {
+                    LogMessage("Getting title data");
+                    GetTitleData(titleId, secretKey).Wait();
+                }
+                else
+                {
+                    LogMessage("Secret Key not specified in app.config. Skipping retrieval of title config");
+                }
+
+                // If the session cookie contained a timeout. Shutdown at this time.
+                // this overrides whatever may have been set in the App config above
+                // We use it for stress testing to make sessions end at random times.
+                EnforceTimeout(sessionCookie);
+            }
+            catch (Exception e)
+            {
+                LogMessage(e.Message);
+                throw;
+            }
         }
 
         private static async Task GetTitleData(string titleId, string secretKey)
