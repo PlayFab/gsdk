@@ -95,7 +95,7 @@ namespace WinTestRunnerGame
                 GameserverSDK.RegisterMaintenanceCallback(OnMaintenanceScheduled);
 
                 IDictionary<string, string> gsdkConfiguration = GameserverSDK.getConfigSettings();
-                if (gsdkConfiguration.TryGetValue("GamePort", out string listeningPortString))
+                if (gsdkConfiguration.TryGetValue("RealPort", out string listeningPortString))
                 {
                     _listeningPort = int.Parse(listeningPortString);
                 }
