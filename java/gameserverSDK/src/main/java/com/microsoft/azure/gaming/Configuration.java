@@ -13,6 +13,7 @@ interface Configuration {
     String getLogFolder();
     String getSharedContentFolder();
     String getCertificateFolder();
+    String getVmId();
     String getTitleId();
     String getBuildId();
     String getRegion();
@@ -21,13 +22,7 @@ interface Configuration {
     void validate() throws GameserverSDKInitializationException;
 
 
-    final String HEARTBEAT_ENDPOINT_VARIABLE_NAME = "HEARTBEAT_ENDPOINT";
-    final String SERVER_ID_VARIABLE_NAME = "SESSION_HOST_ID";
-    final String LOG_FOLDER_VARIABLE_NAME = "GSDK_LOG_FOLDER";
     final String TITLE_ID_VARIABLE_NAME = "PF_TITLE_ID";
     final String BUILD_ID_VARIABLE_NAME = "PF_BUILD_ID";
     final String REGION_VARIABLE_NAME = "PF_REGION";
-
-    // A folder shared by all game servers on the VM to share user generated content and other data.
-    final String SHARED_CONTENT_FOLDER_VARIABLE_NAME = "SHARED_CONTENT_FOLDER";
 }

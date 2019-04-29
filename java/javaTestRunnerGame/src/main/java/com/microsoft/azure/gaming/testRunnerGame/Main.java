@@ -48,6 +48,7 @@ public class Main {
     private static String sharedContentDirectory = "";
     private static String certificateDirectory = "";
     private static String testCertificate = "";
+    private static String vmId = "";
     private static ArrayList<ConnectedPlayer> players = new ArrayList<ConnectedPlayer>();
     private static int requestCount = 0;
     private static ZonedDateTime nextMaintenance = null;
@@ -101,6 +102,7 @@ public class Main {
             logsDirectory = GameserverSDK.getLogsDirectory();
             sharedContentDirectory = GameserverSDK.getSharedContentDirectory();
             certificateDirectory = GameserverSDK.getCertificateDirectory();
+            vmId = GameserverSDK.getVmId();
 
             // Get our cert
             testCertificate = getTestCertificateThumbprint();
@@ -163,6 +165,7 @@ public class Main {
                 config.put("sharedContentFolder", sharedContentDirectory);
                 config.put("certificateFolder", certificateDirectory);
                 config.put("testCertificate", testCertificate);
+                config.put("vmId", vmId);
 
                 if (nextMaintenance != null) {
                     config.put("nextMaintenance", nextMaintenance.withZoneSameInstant(ZoneId.systemDefault()).format(DateTimeFormatter.ISO_OFFSET_DATE_TIME));

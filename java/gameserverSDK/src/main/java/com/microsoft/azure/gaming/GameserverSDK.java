@@ -12,12 +12,12 @@ public class GameserverSDK {
     /**
      * Key to use in the map returned by getConfigSettings to retrieve the agent url
      */
-    public static final String HEARTBEAT_ENDPOINT_KEY = "gsmsBaseUrl";
+    public static final String HEARTBEAT_ENDPOINT_KEY = "heartbeatEndpoint";
 
     /**
      * Key to use in the map returned by getConfigSettings to retrieve the game server instance id
      */
-    public static final String SERVER_ID_KEY = "instanceId";
+    public static final String SERVER_ID_KEY = "serverId";
 
     /**
      * Key to use in the map returned by getConfigSettings to retrieve the log folder that is uploaded to Azure blob
@@ -59,6 +59,12 @@ public class GameserverSDK {
      * readyForPlayers returns true.
      */
     public static final String SESSION_ID_KEY = "sessionId";
+
+    /**
+     * Key to use in the map returned by getConfigSettings to retrieve the vm id of the virtual machine that
+     * this game server is running on.
+     */
+    public static final String VM_ID_KEY = "vmId";
 
     private static boolean isInitialized = false;
 
@@ -189,6 +195,14 @@ public class GameserverSDK {
      */
     public static String getCertificateDirectory(){
         return gsdkConfiguration.getCertificateFolder();
+    }
+
+    /**
+     * Returns the identity of the virtual machine that the games server is running on.
+     * @return identity of the virtual machine.
+     */
+    public static String getVmId(){
+        return gsdkConfiguration.getVmId();
     }
 
     /**
