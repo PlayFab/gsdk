@@ -12,6 +12,9 @@ namespace Microsoft.Playfab.Gaming.GSDK.CSharp
 
         public GsdkConfiguration()
         {
+            GameCertificates = new Dictionary<string, string>();
+            BuildMetadata = new Dictionary<string, string>();
+            GamePorts = new Dictionary<string, string>();
         }
 
         public string TitleId => Environment.GetEnvironmentVariable(TITLE_ID_ENV_VAR);
