@@ -7,6 +7,7 @@ namespace Microsoft.Playfab.Gaming.GSDK.CSharp
     using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
+    using Newtonsoft.Json;
 
     class InternalSdk : IDisposable
     {
@@ -16,7 +17,7 @@ namespace Microsoft.Playfab.Gaming.GSDK.CSharp
         private GameState _state;
 
         private Task _heartbeatTask;
-        private Configuration _configuration;
+        private GsdkConfiguration _configuration;
         private IHttpClient _webClient;
         private bool _heartbeatRunning;
         private DateTime _cachedScheduleMaintDate;
@@ -48,7 +49,6 @@ namespace Microsoft.Playfab.Gaming.GSDK.CSharp
         public Action ShutdownCallback { get; set; }
         public Func<bool> HealthCallback { get; set; }
         public Action<DateTimeOffset> MaintenanceCallback { get; set; }
-
 
         public InternalSdk(string configFileName = null)
         {
@@ -99,7 +99,7 @@ namespace Microsoft.Playfab.Gaming.GSDK.CSharp
             return CompletedTask;
         }
 
-        private Configuration GetConfiguration()
+        private GsdkConfiguration GetConfiguration()
         {
             string fileName;
 
@@ -112,21 +112,29 @@ namespace Microsoft.Playfab.Gaming.GSDK.CSharp
                 fileName = Environment.GetEnvironmentVariable(GameserverSDK.GsdkConfigFileEnvVarKey);
             }
 
-            Configuration localConfig;
+            GsdkConfiguration localConfig;
 
             if (!string.IsNullOrWhiteSpace(fileName) && File.Exists(fileName))
             {
-                localConfig = new JsonFileConfiguration(fileName);
+                try
+                {
+                    localConfig = JsonConvert.DeserializeObject<GsdkConfiguration>(File.ReadAllText(fileName));
+
+                }
+                catch (Exception ex)
+                {
+                    throw new GSDKInitializationException($"Cannot read configuration file {fileName}", ex);
+                }
             }
             else
             {
-                localConfig = new EnvironmentVariableConfiguration();
+                throw new GSDKInitializationException($"GSDK file - {fileName} not found");
             }
 
             return localConfig;
         }
 
-        private IDictionary<string, string> CreateConfigMap(Configuration localConfig)
+        private IDictionary<string, string> CreateConfigMap(GsdkConfiguration localConfig)
         {
             var finalConfig = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
 
@@ -146,7 +154,7 @@ namespace Microsoft.Playfab.Gaming.GSDK.CSharp
             }
 
             finalConfig[GameserverSDK.HeartbeatEndpointKey] = localConfig.HeartbeatEndpoint;
-            finalConfig[GameserverSDK.ServerIdKey] = localConfig.ServerId;
+            finalConfig[GameserverSDK.ServerIdKey] = localConfig.SessionHostId;
             finalConfig[GameserverSDK.VmIdKey] = localConfig.VmId;
             finalConfig[GameserverSDK.LogFolderKey] = localConfig.LogFolder;
             finalConfig[GameserverSDK.SharedContentFolderKey] = localConfig.SharedContentFolder;
@@ -158,6 +166,11 @@ namespace Microsoft.Playfab.Gaming.GSDK.CSharp
             finalConfig[GameserverSDK.FullyQualifiedDomainNameKey] = localConfig.FullyQualifiedDomainName;
 
             return finalConfig;
+        }
+
+        public GameServerConnectionInfo GetGameServerConnectionInfo()
+        {
+            return _configuration.GameServerConnectionInfo;
         }
 
         private async Task HeartbeatAsync()

@@ -75,6 +75,18 @@ namespace Microsoft.Playfab.Gaming.GSDK.CSharp
         }
 
         /// <summary>
+        /// Gets information (ipAddress and ports) for connecting to the game server, as well as the ports the 
+        /// game server should listen on.
+        /// </summary>
+        /// <returns></returns>
+        public static GameServerConnectionInfo GetGameServerConnectionInfo()
+        {
+            Task.WhenAll(_internalSdk.StartAsync())
+                .Wait();
+            return _internalSdk.GetGameServerConnectionInfo();
+        }
+
+        /// <summary>
         /// Returns all configuration settings
         /// </summary>
         /// <returns>Optional</returns>
