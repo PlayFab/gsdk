@@ -339,6 +339,11 @@ namespace WinTestRunnerGame
                         config.Add("nextMaintenance", _nextMaintenance.ToLocalTime().ToString());
                     }
 
+                    foreach (GamePort portInformation in GameserverSDK.GetGameServerConnectionInfo().GamePortsConfiguration)
+                    {
+                        config.Add($"Public{portInformation.Name}", portInformation.ClientConnectionPort.ToString());
+                    }
+
                     string content = JsonConvert.SerializeObject(config, Formatting.Indented);
 
                     response.AddHeader("Content-Type", "application/json");

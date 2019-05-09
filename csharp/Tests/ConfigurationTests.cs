@@ -6,42 +6,12 @@ using System.Threading.Tasks;
 
 namespace Microsoft.Playfab.Gaming.GSDK.CSharp.Test
 {
+    using System.IO;
+    using Newtonsoft.Json;
+
     [TestClass]
     public class ConfigurationTests
     {
-        [TestMethod]
-        public async Task ReadConfiguration_MissingHeartbeatUrl_ShouldThrow()
-        {
-            var testConfig = new { };
-
-            await ConfigFileWrapper.WrapAsync(testConfig, (fileName) =>
-            {
-                Action a = () => new JsonFileConfiguration(fileName);
-
-                a.Should()
-                    .Throw<GSDKInitializationException>()
-                    .WithMessage($"*{fileName}*");
-
-                return Task.CompletedTask;
-            });
-        }
-
-        [TestMethod]
-        public async Task ReadConfiguration_MissingServerId_ShouldThrow()
-        {
-            var testConfig = new { };
-
-            await ConfigFileWrapper.WrapAsync(testConfig, (fileName) =>
-            {
-                Action a = () => new JsonFileConfiguration(fileName);
-                a.Should()
-                    .Throw<GSDKInitializationException>()
-                    .WithMessage($"*{fileName}*");
-
-                return Task.CompletedTask;
-            });
-        }
-
         [TestMethod]
         public async Task ReadConfiguration_AdditionalAttributeInFile_Ignored()
         {
@@ -54,7 +24,7 @@ namespace Microsoft.Playfab.Gaming.GSDK.CSharp.Test
 
             await ConfigFileWrapper.WrapAsync(testConfig, (fileName) =>
             {
-                new JsonFileConfiguration(fileName);
+                JsonConvert.DeserializeObject<GsdkConfiguration>(File.ReadAllText(fileName));
                 return Task.CompletedTask;
             });
         }
@@ -73,7 +43,7 @@ namespace Microsoft.Playfab.Gaming.GSDK.CSharp.Test
 
             await ConfigFileWrapper.WrapAsync(testConfig, (fileName) =>
             {
-                Configuration c = new JsonFileConfiguration(fileName);
+                GsdkConfiguration c = JsonConvert.DeserializeObject<GsdkConfiguration>(File.ReadAllText(fileName));
                 c.GameCertificates.Should().NotBeNull();
                 c.GameCertificates.Should().HaveCount(0);
 
@@ -97,7 +67,7 @@ namespace Microsoft.Playfab.Gaming.GSDK.CSharp.Test
 
             await ConfigFileWrapper.WrapAsync(testConfig, (fileName) =>
                     {
-                        Configuration c = new JsonFileConfiguration(fileName);
+                        GsdkConfiguration c = JsonConvert.DeserializeObject<GsdkConfiguration>(File.ReadAllText(fileName));
 
                         c.GameCertificates.Should().NotBeNull();
                         c.GameCertificates.Should().HaveCount(2);
@@ -121,7 +91,7 @@ namespace Microsoft.Playfab.Gaming.GSDK.CSharp.Test
 
             await ConfigFileWrapper.WrapAsync(testConfig, (fileName) =>
             {
-                Configuration c = new JsonFileConfiguration(fileName);
+                GsdkConfiguration c = JsonConvert.DeserializeObject<GsdkConfiguration>(File.ReadAllText(fileName));
                 c.GamePorts.Should().NotBeNull();
                 c.GamePorts.Should().HaveCount(0);
 
@@ -145,25 +115,13 @@ namespace Microsoft.Playfab.Gaming.GSDK.CSharp.Test
 
             await ConfigFileWrapper.WrapAsync(testConfig, (fileName) =>
                     {
-                        Configuration c = new JsonFileConfiguration(fileName);
+                        GsdkConfiguration c = JsonConvert.DeserializeObject<GsdkConfiguration>(File.ReadAllText(fileName));
 
                         c.GamePorts.Should().NotBeNull();
                         c.GamePorts.Should().HaveCount(2);
 
                         return Task.CompletedTask;
                     });
-        }
-
-        [TestMethod]
-        public void ReadConfiguration_EnvConfigMissingReqProps_Throws()
-        {
-            Environment.SetEnvironmentVariable("HEARTBEAT_ENDPOINT", string.Empty);
-            Environment.SetEnvironmentVariable("SESSION_HOST_ID", string.Empty);
-
-            Action a = () => new EnvironmentVariableConfiguration();
-
-            a.Should().Throw<GSDKInitializationException>()
-                .WithMessage($"*Heartbeat*");
         }
     }
 }
