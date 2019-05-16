@@ -84,7 +84,7 @@ namespace Microsoft.Playfab.Gaming.GSDK.CSharp.Test
                 {
                     await sdk.StartAsync(false);
 
-                    sdk.State.Should().Be(GameState.Invalid);
+                    sdk.State.Should().Be(GameState.Initializing);
                     sdk.ConfigMap.Should().NotBeNull();
                     sdk.ConfigMap.Should().HaveCountGreaterThan(0);
                     sdk.ConnectedPlayers.Should().NotBeNull();
