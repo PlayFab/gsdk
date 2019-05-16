@@ -67,7 +67,7 @@ namespace Microsoft.Playfab.Gaming.GSDK.CSharp
             }
 
             _debug = debugLogs;
-
+            this.State = GameState.Initializing;
 
             if (_configuration == null)
             {
