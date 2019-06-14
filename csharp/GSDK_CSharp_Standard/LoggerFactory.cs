@@ -1,10 +1,8 @@
 namespace Microsoft.Playfab.Gaming.GSDK.CSharp
 {
-
     public interface ILogger
     {
         void Start();
-        void Stop();
         void Log(string message);
     }
 
@@ -12,7 +10,7 @@ namespace Microsoft.Playfab.Gaming.GSDK.CSharp
     {
         public static ILogger CreateInstance(string logFolder)
         {
-            return new FilesystemLogger(logFolder);
+            return new FileSystemLogger(logFolder);
         }
     }
 }

@@ -1,19 +1,23 @@
-﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
-using System;
-using System.Collections.Generic;
-using System.Net.Http;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Microsoft.Playfab.Gaming.GSDK.CSharp
+﻿namespace Microsoft.Playfab.Gaming.GSDK.CSharp
 {
-    class HttpClientProxy : HttpClient, IHttpClient
-    {
-        private string _baseUrl;
-        private HttpClient _client;
+    using System;
+    using System.Net.Http;
+    using System.Text;
+    using System.Threading.Tasks;
+    using Model;
+    using Newtonsoft.Json;
 
-        public HttpClientProxy(string baseUrl)
+    internal interface IHttpClient
+    {
+        Task<HeartbeatResponse> SendHeartbeatAsync(HeartbeatRequest request);
+    }
+
+    internal class HttpClientWrapper : IHttpClient
+    {
+        private readonly string _baseUrl;
+        private readonly HttpClient _client;
+
+        public HttpClientWrapper(string baseUrl)
         {
             _baseUrl = baseUrl;
             _client = new HttpClient();
@@ -26,11 +30,11 @@ namespace Microsoft.Playfab.Gaming.GSDK.CSharp
         public async Task<HeartbeatResponse> SendHeartbeatAsync(HeartbeatRequest request)
         {
             string formattedText = JsonConvert.SerializeObject(request, Formatting.Indented);
-            var requestMessage = new HttpRequestMessage
+            HttpRequestMessage requestMessage = new HttpRequestMessage
             {
                 Method = new HttpMethod("PATCH"),
                 RequestUri = new Uri(_baseUrl),
-                Content = new StringContent(formattedText, Encoding.UTF8, "application/json"),
+                Content = new StringContent(formattedText, Encoding.UTF8, "application/json")
             };
 
             HttpResponseMessage responseMessage = await _client.SendAsync(requestMessage);
