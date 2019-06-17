@@ -1,11 +1,8 @@
-﻿
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Threading.Tasks;
-
-namespace Microsoft.Playfab.Gaming.GSDK.CSharp
+﻿namespace Microsoft.Playfab.Gaming.GSDK.CSharp
 {
+    using System;
+    using System.Collections.Generic;
+    
     public enum GameState
     {
         Invalid,
@@ -21,11 +18,8 @@ namespace Microsoft.Playfab.Gaming.GSDK.CSharp
     {
         Invalid,
         Continue,
-        GetManifest,
-        Quarantine,
         Active,
-        Terminate,
-        Operation_Count
+        Terminate
     }
 
     public static class GameserverSDK
@@ -33,8 +27,8 @@ namespace Microsoft.Playfab.Gaming.GSDK.CSharp
         // These two keys are only available after allocation (once readyForPlayers returns true)
         public const string SessionCookieKey = "sessionCookie";
         public const string SessionIdKey = "sessionId";
-        public const string HeartbeatEndpointKey = "gsmsBaseUrl";
-        public const string ServerIdKey = "instanceId";
+        public const string HeartbeatEndpointKey = "heartbeatEndpoint";
+        public const string ServerIdKey = "serverId";
         public const string LogFolderKey = "logFolder";
         public const string SharedContentFolderKey = "sharedContentFolder";
         public const string CertificateFolderKey = "certificateFolder";
@@ -61,8 +55,7 @@ namespace Microsoft.Playfab.Gaming.GSDK.CSharp
         /// </returns>
         public static bool ReadyForPlayers()
         {
-            Task.WhenAll(_internalSdk.StartAsync())
-                .Wait();
+            _internalSdk.Start();
 
             if (_internalSdk.State != GameState.Active)
             {
@@ -75,14 +68,13 @@ namespace Microsoft.Playfab.Gaming.GSDK.CSharp
         }
 
         /// <summary>
-        /// Gets information (ipAddress and ports) for connecting to the game server, as well as the ports the 
+        /// Gets information (ipAddress and ports) for connecting to the game server, as well as the ports the
         /// game server should listen on.
         /// </summary>
         /// <returns></returns>
         public static GameServerConnectionInfo GetGameServerConnectionInfo()
         {
-            Task.WhenAll(_internalSdk.StartAsync())
-                .Wait();
+            _internalSdk.Start();
             return _internalSdk.GetGameServerConnectionInfo();
         }
 
@@ -92,8 +84,7 @@ namespace Microsoft.Playfab.Gaming.GSDK.CSharp
         /// <returns>Optional</returns>
         public static IDictionary<string, string> getConfigSettings()
         {
-            Task.WhenAll(_internalSdk.StartAsync())
-                .Wait();
+            _internalSdk.Start();
 
             return new Dictionary<string, string>(_internalSdk.ConfigMap, StringComparer.OrdinalIgnoreCase);
         }
@@ -104,8 +95,7 @@ namespace Microsoft.Playfab.Gaming.GSDK.CSharp
         /// </summary>
         public static void Start(bool debugLogs = false)
         {
-            Task.WhenAll(_internalSdk.StartAsync(debugLogs))
-                .Wait();
+            _internalSdk.Start(debugLogs);
         }
 
         /// <summary>
@@ -114,9 +104,7 @@ namespace Microsoft.Playfab.Gaming.GSDK.CSharp
         /// <param name="currentlyConnectedPlayers"></param>
         public static void UpdateConnectedPlayers(IList<ConnectedPlayer> currentlyConnectedPlayers)
         {
-            Task.WhenAll(_internalSdk.StartAsync())
-                .Wait();
-
+            _internalSdk.Start();
             _internalSdk.ConnectedPlayers = currentlyConnectedPlayers;
         }
 
@@ -126,21 +114,19 @@ namespace Microsoft.Playfab.Gaming.GSDK.CSharp
         /// <param name="callback">The callback</param>
         public static void RegisterShutdownCallback(Action callback)
         {
-            Task.WhenAll(_internalSdk.StartAsync())
-                .Wait();
+            _internalSdk.Start();
 
             _internalSdk.ShutdownCallback = callback;
         }
 
         /// <summary>
-        /// Gets called when the agent needs to check on the 
+        /// Gets called when the agent needs to check on the
         /// game's health
         /// </summary>
         /// <param name="callback">The callback</param>
         public static void RegisterHealthCallback(Func<bool> callback)
         {
-            Task.WhenAll(_internalSdk.StartAsync())
-                .Wait();
+            _internalSdk.Start();
 
             _internalSdk.HealthCallback = callback;
         }
@@ -152,23 +138,21 @@ namespace Microsoft.Playfab.Gaming.GSDK.CSharp
         /// <param name="callback">The callback</param>
         public static void RegisterMaintenanceCallback(Action<DateTimeOffset> callback)
         {
-            Task.WhenAll(_internalSdk.StartAsync())
-                .Wait();
+            _internalSdk.Start();
 
             _internalSdk.MaintenanceCallback = callback;
         }
 
         /// <summary>
-        /// Returns the directory whose contents will be uploaded so logs 
+        /// Returns the directory whose contents will be uploaded so logs
         /// can be easily retrieved
         /// </summary>
         /// <returns>A path to the directory to place logs in</returns>
         public static string GetLogsDirectory()
         {
-            Task.WhenAll(_internalSdk.StartAsync())
-                .Wait();
+            _internalSdk.Start();
 
-            if (_internalSdk.ConfigMap.TryGetValue(GameserverSDK.LogFolderKey, out string folder))
+            if (_internalSdk.ConfigMap.TryGetValue(LogFolderKey, out string folder))
             {
                 return folder;
             }
@@ -182,26 +166,20 @@ namespace Microsoft.Playfab.Gaming.GSDK.CSharp
         /// <returns>A path to the directory where shared content can be stored (temporarily). </returns>
         public static string GetSharedContentDirectory()
         {
-            Task.WhenAll(_internalSdk.StartAsync())
-                .Wait();
+            _internalSdk.Start();
 
-            if (_internalSdk.ConfigMap.TryGetValue(GameserverSDK.SharedContentFolderKey, out string folder))
-            {
-                return folder;
-            }
-
-            return string.Empty;
+            return _internalSdk.ConfigMap.TryGetValue(SharedContentFolderKey, out string folder) ? folder : string.Empty;
         }
 
         /// <summary>
-        /// After allocation, returns a list of the initial players that have access to this game server, used by PlayFab's Matchmaking offering
+        /// After allocation, returns a list of the initial players that have access to this game server, used by PlayFab's
+        /// Matchmaking offering
         /// </summary>
         /// <returns>A list of player ids of the initial players that will connect</returns>
         public static IList<string> GetInitialPlayers()
         {
-            Task.WhenAll(_internalSdk.StartAsync())
-                .Wait();
-
+            _internalSdk.Start();
+        
             return new List<string>(_internalSdk.InitialPlayers);
         }
 
@@ -211,7 +189,8 @@ namespace Microsoft.Playfab.Gaming.GSDK.CSharp
         /// <param name="message">The message to be logged</param>
         public static void LogMessage(string message)
         {
+            _internalSdk.Start();
             _internalSdk.Logger.Log(message);
         }
-    };
+    }
 }

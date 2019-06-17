@@ -1,17 +1,14 @@
-
-using System;
-using System.IO;
-
 namespace Microsoft.Playfab.Gaming.GSDK.CSharp
 {
-    using System.Reflection;
+    using System;
+    using System.IO;
 
-    public class FilesystemLogger : ILogger
+    public class FileSystemLogger : ILogger
     {
-        private StreamWriter _logWriter;
         private string _logFolder;
+        private StreamWriter _logWriter;
 
-        public FilesystemLogger(string logFolder)
+        public FileSystemLogger(string logFolder)
         {
             _logFolder = logFolder;
         }
@@ -23,7 +20,7 @@ namespace Microsoft.Playfab.Gaming.GSDK.CSharp
                 return; // Logging is disabled
             }
 
-            _logWriter.WriteLine($"{DateTime.UtcNow.ToString("o")}\t{message}");
+            _logWriter.WriteLine($"{DateTime.UtcNow:o}\t{message}");
             _logWriter.Flush();
         }
 
@@ -56,11 +53,6 @@ namespace Microsoft.Playfab.Gaming.GSDK.CSharp
             long datePart = DateTime.UtcNow.ToFileTime();
             string fileName = Path.Combine(_logFolder, $"GSDK_output_{datePart}.txt");
             _logWriter = new StreamWriter(File.OpenWrite(fileName));
-        }
-
-        public void Stop()
-        {
-            throw new System.NotImplementedException();
         }
     }
 }

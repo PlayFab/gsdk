@@ -3,31 +3,32 @@ namespace Microsoft.Playfab.Gaming.GSDK.CSharp
     using System;
     using System.Collections.Generic;
     using System.Globalization;
-    using System.IO;
     using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
+    using Model;
     using Newtonsoft.Json;
 
-    class InternalSdk : IDisposable
+    class InternalSdk 
     {
         // Workaround to enable .Net 4.5 and netstandard1.6 (instead of using Task.CompletedTask).
         private static readonly Task CompletedTask = Task.FromResult(false);
-        private readonly string _overrideConfigFileName;
         private GameState _state;
 
         private Task _heartbeatTask;
-        private GsdkConfiguration _configuration;
-        private IHttpClient _webClient;
-        private bool _heartbeatRunning;
+        private GSDKConfiguration _configuration;
+        private IHttpClient _httpClient;
+        private readonly IHttpClientFactory _httpClientFactory;
         private DateTime _cachedScheduleMaintDate;
-        private readonly ManualResetEvent _heartbeatDoneEvent = new ManualResetEvent(false);
         private readonly ManualResetEvent _signalHeartbeatEvent = new ManualResetEvent(false);
         private bool _debug;
 
         public ManualResetEvent TransitionToActiveEvent { get; set; }
         public IDictionary<string, string> ConfigMap { get; private set; }
         public ILogger Logger { get; private set; }
+
+        private readonly ISystemOperations _systemOperationsWrapper;
+
         public GameState State
         {
             get => _state;
@@ -50,20 +51,21 @@ namespace Microsoft.Playfab.Gaming.GSDK.CSharp
         public Func<bool> HealthCallback { get; set; }
         public Action<DateTimeOffset> MaintenanceCallback { get; set; }
 
-        public InternalSdk(string configFileName = null)
+        public InternalSdk(ISystemOperations systemOperationsWrapper = null, IHttpClientFactory httpClientFactory = null)
         {
-            _overrideConfigFileName = configFileName;
             ConnectedPlayers = new List<ConnectedPlayer>();
             InitialPlayers = new List<string>();
             TransitionToActiveEvent = new ManualResetEvent(false);
+            _systemOperationsWrapper = systemOperationsWrapper ?? SystemOperations.Instance;
+            _httpClientFactory = httpClientFactory ?? HttpClientFactory.Instance;
         }
 
-        public Task StartAsync(bool debugLogs = false)
+        public void Start(bool debugLogs = false)
         {
             // If we already initialized everything, no need to do it again
             if (_heartbeatTask != null)
             {
-                return CompletedTask;
+                return;
             }
 
             _debug = debugLogs;
@@ -83,42 +85,31 @@ namespace Microsoft.Playfab.Gaming.GSDK.CSharp
             Logger.Start();
             
 
-            string gsmsBaseUrl = ConfigMap[GameserverSDK.HeartbeatEndpointKey];
-            string instanceId = ConfigMap[GameserverSDK.ServerIdKey];
+            string heartbeatEndpoint = ConfigMap[GameserverSDK.HeartbeatEndpointKey];
+            string serverId = ConfigMap[GameserverSDK.ServerIdKey];
 
-            Logger.Log($"VM Agent Endpoint: {gsmsBaseUrl}");
-            Logger.Log($"Instance Id: {instanceId}");
+            Logger.Log($"VM Agent Endpoint: {heartbeatEndpoint}");
+            Logger.Log($"Instance Id: {serverId}");
 
-            _webClient = HttpClientFactory.CreateInstance($"http://{gsmsBaseUrl}/v1/sessionHosts/{instanceId}");
+            _httpClient = _httpClientFactory.CreateInstance($"http://{heartbeatEndpoint}/v1/sessionHosts/{serverId}");
 
-            _heartbeatRunning = true;
             _signalHeartbeatEvent.Reset();
             TransitionToActiveEvent.Reset();
 
             _heartbeatTask = Task.Run(HeartbeatAsync);
-            return CompletedTask;
         }
 
-        private GsdkConfiguration GetConfiguration()
+        private GSDKConfiguration GetConfiguration()
         {
-            string fileName;
+            string fileName = _systemOperationsWrapper.GetEnvironmentVariableValue(GameserverSDK.GsdkConfigFileEnvVarKey);
 
-            if (!string.IsNullOrWhiteSpace(_overrideConfigFileName))
-            {
-                fileName = _overrideConfigFileName;
-            }
-            else
-            {
-                fileName = Environment.GetEnvironmentVariable(GameserverSDK.GsdkConfigFileEnvVarKey);
-            }
+            GSDKConfiguration localConfig;
 
-            GsdkConfiguration localConfig;
-
-            if (!string.IsNullOrWhiteSpace(fileName) && File.Exists(fileName))
+            if (!string.IsNullOrWhiteSpace(fileName) && _systemOperationsWrapper.FileExists(fileName))
             {
                 try
                 {
-                    localConfig = JsonConvert.DeserializeObject<GsdkConfiguration>(File.ReadAllText(fileName));
+                    localConfig = JsonConvert.DeserializeObject<GSDKConfiguration>(_systemOperationsWrapper.FileReadAllText(fileName));
 
                 }
                 catch (Exception ex)
@@ -134,7 +125,7 @@ namespace Microsoft.Playfab.Gaming.GSDK.CSharp
             return localConfig;
         }
 
-        private IDictionary<string, string> CreateConfigMap(GsdkConfiguration localConfig)
+        private IDictionary<string, string> CreateConfigMap(GSDKConfiguration localConfig)
         {
             var finalConfig = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
 
@@ -175,26 +166,30 @@ namespace Microsoft.Playfab.Gaming.GSDK.CSharp
 
         private async Task HeartbeatAsync()
         {
-            while (_heartbeatRunning)
+            while (true)
             {
-                if (_signalHeartbeatEvent.WaitOne(1000))
+                try
                 {
-                    if (_debug)
+                    if (_signalHeartbeatEvent.WaitOne(1000))
                     {
-                        Logger.Log("State transition signaled an early heartbeat.");
+                        if (_debug)
+                        {
+                            Logger.Log("State transition signaled an early heartbeat.");
+                        }
+
+                        _signalHeartbeatEvent.Reset();
                     }
 
-                    _signalHeartbeatEvent.Reset();
+                    await SendHeartbeatAsync();
                 }
-
-                await SendHeartbeatAsync();
+                catch (Exception e)
+                {
+                    Logger.Log($"Encountered exception while sending heartbeat. Exception: {e}");
+                }
             }
-
-            Logger.Log("Shutting down heartbeat thread");
-            _heartbeatDoneEvent.Set();
         }
 
-        internal async virtual Task SendHeartbeatAsync()
+        internal async Task SendHeartbeatAsync()
         {
             bool gameHealth = false;
             if (HealthCallback != null)
@@ -211,7 +206,7 @@ namespace Microsoft.Playfab.Gaming.GSDK.CSharp
 
             try
             {
-                HeartbeatResponse response = await _webClient.SendHeartbeatAsync(payload);
+                HeartbeatResponse response = await _httpClient.SendHeartbeatAsync(payload);
                 await UpdateStateFromHeartbeatAsync(response);
 
                 if (_debug)
@@ -295,41 +290,5 @@ namespace Microsoft.Playfab.Gaming.GSDK.CSharp
 
             return CompletedTask;
         }
-
-        #region IDisposable Support
-        private bool disposedValue = false; // To detect redundant calls
-
-        private void DisposeManagedResources(bool disposing)
-        {
-            if (!disposedValue)
-            {
-                if (disposing)
-                {
-                    _heartbeatRunning = false;
-                    _heartbeatDoneEvent.WaitOne();
-                }
-
-                // TODO: free unmanaged resources (unmanaged objects) and override a finalizer below.
-                // TODO: set large fields to null.
-
-                disposedValue = true;
-            }
-        }
-
-        // TODO: override a finalizer only if Dispose(bool disposing) above has code to free unmanaged resources.
-        // ~InternalSdk() {
-        //   // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
-        //   Dispose(false);
-        // }
-
-        // This code added to correctly implement the disposable pattern.
-        public void Dispose()
-        {
-            // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
-            DisposeManagedResources(true);
-            // TODO: uncomment the following line if the finalizer is overridden above.
-            // GC.SuppressFinalize(this);
-        }
-        #endregion
     }
 }

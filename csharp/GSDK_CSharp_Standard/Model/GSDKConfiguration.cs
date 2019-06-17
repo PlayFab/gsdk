@@ -1,16 +1,16 @@
-namespace Microsoft.Playfab.Gaming.GSDK.CSharp
+namespace Microsoft.Playfab.Gaming.GSDK.CSharp.Model
 {
     using System;
     using System.Collections.Generic;
     using Newtonsoft.Json;
 
-    internal class GsdkConfiguration
+    internal class GSDKConfiguration
     {
         private const string TITLE_ID_ENV_VAR = "PF_TITLE_ID";
         private const string BUILD_ID_ENV_VAR = "PF_BUILD_ID";
         private const string REGION_ENV_VAR = "PF_REGION";
 
-        public GsdkConfiguration()
+        public GSDKConfiguration()
         {
             GameCertificates = new Dictionary<string, string>();
             BuildMetadata = new Dictionary<string, string>();
