@@ -168,7 +168,7 @@ namespace Microsoft
                     Assert::IsTrue(GSDKInternal::m_instance->m_heartbeatRequest.m_currentGameState == GameState::Active, L"Verify state was changed.");
                 }
 
-                TEST_METHOD(DecodeAgentResponseJsonDoesntCrash)
+                TEST_METHOD(DecodeAgentResponse_JsonDoesntCrash)
                 {
                     GSDKInternal::testConfiguration = std::make_unique<TestConfig>("heartbeatEndpoint", "serverId", "logFolder", "sharedContentFolder");
                     GSDK::start();
@@ -191,7 +191,7 @@ namespace Microsoft
                     GSDKInternal::m_instance->decodeHeartbeatResponse(responseJson);
                 }
 
-                TEST_METHOD(DecodeAgentResponseJsonDoesntCrashWhenInvalidJson)
+                TEST_METHOD(DecodeAgentResponse_JsonDoesntCrashWhenInvalidJson)
                 {
                     GSDKInternal::testConfiguration = std::make_unique<TestConfig>("heartbeatEndpoint", "serverId", "logFolder", "sharedContentFolder");
                     GSDK::start();
