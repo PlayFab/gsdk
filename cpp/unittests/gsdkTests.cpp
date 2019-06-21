@@ -168,6 +168,52 @@ namespace Microsoft
                     Assert::IsTrue(GSDKInternal::m_instance->m_heartbeatRequest.m_currentGameState == GameState::Active, L"Verify state was changed.");
                 }
 
+                TEST_METHOD(DecodeAgentResponseJsonDoesntCrash)
+                {
+                    GSDKInternal::testConfiguration = std::make_unique<TestConfig>("heartbeatEndpoint", "serverId", "logFolder", "sharedContentFolder");
+                    GSDK::start();
+
+                    time_t maintenanceTime;
+                    GSDK::registerMaintenanceCallback([&maintenanceTime](tm t) -> void { maintenanceTime = _mkgmtime(&t); });
+
+                    std::string responseJson =
+                        R"({
+                                "operation": {
+                                    "status": "Active"
+                                },
+                                "sessionConfig":
+                                {
+                                    "sessionId":"eca7e870-da2e-45f9-bb66-30d89064313a",
+                                    "sessionCookie":"OreoCookie"
+                                },
+                                "nextScheduledMaintenanceUtc":"2018-04-12T16:58:30.1458776Z"
+                        }")";
+                    GSDKInternal::m_instance->decodeHeartbeatResponse(responseJson);
+                }
+
+                TEST_METHOD(DecodeAgentResponseJsonDoesntCrashWhenInvalidJson)
+                {
+                    GSDKInternal::testConfiguration = std::make_unique<TestConfig>("heartbeatEndpoint", "serverId", "logFolder", "sharedContentFolder");
+                    GSDK::start();
+
+                    time_t maintenanceTime;
+                    GSDK::registerMaintenanceCallback([&maintenanceTime](tm t) -> void { maintenanceTime = _mkgmtime(&t); });
+
+                    std::string responseJson =
+                        R"({
+                                "operation": {
+                                    "status": "Active"
+                                },
+                                "sessionConfig":
+                                {
+                                    "sessionId":"eca7e870-da2e-45f9-bb66-30d89064313a",
+                                    "sessionCookie":"OreoCookie"
+                                },
+                                "nextScheduledMaintenanceUtc":"2018-04-12T16:58:30.1458776Z",
+                        }")";
+                    GSDKInternal::m_instance->decodeHeartbeatResponse(responseJson);
+                }
+
                 TEST_METHOD(ReturnInitialPlayerListFromJson)
                 {
                     GSDKInternal::testConfiguration = std::make_unique<TestConfig>("heartbeatEndpoint", "serverId", "logFolder", "sharedContentFolder");
