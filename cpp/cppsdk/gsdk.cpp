@@ -168,7 +168,7 @@ namespace Microsoft
             {
                 std::lock_guard<std::mutex> lock(get().m_receivedDataMutex);
 
-                get().m_receivedData.assign(buffer, blockSize * blockCount);
+                get().m_receivedData.append(buffer, blockSize * blockCount);
                 return (blockSize * blockCount);
             }
 
@@ -183,6 +183,7 @@ namespace Microsoft
             void GSDKInternal::sendHeartbeat()
             {
                 resetCurl();
+                m_receivedData = "";
                 curl_easy_setopt(m_curlHandle, CURLOPT_CUSTOMREQUEST, "PATCH");
                 std::string request = encodeHeartbeatRequest();
                 curl_easy_setopt(m_curlHandle, CURLOPT_POSTFIELDS, request.c_str());
