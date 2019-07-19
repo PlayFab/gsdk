@@ -21,7 +21,10 @@ namespace Microsoft
                             const std::string & buildId = std::string(),
                             const std::string & region = std::string(),
                             const std::unordered_map<std::string, std::string> & metadata = std::unordered_map<std::string, std::string>(),
-                            const std::unordered_map<std::string, std::string> & ports = std::unordered_map<std::string, std::string>());
+                            const std::unordered_map<std::string, std::string> & ports = std::unordered_map<std::string, std::string>(),
+                            const std::string & ipv4Address = std::string() = std::string(),
+                            const std::string & domainName = std::string() = std::string(),
+                            const GameServerConnectionInfo & connectionInfo = GameServerConnectionInfo());
 
                 const std::string &getHeartbeatEndpoint();
                 const std::string &getServerId();
@@ -34,6 +37,9 @@ namespace Microsoft
                 const std::string &getRegion();
                 const std::unordered_map<std::string, std::string> &getBuildMetadata();
                 const std::unordered_map<std::string, std::string> &getGamePorts();
+                const std::string &getPublicIpV4Address();
+                const std::string &getFullyQualifiedDomainName();
+                const GameServerConnectionInfo &getGameServerConnectionInfo();
                 bool shouldLog();
                 bool shouldHeartbeat();
 
@@ -49,6 +55,9 @@ namespace Microsoft
                 std::string m_titleId;
                 std::string m_buildId;
                 std::string m_region;
+                std::string m_ipv4Address;
+                std::string m_domainName;
+                GameServerConnectionInfo m_connectionInfo;
             };
         }
     }

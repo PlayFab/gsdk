@@ -148,6 +148,7 @@ namespace Microsoft
                 std::function<bool()> m_healthCallback;
                 std::function<void(const tm &)> m_maintenanceCallback;
 
+                GameServerConnectionInfo m_connectionInfo;
                 std::unordered_map<std::string, std::string> m_configSettings;
                 tm m_cachedScheduledMaintenance;
 
