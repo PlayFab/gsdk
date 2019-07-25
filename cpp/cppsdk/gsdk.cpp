@@ -76,11 +76,15 @@ namespace Microsoft
                 m_configSettings[GSDK::TITLE_ID_KEY] = config->getTitleId();
                 m_configSettings[GSDK::BUILD_ID_KEY] = config->getBuildId();
                 m_configSettings[GSDK::REGION_KEY] = config->getRegion();
+                m_configSettings[GSDK::PUBLIC_IP_V4_ADDRESS_KEY] = config->getPublicIpV4Address();
+                m_configSettings[GSDK::FULLY_QUALIFIED_DOMAIN_NAME_KEY] = config->getFullyQualifiedDomainName();
 
                 if (m_configSettings[GSDK::HEARTBEAT_ENDPOINT_KEY].empty() || m_configSettings[GSDK::SERVER_ID_KEY].empty())
                 {
                     throw GSDKInitializationException("Heartbeat endpoint and Server id are required configuration values.");
                 }
+
+                m_connectionInfo = config->getGameServerConnectionInfo();
 
                 // We don't want to write files in our UTs
                 if (config->shouldLog())
@@ -411,6 +415,11 @@ namespace Microsoft
                 }
 
                 return GSDKInternal::get().m_heartbeatRequest.m_currentGameState == GameState::Active;
+            }
+
+            const Microsoft::Azure::Gaming::GameServerConnectionInfo &GSDK::getGameServerConnectionInfo()
+            {
+                return GSDKInternal::get().m_connectionInfo;
             }
 
             const std::unordered_map<std::string, std::string>& GSDK::getConfigSettings()

@@ -88,6 +88,21 @@ const std::unordered_map<std::string, std::string> &Microsoft::Azure::Gaming::En
     return m_ports;
 }
 
+const std::string &Microsoft::Azure::Gaming::EnvironmentVariableConfiguration::getPublicIpV4Address()
+{
+    return m_ipv4Address;
+}
+
+const std::string &Microsoft::Azure::Gaming::EnvironmentVariableConfiguration::getFullyQualifiedDomainName()
+{
+    return m_domainName;
+}
+
+const Microsoft::Azure::Gaming::GameServerConnectionInfo &Microsoft::Azure::Gaming::EnvironmentVariableConfiguration::getGameServerConnectionInfo()
+{
+    return m_connectionInfo;
+}
+
 Microsoft::Azure::Gaming::JsonFileConfiguration::JsonFileConfiguration(const std::string &file_name) : Microsoft::Azure::Gaming::ConfigurationBase::ConfigurationBase()
 {
     std::ifstream is(file_name, std::ifstream::in);
@@ -142,6 +157,30 @@ Microsoft::Azure::Gaming::JsonFileConfiguration::JsonFileConfiguration(const std
                     m_ports[i.key().asCString()] = (*i).asCString();
                 }
             }
+
+            if (configFile.isMember("publicIpV4Address"))
+            {
+                m_ipv4Address = configFile["publicIpV4Address"].asString();
+            }
+
+            if (configFile.isMember("fullyQualifiedDomainName"))
+            {
+                m_domainName = configFile["fullyQualifiedDomainName"].asString();
+            }
+
+            if (configFile.isMember("gameServerConnectionInfo"))
+            {
+                Json::Value connectionInfo = configFile["gameServerConnectionInfo"];
+                Json::Value portsConfiguration = connectionInfo["gamePortsConfiguration"];
+                std::vector<GamePort> gamePorts;
+
+                for (Json::ValueIterator port = portsConfiguration.begin(); port != portsConfiguration.end(); ++port)
+                {
+                    gamePorts.emplace_back((*port)["name"].asString(), (*port)["serverListeningPort"].asInt(), (*port)["clientConnectionPort"].asInt());
+                }
+
+                m_connectionInfo = GameServerConnectionInfo(connectionInfo["publicIpV4Adress"].asString(), gamePorts); // publicIpV4Adress is a typo that exists in the gsdkConfig file...
+            }
         }
         else
         {
@@ -193,4 +232,19 @@ const std::unordered_map<std::string, std::string> &Microsoft::Azure::Gaming::Js
 const std::unordered_map<std::string, std::string> &Microsoft::Azure::Gaming::JsonFileConfiguration::getGamePorts()
 {
     return m_ports;
+}
+
+const std::string &Microsoft::Azure::Gaming::JsonFileConfiguration::getPublicIpV4Address()
+{
+    return m_ipv4Address;
+}
+
+const std::string &Microsoft::Azure::Gaming::JsonFileConfiguration::getFullyQualifiedDomainName()
+{
+    return m_domainName;
+}
+
+const Microsoft::Azure::Gaming::GameServerConnectionInfo &Microsoft::Azure::Gaming::JsonFileConfiguration::getGameServerConnectionInfo()
+{
+    return m_connectionInfo;
 }

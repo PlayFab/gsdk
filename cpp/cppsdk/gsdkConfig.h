@@ -1,4 +1,6 @@
 #pragma once
+
+#include <gsdk.h>
 #include <unordered_map>
 
 namespace Microsoft
@@ -21,6 +23,9 @@ namespace Microsoft
                 virtual const std::string &getRegion() = 0;
                 virtual const std::unordered_map<std::string, std::string> &getBuildMetadata() = 0;
                 virtual const std::unordered_map<std::string, std::string> &getGamePorts() = 0;
+                virtual const std::string &getPublicIpV4Address() = 0;
+                virtual const std::string &getFullyQualifiedDomainName() = 0;
+                virtual const GameServerConnectionInfo &getGameServerConnectionInfo() = 0;
                 virtual bool shouldLog() = 0;
                 virtual bool shouldHeartbeat() = 0;
 
@@ -65,6 +70,9 @@ namespace Microsoft
                 const std::unordered_map<std::string, std::string> &getGameCertificates();
                 const std::unordered_map<std::string, std::string> &getBuildMetadata();
                 const std::unordered_map<std::string, std::string> &getGamePorts();
+                const std::string &getPublicIpV4Address();
+                const std::string &getFullyQualifiedDomainName();
+                const GameServerConnectionInfo &getGameServerConnectionInfo();
 
             private:
                 std::string m_heartbeatEndpoint;
@@ -75,6 +83,9 @@ namespace Microsoft
                 std::unordered_map<std::string, std::string> m_gameCerts;
                 std::unordered_map<std::string, std::string> m_metadata;
                 std::unordered_map<std::string, std::string> m_ports;
+                std::string m_ipv4Address;
+                std::string m_domainName;
+                GameServerConnectionInfo m_connectionInfo;
             };
 
             class JsonFileConfiguration : public ConfigurationBase
@@ -90,6 +101,9 @@ namespace Microsoft
                 const std::unordered_map<std::string, std::string> &getGameCertificates();
                 const std::unordered_map<std::string, std::string> &getBuildMetadata();
                 const std::unordered_map<std::string, std::string> &getGamePorts();
+                const std::string &getPublicIpV4Address();
+                const std::string &getFullyQualifiedDomainName();
+                const GameServerConnectionInfo &getGameServerConnectionInfo();
 
             private:
                 std::string m_heartbeatEndpoint;
@@ -100,6 +114,9 @@ namespace Microsoft
                 std::unordered_map<std::string, std::string> m_gameCerts;
                 std::unordered_map<std::string, std::string> m_metadata;
                 std::unordered_map<std::string, std::string> m_ports;
+                std::string m_ipv4Address;
+                std::string m_domainName;
+                GameServerConnectionInfo m_connectionInfo;
             };
         }
     }

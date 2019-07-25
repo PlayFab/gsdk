@@ -26,6 +26,54 @@ namespace Microsoft
                 }
             };
 
+            /// <summary>
+            /// A class that captures details about a game server port.
+            /// </summary>
+            class GamePort
+            {
+                public:
+                    /// <summary>
+                    /// The friendly name / identifier for the port, specified by the game developer in the Build configuration.
+                    /// </summary>
+                    std::string m_name;
+
+                    /// <summary>
+                    /// The port at which the game server should listen on (maps externally to <see cref="m_clientConnectionPort" />).
+                    /// For process based servers, this is determined by Control Plane, based on the ports available on the VM.
+                    /// For containers, this is specified by the game developer in the Build configuration.
+                    /// </summary>
+                    int m_serverListeningPort;
+
+                    /// <summary>
+                    /// The public port to which clients should connect (maps internally to <see cref="m_serverListeningPort" />).
+                    /// </summary>
+                    int m_clientConnectionPort;
+
+                    GamePort() {}
+
+                    GamePort(std::string name, int serverListeningPort, int clientConnectionPort)
+                    {
+                        m_name = name;
+                        m_serverListeningPort = serverListeningPort;
+                        m_clientConnectionPort = clientConnectionPort;
+                    }
+            };
+
+            class GameServerConnectionInfo
+            {
+                public:
+                    std::string m_publicIpV4Address;
+                    std::vector<GamePort> m_gamePortsConfiguration;
+
+                    GameServerConnectionInfo() {}
+
+                    GameServerConnectionInfo(std::string publicIpV4Address, std::vector<GamePort> gamePortsConfiguration)
+                    {
+                        m_publicIpV4Address = publicIpV4Address;
+                        m_gamePortsConfiguration = gamePortsConfiguration;
+                    }
+            };
+
             class GSDKInitializationException : public std::runtime_error
             {
                 using std::runtime_error::runtime_error;
@@ -38,6 +86,13 @@ namespace Microsoft
                 /// <remarks>Required. This is a blocking call and will only return when this server is either allocated (a player is about to connect) or terminated.</remarks>
                 /// <returns>True if the server is allocated (will receive players shortly). False if the server is terminated. </returns>
                 static bool readyForPlayers();
+
+                /// <summary>
+                /// Gets information (ipAddress and ports) for connecting to the game server, as well as the ports the
+                /// game server should listen on.
+                /// </summary>
+                /// <returns></returns>
+                static const GameServerConnectionInfo &getGameServerConnectionInfo();
 
                 /// <summary>Returns all configuration settings</summary>
                 /// <returns>unordered map of string key:value configuration setting values</returns>
@@ -82,6 +137,9 @@ namespace Microsoft
                 static constexpr const char* TITLE_ID_KEY = "titleId";
                 static constexpr const char* BUILD_ID_KEY = "buildId";
                 static constexpr const char* REGION_KEY = "region";
+                static constexpr const char* VM_ID_KEY = "vmId";
+                static constexpr const char* PUBLIC_IP_V4_ADDRESS_KEY = "publicIpV4Address";
+                static constexpr const char* FULLY_QUALIFIED_DOMAIN_NAME_KEY = "fullyQualifiedDomainName";
 
                 // These two keys are only available after allocation (once readyForPlayers returns true)
                 static constexpr const char* SESSION_COOKIE_KEY = "sessionCookie";
