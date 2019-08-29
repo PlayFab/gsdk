@@ -1,6 +1,7 @@
 ﻿namespace PlayFab.MultiplayerAgent.Model
 {
     using System;
+    using Json;
 
     [Serializable]
     public class ConnectedPlayer
@@ -10,6 +11,7 @@
             PlayerId = playerid;
         }
 
+        [JsonProperty(PropertyName = "playerId")]
         public string PlayerId { get; set; }
     }
 }
