@@ -1,8 +1,16 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="DebugPIC|x64">
+      <Configuration>DebugPIC</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
     <ProjectConfiguration Include="Debug|x64">
       <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="ReleasePIC|x64">
+      <Configuration>ReleasePIC</Configuration>
       <Platform>x64</Platform>
     </ProjectConfiguration>
     <ProjectConfiguration Include="Release|x64">
@@ -28,7 +36,17 @@
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <PlatformToolset>Remote_GCC_1_0</PlatformToolset>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DebugPIC|x64'" Label="Configuration">
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <PlatformToolset>Remote_GCC_1_0</PlatformToolset>
+  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <PlatformToolset>Remote_GCC_1_0</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='ReleasePIC|x64'" Label="Configuration">
     <UseDebugLibraries>false</UseDebugLibraries>
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <PlatformToolset>Remote_GCC_1_0</PlatformToolset>
@@ -50,12 +68,38 @@
       <LibraryDependencies>curl;jsoncpp;pthread</LibraryDependencies>
     </Link>
   </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='DebugPIC|x64'">
+    <ClCompile>
+      <PreprocessorDefinitions>GSDK_LINUX</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)include;/usr/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <CppLanguageStandard>c++1y</CppLanguageStandard>
+      <AdditionalOptions>-I $(RemoteProjectDir) -I $(RemoteProjectDir)/include %(AdditionalOptions)</AdditionalOptions>
+      <PositionIndependentCode>true</PositionIndependentCode>
+    </ClCompile>
+    <Link>
+      <AdditionalLibraryDirectories>/usr/lib/x86_64-linux-gnu;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <LibraryDependencies>curl;jsoncpp;pthread</LibraryDependencies>
+    </Link>
+  </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
       <PreprocessorDefinitions>GSDK_LINUX</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)include;/usr/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <CppLanguageStandard>c++1y</CppLanguageStandard>
       <AdditionalOptions>-I $(RemoteProjectDir) -I $(RemoteProjectDir)/include %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+    <Link>
+      <AdditionalLibraryDirectories>/usr/lib/x86_64-linux-gnu;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <LibraryDependencies>curl;jsoncpp;pthread</LibraryDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='ReleasePIC|x64'">
+    <ClCompile>
+      <PreprocessorDefinitions>GSDK_LINUX</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)include;/usr/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <CppLanguageStandard>c++1y</CppLanguageStandard>
+      <AdditionalOptions>-I $(RemoteProjectDir) -I $(RemoteProjectDir)/include %(AdditionalOptions)</AdditionalOptions>
+      <PositionIndependentCode>true</PositionIndependentCode>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>/usr/lib/x86_64-linux-gnu;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
