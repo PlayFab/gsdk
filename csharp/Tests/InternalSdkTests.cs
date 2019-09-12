@@ -270,6 +270,41 @@ namespace Microsoft.Playfab.Gaming.GSDK.CSharp.Test
             sdk.InitialPlayers.Should().Contain(playerList, "Initial Player List returned");
 
         }
+        
+        [TestMethod]
+        public void GameState_SessionConfigReturnedWithSessionMetadata_ConfigMapUpdated()
+        {
+            _testConfiguration = new
+            {
+                heartbeatEndpoint = "heartbeatendpoint",
+                sessionHostId = "serverid"
+            };
+
+            var sessionMetadataKey = "sessionMetadataKey";
+            var sessionMetadataValue = "sessionMetadataValue";
+            _mockHttpClient.Setup(x => x.SendHeartbeatAsync(It.IsAny<HeartbeatRequest>()))
+                .ReturnsAsync(new HeartbeatResponse
+                {
+                    Operation = GameOperation.Continue,
+                    SessionConfig = new SessionConfig
+                    {
+                        SessionId = Guid.NewGuid(),
+                        SessionCookie = "awesomeCookie",
+                        Metadata = new Dictionary<string, string>() { { sessionMetadataKey, sessionMetadataValue } }
+                    }
+                });
+
+
+            var sdk = new InternalSdk(_mockSystemOperations.Object, _mockHttpClientFactory.Object);
+
+            sdk.Start(false);
+
+            sdk.ConfigMap.Should().NotContainKey("sessionCookie");
+            Thread.Sleep(2000);
+            sdk.ConfigMap.Should().ContainKey("sessionCookie");
+            Assert.AreEqual(sessionMetadataValue, sdk.ConfigMap[sessionMetadataKey]);
+
+        }
 
         [TestMethod]
         public void GameState_TerminateReturned_CallbackInvoked()
