@@ -14,8 +14,5 @@
 
         [JsonProperty(PropertyName = "initialPlayers")]
         public List<string> InitialPlayers { get; set; }
-
-        [JsonProperty(PropertyName = "metadata")]
-        public Dictionary<string, string> Metadata { get; set; }
     }
 }

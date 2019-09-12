@@ -251,33 +251,6 @@ namespace Microsoft
                     Assert::AreEqual(std::string("player2"), players[2], L"Verify player2 exists.");
                 }
 
-                TEST_METHOD(ReturnSessionMetadataFromJson)
-                {
-                    GSDKInternal::testConfiguration = std::make_unique<TestConfig>("heartbeatEndpoint", "serverId", "logFolder", "sharedContentFolder");
-                    GSDK::start();
-
-                    Assert::AreEqual((size_t)0, GSDK::getInitialPlayers().size(), L"InitialPlayer list is empty before allocation.");
-
-                    std::string responseJson =
-                        R"({
-                                "operation":"Active",
-                                "sessionConfig":
-                                {
-                                    "sessionId":"eca7e870-da2e-45f9-bb66-30d89064313a",
-                                    "sessionCookie":"OreoCookie",
-                                    "metadata":
-                                    {
-                                        "testKey": "testValue"
-                                    }
-                                }
-                        }")";
-                    GSDKInternal::m_instance->decodeHeartbeatResponse(responseJson);
-
-                    // Test heartbeat response handled correctly
-                    const std::unordered_map<std::string, std::string> &config = GSDK::getConfigSettings();
-                    Assert::AreEqual(std::string("testValue"), config.at("testKey"), L"Ensuring session metadata was set.");
-                }
-
                 TEST_METHOD(AgentOperationStateChangesHandledCorrectly)
                 {
                     GSDKInternal::testConfiguration = std::make_unique<TestConfig>("heartbeatEndpoint", "serverId", "logFolder", "sharedContentFolder");

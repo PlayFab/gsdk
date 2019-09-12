@@ -309,17 +309,6 @@ namespace Microsoft
                             }
                         }
 
-                        if (sessionConfig.isMember("metadata"))
-                        {
-                            Json::Value sessionMetadata = sessionConfig["metadata"];
-                            for (Json::ValueIterator i = sessionMetadata.begin(); i != sessionMetadata.end(); ++i)
-                            {
-                                if ((*i).isString())
-                                {
-                                    m_configSettings[i.key().asCString()] = (*i).asCString();
-                                }
-                            }
-                        }
                     }
 
                     if (heartbeatResponse.isMember("nextScheduledMaintenanceUtc"))

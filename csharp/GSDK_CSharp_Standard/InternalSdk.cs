@@ -232,14 +232,6 @@ namespace Microsoft.Playfab.Gaming.GSDK.CSharp
                 {
                     InitialPlayers = response.SessionConfig.InitialPlayers;
                 }
-
-                if (response.SessionConfig?.Metadata != null && response.SessionConfig.Metadata.Any())
-                {
-                    foreach (KeyValuePair<string, string> keyValuePair in response.SessionConfig.Metadata)
-                    {
-                        ConfigMap.AddIfNotNullOrEmpty(keyValuePair.Key, keyValuePair.Value);
-                    }
-                }
             }
 
             if (!string.IsNullOrWhiteSpace(response.NextScheduledMaintenanceUtc))
