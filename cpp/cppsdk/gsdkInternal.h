@@ -180,6 +180,8 @@ namespace Microsoft
                 static std::mutex m_gsdkInitMutex;
 
                 static volatile long long m_exitStatus;
+
+                static GSDKLogCallback m_logCallback;
                 static std::mutex m_logLock;
                 static std::ofstream m_logFile;
 

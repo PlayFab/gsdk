@@ -302,7 +302,7 @@ int main()
     catch (const std::exception &ex)
     {
         printf("Exception encountered: %s", ex.what());
-        Microsoft::Azure::Gaming::GSDK::logMessage(ex.what());
+        Microsoft::Azure::Gaming::GSDK::logMessage(Microsoft::Azure::Gaming::GSDKLogLevel::Error, ex.what());
     }
 
     return 0;

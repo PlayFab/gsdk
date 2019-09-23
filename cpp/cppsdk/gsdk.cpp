@@ -14,6 +14,7 @@ namespace Microsoft
             std::unique_ptr<GSDKInternal> GSDKInternal::m_instance = nullptr;
             std::mutex GSDKInternal::m_gsdkInitMutex;
             volatile long long GSDKInternal::m_exitStatus = 0;
+            GSDKLogCallback GSDKInternal::m_logCallback;
             std::mutex GSDKInternal::m_logLock;
             std::ofstream GSDKInternal::m_logFile;
             bool GSDKInternal::m_debug = false;
@@ -98,8 +99,8 @@ namespace Microsoft
                     std::string gsmsBaseUrl = m_configSettings[GSDK::HEARTBEAT_ENDPOINT_KEY];
                     std::string instanceId = m_configSettings[GSDK::SERVER_ID_KEY];
 
-                    GSDK::logMessage("VM Agent Endpoint: " + gsmsBaseUrl);
-                    GSDK::logMessage("Instance Id: " + instanceId);
+                    GSDK::logMessage(GSDKLogLevel::Info, "VM Agent Endpoint: " + gsmsBaseUrl);
+                    GSDK::logMessage(GSDKLogLevel::Info, "Instance Id: " + instanceId);
 
                     m_heartbeatUrl.reserve(1024);
                     m_heartbeatUrl += "http://";
@@ -125,7 +126,7 @@ namespace Microsoft
                 }
                 catch (const std::exception& ex)
                 {
-                    GSDK::logMessage(ex.what());
+                    GSDK::logMessage(GSDKLogLevel::Error, ex.what());
                     throw;
                 }
             }
@@ -159,7 +160,7 @@ namespace Microsoft
                 {
                     if (m_signalHeartbeatEvent.Wait(1000))
                     {
-                        if (m_debug) GSDK::logMessage("State transition signaled an early heartbeat.");
+                        if (m_debug) GSDK::logMessage(GSDKLogLevel::Debug, "State transition signaled an early heartbeat.");
                         m_signalHeartbeatEvent.Reset(); // We've handled this signal, so reset the event
                     }
 
@@ -280,9 +281,9 @@ namespace Microsoft
                 bool parsedSuccessfully = jsonReader->parse(responseJson.c_str(), responseJson.c_str() + responseJson.length(), &heartbeatResponse, &jsonParseErrors);
 
                 if (!parsedSuccessfully) {
-                    GSDK::logMessage("Failed to parse heartbeat");
-                    GSDK::logMessage(jsonParseErrors);
-                    GSDK::logMessage("Message: " + responseJson);
+                    GSDK::logMessage(GSDKLogLevel::Error, "Failed to parse heartbeat");
+                    GSDK::logMessage(GSDKLogLevel::Error, jsonParseErrors);
+                    GSDK::logMessage(GSDKLogLevel::Error, "Message: " + responseJson);
                     return;
                 }
 
@@ -343,7 +344,7 @@ namespace Microsoft
                         try
                         {
                             if (m_debug) {
-                                GSDK::logMessage("Heartbeat request: { state = " + std::string(GameStateNames[static_cast<int>(m_heartbeatRequest.m_currentGameState)]) + "}"
+                                GSDK::logMessage(GSDKLogLevel::Debug, "Heartbeat request: { state = " + std::string(GameStateNames[static_cast<int>(m_heartbeatRequest.m_currentGameState)]) + "}"
                                     + " response: { operation = " + heartbeatResponse["operation"].asString() + "}");
                             }
 
@@ -370,20 +371,20 @@ namespace Microsoft
                                 }
                                 break;
                             default:
-                                GSDK::logMessage("Unhandled operation received: " + std::string(OperationNames[static_cast<int>(nextOperation)]));
+                                GSDK::logMessage(GSDKLogLevel::Error, "Unhandled operation received: " + std::string(OperationNames[static_cast<int>(nextOperation)]));
                             }
                         }
                         catch (std::out_of_range&)
                         {
-                            GSDK::logMessage("Unknown operation received: " + heartbeatResponse["operation"].asString());
+                            GSDK::logMessage(GSDKLogLevel::Error, "Unknown operation received: " + heartbeatResponse["operation"].asString());
                         }
                     }
                 }
                 catch (Json::Exception& ex) {
                     // we caught an exception - log it out
-                    GSDK::logMessage("An error occured while processing heartbeat.");
-                    GSDK::logMessage(ex.what());
-                    GSDK::logMessage("Message: " + responseJson);
+                    GSDK::logMessage(GSDKLogLevel::Error, "An error occured while processing heartbeat.");
+                    GSDK::logMessage(GSDKLogLevel::Error, ex.what());
+                    GSDK::logMessage(GSDKLogLevel::Error, "Message: " + responseJson);
                 }
             }
 
@@ -393,7 +394,7 @@ namespace Microsoft
                 curl_easy_getinfo(m_curlHandle, CURLINFO_RESPONSE_CODE, &http_code);
                 if (http_code >= 300)
                 {
-                    GSDK::logMessage("Received non-success code from Agent.  Status Code: " + std::to_string(http_code) + " Response Body: " + m_receivedData);
+                    GSDK::logMessage(GSDKLogLevel::Error, "Received non-success code from Agent.  Status Code: " + std::to_string(http_code) + " Response Body: " + m_receivedData);
                     return;
                 }
 
@@ -458,8 +459,18 @@ namespace Microsoft
                 GSDKInternal::get().m_maintenanceCallback = callback;
             }
 
-            unsigned int GSDK::logMessage(const std::string& message)
+            void GSDK::registerLogCallback(GSDKLogCallback callback)
             {
+                GSDKInternal::m_logCallback = callback;
+            }
+
+            unsigned int GSDK::logMessage(GSDKLogLevel level, const std::string& message)
+            {
+                if (GSDKInternal::m_logCallback)
+                {
+                    GSDKInternal::m_logCallback(level, message);
+                }
+
                 std::unique_lock<std::mutex> lock(GSDKInternal::m_logLock);
                 GSDKInternal::m_logFile << message.c_str() << std::endl;
                 GSDKInternal::m_logFile.flush();

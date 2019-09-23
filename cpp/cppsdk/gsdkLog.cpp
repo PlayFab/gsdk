@@ -15,7 +15,7 @@ namespace Microsoft
             {
                 m_hr = S_OK;
                 m_methodName = methodName;
-                GSDK::logMessage(" - GSDKMethodEntry: " + m_methodName);
+                GSDK::logMessage(GSDKLogLevel::Info, " - GSDKMethodEntry: " + m_methodName);
             }
 
             GSDKLogMethod::~GSDKLogMethod()
@@ -23,7 +23,7 @@ namespace Microsoft
                 std::string msg = " - GSDKMethodEntry: " + m_methodName + " Result: " + std::to_string(m_hr);
                 if (!m_exception_message.empty())
                     msg += " Exception: " + m_exception_message;
-                GSDK::logMessage(msg);
+                GSDK::logMessage(GSDKLogLevel::Info, msg);
             }
 
             void GSDKLogMethod::setExceptionInformation(const std::exception &ex)

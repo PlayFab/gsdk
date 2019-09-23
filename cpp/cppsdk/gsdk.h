@@ -79,6 +79,21 @@ namespace Microsoft
                 using std::runtime_error::runtime_error;
             };
 
+            /// <summary>
+            /// Possible log levels for log lines produced by GSDK
+            /// </summary>
+            enum class GSDKLogLevel
+            {
+                Debug,
+                Info,
+                Error
+            };
+
+            /// <summary>
+            /// Functor that will be called for each log line produced by GSDK
+            /// </summary>
+            using GSDKLogCallback = std::function<void(GSDKLogLevel level, const std::string& message)>;
+
             class GSDK
             {
             public:
@@ -115,8 +130,11 @@ namespace Microsoft
                 /// <summary>Gets called if the server is getting a scheduled maintenance, it will get the UTC time of the maintenance event as an argument.</summary>
                 static void registerMaintenanceCallback(std::function<void(const tm &)> callback);
 
+                /// <summary>Gets called for each log line produced by gsdk.</summary>
+                static void registerLogCallback(GSDKLogCallback callback);
+
                 /// <summary>outputs a message to the log</summary>
-                static unsigned int logMessage(const std::string &message);
+                static unsigned int logMessage(GSDKLogLevel level, const std::string &message);
 
                 /// <summary>Returns a path to the directory where logs will be mapped to the VM host</summary>
                 static const std::string &getLogsDirectory();
