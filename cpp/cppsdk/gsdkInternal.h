@@ -194,6 +194,8 @@ namespace Microsoft
                 void sendHeartbeat();
                 void receiveHeartbeatResponse();
 
+                void terminate();
+
                 // These two methods are used for unit testing
                 std::string encodeHeartbeatRequest();
                 void decodeHeartbeatResponse(const std::string &responseJson);

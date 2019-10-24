@@ -271,6 +271,16 @@ namespace Microsoft
                 get().m_keepHeartbeatRunning = false;
             }
 
+            void GSDKInternal::terminate()
+            {
+                if (m_heartbeatRequest.m_currentGameState != GameState::Terminating)
+                {
+                    setState(GameState::Terminating);
+                    m_transitionToActiveEvent.Signal();
+                    m_shutdownThread = std::async(std::launch::async, &runShutdownCallback);
+                }
+            }
+
             void GSDKInternal::decodeHeartbeatResponse(const std::string& responseJson)
             {
                 Json::CharReaderBuilder jsonReaderFactory;
@@ -362,12 +372,7 @@ namespace Microsoft
                                 }
                                 break;
                             case Operation::Terminate:
-                                if (m_heartbeatRequest.m_currentGameState != GameState::Terminating)
-                                {
-                                    setState(GameState::Terminating);
-                                    m_transitionToActiveEvent.Signal();
-                                    m_shutdownThread = std::async(std::launch::async, &runShutdownCallback);
-                                }
+                                terminate();
                                 break;
                             default:
                                 GSDK::logMessage("Unhandled operation received: " + std::string(OperationNames[static_cast<int>(nextOperation)]));
@@ -415,6 +420,11 @@ namespace Microsoft
             {
                 GSDKInternal::m_debug = debugLogs;
                 GSDKInternal::get();
+            }
+
+            void GSDK::stop()
+            {
+                GSDKInternal::get().terminate();
             }
 
             bool GSDK::readyForPlayers()
