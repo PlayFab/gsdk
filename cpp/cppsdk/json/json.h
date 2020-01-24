@@ -2202,8 +2202,8 @@ JSON_API JSONCPP_OSTREAM& operator<<(JSONCPP_OSTREAM&, const Value& root);
 // recognized in your jurisdiction.
 // See file LICENSE for detail or copy at http://jsoncpp.sourceforge.net/LICENSE
 
-#ifndef JSON_ASSERTIONS_H_INCLUDED
-#define JSON_ASSERTIONS_H_INCLUDED
+#ifndef CPPTL_JSON_ASSERTIONS_H_INCLUDED
+#define CPPTL_JSON_ASSERTIONS_H_INCLUDED
 
 #include <sstream>
 #include <stdlib.h>
@@ -2255,7 +2255,7 @@ JSON_API JSONCPP_OSTREAM& operator<<(JSONCPP_OSTREAM&, const Value& root);
     JSON_FAIL_MESSAGE(message);                                                \
   }
 
-#endif // JSON_ASSERTIONS_H_INCLUDED
+#endif // CPPTL_JSON_ASSERTIONS_H_INCLUDED
 
 // //////////////////////////////////////////////////////////////////////
 // End of content of file: include/json/assertions.h
