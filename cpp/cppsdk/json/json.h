@@ -463,8 +463,8 @@ public:
 // recognized in your jurisdiction.
 // See file LICENSE for detail or copy at http://jsoncpp.sourceforge.net/LICENSE
 
-#ifndef CPPTL_JSON_H_INCLUDED
-#define CPPTL_JSON_H_INCLUDED
+#ifndef JSON_JSON_H_INCLUDED
+#define JSON_JSON_H_INCLUDED
 
 #if !defined(JSON_IS_AMALGAMATION)
 #include "forwards.h"
@@ -1366,7 +1366,7 @@ inline void swap(Value& a, Value& b) { a.swap(b); }
 #pragma warning(pop)
 #endif // if defined(JSONCPP_DISABLE_DLL_INTERFACE_WARNING)
 
-#endif // CPPTL_JSON_H_INCLUDED
+#endif // JSON_JSON_H_INCLUDED
 
 // //////////////////////////////////////////////////////////////////////
 // End of content of file: include/json/value.h
