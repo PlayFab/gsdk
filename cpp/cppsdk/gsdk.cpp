@@ -50,6 +50,7 @@ namespace Microsoft
                     config = configSmrtPtr.get();
                 }
 
+				m_configMutex.lock();
                 std::unordered_map<std::string, std::string> gameCerts = config->getGameCertificates();
                 for (auto it = gameCerts.begin(); it != gameCerts.end(); ++it)
                 {
@@ -78,6 +79,8 @@ namespace Microsoft
                 m_configSettings[GSDK::REGION_KEY] = config->getRegion();
                 m_configSettings[GSDK::PUBLIC_IP_V4_ADDRESS_KEY] = config->getPublicIpV4Address();
                 m_configSettings[GSDK::FULLY_QUALIFIED_DOMAIN_NAME_KEY] = config->getFullyQualifiedDomainName();
+
+				m_configMutex.unlock();
 
                 if (m_configSettings[GSDK::HEARTBEAT_ENDPOINT_KEY].empty() || m_configSettings[GSDK::SERVER_ID_KEY].empty())
                 {
@@ -289,14 +292,13 @@ namespace Microsoft
                 try {
                     if (heartbeatResponse.isMember("sessionConfig"))
                     {
-						std::unordered_map<std::string, std::string> tempConfig = std::unordered_map<std::string, std::string>(m_configSettings);
-
-                        Json::Value sessionConfig = heartbeatResponse["sessionConfig"];
+						m_configMutex.lock();
+						Json::Value sessionConfig = heartbeatResponse["sessionConfig"];
                         for (Json::ValueIterator i = sessionConfig.begin(); i != sessionConfig.end(); ++i)
                         {
                             if ((*i).isString())
                             {
-								tempConfig[i.key().asCString()] = (*i).asCString();
+								m_configSettings[i.key().asCString()] = (*i).asCString();
                             }
                         }
 
@@ -318,12 +320,12 @@ namespace Microsoft
                             {
                                 if ((*i).isString())
                                 {
-									tempConfig[i.key().asCString()] = (*i).asCString();
+									m_configSettings[i.key().asCString()] = (*i).asCString();
                                 }
                             }
                         }
 
-						m_configSettings = std::unordered_map<std::string, std::string>(tempConfig);
+						m_configMutex.unlock();
                     }
 
                     if (heartbeatResponse.isMember("nextScheduledMaintenanceUtc"))
@@ -439,7 +441,11 @@ namespace Microsoft
 
             const std::unordered_map<std::string, std::string>& GSDK::getConfigSettings()
             {
-                return GSDKInternal::get().m_configSettings;
+				GSDKInternal::get().m_configMutex.lock();
+				std::unordered_map<std::string, std::string> copyConfigSettings = GSDKInternal::get().m_configSettings;
+				GSDKInternal::get().m_configMutex.unlock();
+
+                return copyConfigSettings;
             }
 
             void GSDK::updateConnectedPlayers(const std::vector<ConnectedPlayer>& currentlyConnectedPlayers)
