@@ -289,12 +289,14 @@ namespace Microsoft
                 try {
                     if (heartbeatResponse.isMember("sessionConfig"))
                     {
+						std::unordered_map<std::string, std::string> tempConfig = std::unordered_map<std::string, std::string>(m_configSettings);
+
                         Json::Value sessionConfig = heartbeatResponse["sessionConfig"];
                         for (Json::ValueIterator i = sessionConfig.begin(); i != sessionConfig.end(); ++i)
                         {
                             if ((*i).isString())
                             {
-                                m_configSettings[i.key().asCString()] = (*i).asCString();
+								tempConfig[i.key().asCString()] = (*i).asCString();
                             }
                         }
 
@@ -316,10 +318,12 @@ namespace Microsoft
                             {
                                 if ((*i).isString())
                                 {
-                                    m_configSettings[i.key().asCString()] = (*i).asCString();
+									tempConfig[i.key().asCString()] = (*i).asCString();
                                 }
                             }
                         }
+
+						m_configSettings = std::unordered_map<std::string, std::string>(tempConfig);
                     }
 
                     if (heartbeatResponse.isMember("nextScheduledMaintenanceUtc"))
