@@ -1,3 +1,5 @@
+using System.Collections.Concurrent;
+
 namespace Microsoft.Playfab.Gaming.GSDK.CSharp
 {
     using System;
@@ -127,7 +129,7 @@ namespace Microsoft.Playfab.Gaming.GSDK.CSharp
 
         private IDictionary<string, string> CreateConfigMap(GSDKConfiguration localConfig)
         {
-            var finalConfig = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+            var finalConfig = new ConcurrentDictionary<string, string>(StringComparer.OrdinalIgnoreCase);
 
             foreach (KeyValuePair<string, string> certEntry in localConfig.GameCertificates)
             {
