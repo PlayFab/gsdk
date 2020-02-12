@@ -1,9 +1,9 @@
-﻿using System.Collections.Concurrent;
-
+﻿
 #if ENABLE_PLAYFABSERVER_API
 namespace PlayFab
 {
     using System;
+    using System.Collections.Concurrent;
     using System.Collections.Generic;
     using System.Globalization;
     using System.IO;

@@ -50,7 +50,6 @@ namespace Microsoft
                     config = configSmrtPtr.get();
                 }
 
-				m_configMutex.lock();
                 std::unordered_map<std::string, std::string> gameCerts = config->getGameCertificates();
                 for (auto it = gameCerts.begin(); it != gameCerts.end(); ++it)
                 {
@@ -79,8 +78,6 @@ namespace Microsoft
                 m_configSettings[GSDK::REGION_KEY] = config->getRegion();
                 m_configSettings[GSDK::PUBLIC_IP_V4_ADDRESS_KEY] = config->getPublicIpV4Address();
                 m_configSettings[GSDK::FULLY_QUALIFIED_DOMAIN_NAME_KEY] = config->getFullyQualifiedDomainName();
-
-				m_configMutex.unlock();
 
                 if (m_configSettings[GSDK::HEARTBEAT_ENDPOINT_KEY].empty() || m_configSettings[GSDK::SERVER_ID_KEY].empty())
                 {
@@ -139,6 +136,8 @@ namespace Microsoft
                 m_heartbeatThread.join();
             }
 
+			//Do not need to acquire lock for configuration becase startLog is only called from the constructor.
+			//If this changes lock will be needed.
             void GSDKInternal::startLog()
             {
                 if (m_logFile.is_open())
@@ -292,7 +291,7 @@ namespace Microsoft
                 try {
                     if (heartbeatResponse.isMember("sessionConfig"))
                     {
-						m_configMutex.lock();
+						std::lock_guard<std::mutex> lock(m_configMutex);
 						Json::Value sessionConfig = heartbeatResponse["sessionConfig"];
                         for (Json::ValueIterator i = sessionConfig.begin(); i != sessionConfig.end(); ++i)
                         {
@@ -324,8 +323,6 @@ namespace Microsoft
                                 }
                             }
                         }
-
-						m_configMutex.unlock();
                     }
 
                     if (heartbeatResponse.isMember("nextScheduledMaintenanceUtc"))
@@ -441,11 +438,8 @@ namespace Microsoft
 
             const std::unordered_map<std::string, std::string>& GSDK::getConfigSettings()
             {
-				GSDKInternal::get().m_configMutex.lock();
-				std::unordered_map<std::string, std::string> copyConfigSettings = GSDKInternal::get().m_configSettings;
-				GSDKInternal::get().m_configMutex.unlock();
-
-                return copyConfigSettings;
+				std::lock_guard<std::mutex> lock(GSDKInternal::get().m_configMutex);
+                return GSDKInternal::get().m_configSettings;
             }
 
             void GSDK::updateConnectedPlayers(const std::vector<ConnectedPlayer>& currentlyConnectedPlayers)
