@@ -436,7 +436,7 @@ namespace Microsoft
                 return GSDKInternal::get().m_connectionInfo;
             }
 
-            const std::unordered_map<std::string, std::string>& GSDK::getConfigSettings()
+            const std::unordered_map<std::string, std::string> GSDK::getConfigSettings()
             {
 				std::lock_guard<std::mutex> lock(GSDKInternal::get().m_configMutex);
                 return GSDKInternal::get().m_configSettings;
@@ -470,12 +470,12 @@ namespace Microsoft
                 return 0;
             }
 
-            const std::string& GSDK::getLogsDirectory()
+            const std::string GSDK::getLogsDirectory()
             {
                 // Declare as static so that it doesn't live on the stack (since we're returning a reference)
                 static const std::string empty = "";
 
-                const std::unordered_map<std::string, std::string>& config = GSDK::getConfigSettings();
+                const std::unordered_map<std::string, std::string> config = GSDK::getConfigSettings();
                 auto it = config.find(GSDK::LOG_FOLDER_KEY);
 
                 if (it == config.end())
@@ -484,16 +484,16 @@ namespace Microsoft
                 }
                 else
                 {
-                    return it->second;
+					return it->second;
                 }
             }
 
-            const std::string& GSDK::getSharedContentDirectory()
+            const std::string GSDK::getSharedContentDirectory()
             {
                 // Declare as static so that it doesn't live on the stack (since we're returning a reference)
                 static const std::string empty = "";
 
-                const std::unordered_map<std::string, std::string>& config = GSDK::getConfigSettings();
+                const std::unordered_map<std::string, std::string> config = GSDK::getConfigSettings();
                 auto it = config.find(GSDK::SHARED_CONTENT_FOLDER_KEY);
 
                 if (it == config.end())
