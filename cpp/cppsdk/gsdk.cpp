@@ -475,7 +475,9 @@ namespace Microsoft
                 // Declare as static so that it doesn't live on the stack (since we're returning a reference)
                 static const std::string empty = "";
 
-                const std::unordered_map<std::string, std::string> config = GSDK::getConfigSettings();
+				std::lock_guard<std::mutex> lock(GSDKInternal::get().m_configMutex);
+
+                const std::unordered_map<std::string, std::string> config = GSDKInternal::get().m_configSettings;
                 auto it = config.find(GSDK::LOG_FOLDER_KEY);
 
                 if (it == config.end())
@@ -493,7 +495,10 @@ namespace Microsoft
                 // Declare as static so that it doesn't live on the stack (since we're returning a reference)
                 static const std::string empty = "";
 
-                const std::unordered_map<std::string, std::string> config = GSDK::getConfigSettings();
+				std::lock_guard<std::mutex> lock(GSDKInternal::get().m_configMutex);
+
+				const std::unordered_map<std::string, std::string> config = GSDKInternal::get().m_configSettings;
+
                 auto it = config.find(GSDK::SHARED_CONTENT_FOLDER_KEY);
 
                 if (it == config.end())
