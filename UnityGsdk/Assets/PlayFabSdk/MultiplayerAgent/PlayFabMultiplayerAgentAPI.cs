@@ -2,6 +2,7 @@
 namespace PlayFab
 {
     using System;
+    using System.Collections.Concurrent;
     using System.Collections.Generic;
     using System.Globalization;
     using System.IO;
@@ -33,6 +34,8 @@ namespace PlayFab
 
         public delegate void OnMaintenanceEvent(DateTime? NextScheduledMaintenanceUtc);
 
+        public delegate void OnSessionConfigUpdate(SessionConfig sessionConfig);
+
         public delegate void OnServerActiveEvent();
 
         public delegate void OnShutdownEventk();
@@ -47,6 +50,8 @@ namespace PlayFab
 
         private static ISerializerPlugin _jsonWrapper;
 
+        private static GameObject _agentView;
+
         public static SessionConfig SessionConfig = new SessionConfig();
         public static HeartbeatRequest CurrentState = new HeartbeatRequest();
         public static ErrorStates CurrentErrorState = ErrorStates.Ok;
@@ -56,6 +61,8 @@ namespace PlayFab
         public static event OnMaintenanceEvent OnMaintenanceCallback;
         public static event OnAgentCommunicationErrorEvent OnAgentErrorCallback;
         public static event OnServerActiveEvent OnServerActiveCallback;
+
+        public static event OnSessionConfigUpdate OnSessionConfigUpdateEvent;
 
 
         public static void Start()
@@ -88,15 +95,20 @@ namespace PlayFab
                 Debug.Log(_gsdkconfig.LogFolder);
             }
 
-            //Create an agent that can talk on the main-tread and pull on an interval.
+            //Create an agent that can talk on the main-thread and pull on an interval.
             //This is a unity thing, need an object in the scene.
-            GameObject agentView = new GameObject("PlayFabAgentView");
-            agentView.AddComponent<PlayFabMultiplayerAgentView>();
+
+            if(_agentView == null)
+            {
+                _agentView = new GameObject("PlayFabAgentView");
+                _agentView.AddComponent<PlayFabMultiplayerAgentView>();
+                UnityEngine.Object.DontDestroyOnLoad(_agentView);
+            }
         }
 
         private static IDictionary<string, string> CreateConfigMap(GSDKConfiguration localConfig)
         {
-            var finalConfig = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+            var finalConfig = new ConcurrentDictionary<string, string>(StringComparer.OrdinalIgnoreCase);
 
             foreach (KeyValuePair<string, string> certEntry in localConfig.GameCertificates)
             {
@@ -161,7 +173,7 @@ namespace PlayFab
                 return;
             }
 
-            byte[] payloadBytes = Encoding.ASCII.GetBytes(payload);
+            byte[] payloadBytes = Encoding.UTF8.GetBytes(payload);
 
             if (IsDebugging)
             {
@@ -171,7 +183,6 @@ namespace PlayFab
             PlayFabHttp.SimplePostCall(_baseUrl, payloadBytes, success =>
             {
                 string json = Encoding.UTF8.GetString(success);
-                Debug.Log(json);
                 if (string.IsNullOrEmpty(json))
                 {
                     return;
@@ -245,7 +256,27 @@ namespace PlayFab
 
         private static void ProcessAgentResponse(HeartbeatResponse heartBeat)
         {
+            bool updateConfig = false;
+            if (SessionConfig != heartBeat.SessionConfig)
+            {
+                updateConfig = true;
+            }
+
             SessionConfig.CopyNonNullFields(heartBeat.SessionConfig);
+            
+            try
+            {
+                if(OnSessionConfigUpdateEvent != null)
+                    OnSessionConfigUpdateEvent.Invoke(SessionConfig);
+            }
+            catch(Exception e)
+            {
+                if(IsDebugging)
+                {
+                    Debug.LogException(e, this);
+                }
+            }
+
 
             if (!string.IsNullOrEmpty(heartBeat.NextScheduledMaintenanceUtc))
             {
