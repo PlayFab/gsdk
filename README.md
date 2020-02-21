@@ -21,6 +21,9 @@ Our Developer Success Team can assist with answering any questions as well as pr
 
 [Forums, Support and Knowledge Base](https://community.playfab.com/index.html)
 
+## Contributing
+
+We are more than happy to accept external contributions! If you want to propose a small code change, feel free to open a Pull Request directly. If you plan to do a bigger change, it would be better if you open an issue describing your proposed design in order to get feedback from project maintainers.
 
 ## Copyright and Licensing Information:
 
