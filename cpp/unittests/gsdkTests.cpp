@@ -48,7 +48,7 @@ namespace Microsoft
                     ports["port2"] = "2222";
                     GSDKInternal::testConfiguration = std::make_unique<TestConfig>(heartbeatEndpoint, serverId, logFolder, sharedContentFolder, certFolder, gameCerts, titleId, buildId, region, metadata, ports);
                     GSDK::start();
-                    const std::unordered_map<std::string, std::string> &config = GSDK::getConfigSettings();
+                    const std::unordered_map<std::string, std::string> config = GSDK::getConfigSettings();
                     Assert::AreEqual(heartbeatEndpoint, config.at("gsmsBaseUrl"), L"Ensuring heartbeat endpoint was set.");
                     Assert::AreEqual(serverId, config.at("instanceId"), L"Ensuring server id was set.");
                     Assert::AreEqual(logFolder, config.at("logFolder"), L"Ensuring log folder was set.");
@@ -161,7 +161,7 @@ namespace Microsoft
                     GSDKInternal::m_instance->decodeHeartbeatResponse(responseJson);
 
                     // Test heartbeat response handled correctly
-                    const std::unordered_map<std::string, std::string> &config = GSDK::getConfigSettings();
+                    const std::unordered_map<std::string, std::string> config = GSDK::getConfigSettings();
                     Assert::IsTrue("eca7e870-da2e-45f9-bb66-30d89064313a" == config.at("sessionId"), L"Verify session id was captured from the heartbeat.");
                     Assert::IsTrue("OreoCookie" == config.at("sessionCookie"), L"Verify session cookie was captured from the heartbeat.");
                     Assert::IsTrue(1523552310LL == maintenanceTime, L"Verify maintenance callback with correct time was called.");
@@ -274,7 +274,7 @@ namespace Microsoft
                     GSDKInternal::m_instance->decodeHeartbeatResponse(responseJson);
 
                     // Test heartbeat response handled correctly
-                    const std::unordered_map<std::string, std::string> &config = GSDK::getConfigSettings();
+                    const std::unordered_map<std::string, std::string> config = GSDK::getConfigSettings();
                     Assert::AreEqual(std::string("testValue"), config.at("testKey"), L"Ensuring session metadata was set.");
                 }
 
