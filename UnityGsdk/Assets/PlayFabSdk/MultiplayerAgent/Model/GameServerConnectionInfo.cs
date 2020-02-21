@@ -1,5 +1,6 @@
 namespace PlayFab.MultiplayerAgent.Model
 {
+    using System;
     using System.Collections.Generic;
     using Json;
 

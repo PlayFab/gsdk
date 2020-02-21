@@ -1,3 +1,5 @@
+using System.Collections.Concurrent;
+
 namespace Microsoft.Playfab.Gaming.GSDK.CSharp
 {
     using System;
@@ -127,7 +129,7 @@ namespace Microsoft.Playfab.Gaming.GSDK.CSharp
 
         private IDictionary<string, string> CreateConfigMap(GSDKConfiguration localConfig)
         {
-            var finalConfig = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+            var finalConfig = new ConcurrentDictionary<string, string>(StringComparer.OrdinalIgnoreCase);
 
             foreach (KeyValuePair<string, string> certEntry in localConfig.GameCertificates)
             {
@@ -231,6 +233,14 @@ namespace Microsoft.Playfab.Gaming.GSDK.CSharp
                 if (response.SessionConfig?.InitialPlayers != null && response.SessionConfig.InitialPlayers.Any())
                 {
                     InitialPlayers = response.SessionConfig.InitialPlayers;
+                }
+
+                if (response.SessionConfig?.Metadata != null && response.SessionConfig.Metadata.Any())
+                {
+                    foreach (KeyValuePair<string, string> keyValuePair in response.SessionConfig.Metadata)
+                    {
+                        ConfigMap.AddIfNotNullOrEmpty(keyValuePair.Key, keyValuePair.Value);
+                    }
                 }
             }
 

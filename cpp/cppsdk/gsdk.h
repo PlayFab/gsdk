@@ -96,7 +96,7 @@ namespace Microsoft
 
                 /// <summary>Returns all configuration settings</summary>
                 /// <returns>unordered map of string key:value configuration setting values</returns>
-                static const std::unordered_map<std::string, std::string> &getConfigSettings();
+                static const std::unordered_map<std::string, std::string> getConfigSettings();
 
                 /// <summary>Kicks off communication threads, heartbeats, etc.  Called implicitly by ReadyForPlayers if not called beforehand.</summary>
                 /// <param name="debugLogs">Enables outputting additional logs to the GSDK log file.</param>
@@ -119,10 +119,10 @@ namespace Microsoft
                 static unsigned int logMessage(const std::string &message);
 
                 /// <summary>Returns a path to the directory where logs will be mapped to the VM host</summary>
-                static const std::string &getLogsDirectory();
+                static const std::string getLogsDirectory();
 
                 /// <summary>Returns a path to the directory shared by all game servers to cache data.</summary>
-                static const std::string &getSharedContentDirectory();
+                static const std::string getSharedContentDirectory();
 
                 /// <summary>After allocation, returns a list of the initial players that have access to this game server, used by PlayFab's Matchmaking offering</summary>
                 static const std::vector<std::string> &getInitialPlayers();
