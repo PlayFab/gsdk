@@ -1,7 +1,9 @@
-﻿#if ENABLE_PLAYFABSERVER_API
+﻿
+#if ENABLE_PLAYFABSERVER_API
 namespace PlayFab
 {
     using System;
+    using System.Collections.Concurrent;
     using System.Collections.Generic;
     using System.Globalization;
     using System.IO;
@@ -96,7 +98,7 @@ namespace PlayFab
 
         private static IDictionary<string, string> CreateConfigMap(GSDKConfiguration localConfig)
         {
-            var finalConfig = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+            var finalConfig = new ConcurrentDictionary<string, string>(StringComparer.OrdinalIgnoreCase);
 
             foreach (KeyValuePair<string, string> certEntry in localConfig.GameCertificates)
             {
