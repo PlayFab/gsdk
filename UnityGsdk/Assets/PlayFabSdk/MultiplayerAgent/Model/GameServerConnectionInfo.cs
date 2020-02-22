@@ -22,7 +22,7 @@ namespace PlayFab.MultiplayerAgent.Model
 
         [Obsolete("Please use PublicIPv4Address instead.")]
         [JsonProperty(PropertyName = "publicIpV4Adress")]
-        public string PublicIpV4Adress { get => PublicIPv4Address; set { if (!string.IsNullOrWhitespace(value) && PublicIPv4Address != value) { PublicIPv4Address = value; } } }
+        public string PublicIpV4Adress { get => PublicIPv4Address; set { if (!string.IsNullOrWhiteSpace(value) && PublicIPv4Address != value) { PublicIPv4Address = value; } } }
 
         /// <summary>
         /// The ports configured for the game server.
