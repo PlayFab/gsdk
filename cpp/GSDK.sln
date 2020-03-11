@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27130.2027
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29905.134
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "cppLinuxTestApp", "testapps\cppLinuxTestApp\cppLinuxTestApp.vcxproj", "{521C0810-6512-47EE-9142-92445DC35912}"
 EndProject
@@ -19,6 +19,8 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GSDK_CPP_UnitTests", "unittests\GSDK_CPP_UnitTests.vcxproj", "{5D3FDED4-6F0B-4797-BDD8-43B4D9994A42}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "cppWindowsRunnerGame", "testapps\cppWindowsRunnerGame\cppWindowsRunnerGame.vcxproj", "{973124EF-B8A8-4C53-972F-D792F14B7ED9}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ServerLoadSimulator", "testapps\cppServerLoadSimulator\ServerLoadSimulator.vcxproj", "{361EB048-858A-402A-98E4-4632A71BA106}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -114,6 +116,22 @@ Global
 		{973124EF-B8A8-4C53-972F-D792F14B7ED9}.ReleaseDynamic|x64.Build.0 = Release|x64
 		{973124EF-B8A8-4C53-972F-D792F14B7ED9}.ReleaseDynamic|x86.ActiveCfg = Release|Win32
 		{973124EF-B8A8-4C53-972F-D792F14B7ED9}.ReleaseDynamic|x86.Build.0 = Release|Win32
+		{361EB048-858A-402A-98E4-4632A71BA106}.Debug|x64.ActiveCfg = Debug|x64
+		{361EB048-858A-402A-98E4-4632A71BA106}.Debug|x64.Build.0 = Debug|x64
+		{361EB048-858A-402A-98E4-4632A71BA106}.Debug|x86.ActiveCfg = Debug|Win32
+		{361EB048-858A-402A-98E4-4632A71BA106}.Debug|x86.Build.0 = Debug|Win32
+		{361EB048-858A-402A-98E4-4632A71BA106}.DebugDynamic|x64.ActiveCfg = Debug|x64
+		{361EB048-858A-402A-98E4-4632A71BA106}.DebugDynamic|x64.Build.0 = Debug|x64
+		{361EB048-858A-402A-98E4-4632A71BA106}.DebugDynamic|x86.ActiveCfg = Debug|Win32
+		{361EB048-858A-402A-98E4-4632A71BA106}.DebugDynamic|x86.Build.0 = Debug|Win32
+		{361EB048-858A-402A-98E4-4632A71BA106}.Release|x64.ActiveCfg = Release|x64
+		{361EB048-858A-402A-98E4-4632A71BA106}.Release|x64.Build.0 = Release|x64
+		{361EB048-858A-402A-98E4-4632A71BA106}.Release|x86.ActiveCfg = Release|Win32
+		{361EB048-858A-402A-98E4-4632A71BA106}.Release|x86.Build.0 = Release|Win32
+		{361EB048-858A-402A-98E4-4632A71BA106}.ReleaseDynamic|x64.ActiveCfg = Release|x64
+		{361EB048-858A-402A-98E4-4632A71BA106}.ReleaseDynamic|x64.Build.0 = Release|x64
+		{361EB048-858A-402A-98E4-4632A71BA106}.ReleaseDynamic|x86.ActiveCfg = Release|Win32
+		{361EB048-858A-402A-98E4-4632A71BA106}.ReleaseDynamic|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
