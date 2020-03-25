@@ -8,6 +8,10 @@ PlayFab Game Server SDK for C#, C++, and Java environments.  The GSDK is used to
 
 [getting started guide](https://docs.microsoft.com/en-us/gaming/playfab/features/multiplayer/servers/integrating-game-servers-with-gsdk)
 
+## C#
+
+We do have a Nuget package here: https://www.nuget.org/packages/com.playfab.csharpgsdk
+
 ## Samples
 
 Check the [gsdkSamples](https://github.com/PlayFab/gsdkSamples) repo.

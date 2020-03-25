@@ -1,18 +1,18 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <!-- NuGet Package Confguration BEGIN -->
   <PropertyGroup>
-    <Title>PlayFab CSharp Gameserver SDK</Title>
+    <Title>PlayFab C# Gameserver SDK</Title>
     <Company>Microsoft</Company>
-    <Copyright>Copyright (c) 2018 Microsoft</Copyright>
-    <Description>SDK for making calls against Thunderhead</Description>
+    <Copyright>Copyright (c) 2020 Microsoft</Copyright>
+    <Description>SDK for making calls against PlayFab Multiplayer Servers Control Plane</Description>
     <Authors>PlayFab</Authors>
     <Version>0.0.0.0-beta</Version>
     <FileVersion>$(Version)</FileVersion>
-    <PackageTags>GSDK Thunderhead Playfab</PackageTags>
+    <PackageTags>GSDK Playfab Multiplayer Servers</PackageTags>
     <PackageLicenseUrl>http://www.apache.org/licenses/LICENSE-2.0</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/PlayFab/gsdk</PackageProjectUrl>
-    <PackageDescription>Enables Thunderhead game servers to interact with PlayFab control systems and accept players.</PackageDescription>
-    <PackageReleaseNotes>Release of the C# Game Server SDK for use with Thunderhead.</PackageReleaseNotes>
+    <PackageDescription>Enables PlayFab game servers to interact with PlayFab control systems, accept players and send heartbeats.</PackageDescription>
+    <PackageReleaseNotes>Release of the C# Game Server SDK for use with PlayFab Multiplayer Servers.</PackageReleaseNotes>
     <PackageIconUrl>https://playfab.com/assets/img/playfab-mark.png</PackageIconUrl>
     <PackageId>com.playfab.csharpgsdk</PackageId>
     <Platforms>AnyCPU;x64</Platforms>
