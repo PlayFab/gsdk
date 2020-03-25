@@ -8,10 +8,6 @@ PlayFab Game Server SDK for C#, C++, and Java environments.  The GSDK is used to
 
 [getting started guide](https://docs.microsoft.com/en-us/gaming/playfab/features/multiplayer/servers/integrating-game-servers-with-gsdk)
 
-## C#
-
-We do have a Nuget package here: https://www.nuget.org/packages/com.playfab.csharpgsdk
-
 ## Samples
 
 Check the [gsdkSamples](https://github.com/PlayFab/gsdkSamples) repo.
@@ -29,7 +25,7 @@ Our Developer Success Team can assist with answering any questions as well as pr
 
 We are more than happy to accept external contributions! If you want to propose a small code change, feel free to open a Pull Request directly. If you plan to do a bigger change, it would be better if you open an issue describing your proposed design in order to get feedback from project maintainers.
 
-## Copyright and Licensing Information:
+## Copyright and Licensing Information
 
   Apache License --
   Version 2.0, January 2004
@@ -37,3 +33,10 @@ We are more than happy to accept external contributions! If you want to propose 
 
   Full details available within the LICENSE file.
 
+## C# Nuget package
+
+We do have a Nuget package here: https://www.nuget.org/packages/com.playfab.csharpgsdk
+
+### Release Notes for C# Nuget package
+
+- 0.10.200325: No API differences from 0.9.200218, only minor changes on the text displayed at the Nuget page.
