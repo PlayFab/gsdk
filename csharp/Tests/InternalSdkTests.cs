@@ -122,7 +122,7 @@ namespace Microsoft.Playfab.Gaming.GSDK.CSharp.Test
 
             var sdk = new InternalSdk(_mockSystemOperations.Object, _mockHttpClientFactory.Object);
             sdk.Start(false);
-            Thread.Sleep(2000);
+            Thread.Sleep(3000);
 
             sdk.State.Should().Be(GameState.Terminating);
         }
