@@ -9,6 +9,7 @@
 
         private void LateUpdate()
         {
+#if ENABLE_PLAYFABSERVER_API
             if (PlayFabMultiplayerAgentAPI.CurrentState == null)
             {
                 return;
@@ -54,6 +55,7 @@
                 _timer = 0f;
                 PlayFabMultiplayerAgentAPI.SendHeartBeatRequest();
             }
+#endif
         }
     }
 }

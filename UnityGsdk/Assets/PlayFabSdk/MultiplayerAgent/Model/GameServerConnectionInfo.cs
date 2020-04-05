@@ -1,17 +1,32 @@
-﻿namespace PlayFab.MultiplayerAgent.Model
+namespace PlayFab.MultiplayerAgent.Model
 {
+    using System;
     using System.Collections.Generic;
     using Json;
 
+    /// <summary>
+    /// A class that captures details on how a game server operates.
+    /// </summary>
     public class GameServerConnectionInfo
     {
         public GameServerConnectionInfo()
         {
         }
 
-        [JsonProperty(PropertyName = "publicIpV4Adress")]
-        public string PublicIpV4Adress { get; set; }
+        /// <summary>
+        /// The IPv4 address of the game server.
+        /// </summary>
+        [JsonProperty(PropertyName = "publicIpV4Address")]
+        public string PublicIPv4Address { get; set; }
 
+
+        [Obsolete("Please use PublicIPv4Address instead.")]
+        [JsonProperty(PropertyName = "publicIpV4Adress")]
+        public string PublicIpV4Adress { get => PublicIPv4Address; set { if (!string.IsNullOrWhiteSpace(value) && PublicIPv4Address != value) { PublicIPv4Address = value; } } }
+
+        /// <summary>
+        /// The ports configured for the game server.
+        /// </summary>
         [JsonProperty(PropertyName = "gamePortsConfiguration")]
         public IEnumerable<GamePort> GamePortsConfiguration { get; set; }
     }
