@@ -69,7 +69,7 @@
             hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(SessionId);
             hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(SessionCookie);
             hashCode = hashCode * -1521134295 + EqualityComparer<List<string>>.Default.GetHashCode(InitialPlayers);
-            hashCode = hashCode * -1521134295 + EqualityComparer<Dictionary<string, string>>.Default.Equals(Metadata);
+            hashCode = hashCode * -1521134295 + EqualityComparer<Dictionary<string, string>>.Default.GetHashCode(Metadata);
 
             return hashCode;
         }
