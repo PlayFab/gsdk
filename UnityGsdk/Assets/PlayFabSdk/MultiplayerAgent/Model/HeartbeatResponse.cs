@@ -1,7 +1,7 @@
 ﻿namespace PlayFab.MultiplayerAgent.Model
 {
+    using Helpers;
     using System;
-    using PlayFab.Json;
 
     [Serializable]
     public class HeartbeatResponse

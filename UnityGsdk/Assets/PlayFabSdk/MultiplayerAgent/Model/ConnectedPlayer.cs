@@ -1,7 +1,7 @@
 ﻿namespace PlayFab.MultiplayerAgent.Model
 {
     using System;
-    using Json;
+    using Helpers;
 
     [Serializable]
     public class ConnectedPlayer

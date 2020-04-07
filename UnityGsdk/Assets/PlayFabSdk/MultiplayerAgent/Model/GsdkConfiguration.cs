@@ -2,7 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
-    using PlayFab.Json;
+    using Helpers;
 
     internal class GSDKConfiguration
     {

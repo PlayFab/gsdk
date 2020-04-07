@@ -137,13 +137,13 @@
 
         public override void Deserialize(NetworkReader reader)
         {
-            var json = PlayFab.PluginManager.GetPlugin<ISerializerPlugin>(PluginContract.PlayFab_Serializer);
+            var json = new MultiplayerAgent.Helpers.SimpleJsonInstance();
             ScheduledMaintenanceUTC = json.DeserializeObject<DateTime>(reader.ReadString());
         }
 
         public override void Serialize(NetworkWriter writer)
         {
-            var json = PlayFab.PluginManager.GetPlugin<ISerializerPlugin>(PluginContract.PlayFab_Serializer);
+            var json = new MultiplayerAgent.Helpers.SimpleJsonInstance();
             var str = json.SerializeObject(ScheduledMaintenanceUTC);
             writer.Write(str);
         }
