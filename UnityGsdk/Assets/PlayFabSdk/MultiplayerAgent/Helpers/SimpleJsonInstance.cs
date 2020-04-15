@@ -31,14 +31,14 @@
                 else if (type == typeof(DateTime))
                 {
                     DateTime output;
-                    var result = DateTime.TryParseExact(valueStr, _defaultDateTimeFormats, CultureInfo.InvariantCulture, _dateTimeStyles, out output);
+                    var result = DateTime.TryParseExact(valueStr, DefaultDateTimeFormats, CultureInfo.InvariantCulture, _dateTimeStyles, out output);
                     if (result)
                         return output;
                 }
                 else if (type == typeof(DateTimeOffset))
                 {
                     DateTimeOffset output;
-                    var result = DateTimeOffset.TryParseExact(valueStr, _defaultDateTimeFormats, CultureInfo.InvariantCulture, _dateTimeStyles, out output);
+                    var result = DateTimeOffset.TryParseExact(valueStr, DefaultDateTimeFormats, CultureInfo.InvariantCulture, _dateTimeStyles, out output);
                     if (result)
                         return output;
                 }
@@ -63,12 +63,12 @@
                 }
                 else if (input is DateTime)
                 {
-                    output = ((DateTime)input).ToString(_defaultDateTimeFormats[DEFAULT_UTC_OUTPUT_INDEX], CultureInfo.InvariantCulture);
+                    output = ((DateTime)input).ToString(DefaultDateTimeFormats[DEFAULT_UTC_OUTPUT_INDEX], CultureInfo.InvariantCulture);
                     return true;
                 }
                 else if (input is DateTimeOffset)
                 {
-                    output = ((DateTimeOffset)input).ToString(_defaultDateTimeFormats[DEFAULT_UTC_OUTPUT_INDEX], CultureInfo.InvariantCulture);
+                    output = ((DateTimeOffset)input).ToString(DefaultDateTimeFormats[DEFAULT_UTC_OUTPUT_INDEX], CultureInfo.InvariantCulture);
                     return true;
                 }
                 else if (input is TimeSpan)
@@ -79,7 +79,7 @@
                 return base.TrySerializeKnownTypes(input, out output);
             }
             
-            public static readonly string[] _defaultDateTimeFormats = new string[]{ // All parseable ISO 8601 formats for DateTime.[Try]ParseExact - Lets us deserialize any legacy timestamps in one of these formats
+            public static readonly string[] DefaultDateTimeFormats = new string[]{ // All parseable ISO 8601 formats for DateTime.[Try]ParseExact - Lets us deserialize any legacy timestamps in one of these formats
                 // These are the standard format with ISO 8601 UTC markers (T/Z)
                 "yyyy-MM-ddTHH:mm:ss.FFFFFFZ",
                 "yyyy-MM-ddTHH:mm:ss.FFFFZ",
