@@ -3,7 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using Json;
+    using Helpers;
 
     [Serializable]
     public class SessionConfig : IEquatable<SessionConfig>

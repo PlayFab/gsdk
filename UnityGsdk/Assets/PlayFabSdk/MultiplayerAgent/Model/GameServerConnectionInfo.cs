@@ -1,8 +1,8 @@
-namespace PlayFab.MultiplayerAgent.Model
+﻿namespace PlayFab.MultiplayerAgent.Model
 {
     using System;
     using System.Collections.Generic;
-    using Json;
+    using Helpers;
 
     /// <summary>
     /// A class that captures details on how a game server operates.
