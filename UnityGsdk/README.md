@@ -1,6 +1,6 @@
 # GSDK for the Unity game engine
 
-This folder contains the Game Server SDK for the Unity game engine. You can find the relevant files in the `PlayFabSdk/MultiplayerAgent` folder. There is a sample scene in the `MultiplayerServerSample` folder that is meant to be used as a guidance when starting up a new project. For a more robust sample, check our `gsdksamples` repository [here](https://github.com/PlayFab/gsdkSamples/tree/master/UnityMirror).
+This folder contains the Game Server SDK for the Unity game engine. The GSDK files are in the `PlayFabSdk/MultiplayerAgent` folder. The entire GSDK is usable via class `PlayFabMultiplayerAgentAPI`. There is a sample scene in the `MultiplayerServerSample` folder that is meant to be used as a guidance when starting up a new project. For a more robust sample, check our `gsdksamples` repository [here](https://github.com/PlayFab/gsdkSamples/tree/master/UnityMirror).
 
 ### Can I use PlayFab SDK along the GSDK? 
 
