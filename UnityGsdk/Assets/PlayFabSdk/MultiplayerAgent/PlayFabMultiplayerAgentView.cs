@@ -31,7 +31,7 @@ namespace PlayFab
             {
                 // Need to keep this game object alive through scene changes.
                 DontDestroyOnLoad(this);
-                current = this;
+                Current = this;
             }
         }
         
