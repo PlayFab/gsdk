@@ -10,7 +10,7 @@ namespace PlayFab
         /// <summary>
         /// Static reference to the current active instance of the PlayFabMultiplayerAgentView.
         /// </summary>
-        public static PlayFabMultiplayerAgentView current { get; private set; };
+        public static PlayFabMultiplayerAgentView Current { get; private set; } = null;
         
         private float _timer;
 
@@ -19,9 +19,9 @@ namespace PlayFab
         /// </summary>
         private void Awake()
         {
-            Debug.Log($"{Time.fixedTime} PlayFabMultiplayerAgentView awake ");
-            // Check if the static instance already contains a refernce:
-            if (current)
+            Debug.Log($"{Time.fixedTime} {nameof(PlayFabMultiplayerAgentView)} awake");
+            // Check if the static instance already contains a reference:
+            if(Current != null)
             {
                 // Destroy this instance since we only ever need one PlayFabMultiplayerAgentView
                 Destroy(gameObject);
@@ -89,7 +89,7 @@ namespace PlayFab
         /// </summary>
         private void OnDestroy()
         {
-            Debug.Log($"{Time.fixedTime} PlayFabMultiplayerAgentView destroyed ");
+            Debug.Log($"{Time.fixedTime} {nameof(PlayFabMultiplayerAgentView)} destroyed");
         }
     }
 }
