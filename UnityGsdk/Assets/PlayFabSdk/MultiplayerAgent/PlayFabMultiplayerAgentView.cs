@@ -7,8 +7,34 @@ namespace PlayFab
 
     public class PlayFabMultiplayerAgentView : MonoBehaviour
     {
+        /// <summary>
+        /// Static reference to the current active instance of the PlayFabMultiplayerAgentView.
+        /// </summary>
+        public static PlayFabMultiplayerAgentView Current { get; private set; } = null;
+        
         private float _timer;
 
+        /// <summary>
+        /// Awake constructor
+        /// </summary>
+        private void Awake()
+        {
+            Debug.Log($"{Time.fixedTime} {nameof(PlayFabMultiplayerAgentView)} awake");
+            // Check if the static instance already contains a reference:
+            if(Current != null)
+            {
+                // Destroy this instance since we only ever need one PlayFabMultiplayerAgentView
+                Destroy(gameObject);
+                return;
+            }
+            else
+            {
+                // Need to keep this game object alive through scene changes.
+                DontDestroyOnLoad(this);
+                Current = this;
+            }
+        }
+        
         private void LateUpdate()
         {
             if (PlayFabMultiplayerAgentAPI.CurrentState == null)
@@ -56,6 +82,14 @@ namespace PlayFab
                 _timer = 0f;
                 StartCoroutine(PlayFabMultiplayerAgentAPI.SendHeartBeatRequest());
             }
+        }
+        
+        /// <summary>
+        /// Called when gameobject is destroyed
+        /// </summary>
+        private void OnDestroy()
+        {
+            Debug.Log($"{Time.fixedTime} {nameof(PlayFabMultiplayerAgentView)} destroyed");
         }
     }
 }
