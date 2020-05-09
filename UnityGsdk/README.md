@@ -8,9 +8,10 @@ Yup, PlayFab SDK and GSDK would reside in different folders in your Unity projec
 
 ### What do I need to do in order to use the Unity GSDK in a new project? 
 
-You can drag the `PlayFabSDK` folder to your Unity project. After that, you need to enable the scripring directive `ENABLE_PLAYFAB_SERVER_API` on your Build settings, like in the example below: 
+You can drag the `PlayFabSDK` folder to your Unity project. After that, you need to enable the scripring directive `ENABLE_PLAYFAB_SERVER_API` on your Build settings, like in this screenshot
 
-![image](https://user-images.githubusercontent.com/8256138/81462533-f23d8b00-9167-11ea-8553-d2adee009678.png)
+
+![image](https://user-images.githubusercontent.com/8256138/81462605-a6d7ac80-9168-11ea-9748-110ed01095c2.png)
 
 ## Release notes
 
