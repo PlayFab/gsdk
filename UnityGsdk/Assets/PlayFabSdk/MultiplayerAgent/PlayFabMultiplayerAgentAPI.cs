@@ -1,6 +1,6 @@
 ﻿using UnityEngine.Networking;
 
-#if ENABLE_PLAYFABSERVER_API
+#if ENABLE_PLAYFAB_SERVER_API
 namespace PlayFab
 {
     using System;
