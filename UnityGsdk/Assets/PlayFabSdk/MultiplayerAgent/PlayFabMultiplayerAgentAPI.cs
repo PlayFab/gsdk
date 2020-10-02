@@ -169,7 +169,7 @@ namespace PlayFab
         public static IEnumerator SendHeartBeatRequest()
         {
             string payload = _jsonInstance.SerializeObject(CurrentState);
-            if (string.IsNullOrEmpty(payload))
+            if (string.IsNullOrEmpty(payload) || string.IsNullOrEmpty(_baseUrl))
             {
                 yield break;
             }
