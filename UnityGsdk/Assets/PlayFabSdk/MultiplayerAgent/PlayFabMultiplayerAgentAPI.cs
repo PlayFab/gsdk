@@ -146,7 +146,6 @@ namespace PlayFab
             if(CurrentState.CurrentGameState == GameState.Active)
             {
                 string msg = "Cannot call ReadyForPlayers on an Active server";
-                Debug.Log(msg);
                 throw new Exception(msg);
             }
             CurrentState.CurrentGameState = GameState.StandingBy;
