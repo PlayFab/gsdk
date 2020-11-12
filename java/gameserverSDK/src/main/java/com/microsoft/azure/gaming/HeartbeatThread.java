@@ -227,10 +227,14 @@ class HeartbeatThread implements Runnable {
 
                 // Perform the operation that the server requested
                 PerformOperation(sessionInfo.getOperation());
-            } catch (RetryException | ExecutionException e) {
-                Logger.Instance().LogError("Checked exception occurred when sending a heartbeat to the agent", e);
+            } catch (RetryException e) {
+                Logger.Instance().LogError("Exhausted all retry attempts when trying to send heartbeat to the agent.", e);
             } catch (Exception e) {
                 Logger.Instance().LogError("Unexpected exception occurred when sending a heartbeat to the agent.  Terminating process.", e);
+                Runnable temp = shutdownCallback;
+                if (temp != null) {
+                    temp.run();
+                }
                 System.exit(1);
             }
         }
