@@ -33,8 +33,6 @@ import java.util.function.Supplier;
  * of the GSDK.
  */
 class HeartbeatThread implements Runnable {
-    private String agentEndpoint;
-    private String serverId;
     private SessionHostStatus serverState;
     private List<ConnectedPlayer> connectedPlayers;
     private Map<String, String> configSettings;
@@ -46,6 +44,7 @@ class HeartbeatThread implements Runnable {
     private ZonedDateTime lastScheduledMaintenanceUtc;
     private final Semaphore transitionToActive = new Semaphore(0);
     private final Semaphore signalHeartbeat = new Semaphore(0);
+    private final URI agentUri;
 
     private final int MAXIMUM_NUM_HEARTBEAT_RETRIES = 8;
     private final int WAIT_TIME_BETWEEN_HEARTBEAT_RETRIES_MILLISECONDS = 1000;
@@ -70,8 +69,8 @@ class HeartbeatThread implements Runnable {
 
         config.validate();
 
-        this.agentEndpoint = config.getHeartbeatEndpoint();
-        this.serverId = config.getServerId();
+        String agentEndpoint = config.getHeartbeatEndpoint();
+        String serverId = config.getServerId();
 
         configSettings = Collections.synchronizedMap(new HashMap<String, String>());
         configSettings.putAll(config.getBuildMetadata());
@@ -84,12 +83,18 @@ class HeartbeatThread implements Runnable {
         configSettings.put(GameserverSDK.BUILD_ID_KEY, config.getBuildId());
         configSettings.put(GameserverSDK.REGION_KEY, config.getRegion());
 
-        Logger.Instance().Log("VM Agent Endpoint: " + this.agentEndpoint);
-        Logger.Instance().Log("Instance Id: " + this.serverId);
+        Logger.Instance().Log("VM Agent Endpoint: " + agentEndpoint);
+        Logger.Instance().Log("Instance Id: " + serverId);
 
         // Send an initial heartbeat here in the constructor so that we can fail
         // quickly if the Agent is unreachable.
         try {
+            this.agentUri = new URIBuilder()
+                    .setScheme("http")
+                    .setHost(agentEndpoint)
+                    .setPath("/v1/sessionHosts/" + serverId)
+                    .build();
+
             SessionHostHeartbeatInfo heartbeatInfo = this.sendHeartbeat(this.getState());
             this.heartbeatInterval = heartbeatInfo.getNextHeartbeatIntervalMs();
             PerformOperation(heartbeatInfo.getOperation());
@@ -222,8 +227,15 @@ class HeartbeatThread implements Runnable {
 
                 // Perform the operation that the server requested
                 PerformOperation(sessionInfo.getOperation());
+            } catch (RetryException e) {
+                Logger.Instance().LogError("Exhausted all retry attempts when trying to send heartbeat to the agent.", e);
             } catch (Exception e) {
-                throw new RuntimeException(e);
+                Logger.Instance().LogError("Unexpected exception occurred when sending a heartbeat to the agent.  Terminating process.", e);
+                Runnable temp = shutdownCallback;
+                if (temp != null) {
+                    temp.run();
+                }
+                System.exit(1);
             }
         }
     }
@@ -237,12 +249,7 @@ class HeartbeatThread implements Runnable {
      * @throws ExecutionException If an unexpected exception is raised by one of the retry attempts then that exception will
      * be included as the 'cause' in an ExceutionException.
      */
-    private SessionHostHeartbeatInfo sendHeartbeat(SessionHostStatus currentState) throws URISyntaxException, RetryException, ExecutionException {
-        URI uri = new URIBuilder()
-                .setScheme("http")
-                .setHost(this.agentEndpoint)
-                .setPath("/v1/sessionHosts/" + this.serverId)
-                .build();
+    private SessionHostHeartbeatInfo sendHeartbeat(SessionHostStatus currentState) throws RetryException, ExecutionException {
 
         Gson gson = new Gson();
         Retryer<SessionHostHeartbeatInfo> retryer = RetryerBuilder.<SessionHostHeartbeatInfo>newBuilder()
@@ -264,7 +271,7 @@ class HeartbeatThread implements Runnable {
                 heartbeatInfo.setCurrentGameHealth(callback.get());
             }
 
-            heartbeatInfo = Request.Patch(uri)
+            heartbeatInfo = Request.Patch(agentUri)
                     .bodyString(gson.toJson(heartbeatInfo), ContentType.APPLICATION_JSON)
                     .connectTimeout(HEARTBEAT_TIMEOUT_MILLISECONDS)
                     .socketTimeout(HEARTBEAT_TIMEOUT_MILLISECONDS)

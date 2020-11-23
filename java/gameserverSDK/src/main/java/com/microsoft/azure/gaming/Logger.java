@@ -70,7 +70,7 @@ class Logger {
 
     protected void LogError(String message)
     {
-        this.Log("ERROR: " + message);
+        this.LogError(message, null);
     }
 
     protected void LogWarning(String message){
@@ -79,11 +79,23 @@ class Logger {
 
     protected void LogError(Exception ex)
     {
+        this.LogError("", ex);
+    }
+
+    protected void LogError(String message, Exception ex)
+    {
         try(BufferedOutputStream bos = new BufferedOutputStream(
-            Files.newOutputStream(this.logFile, CREATE, APPEND));
+                Files.newOutputStream(this.logFile, CREATE, APPEND));
             PrintWriter out = new PrintWriter(bos))
         {
-            ex.printStackTrace(out);
+            if (message != null && !message.equals(""))
+            {
+                out.println("ERROR: " + message);
+            }
+            if (ex != null)
+            {
+                ex.printStackTrace(out);
+            }
         }
         catch (IOException e)
         {
