@@ -7,6 +7,7 @@ import java.nio.file.Files;
 import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.Instant;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
@@ -60,6 +61,8 @@ class Logger {
                 Files.newOutputStream(this.logFile, CREATE, APPEND));
             PrintWriter out = new PrintWriter(bos))
         {
+            Instant currentTime = Instant.now();
+            message = currentTime.toString() + ": " + message;
             out.println(message);
         }
         catch (IOException e)
@@ -90,7 +93,9 @@ class Logger {
         {
             if (message != null && !message.equals(""))
             {
-                out.println("ERROR: " + message);
+                Instant currentTime = Instant.now();
+                message = currentTime.toString() + ": ERROR: " + message;
+                out.println(message);
             }
             if (ex != null)
             {
