@@ -5,7 +5,8 @@
 #include "gsdkInternal.h"
 
 #ifdef GSDK_WINDOWS
-#include "filesystem"
+#define _SILENCE_EXPERIMENTAL_FILESYSTEM_DEPRECATION_WARNING
+#include "experimental/filesystem"
 #include "process.h"
 #endif
 
