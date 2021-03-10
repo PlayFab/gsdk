@@ -138,6 +138,7 @@ namespace Microsoft
                     GAME_OPERATIONS(MAKE_OPERATION_MAP)
                 };
 
+                bool m_isInitialized;
                 std::string m_agentEntpoint;
                 HeartbeatRequest m_heartbeatRequest;
                 std::string m_sessionCookie;
@@ -176,8 +177,7 @@ namespace Microsoft
 
                 std::vector<std::string> m_initialPlayers;
 
-                static std::unique_ptr<GSDKInternal> m_instance;
-                static std::mutex m_gsdkInitMutex;
+                static GSDKInternal *m_instance;
 
                 static volatile long long m_exitStatus;
                 static std::mutex m_logLock;
@@ -189,7 +189,10 @@ namespace Microsoft
                 
                 static bool m_debug;
 
+                bool init();
+                void dispose();
                 void startLog();
+                void stopLog();
                 void resetCurl();
                 void sendHeartbeat();
                 void receiveHeartbeatResponse();
@@ -203,7 +206,7 @@ namespace Microsoft
                 void setState(GameState state);
                 void setConnectedPlayers(const std::vector<ConnectedPlayer> &currentConnectedPlayers);
 
-                static GSDKInternal &get();
+                static GSDKInternal *get();
                 static std::unique_ptr<Configuration> testConfiguration; // may be overriden by unit tests
             };
 

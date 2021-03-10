@@ -7,6 +7,7 @@
 #include <unordered_map>
 #include <functional>
 #include <exception>
+#include <stdexcept>
 #include <vector>
 
 namespace Microsoft
@@ -100,7 +101,10 @@ namespace Microsoft
 
                 /// <summary>Kicks off communication threads, heartbeats, etc.  Called implicitly by ReadyForPlayers if not called beforehand.</summary>
                 /// <param name="debugLogs">Enables outputting additional logs to the GSDK log file.</param>
-                static void start(bool debugLogs = false);
+                static bool start(bool debugLogs = false);
+
+                /// <summary>Halts communication threads, heartbeats, etc.  Call this before shutting down your executable.</summary>
+                static void stop();
 
                 /// <summary>Tells the Xcloud service information on who is connected.</summary>
                 /// <param name="currentlyConnectedPlayers"></param>
