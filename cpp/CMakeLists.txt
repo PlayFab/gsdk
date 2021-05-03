@@ -24,16 +24,6 @@ add_library(GSDK_CPP
     "cppsdk/gsdkUtils.cpp"
     "cppsdk/jsoncpp.cpp"
     "cppsdk/ManualResetEvent.cpp"
-
-    # TODO: Do we need these??
-    "cppsdk/source/playfab/PlayFabAdminApi.cpp"
-    "cppsdk/source/playfab/PlayFabClientApi.cpp"
-    "cppsdk/source/playfab/PlayFabEntityApi.cpp"
-    "cppsdk/source/playfab/PlayFabError.cpp"
-    "cppsdk/source/playfab/PlayFabHttp.cpp"
-    "cppsdk/source/playfab/PlayFabMatchmakerApi.cpp"
-    "cppsdk/source/playfab/PlayFabServerApi.cpp"
-    "cppsdk/source/playfab/PlayFabSettings.cpp"
 )
 
 target_include_directories(GSDK_CPP PRIVATE
