@@ -78,7 +78,7 @@ namespace PlayFab
     // Utilities for [de]serializing time_t to/from json
     inline void ToJsonUtilT(const time_t input, Json::Value& output)
     {
-        input; // vs is stupid
+        (void)input; // vs is stupid
         struct tm timeInfo;
 #ifdef GSDK_WINDOWS
         gmtime_s(&timeInfo, &input);

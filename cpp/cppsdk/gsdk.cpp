@@ -4,6 +4,8 @@
 #include "gsdkCommonPch.h"
 #include "gsdkInternal.h"
 #include "gsdkConfig.h"
+#include <stdio.h>
+#include <assert.h>
 
 namespace Microsoft
 {
@@ -11,8 +13,7 @@ namespace Microsoft
     {
         namespace Gaming
         {
-            std::unique_ptr<GSDKInternal> GSDKInternal::m_instance = nullptr;
-            std::mutex GSDKInternal::m_gsdkInitMutex;
+            GSDKInternal* GSDKInternal::m_instance = nullptr;
             volatile long long GSDKInternal::m_exitStatus = 0;
             std::mutex GSDKInternal::m_logLock;
             std::ofstream GSDKInternal::m_logFile;
@@ -20,6 +21,17 @@ namespace Microsoft
             std::unique_ptr<Configuration> GSDKInternal::testConfiguration = nullptr;
 
             GSDKInternal::GSDKInternal() : m_transitionToActiveEvent(), m_signalHeartbeatEvent(), m_initialPlayers()
+            {
+
+            }
+
+			GSDKInternal::~GSDKInternal()
+			{
+                // dispose() should have been called first
+                assert(!m_isInitialized);
+			}
+
+            bool GSDKInternal::init()
             {
                 // Need to setup the config first, as that tells us where to log
                 Configuration* config = nullptr;
@@ -79,18 +91,32 @@ namespace Microsoft
                 m_configSettings[GSDK::PUBLIC_IP_V4_ADDRESS_KEY] = config->getPublicIpV4Address();
                 m_configSettings[GSDK::FULLY_QUALIFIED_DOMAIN_NAME_KEY] = config->getFullyQualifiedDomainName();
 
+                {
+					std::string file_name = cGSDKUtils::getEnvironmentVariable("GSDK_CONFIG_FILE");
+                    printf("GSDK Config File: %s\n", file_name.c_str());
+
+					for (std::pair<std::string, std::string> configEntry : m_configSettings)
+					{
+						const std::string& keyString = configEntry.first;
+						const std::string& valueString = configEntry.second;
+
+						printf("  %s=%s\n", keyString.c_str(), valueString.c_str());
+					}
+                }
+
                 if (m_configSettings[GSDK::HEARTBEAT_ENDPOINT_KEY].empty() || m_configSettings[GSDK::SERVER_ID_KEY].empty())
                 {
-                    throw GSDKInitializationException("Heartbeat endpoint and Server id are required configuration values.");
+                    printf("GSDKInternal::init() - Heartbeat endpoint and Server id are required configuration values.");
+                    return false;
                 }
+
+				// We don't want to write files in our UTs
+				if (config->shouldLog())
+				{
+					startLog();
+				}
 
                 m_connectionInfo = config->getGameServerConnectionInfo();
-
-                // We don't want to write files in our UTs
-                if (config->shouldLog())
-                {
-                    startLog();
-                }
 
                 GSDKLogMethod method_logger(__func__);
                 try
@@ -109,7 +135,11 @@ namespace Microsoft
 
                     m_cachedScheduledMaintenance = {};
 
-                    curl_global_init(CURL_GLOBAL_GSDK_INIT_FLAGS);
+                    if (curl_global_init(CURL_GLOBAL_GSDK_INIT_FLAGS) != CURLE_OK)
+                    {
+                        GSDK::logMessage("GSDKInternal::init() - Failed to initialize curl lib.");
+						return false;
+                    }
 
                     m_curlHttpHeaders = nullptr;
                     m_curlHttpHeaders = curl_slist_append(m_curlHttpHeaders, "Accept: application/json");
@@ -126,15 +156,36 @@ namespace Microsoft
                 catch (const std::exception& ex)
                 {
                     GSDK::logMessage(ex.what());
-                    throw;
+                    return false;                    
                 }
+
+                m_isInitialized= true;
+                return true;
             }
 
-            GSDKInternal::~GSDKInternal()
-            {
-                m_keepHeartbeatRunning = false;
-                m_heartbeatThread.join();
-            }
+			void GSDKInternal::dispose()
+			{
+                // Stop the heartbeat thread if it's running
+                if (m_heartbeatThread.joinable())
+                {
+                    // End the infinite looping in the heartbeat thread
+					m_keepHeartbeatRunning = false;
+
+                    // Wake up the thread if it was sleeping
+                    m_signalHeartbeatEvent.Signal();
+
+                    // Block in this thread until the heartbeat terminates
+					m_heartbeatThread.join();
+
+                    // Teardown CURL lib last
+					curl_global_cleanup();
+                }
+
+                // Close the log file
+                stopLog();
+
+                m_isInitialized= false;
+			}
 
 			//Do not need to acquire lock for configuration becase startLog is only called from the constructor.
 			//If this changes lock will be needed.
@@ -155,6 +206,16 @@ namespace Microsoft
                 m_logFile.open(logPath.c_str(), std::ofstream::out);
             }
 
+            void GSDKInternal::stopLog()
+            {
+                std::unique_lock<std::mutex> lock(GSDKInternal::m_logLock);
+
+                if (m_logFile.is_open())
+                {
+                    m_logFile.close();
+                }
+            }
+
             void GSDKInternal::heartbeatThreadFunc()
             {
                 while (m_keepHeartbeatRunning)
@@ -165,16 +226,20 @@ namespace Microsoft
                         m_signalHeartbeatEvent.Reset(); // We've handled this signal, so reset the event
                     }
 
-                    sendHeartbeat();
-                    receiveHeartbeatResponse();
+                    // Only run this if we haven't just been woken up for shutdown
+                    if (m_keepHeartbeatRunning)
+                    {
+						sendHeartbeat();
+						receiveHeartbeatResponse();
+                    }
                 }
             }
 
             size_t GSDKInternal::curlReceiveData(char* buffer, size_t blockSize, size_t blockCount, void*)
             {
-                std::lock_guard<std::mutex> lock(get().m_receivedDataMutex);
+                std::lock_guard<std::mutex> lock(get()->m_receivedDataMutex);
 
-                get().m_receivedData.append(buffer, blockSize * blockCount);
+                get()->m_receivedData.append(buffer, blockSize * blockCount);
                 return (blockSize * blockCount);
             }
 
@@ -264,13 +329,17 @@ namespace Microsoft
             }
 
             void GSDKInternal::runShutdownCallback()
-            {
-                std::function<void()> temp = get().m_shutdownCallback;
+			{
+				auto* gsdk = GSDKInternal::get();
+				if (gsdk == nullptr)
+					return;
+
+                std::function<void()> temp = gsdk->m_shutdownCallback;
                 if (temp != nullptr)
                 {
                     temp();
                 }
-                get().m_keepHeartbeatRunning = false;
+                gsdk->m_keepHeartbeatRunning = false;
             }
 
             void GSDKInternal::decodeHeartbeatResponse(const std::string& responseJson)
@@ -403,81 +472,144 @@ namespace Microsoft
                 decodeHeartbeatResponse(m_receivedData);
             }
 
-            Microsoft::Azure::Gaming::GSDKInternal& GSDKInternal::get()
+            Microsoft::Azure::Gaming::GSDKInternal* GSDKInternal::get()
             {
-                std::unique_lock<std::mutex> lock(m_gsdkInitMutex);
-
-                if (!m_instance)
-                {
-                    m_instance = std::make_unique<GSDKInternal>();
-                }
-                return *m_instance;
+                return m_instance;
             }
 
-            void GSDK::start(bool debugLogs)
+            bool GSDK::start(bool debugLogs)
             {
+                // Return true if we already made the 
+                if (GSDKInternal::m_instance != nullptr)
+                    return true;
+
                 GSDKInternal::m_debug = debugLogs;
-                GSDKInternal::get();
+
+                auto *instance = new Microsoft::Azure::Gaming::GSDKInternal();
+                if (instance->init())
+                {
+                    GSDKInternal::m_instance= instance;
+                }
+                else
+                {
+                    instance->dispose();
+                    delete instance;
+                }
+
+                return GSDKInternal::m_instance != nullptr;
+            }
+
+            void GSDK::stop()
+            {
+                // This deallocates the GSDKInternal and stops it's internal heartbeat thread
+                if (GSDKInternal::m_instance != nullptr)
+                {
+                    GSDKInternal::m_instance->dispose();
+                    delete GSDKInternal::m_instance;
+                    GSDKInternal::m_instance= nullptr;
+                }
             }
 
             bool GSDK::readyForPlayers()
             {
-                if (GSDKInternal::get().m_heartbeatRequest.m_currentGameState != GameState::Active)
+                auto* gsdk= GSDKInternal::get();
+                if (gsdk == nullptr)
+                    return false;
+
+                if (gsdk->m_heartbeatRequest.m_currentGameState != GameState::Active)
                 {
-                    GSDKInternal::get().setState(GameState::StandingBy);
-                    GSDKInternal::get().m_transitionToActiveEvent.Wait();
+                    gsdk->setState(GameState::StandingBy);
+                    gsdk->m_transitionToActiveEvent.Wait();
                 }
 
-                return GSDKInternal::get().m_heartbeatRequest.m_currentGameState == GameState::Active;
+                return gsdk->m_heartbeatRequest.m_currentGameState == GameState::Active;
             }
 
             const Microsoft::Azure::Gaming::GameServerConnectionInfo &GSDK::getGameServerConnectionInfo()
             {
-                return GSDKInternal::get().m_connectionInfo;
+                static Microsoft::Azure::Gaming::GameServerConnectionInfo empty;
+
+				auto* gsdk = GSDKInternal::get();
+                if (gsdk != nullptr)
+                {
+					return gsdk->m_connectionInfo;
+                }
+                else
+                {
+					return empty;
+                }
             }
 
             const std::unordered_map<std::string, std::string> GSDK::getConfigSettings()
             {
-				std::lock_guard<std::mutex> lock(GSDKInternal::get().m_configMutex);
-                return GSDKInternal::get().m_configSettings;
+				auto* gsdk = GSDKInternal::get();
+				if (gsdk == nullptr)
+					return std::unordered_map<std::string, std::string>();
+
+				std::lock_guard<std::mutex> lock(gsdk->m_configMutex);
+                return gsdk->m_configSettings;
             }
 
             void GSDK::updateConnectedPlayers(const std::vector<ConnectedPlayer>& currentlyConnectedPlayers)
             {
-                GSDKInternal::get().setConnectedPlayers(currentlyConnectedPlayers);
+				auto* gsdk = GSDKInternal::get();
+                if (gsdk != nullptr)
+                {
+                    gsdk->setConnectedPlayers(currentlyConnectedPlayers);
+                }
             }
 
             void GSDK::registerShutdownCallback(std::function< void() > callback)
             {
-                GSDKInternal::get().m_shutdownCallback = callback;
+				auto* gsdk = GSDKInternal::get();
+				if (gsdk != nullptr)
+				{
+                    gsdk->m_shutdownCallback = callback;
+                }
             }
 
             void GSDK::registerHealthCallback(std::function< bool() > callback)
             {
-                GSDKInternal::get().m_healthCallback = callback;
+				auto* gsdk = GSDKInternal::get();
+				if (gsdk != nullptr)
+				{
+                    gsdk->m_healthCallback = callback;
+                }
             }
 
             void GSDK::registerMaintenanceCallback(std::function< void(const tm&) > callback)
             {
-                GSDKInternal::get().m_maintenanceCallback = callback;
+				auto* gsdk = GSDKInternal::get();
+				if (gsdk != nullptr)
+				{
+                    gsdk->m_maintenanceCallback = callback;
+                }
             }
 
             unsigned int GSDK::logMessage(const std::string& message)
             {
                 std::unique_lock<std::mutex> lock(GSDKInternal::m_logLock);
-                GSDKInternal::m_logFile << message.c_str() << std::endl;
-                GSDKInternal::m_logFile.flush();
+
+                if (GSDKInternal::m_logFile.is_open())
+                {
+					GSDKInternal::m_logFile << message.c_str() << std::endl;
+					GSDKInternal::m_logFile.flush();
+                }
                 return 0;
             }
 
             const std::string GSDK::getLogsDirectory()
             {
+                auto* gsdk = GSDKInternal::get();
+                if (gsdk == nullptr)
+                    return std::string();
+
                 // Declare as static so that it doesn't live on the stack (since we're returning a reference)
                 static const std::string empty = "";
 
-				std::lock_guard<std::mutex> lock(GSDKInternal::get().m_configMutex);
+				std::lock_guard<std::mutex> lock(gsdk->m_configMutex);
 
-                const std::unordered_map<std::string, std::string> config = GSDKInternal::get().m_configSettings;
+                const std::unordered_map<std::string, std::string> config = gsdk->m_configSettings;
                 auto it = config.find(GSDK::LOG_FOLDER_KEY);
 
                 if (it == config.end())
@@ -492,18 +624,19 @@ namespace Microsoft
 
             const std::string GSDK::getSharedContentDirectory()
             {
-                // Declare as static so that it doesn't live on the stack (since we're returning a reference)
-                static const std::string empty = "";
+				auto* gsdk = GSDKInternal::get();
+				if (gsdk == nullptr)
+					return std::string();
 
-				std::lock_guard<std::mutex> lock(GSDKInternal::get().m_configMutex);
+				std::lock_guard<std::mutex> lock(gsdk->m_configMutex);
 
-				const std::unordered_map<std::string, std::string> config = GSDKInternal::get().m_configSettings;
+				const std::unordered_map<std::string, std::string> config = gsdk->m_configSettings;
 
                 auto it = config.find(GSDK::SHARED_CONTENT_FOLDER_KEY);
 
                 if (it == config.end())
                 {
-                    return empty;
+                    return std::string();
                 }
                 else
                 {
@@ -513,7 +646,17 @@ namespace Microsoft
 
             const std::vector<std::string>& GSDK::getInitialPlayers()
             {
-                return GSDKInternal::get().m_initialPlayers;
+                static std::vector<std::string> empty;
+
+				auto* gsdk = GSDKInternal::get();
+                if (gsdk != nullptr)
+                {
+					return gsdk->m_initialPlayers;
+                }
+                else
+                {
+                    return empty;
+                }
             }
         }
     }

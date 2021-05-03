@@ -12,6 +12,8 @@ namespace Microsoft
             class Configuration
             {
             public:
+                virtual ~Configuration() = default;
+
                 virtual const std::string &getHeartbeatEndpoint() = 0;
                 virtual const std::string &getServerId() = 0;
                 virtual const std::string &getLogFolder() = 0;
@@ -43,6 +45,7 @@ namespace Microsoft
             {
             public:
                 ConfigurationBase();
+                virtual ~ConfigurationBase() = default;
 
                 const std::string &getTitleId();
                 const std::string &getBuildId();
@@ -61,6 +64,7 @@ namespace Microsoft
             {
             public:
                 EnvironmentVariableConfiguration();
+                virtual ~EnvironmentVariableConfiguration() = default;
 
                 const std::string &getHeartbeatEndpoint();
                 const std::string &getServerId();
@@ -92,6 +96,7 @@ namespace Microsoft
             {
             public:
                 JsonFileConfiguration(const std::string &file_name);
+                virtual ~JsonFileConfiguration() = default;
 
                 const std::string &getHeartbeatEndpoint();
                 const std::string &getServerId();
