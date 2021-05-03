@@ -8,6 +8,7 @@
 #include <functional>
 #include <exception>
 #include <vector>
+#include <stdexcept>
 
 namespace Microsoft
 {

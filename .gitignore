@@ -328,3 +328,18 @@ pom.xml.versionsBackup
 # Don't check in the generated nuget package that Jenkins creates
 /cpp/**/*.nupkg
 /csharp/**/*.nupkg
+
+#CMake
+out*/
+build
+CMakeLists.txt.user
+CMakeCache.txt
+CMakeFiles
+CMakeScripts
+Testing
+Makefile
+cmake_install.cmake
+install_manifest.txt
+compile_commands.json
+CTestTestfile.cmake
+_deps
