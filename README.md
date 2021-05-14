@@ -1,4 +1,7 @@
 # PlayFab Game Server SDK
+[![C++](https://img.shields.io/nuget/v/com.playfab.cppgsdk.v140?style=flat-square&label=C%2B%2B)](https://www.nuget.org/packages/com.playfab.cppgsdk.v140)
+[![C#](https://img.shields.io/nuget/v/com.playfab.csharpgsdk?style=flat-square&label=C%23)](https://www.nuget.org/packages/com.playfab.csharpgsdk)
+[![Java](https://img.shields.io/maven-central/v/com.playfab/gameserverSDK?style=flat-square&label=Java)](https://mvnrepository.com/artifact/com.playfab/gameserverSDK)
 
 ## Overview
 
