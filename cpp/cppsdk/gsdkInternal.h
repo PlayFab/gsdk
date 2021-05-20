@@ -194,10 +194,11 @@ namespace Microsoft
                 void sendHeartbeat();
                 void receiveHeartbeatResponse();
 
-                // These two methods are used for unit testing
+                // These two methods are used for unit testing as well as regular operation.
                 std::string encodeHeartbeatRequest();
                 void decodeHeartbeatResponse(const std::string &responseJson);
 				std::mutex m_configMutex;
+                int m_nextHeartbeatIntervalMs;
 
                 std::tm parseDate(const std::string &dateStr);
                 void setState(GameState state);

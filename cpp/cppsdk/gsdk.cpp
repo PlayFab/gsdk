@@ -11,6 +11,7 @@ namespace Microsoft
     {
         namespace Gaming
         {
+            constexpr int c_minHeartbeatIntervalMs = 1000;
             std::unique_ptr<GSDKInternal> GSDKInternal::m_instance = nullptr;
             std::mutex GSDKInternal::m_gsdkInitMutex;
             volatile long long GSDKInternal::m_exitStatus = 0;
@@ -92,6 +93,9 @@ namespace Microsoft
                     startLog();
                 }
 
+                // Use highest frequency permitted heartbeat interval until VMAgent tells an updated one.
+                m_nextHeartbeatIntervalMs = c_minHeartbeatIntervalMs;
+
                 GSDKLogMethod method_logger(__func__);
                 try
                 {
@@ -159,7 +163,7 @@ namespace Microsoft
             {
                 while (m_keepHeartbeatRunning)
                 {
-                    if (m_signalHeartbeatEvent.Wait(1000))
+                    if (m_signalHeartbeatEvent.Wait(m_nextHeartbeatIntervalMs))
                     {
                         if (m_debug) GSDK::logMessage("State transition signaled an early heartbeat.");
                         m_signalHeartbeatEvent.Reset(); // We've handled this signal, so reset the event
@@ -380,6 +384,22 @@ namespace Microsoft
                         {
                             GSDK::logMessage("Unknown operation received: " + heartbeatResponse["operation"].asString());
                         }
+                    }
+
+                    if (heartbeatResponse.isMember("nextHeartbeatIntervalMs"))
+                    {
+                        m_nextHeartbeatIntervalMs = heartbeatResponse["nextHeartbeatIntervalMs"].asInt();
+
+                        // Clamp to the minimum permitted interval.
+                        if (m_nextHeartbeatIntervalMs < c_minHeartbeatIntervalMs)
+                        {
+                            m_nextHeartbeatIntervalMs = c_minHeartbeatIntervalMs;
+                        }
+                    }
+                    else
+                    {
+                        // If VMagent didn't specify a heartbeat interval, default to higher frequency for safety.
+                        m_nextHeartbeatIntervalMs = c_minHeartbeatIntervalMs;
                     }
                 }
                 catch (Json::Exception& ex) {
