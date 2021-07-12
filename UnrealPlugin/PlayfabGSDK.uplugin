@@ -1,0 +1,24 @@
+{
+	"FileVersion": 3,
+	"Version": 1,
+	"VersionName": "1.0",
+	"FriendlyName": "PlayfabGSDK",
+	"Description": "Unreal Integration of the Playfab GSDK",
+	"Category": "Other",
+	"CreatedBy": "Stefan Krismann",
+	"CreatedByURL": "",
+	"DocsURL": "",
+	"MarketplaceURL": "",
+	"SupportURL": "",
+	"CanContainContent": false,
+	"IsBetaVersion": true,
+	"IsExperimentalVersion": false,
+	"Installed": false,
+	"Modules": [
+		{
+			"Name": "PlayfabGSDK",
+			"Type": "Runtime",
+			"LoadingPhase": "EarliestPossible"
+		}
+	]
+}
