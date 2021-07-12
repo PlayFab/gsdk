@@ -7,6 +7,7 @@
 #include "HAL/Event.h"
 #include "HAL/CriticalSection.h"
 #include "Interfaces/IHttpRequest.h"
+#include "Misc/OutputDeviceFile.h"
 
 #define MAKE_ENUM(VAR) VAR,
 #define MAKE_STRINGS(VAR) TEXT(#VAR),
@@ -147,8 +148,13 @@ public:
 	void SetState(EGameState State);
 	void SetConnectedPlayers(const TArray<FConnectedPlayer>& CurrentConnectedPlayers);
 
-	void LogMessage(const FString& Message);
-
+	DECLARE_DELEGATE(FOnShutdown);
+	DECLARE_DELEGATE_RetVal(bool, FOnHealthCheck);
+	DECLARE_DELEGATE_OneParam(FOnMaintenance, const FDateTime&)
+	
+	FOnShutdown OnShutdown;
+	FOnMaintenance OnMaintenance;
+	FOnHealthCheck OnHealthCheck;
 private:
 
 	#define ADD_OPERATION_MAP(VAR) ReturnMap.Add(TEXT(#VAR), EOperation::VAR);
@@ -172,15 +178,8 @@ private:
 	int32 HeatbeatInterval;
 	FString HeartbeatUrl;
 	TFuture<void> HeartbeatThread;
-	IFileHandle* LogFile = nullptr;
-
-	DECLARE_DELEGATE(FOnShutdown);
-	DECLARE_DELEGATE_RetVal(bool, FOnHealthCheck);
-	DECLARE_DELEGATE_OneParam(FOnMaintenance, const FDateTime&)
+	FOutputDeviceFile* OutputDevice;
 	
-	FOnShutdown OnShutdown;
-	FOnMaintenance OnMaintenance;
-	FOnHealthCheck OnHealthCheck;
 	
 	FGameServerConnectionInfo ConnectionInfo;
 	TMap<FString, FString> ConfigSettings;

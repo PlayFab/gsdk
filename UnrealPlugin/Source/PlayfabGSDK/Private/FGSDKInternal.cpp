@@ -107,10 +107,11 @@ FGSDKInternal::~FGSDKInternal()
 	FPlatformProcess::ReturnSynchEventToPool(SignalHeartbeatEvent);
 	HeartbeatThread.Wait();
 
-	if (LogFile)
+	if (OutputDevice)
 	{
-		delete LogFile;
-		LogFile = nullptr;
+		GLog->RemoveOutputDevice(OutputDevice);
+		delete OutputDevice;
+		OutputDevice = nullptr;
 	}
 }
 
@@ -157,21 +158,8 @@ void FGSDKInternal::StartLog()
 
 	const FString GSDKLogPath = LogFolder + LogFileName;
 
-	LogFile = FileManager.OpenWrite(*GSDKLogPath, true);
-}
-
-void FGSDKInternal::LogMessage(const FString& Message)
-{
-	FScopeLock ScopeLock(&LogMutex);
-
-	const FString MessageWithNewLine = FString::Printf(TEXT("%s\n"), *Message);
-
-	TArray<uint8> MessageBytes;
-	MessageBytes.SetNumUninitialized(MessageWithNewLine.Len());
-	StringToBytes(MessageWithNewLine, MessageBytes.GetData(), MessageBytes.Num());
-	
-	LogFile->Write(MessageBytes.GetData(), MessageBytes.Num());
-	LogFile->Flush(true);
+	OutputDevice = new FOutputDeviceFile(*GSDKLogPath);
+	GLog->AddOutputDevice(OutputDevice);
 }
 
 void FGSDKInternal::SendHeartbeat()
@@ -365,7 +353,7 @@ void FGSDKInternal::DecodeHeartbeatResponse(const FString& ResponseJson)
 FDateTime FGSDKInternal::ParseDate(const FString& DateStr)
 {
 	FDateTime OutDateTime;
-	return FDateTime::Parse(DateStr, OutDateTime);
+	return FDateTime::ParseIso8601(*DateStr, OutDateTime);
 }
 
 void FGSDKInternal::SetState(EGameState State)

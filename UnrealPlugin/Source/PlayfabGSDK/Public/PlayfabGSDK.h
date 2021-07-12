@@ -7,7 +7,6 @@
 #include "ConnectedPlayer.h"
 #include "GameServerConnectionInfo.h"
 #include "FGSDKInternal.h"
-#include "GSDKOutputDevice.h"
 #include "Modules/ModuleManager.h"
 
 DECLARE_LOG_CATEGORY_EXTERN(LogPlayfabGSDK, Log, All);
@@ -48,7 +47,6 @@ public:
     /// <param name="CurrentlyConnectedPlayers">Array of player ids</param>
     void UpdateConnectedPlayers(const TArray<FConnectedPlayer>& CurrentlyConnectedPlayers);
 
-
 protected:
 	DECLARE_DELEGATE(FOnShutdown);
 	DECLARE_DELEGATE_RetVal(bool, FOnHealthCheck);
@@ -63,9 +61,6 @@ public:
 
 	/// <summary>Gets called if the server is getting a scheduled maintenance, it will get the UTC time of the maintenance event as an argument.</summary>
 	FOnMaintenance OnMaintenance;
-	
-    /// <summary>outputs a message to the log</summary>
-    void LogMessage(const FString& Message);
 
     /// <summary>Returns a path to the directory where logs will be mapped to the VM host</summary>
     const FString GetLogsDirectory();
@@ -95,5 +90,4 @@ public:
 private:
 
 	FGSDKInternal* GSDKInternal = nullptr;
-	FGSDKOutputDevice* OutputDevice = nullptr;
 };

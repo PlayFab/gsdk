@@ -16,7 +16,30 @@ void FPlayfabGSDKModule::StartupModule()
 {
 #if UE_SERVER
 	GSDKInternal = new FGSDKInternal();
-	OutputDevice = new FGSDKOutputDevice();
+
+	GSDKInternal->OnShutdown.BindLambda([this]()
+	{
+		if (OnShutdown.IsBound())
+		{
+			OnShutdown.Execute();
+		}
+	});
+	GSDKInternal->OnHealthCheck.BindLambda([this]()
+	{
+		if (OnHealthCheck.IsBound())
+		{
+			return OnHealthCheck.Execute();
+		}
+
+		return false;
+	});
+	GSDKInternal->OnMaintenance.BindLambda([this](const FDateTime& Time)
+	{
+		if (OnMaintenance.IsBound())
+		{
+			OnMaintenance.Execute(Time);
+		}
+	});
 #endif
 }
 
@@ -27,12 +50,6 @@ void FPlayfabGSDKModule::ShutdownModule()
 	{
 		delete GSDKInternal;
 		GSDKInternal = nullptr;
-	}
-	
-	if (OutputDevice)
-	{
-		delete OutputDevice;
-		OutputDevice = nullptr;
 	}
 #endif
 }
