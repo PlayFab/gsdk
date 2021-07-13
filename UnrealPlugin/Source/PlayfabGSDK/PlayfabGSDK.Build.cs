@@ -1,4 +1,5 @@
-// Copyright Epic Games, Inc. All Rights Reserved.
+// Copyright Stefan Krismann
+// MIT License
 
 using UnrealBuildTool;
 
