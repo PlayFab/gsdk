@@ -127,22 +127,12 @@ void FGSDKInternal::HeartbeatAsyncTaskFunction()
 			SignalHeartbeatEvent->Reset();
 		}
 
-		SendHeartbeat();
+		if (KeepHeartbeatRunning)
+		{
+			SendHeartbeat();
+			ReceiveHeartbeat();
+		}
 	}
-}
-
-void FGSDKInternal::OnReceiveHeartbeatResponse(FHttpRequestPtr Request, FHttpResponsePtr Response,
-	bool bConnectedSuccessfully)
-{
-	Request->OnProcessRequestComplete().Unbind();
-	
-	if (!bConnectedSuccessfully || Response->GetResponseCode() >= 300)
-	{
-		UE_LOG(LogPlayfabGSDK, Error, TEXT("Received non-success code from Agent.  Status Code: %d Response Body: %s"), Response->GetResponseCode(), *Response->GetContentAsString());
-		return;
-	}
-
-	DecodeHeartbeatResponse(Response->GetContentAsString());
 }
 
 void FGSDKInternal::StartLog()
@@ -176,9 +166,36 @@ void FGSDKInternal::SendHeartbeat()
 	Request->SetURL(HeartbeatUrl);
 	Request->SetVerb(TEXT("PATCH"));
 	Request->SetContentAsString(EncodeHeartbeatRequest());
-	Request->OnProcessRequestComplete().BindRaw(this, &FGSDKInternal::OnReceiveHeartbeatResponse);
+
+	HeartBeats.Add(Request);
 
 	Request->ProcessRequest();
+}
+
+void FGSDKInternal::ReceiveHeartbeat()
+{
+	if (HeartBeats.Num() == 0 || !HeartBeats[0]->GetResponse().IsValid())
+	{
+		return;
+	}
+
+	auto Request = HeartBeats[0];
+	auto Response = HeartBeats[0]->GetResponse();
+
+	if (Response->GetContentAsString().Len() != Response->GetContentLength())
+	{
+		return;
+	}	
+
+	HeartBeats.RemoveAt(0);
+	
+	if (Response->GetResponseCode() >= 300)
+	{
+		UE_LOG(LogPlayfabGSDK, Error, TEXT("Received non-success code from Agent.  Status Code: %d Response Body: %s"), Response->GetResponseCode(), *Response->GetContentAsString());
+		return;
+	}
+
+	DecodeHeartbeatResponse(Response->GetContentAsString());
 }
 
 FString FGSDKInternal::EncodeHeartbeatRequest()
@@ -315,15 +332,24 @@ void FGSDKInternal::DecodeHeartbeatResponse(const FString& ResponseJson)
 				if (HeartbeatRequest.CurrentGameState != EGameState::Terminating)
 				{
 					SetState(EGameState::Terminating);
+					
 					TransitionToActiveEvent->Trigger();
 					AsyncTask(ENamedThreads::AnyThread, [this]()
 					{
+						this->KeepHeartbeatRunning = false;
+						
+						for (auto Heartbeat: HeartBeats)
+						{
+							Heartbeat->CancelRequest();
+						}
+
+						HeartBeats.Empty();
+						
+						
 						if (this->OnShutdown.IsBound())
 						{
 							this->OnShutdown.Execute();
 						}
-
-						this->KeepHeartbeatRunning = false;
 					});
 				}
 				break;

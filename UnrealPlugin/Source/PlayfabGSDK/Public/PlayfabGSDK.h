@@ -14,7 +14,7 @@ DECLARE_LOG_CATEGORY_EXTERN(LogPlayfabGSDK, Log, All);
 
 
 
-class FPlayfabGSDKModule : public IModuleInterface
+class PLAYFABGSDK_API FPlayfabGSDKModule : public IModuleInterface
 {
 public:
 

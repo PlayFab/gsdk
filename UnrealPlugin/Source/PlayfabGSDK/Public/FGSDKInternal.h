@@ -208,8 +208,12 @@ private:
 	FCriticalSection ConfigMutex;
 
 	FCriticalSection LogMutex;
+
+	TArray<TSharedRef<IHttpRequest, ESPMode::ThreadSafe>> HeartBeats;
+	
 	void StartLog();
 	void SendHeartbeat();
+	void ReceiveHeartbeat();
 
 	// These two methods are used for unit testing as well as regular operation.
 	FString EncodeHeartbeatRequest();
