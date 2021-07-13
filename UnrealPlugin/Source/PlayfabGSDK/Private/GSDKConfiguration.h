@@ -1,4 +1,7 @@
-﻿#pragma once
+﻿// Copyright Stefan Krismann
+// MIT License
+
+#pragma once
 
 #include "CoreMinimal.h"
 

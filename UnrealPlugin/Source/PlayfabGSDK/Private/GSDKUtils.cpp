@@ -1,4 +1,7 @@
-﻿#include "GSDKUtils.h"
+﻿// Copyright Stefan Krismann
+// MIT License
+
+#include "GSDKUtils.h"
 
 #if PLATFORM_WINDOWS
 #include "Windows/WindowsPlatformMisc.h"

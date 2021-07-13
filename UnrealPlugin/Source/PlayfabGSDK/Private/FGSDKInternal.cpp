@@ -1,4 +1,7 @@
-﻿#include "FGSDKInternal.h"
+﻿// Copyright Stefan Krismann
+// MIT License
+
+#include "FGSDKInternal.h"
 
 #include "GSDKConfiguration.h"
 #include "GSDKUtils.h"
@@ -337,12 +340,8 @@ void FGSDKInternal::DecodeHeartbeatResponse(const FString& ResponseJson)
 	{
 		NextHeartbeatIntervalMs = HeartbeatResponseJson->GetNumberField(TEXT("nextHeartbeatIntervalMs"));
 
-		
-		// Clamp to the minimum permitted interval.
-		if (NextHeartbeatIntervalMs < 1000)
-		{
-			NextHeartbeatIntervalMs = 1000;
-		}
+
+		NextHeartbeatIntervalMs = FMath::Max(1000, NextHeartbeatIntervalMs);
 	}
 	else
 	{
@@ -353,7 +352,7 @@ void FGSDKInternal::DecodeHeartbeatResponse(const FString& ResponseJson)
 FDateTime FGSDKInternal::ParseDate(const FString& DateStr)
 {
 	FDateTime OutDateTime;
-	return FDateTime::ParseIso8601(*DateStr, OutDateTime);
+	return FDateTime::ParseHttpDate(DateStr, OutDateTime);
 }
 
 void FGSDKInternal::SetState(EGameState State)

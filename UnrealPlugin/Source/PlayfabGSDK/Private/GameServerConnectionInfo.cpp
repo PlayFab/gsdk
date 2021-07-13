@@ -1,1 +1,4 @@
-﻿#include "GameServerConnectionInfo.h"
+﻿// Copyright Stefan Krismann
+// MIT License
+
+#include "GameServerConnectionInfo.h"

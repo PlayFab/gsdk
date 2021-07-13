@@ -1,4 +1,5 @@
-// Copyright Epic Games, Inc. All Rights Reserved.
+// Copyright Stefan Krismann
+// MIT License
 
 #include "PlayfabGSDK.h"
 
@@ -91,13 +92,6 @@ void FPlayfabGSDKModule::UpdateConnectedPlayers(const TArray<FConnectedPlayer>& 
 {
 #if UE_SERVER
 	GSDKInternal->SetConnectedPlayers(CurrentlyConnectedPlayers);
-#endif
-}
-
-void FPlayfabGSDKModule::LogMessage(const FString& Message)
-{
-#if UE_SERVER
-	GSDKInternal->LogMessage(Message);
 #endif
 }
 

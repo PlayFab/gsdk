@@ -1,4 +1,7 @@
-﻿#include "GSDKConfiguration.h"
+﻿// Copyright Stefan Krismann
+// MIT License
+
+#include "GSDKConfiguration.h"
 
 #include "GSDKUtils.h"
 #include "PlayfabGSDK.h"
