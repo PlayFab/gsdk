@@ -149,7 +149,7 @@ void FGSDKInternal::StartLog()
 		LogFolder = "";
 	}
 
-	const FString GSDKLogPath = LogFolder + LogFileName;
+	const FString GSDKLogPath = FString::Printf(TEXT("%s/%s"), *LogFolder, *LogFileName);
 
 	OutputDevice = new FOutputDeviceFile(*GSDKLogPath);
 	GLog->AddOutputDevice(OutputDevice);
