@@ -1,5 +1,16 @@
-﻿// Copyright Stefan Krismann
-// MIT License
+﻿// Copyright 2021 Stefan Krismann
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+// 	http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
 
 #pragma once
 
@@ -174,11 +185,13 @@ private:
 	// will throw an access violation exception when the game server main loop returns
 	// (As C++ starts getting rid of all statics)
 	const TMap<FString, EOperation> OperationMap = InitializeOperationMap();
-
+	int32 MaximumUnexpectedOperationsErrorCount;
+	int32 UnexpectedOperationsErrorCount = 0;
+	
 	FString AgentEntpoint;
 	FHeartbeatRequest HeartbeatRequest;
 	FString SessionCookie;
-	int32 HeatbeatInterval;
+	int32 MinimumHeartbeatInterval;
 	FString HeartbeatUrl;
 	TFuture<void> HeartbeatThread;
 	FOutputDeviceFile* OutputDevice;
@@ -221,4 +234,7 @@ private:
 	int32 NextHeartbeatIntervalMs;
 
 	FDateTime ParseDate(const FString& DateStr);
+
+
+	void TriggerShutdown();
 };

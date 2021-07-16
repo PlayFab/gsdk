@@ -1,4 +1,4 @@
-# PlayfabGSDK_Unreal
+# Playfab GSDK Unreal Plugin Preview
 This Unreal Plugin is implementing the GSDK directly in Unreal Engine.
 
 It was tested with Unreal Engine 4.26.2, but should work with other engines as well.

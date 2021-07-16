@@ -1,7 +1,18 @@
-﻿// Copyright Stefan Krismann
-// MIT License
+﻿// Copyright 2021 Stefan Krismann
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+// 	http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
 
-#include "FGSDKInternal.h"
+#include "GSDKInternal.h"
 
 #include "GSDKConfiguration.h"
 #include "GSDKUtils.h"
@@ -75,10 +86,13 @@ FGSDKInternal::FGSDKInternal()
 	}
 
 	// Use highest frequency permitted heartbeat interval until VMAgent tells an updated one.
-	NextHeartbeatIntervalMs = 1000; // TODO Move to constant
+	MinimumHeartbeatInterval = ConfigPtr->GetMinimumHeartbeatInterval();
+	NextHeartbeatIntervalMs = MinimumHeartbeatInterval;
 
-	FString GsmBaseUrl = ConfigSettings[FPlayfabGSDKModule::HEARTBEAT_ENDPOINT_KEY];
-	FString InstanceId = ConfigSettings[FPlayfabGSDKModule::SERVER_ID_KEY];
+	MaximumUnexpectedOperationsErrorCount = ConfigPtr->GetMaximumAllowedUnexpectedOperationsCount();
+
+	const FString GsmBaseUrl = ConfigSettings[FPlayfabGSDKModule::HEARTBEAT_ENDPOINT_KEY];
+	const FString InstanceId = ConfigSettings[FPlayfabGSDKModule::SERVER_ID_KEY];
 
 	UE_LOG(LogPlayfabGSDK, Log, TEXT("VM Agent Endpoint: %s"), *GsmBaseUrl);
 	UE_LOG(LogPlayfabGSDK, Log, TEXT("Instance Id: %s"), *InstanceId);
@@ -312,6 +326,8 @@ void FGSDKInternal::DecodeHeartbeatResponse(const FString& ResponseJson)
 	{
 		EOperation NextOperation = OperationMap[HeartbeatResponseJson->GetStringField(TEXT("operation"))];
 
+		bool bWasOperationValid = true;
+
 		switch (NextOperation)
 		{
 		case EOperation::Continue:
@@ -334,31 +350,32 @@ void FGSDKInternal::DecodeHeartbeatResponse(const FString& ResponseJson)
 					SetState(EGameState::Terminating);
 					
 					TransitionToActiveEvent->Trigger();
-					AsyncTask(ENamedThreads::AnyThread, [this]()
-					{
-						this->KeepHeartbeatRunning = false;
-						
-						for (auto Heartbeat: HeartBeats)
-						{
-							Heartbeat->CancelRequest();
-						}
-
-						HeartBeats.Empty();
-						
-						
-						if (this->OnShutdown.IsBound())
-						{
-							this->OnShutdown.Execute();
-						}
-					});
+					TriggerShutdown();
 				}
 				break;
 			}
 		default:
 			{
 				UE_LOG(LogPlayfabGSDK, Error, TEXT("Unhandled operation received: %s"), OperationNames[static_cast<int32>(NextOperation)]);
+				bWasOperationValid = false;
 				break;
 			}
+		}
+
+		if (!bWasOperationValid)
+		{
+			UnexpectedOperationsErrorCount++;
+
+			// Too many unexpected operations have been sent, time to shut down
+			if (UnexpectedOperationsErrorCount >= MaximumUnexpectedOperationsErrorCount)
+			{
+				UE_LOG(LogPlayfabGSDK, Error, TEXT("Too many unexpected operations received. Shutting down!"));
+				TriggerShutdown();
+			}
+		}
+		else
+		{
+			UnexpectedOperationsErrorCount = 0;
 		}
 	}
 
@@ -367,11 +384,11 @@ void FGSDKInternal::DecodeHeartbeatResponse(const FString& ResponseJson)
 		NextHeartbeatIntervalMs = HeartbeatResponseJson->GetNumberField(TEXT("nextHeartbeatIntervalMs"));
 
 
-		NextHeartbeatIntervalMs = FMath::Max(1000, NextHeartbeatIntervalMs);
+		NextHeartbeatIntervalMs = FMath::Max(MinimumHeartbeatInterval, NextHeartbeatIntervalMs);
 	}
 	else
 	{
-		NextHeartbeatIntervalMs = 1000;
+		NextHeartbeatIntervalMs = MinimumHeartbeatInterval;
 	}
 }
 
@@ -379,6 +396,27 @@ FDateTime FGSDKInternal::ParseDate(const FString& DateStr)
 {
 	FDateTime OutDateTime;
 	return FDateTime::ParseHttpDate(DateStr, OutDateTime);
+}
+
+void FGSDKInternal::TriggerShutdown()
+{
+	AsyncTask(ENamedThreads::AnyThread, [this]()
+	{
+		this->KeepHeartbeatRunning = false;
+		
+		for (auto Heartbeat: HeartBeats)
+		{
+			Heartbeat->CancelRequest();
+		}
+
+		HeartBeats.Empty();
+		
+		
+		if (this->OnShutdown.IsBound())
+		{
+			this->OnShutdown.Execute();
+		}
+	});
 }
 
 void FGSDKInternal::SetState(EGameState State)
