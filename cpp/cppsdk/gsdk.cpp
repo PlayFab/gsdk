@@ -155,6 +155,11 @@ namespace Microsoft
                     logFolder = "";
                 }
 
+                if (logFolder.back() != '/' && logFolder.back() != '\\')
+                {
+                    logFolder.append("/");
+                }
+
                 std::string logPath = logFolder + logFile;
                 m_logFile.open(logPath.c_str(), std::ofstream::out);
             }
