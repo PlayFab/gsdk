@@ -123,7 +123,9 @@ Select the option to build from development editor mode.
 
 Then select the option to build from development server mode and build the project again.
 
-Once the build succeeds, close Visual Studio
+Once the build succeeds, close Visual Studio.
+
+## Packaging the game server
 
 Right click on the .uproject file in your file editor and select "Generate Visual Studio Project Files". 
 
@@ -134,10 +136,13 @@ You can now use this packaged version of your game server to test with LocalMult
 
 To get the game client, click on file->package->target configuration->[game name] client and then go to file -> package -> windows x64. 
 
-Then when your game server is running, you can run your client from the command line with a specific IP address and port as arguments. For example:
-.\GameClient.exe 127.0.0.1 -port=30000
+Then when your game server is running, you can run your client from the command line with a specific IP address and port as arguments. For example, this command:
 
-Would mean that you are running your game client executable, GameClient.exe, to connect to your game server that is on 127.0.0.1 (i.e. local host) through port 30000. You can learn more about command line arguments here.
+```
+.\GameClient.exe 127.0.0.1 -port=30000
+```
+
+would mean that you are running your game client executable, GameClient.exe, to connect to your game server that is on 127.0.0.1 (i.e. local host) through port 30000. You can learn more about command line arguments here.
 
 
 
