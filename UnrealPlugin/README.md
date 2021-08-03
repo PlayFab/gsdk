@@ -135,10 +135,16 @@ Update DefaultEngine.ini file and add this:
 [/Script/EngineSettings.GameMapsSettings]
 GameInstanceClass=/Script/[game name].MyGameInstance"
 
-Update [game name].Build.cs file to have "PlayfabGSDK" in the PublicDependencyModuleNames.AddRange(); list as follows:
-![image with lines of code with the PlayfabGSDK added to the PublicDependencyModuleNames](Resources/UnrealTutorialImages/DependencyModules.png)
+Update [game name].Build.cs file to add "PlayfabGSDK" into the PublicDependencyModuleNames.AddRange(); list as follows:
 
-Select the option to build from development editor mode.
+```csharp
+		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "HeadMountedDisplay", "PlayfabGSDK"});
+
+		PrivateDependencyModuleNames.AddRange(new string[] { });
+```
+
+Then select the option to build from development editor mode and build the project.
+
 ![image depicting Visual Studio with the option to build in Development Editor Mode](Resources/UnrealTutorialImages/DevelopmentEditor.png)
 
 Then select the option to build from development server mode and build the project again.
