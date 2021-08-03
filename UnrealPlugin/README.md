@@ -1,7 +1,7 @@
 # Instructions on Integrating the Playfab GSDK Unreal Plugin
 This Unreal Plugin is implementing the GSDK directly in Unreal Engine.
 
-It was tested with Unreal Engine 4.26.2, but should work with other engines as well.
+It was tested with Unreal Engine 4.26.2, but should work with other engines as well. The sample game these instructions were created with was called ThirdPersonMP, so replace anywhere you see that with your game name.
 
 # Prerequisites:
 - Download Unreal Engine Source Build by following [these instructions](https://docs.unrealengine.com/4.26/en-US/ProgrammingAndScripting/ProgrammingWithCPP/DownloadingSourceCode/) from the Unreal website
@@ -32,7 +32,7 @@ Then close Unreal and generate project files in source build mode again.
 
 Then using Visual Studio, open those newly created files and add in the following methods for (MyGameInstance.cpp and MyGameInstance.h)
 
-### MyGameInstance.cpp
+#### MyGameInstance.cpp
 ```csharp
 // Fill out your copyright notice in the Description page of Project Settings.
 #include "MyGameInstance.h"
@@ -67,7 +67,7 @@ bool UMyGameInstance::OnGSDKHealthCheck()
 }
 ```
 
-### MyGameInstance.h:
+#### MyGameInstance.h:
 ```csharp
 // Fill out your copyright notice in the Description page of Project Settings.
 
@@ -106,87 +106,7 @@ DisablePlugins.Add("AsyncLoadingScreen"); //if you are using this plugin
 DisablePlugins.Add("WindowsMoviePlayer");
 DisablePlugins.Add("MediaFoundationMediaPlayer");
 
-Update DefaultGame.ini to show the following:
- [/Script/UnrealEd.ProjectPackagingSettings]
-IncludeAppLocalPrerequesites = True
-
-Update DefaultEngine.ini file and add this:
-[/Script/EngineSettings.GameMapsSettings]
-GameInstanceClass=/Script/[game name].MyGameInstance"
-
-Update [game name].Build.cs file to have "PlayfabGSDK" in the PublicDependencymodulesnames.addrange(); list as follows:
-
-<INSERT IMAGE HERE>
-
-Select the option to build from development editor mode.
-<INSERT IMAGE HERE>
-
-Then select the option to build from development server mode and build the project again.
-
-Once the build succeeds, close Visual Studio.
-
-## Packaging the game server
-
-Right click on the .uproject file in your file editor and select "Generate Visual Studio Project Files". 
-
-Then open the .uproject file.
-
-In the top left of the Unreal editor menu, click on file->package->target configuration ->[game name] server and then go to file -> package -> windows x64. 
-You can now use this packaged version of your game server to test with LocalMultiplayerAgent or to use it directly with Playfab by using the wrappingGSDK.
-
-To get the game client, click on file->package->target configuration->[game name] client and then go to file -> package -> windows x64. 
-
-Then when your game server is running, you can run your client from the command line with a specific IP address and port as arguments. For example, this command:
-
-```
-.\GameClient.exe 127.0.0.1 -port=30000
-```
-
-would mean that you are running your game client executable, GameClient.exe, to connect to your game server that is on 127.0.0.1 (i.e. local host) through port 30000. You can learn more about command line arguments here.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-First, when you are building dedicated server, make sure you add the following to DefaultGame.ini
-
-```ini
-[/Script/UnrealEd.ProjectPackagingSettings]
-IncludeAppLocalPrerequisites=True
-```
-
-If the category already exists in your DefaultGame.ini, then just add the second line to it. This ensures that all app local dependencies ship with the game as well.
-
-If you are using Continuous Integration (CI), then you could add it to your setup to only turn this flag on when building a dedicated server, so the additional dlls only get added if it is a dedicated server build.
-
-## Disabling plugins
-When you add Dedicated Server support to your project, you will definitely have created a \<projectname\>Server.Target.cs file.
-
-In this file add the following lines to the constructor:
-```csharp
-DisablePlugins.Add("WMFMediaPlayer");
-DisablePlugins.Add("AsyncLoadingScreen"); //if you are using this plugin
-DisablePlugins.Add("WindowsMoviePlayer");
-DisablePlugins.Add("MediaFoundationMediaPlayer");
-```
-
-Result would be:
+Result should be:
 ```csharp
 public class <projectname>ServerTarget : TargetRules
 {
@@ -204,3 +124,45 @@ public class <projectname>ServerTarget : TargetRules
 }
 
 ```
+
+Update DefaultGame.ini to show the following:
+ [/Script/UnrealEd.ProjectPackagingSettings]
+IncludeAppLocalPrerequesites=True
+
+If the category already exists in your DefaultGame.ini, then just add the second line to it. This ensures that all app local dependencies ship with the game as well.
+
+Update DefaultEngine.ini file and add this:
+[/Script/EngineSettings.GameMapsSettings]
+GameInstanceClass=/Script/[game name].MyGameInstance"
+
+Update [game name].Build.cs file to have "PlayfabGSDK" in the PublicDependencyModuleNames.AddRange(); list as follows:
+![image with lines of code with the PlayfabGSDK added to the PublicDependencyModuleNames](Resources/UnrealTutorialImages/DependencyModules.png)
+
+Select the option to build from development editor mode.
+![image depicting Visual Studio with the option to build in Development Editor Mode](Resources/UnrealTutorialImages/DevelopmentEditor.png)
+
+Then select the option to build from development server mode and build the project again.
+
+Once the build succeeds, close Visual Studio.
+
+## Packaging the game server
+
+Right click on the .uproject file in your file editor and select "Generate Visual Studio Project Files". 
+
+Then open the .uproject file.
+
+In the top left of the Unreal editor menu, click on file->package->target configuration ->[game name] server and then go to file -> package -> windows x64. 
+You can now use this packaged version of your game server to [test with LocalMultiplayerAgent](https://docs.microsoft.com/en-us/gaming/playfab/features/multiplayer/servers/locally-debugging-game-servers-and-integration-with-playfab) 
+or to use it directly with [Playfab VMAgent by using the wrappingGSDK](https://github.com/PlayFab/MpsSamples/blob/master/wrappingGsdk/README.md).
+
+To get the game client, click on file->package->target configuration->[game name] client and then go to file -> package -> windows x64. 
+
+Then when your game server is running, you can run your client from the command line with a specific IP address and port as arguments. For example, this command:
+
+```
+.\GameClient.exe 127.0.0.1 -port=30000
+```
+
+would mean that you are running your game client executable, GameClient.exe, to connect to your game server that is on 127.0.0.1 (i.e. local host) through port 30000. You can learn more about [command line arguments here](https://docs.unrealengine.com/4.26/en-US/ProductionPipelines/CommandLineArguments/).
+
+
