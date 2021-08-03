@@ -154,12 +154,17 @@ namespace Microsoft
                 {
                     logFolder = "";
                 }
-
-                if (logFolder.back() != '/' && logFolder.back() != '\\')
+#if _WIN32
+                if (!logFolder.empty() && logFolder.back() != '/' && logFolder.back() != '\\')
+                {
+                    logFolder.append("\\");
+                }
+#else
+                if (!logFolder.empty() && logFolder.back() != '/')
                 {
                     logFolder.append("/");
                 }
-
+#endif
                 std::string logPath = logFolder + logFile;
                 m_logFile.open(logPath.c_str(), std::ofstream::out);
             }
