@@ -20,7 +20,7 @@ Right click on the .uproject file and choose the option to "Switch Unreal Engine
 The popup seen below should appear. If you already see that the Unreal Engine version is source build, you don’t need to change anything, so click Cancel. If the Unreal version is not 
 currently the source build, select it from the dropdown list and then click OK. 
 
-![image depicting a window that says "Select Unreal Engine Version"](UnrealTutorialImages/SelectUnrealEngineVersion.png)
+![image depicting a window that says "Select Unreal Engine Version"](https://github.com/PlayFab/gsdk/tree/updateUnrealPluginReadMe/UnrealPlugin/Resources/UnrealTutorialImages/SelectUnrealEngineVersion.png)
 
 Right click on the .uproject file again and select “Generate Visual Studio Project Files".
 
