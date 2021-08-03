@@ -14,15 +14,15 @@ It was tested with Unreal Engine 4.26.2, but should work with other engines as w
 ## Dependencies
 When using the plugin a few things need to be taken care off.
 
-First, open your File Explorer and create a folder called ìPluginsî in your games' root directory. Then drag the Playfab GSDK plugin file into the Plugins folder.
+First, open your File Explorer and create a folder called ‚ÄúPlugins‚Äù in your games' root directory. Then drag the Playfab GSDK plugin file into the Plugins folder.
 
 Right click on the .uproject file and choose the option to "Switch Unreal Engine version", which is how you can quickly check which Unreal Engine version you are currently using. 
-The popup seen below should appear. If you already see that the Unreal Engine version is source build, you donít need to change anything, so click Cancel. If the Unreal version is not 
+The popup seen below should appear. If you already see that the Unreal Engine version is source build, you don‚Äôt need to change anything, so click Cancel. If the Unreal version is not 
 currently the source build, select it from the dropdown list and then click OK. 
 
-![image depicting a window that says "Select Unreal Engine Version"](UnrealTutorialImages/SelectUnrealEngineVersion.png)
+![image depicting a window that says "Select Unreal Engine Version"](SelectUnrealEngineVersion.png)
 
-Right click on the .uproject file again and select ìGenerate Visual Studio Project Files".
+Right click on the .uproject file again and select ‚ÄúGenerate Visual Studio Project Files".
 
 Then, double click to open the .uproject in Unreal.
 
