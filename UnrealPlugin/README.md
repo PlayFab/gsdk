@@ -20,7 +20,7 @@ Right click on the .uproject file and choose the option to "Switch Unreal Engine
 The popup seen below should appear. If you already see that the Unreal Engine version is source build, you don’t need to change anything, so click Cancel. If the Unreal version is not 
 currently the source build, select it from the dropdown list and then click OK. 
 
-![image depicting a window that says "Select Unreal Engine Version"](Resources/UnrealTutorialImages/SelectUnrealEngineVersion.png)
+![image depicting a window that says "Select Unreal Engine Version"](Documentation/SelectUnrealEngineVersion.png)
 
 Right click on the .uproject file again and select “Generate Visual Studio Project Files".
 
@@ -153,9 +153,10 @@ navigate to Maps&Modes on the left side. Scroll to the bottom, and then you can 
 Or you can update DefaultEngine.ini file and add this:
 [/Script/EngineSettings.GameMapsSettings]
 GameInstanceClass=/Script/[game name].MyGameInstance"
+
 Then select the option to build from development editor mode and build the project.
 
-![image depicting Visual Studio with the option to build in Development Editor Mode](Resources/UnrealTutorialImages/DevelopmentEditor.png)
+![image depicting Visual Studio with the option to build in Development Editor Mode](Documentation/DevelopmentEditor.png)
 
 Then select the option to build from development server mode and build the project again.
 
