@@ -126,10 +126,10 @@ public class <projectname>ServerTarget : TargetRules
 ```
 
 There are two ways to include the app-local prerequisites - either through the Unreal Engine editor or by editing DefaultGame.ini.
-######In the Unreal Editor
+###### In the Unreal Editor
 In the editor go to Edit -> Project Settings. In the opened window navigate to Packaging on the left side. Scroll to the bottom of the list, and tick "Include app-local prerequisities".
 
-######In DefaultGame.ini
+###### In DefaultGame.ini
 Or you can update DefaultGame.ini to show the following:
  [/Script/UnrealEd.ProjectPackagingSettings]
 IncludeAppLocalPrerequesites=True
@@ -145,11 +145,11 @@ Update [game name].Build.cs file to add "PlayfabGSDK" into the PublicDependencyM
 ```
 
 There are two ways to update the Game Instance Class - either through the Unreal Engine editor or by editing DefaultEngine.ini directly. 
-######In the Unreal Editor
+###### In the Unreal Editor
 In the editor, This can also be set through the UI in the editor. In the editor go to Edit -> Project Settings. From that opened window,
 navigate to Maps&Modes on the left side. Scroll to the bottom, and then you can set the option "Game Instance Class" to your new game instance class directly, and avoid typos.
 
-######In DefaultEngine.ini
+###### In DefaultEngine.ini
 Or you can update DefaultEngine.ini file and add this:
 [/Script/EngineSettings.GameMapsSettings]
 GameInstanceClass=/Script/[game name].MyGameInstance"
