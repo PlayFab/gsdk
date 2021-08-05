@@ -14,16 +14,16 @@
 
 #include "GSDKConfiguration.h"
 
-#include "GSDKUtils.h"
+#include "GSDKInternalUtils.h"
 #include "PlayfabGSDK.h"
 #include "Logging/LogMacros.h"
 #include "Misc/FileHelper.h"
 
 FConfigurationBase::FConfigurationBase()
 {
-	TitleId = UGSDKUtils::GetEnvironmentVariable(TITLE_ID_ENV_VAR);
-	BuildId = UGSDKUtils::GetEnvironmentVariable(BUILD_ID_ENV_VAR);
-	Region = UGSDKUtils::GetEnvironmentVariable(REGION_ENV_VAR);
+	TitleId = UGSDKInternalUtils::GetEnvironmentVariable(TITLE_ID_ENV_VAR);
+	BuildId = UGSDKInternalUtils::GetEnvironmentVariable(BUILD_ID_ENV_VAR);
+	Region = UGSDKInternalUtils::GetEnvironmentVariable(REGION_ENV_VAR);
 }
 
 const FString& FConfigurationBase::GetTitleId()
@@ -63,10 +63,10 @@ int32 FConfigurationBase::GetMaximumAllowedUnexpectedOperationsCount()
 
 FEnvironmentVariableConfiguration::FEnvironmentVariableConfiguration()
 {
-	HeartbeatEndpoint = UGSDKUtils::GetEnvironmentVariable(HEARTBEAT_ENDPOINT_ENV_VAR);
-	ServerId = UGSDKUtils::GetEnvironmentVariable(SERVER_ID_ENV_VAR);
-	LogFolder = UGSDKUtils::GetEnvironmentVariable(LOG_FOLDER_ENV_VAR);
-	SharedContentFolder = UGSDKUtils::GetEnvironmentVariable(SHARED_CONTENT_FOLDER_ENV_VAR);
+	HeartbeatEndpoint = UGSDKInternalUtils::GetEnvironmentVariable(HEARTBEAT_ENDPOINT_ENV_VAR);
+	ServerId = UGSDKInternalUtils::GetEnvironmentVariable(SERVER_ID_ENV_VAR);
+	LogFolder = UGSDKInternalUtils::GetEnvironmentVariable(LOG_FOLDER_ENV_VAR);
+	SharedContentFolder = UGSDKInternalUtils::GetEnvironmentVariable(SHARED_CONTENT_FOLDER_ENV_VAR);
 
 	// Game cert support was added once we switched to a json config, so we don't have values for them
 }
@@ -210,10 +210,17 @@ FJsonFileConfiguration::FJsonFileConfiguration(const FString& FileName)
 		for (const auto& PortJson: PortsConfiguration)
 		{
 			auto PortObject = PortJson->AsObject();
-			GamePorts.Add(FGamePort(PortObject->GetStringField("name"), PortObject->GetNumberField("serverListeningPort"), PortObject->GetNumberField("clientConnectionPort")));
+			FGamePort Port;
+			Port.Name = PortObject->GetStringField("name");
+			Port.ServerListeningPort = PortObject->GetNumberField("serverListeningPort");
+			Port.ClientConnectionPort = PortObject->GetNumberField("clientConnectionPort");
+			GamePorts.Add(Port);
 		}
 
-		ConnectionInfo = FGameServerConnectionInfo(ConnectionInfoJson->GetStringField("publicIpV4Adress"), GamePorts);
+		FGameServerConnectionInfo GameServerConnectionInfo;
+		GameServerConnectionInfo.PublicIpV4Address = ConnectionInfoJson->GetStringField("publicIpV4Adress");
+		GameServerConnectionInfo.GamePortsConfiguration = GamePorts;
+		ConnectionInfo = FGameServerConnectionInfo(GameServerConnectionInfo);
 	}
 }
 
