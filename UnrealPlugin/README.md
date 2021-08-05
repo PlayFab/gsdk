@@ -11,7 +11,7 @@ It was tested with Unreal Engine 4.26.2, but should work with other engines as w
 
 # Setup
 
-## Dependencies
+## Adding the plugin to the project
 When using the plugin a few things need to be taken care off.
 
 First, open your File Explorer and create a folder called “Plugins” in your games' root directory. Then drag the Playfab GSDK plugin file into the Plugins folder.
@@ -126,6 +126,7 @@ public class <projectname>ServerTarget : TargetRules
 }
 ```
 
+## Include Pre-requisites
 There are two ways to include the app-local prerequisites - either through the Unreal Engine editor or by editing DefaultGame.ini.
 ###### In the Unreal Editor
 In the editor go to Edit -> Project Settings. In the opened window navigate to Packaging on the left side. Scroll to the bottom of the list, and tick "Include app-local prerequisities".
@@ -167,10 +168,12 @@ Once the build succeeds, close Visual Studio.
 
 ## Packaging the game server
 
+Make sure that you have just built your project in development editor and development server mode in Visual Studio *before* doing this next step, because sometimes building fails when opening the project directly through the .uproject file.
+
 Right click on the .uproject file in your file editor and select "Generate Visual Studio Project Files". 
 
 Then open the .uproject file.
 
-In the top left of the Unreal editor menu, click on file->package->target configuration ->[game name] server and then go to file -> package -> windows x64. 
+In the top left of the Unreal editor menu, click on File -> Package -> Target Configuration -> [game name]Server and then go to File -> Package -> Windowsx64. 
 You can now use this packaged version of your game server to [test with LocalMultiplayerAgent](https://docs.microsoft.com/en-us/gaming/playfab/features/multiplayer/servers/locally-debugging-game-servers-and-integration-with-playfab) 
 or to use it directly with Playfab by [creating a build](https://developer.playfab.com/) and then using [Playfab MpsAllocatorSample](https://github.com/PlayFab/MpsSamples/blob/master/MpsAllocatorSample/README.md).
