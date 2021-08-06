@@ -1,4 +1,4 @@
-﻿// Copyright 2021 Stefan Krismann
+// Copyright 2021 Stefan Krismann
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,12 +12,23 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#pragma once
+#include "GSDKReadyForPlayersAction.h"
 
-#include "CoreMinimal.h"
+#include "GSDKUtils.h"
 
-class UGSDKUtils
+UGSDKReadyForPlayersAction* UGSDKReadyForPlayersAction::ReadyForPlayers()
 {
-public:
-	static FString GetEnvironmentVariable(const FString& EnvironmentVariableName);
-};
+	UGSDKReadyForPlayersAction* Action = NewObject<UGSDKReadyForPlayersAction>();
+	return Action;
+}
+
+void UGSDKReadyForPlayersAction::Activate()
+{
+	if (!UGSDKUtils::ReadyForPlayers())
+	{
+		OnTerminating.Broadcast();
+		return;
+	}
+
+	OnReadyForPlayers.Broadcast();
+}

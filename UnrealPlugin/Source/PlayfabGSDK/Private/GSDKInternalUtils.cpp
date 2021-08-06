@@ -12,17 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#pragma once
+#include "GSDKInternalUtils.h"
 
-#include "CoreMinimal.h"
+#include "HAL/PlatformMisc.h"
 
-#include "ConnectedPlayer.generated.h"
-
-USTRUCT(BlueprintType)
-struct FConnectedPlayer
+FString UGSDKInternalUtils::GetEnvironmentVariable(const FString& EnvironmentVariableName)
 {
-	GENERATED_BODY()	
-public:
-	UPROPERTY(BlueprintReadOnly)
-	FString PlayerId;
-};
+	return FPlatformMisc::GetEnvironmentVariable(*EnvironmentVariableName);
+}

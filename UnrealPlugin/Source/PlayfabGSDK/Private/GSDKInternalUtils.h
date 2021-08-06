@@ -16,13 +16,8 @@
 
 #include "CoreMinimal.h"
 
-#include "ConnectedPlayer.generated.h"
-
-USTRUCT(BlueprintType)
-struct FConnectedPlayer
+class UGSDKInternalUtils
 {
-	GENERATED_BODY()	
 public:
-	UPROPERTY(BlueprintReadOnly)
-	FString PlayerId;
+	static FString GetEnvironmentVariable(const FString& EnvironmentVariableName);
 };

@@ -15,7 +15,7 @@
 #include "GSDKInternal.h"
 
 #include "GSDKConfiguration.h"
-#include "GSDKUtils.h"
+#include "GSDKInternalUtils.h"
 #include "HttpModule.h"
 #include "Async/Async.h"
 #include "Json.h"
@@ -31,7 +31,7 @@ FGSDKInternal::FGSDKInternal()
 {
 	TUniquePtr<FConfiguration> ConfigPtr;
 
-	FString FileName = UGSDKUtils::GetEnvironmentVariable(TEXT("GSDK_CONFIG_FILE"));
+	FString FileName = UGSDKInternalUtils::GetEnvironmentVariable(TEXT("GSDK_CONFIG_FILE"));
 
 	// If the configuration file is not there, we'll get our config from environment variables
 	if (!FPaths::FileExists(FileName))

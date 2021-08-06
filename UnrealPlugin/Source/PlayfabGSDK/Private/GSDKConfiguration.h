@@ -21,6 +21,7 @@
 class FConfiguration
 {
 public:
+	virtual ~FConfiguration() = default;
 	virtual const FString& GetHeartbeatEndpoint() = 0;
 	virtual const FString& GetServerId() = 0;
 	virtual const FString& GetLogFolder() = 0;

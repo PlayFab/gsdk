@@ -25,7 +25,7 @@ DECLARE_LOG_CATEGORY_EXTERN(LogPlayfabGSDK, Log, All);
 
 
 
-class PLAYFABGSDK_API FPlayfabGSDKModule : public IModuleInterface
+class FPlayfabGSDKModule : public IModuleInterface
 {
 public:
 
@@ -50,10 +50,6 @@ public:
     /// <summary>Returns all configuration settings</summary>
     /// <returns>unordered map of string key:value configuration setting values</returns>
     const TMap<FString, FString> GetConfigSettings();
-
-    /// <summary>Kicks off communication threads, heartbeats, etc.  Called implicitly by ReadyForPlayers if not called beforehand.</summary>
-    /// <param name="debugLogs">Enables outputting additional logs to the GSDK log file.</param>
-    // void Start(bool debugLogs = false);
 
     /// <summary>Tells the Xcloud service information on who is connected.</summary>
     /// <param name="CurrentlyConnectedPlayers">Array of player ids</param>
