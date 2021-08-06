@@ -28,26 +28,26 @@ See the example below:
 
 ```json
 {
-	"FileVersion": 3,
-	"EngineAssociation": "4.26",
-	"Category": "",
-	"Description": "",
-	"Modules": [
-		{
-			"Name": "<projectname>",
-			"Type": "Runtime",
-			"LoadingPhase": "Default",
-			"AdditionalDependencies": [
-				"Engine"
-			]
-		}
-	],
-	"Plugins": [                    // Add this if it doesn't exist
-		{                           // Add this
-			"Name": "PlayfabGSDK",  // Add this
-			"Enabled": true         // Add this
-		}                           // Add this
-	]                               // Add this if it doesn't exist
+    "FileVersion": 3,
+    "EngineAssociation": "4.26",
+    "Category": "",
+    "Description": "",
+    "Modules": [
+        {
+            "Name": "<projectname>",
+            "Type": "Runtime",
+            "LoadingPhase": "Default",
+            "AdditionalDependencies": [
+                "Engine"
+            ]
+        }
+    ],
+    "Plugins": [                    // Add this if it doesn't exist
+        {                           // Add this
+            "Name": "PlayfabGSDK",  // Add this
+            "Enabled": true         // Add this
+        }                           // Add this
+    ]                               // Add this if it doesn't exist
 }
 ```
 
@@ -55,9 +55,9 @@ See the example below:
 Update <modulename>.Build.cs file to add "PlayfabGSDK" into the PublicDependencyModuleNames.AddRange(); list as follows:
 
 ```csharp
-		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "HeadMountedDisplay", "PlayfabGSDK"});
+        PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "HeadMountedDisplay", "PlayfabGSDK"});
 
-		PrivateDependencyModuleNames.AddRange(new string[] { });
+        PrivateDependencyModuleNames.AddRange(new string[] { });
 ```
 
 There are two ways to update the Game Instance Class - either through the Unreal Engine editor or by editing DefaultEngine.ini directly. 
@@ -100,17 +100,17 @@ Result should be:
 ```csharp 
 public class <projectname>ServerTarget : TargetRules
 {
-	public <projectname>ServerTarget( TargetInfo Target) : base(Target)
-	{
-		Type = TargetType.Server;
-		DefaultBuildSettings = BuildSettingsVersion.V2;
-		ExtraModuleNames.AddRange( new string[] { "<projectname>" } );
-		
-		DisablePlugins.Add("WMFMediaPlayer");
-		DisablePlugins.Add("AsyncLoadingScreen"); //if you are using this plugin
-		DisablePlugins.Add("WindowsMoviePlayer");
-		DisablePlugins.Add("MediaFoundationMediaPlayer");
-	}
+    public <projectname>ServerTarget( TargetInfo Target) : base(Target)
+    {
+        Type = TargetType.Server;
+        DefaultBuildSettings = BuildSettingsVersion.V2;
+        ExtraModuleNames.AddRange( new string[] { "<projectname>" } );
+        
+        DisablePlugins.Add("WMFMediaPlayer");
+        DisablePlugins.Add("AsyncLoadingScreen"); //if you are using this plugin
+        DisablePlugins.Add("WindowsMoviePlayer");
+        DisablePlugins.Add("MediaFoundationMediaPlayer");
+    }
 }
 ```
 
@@ -131,34 +131,34 @@ Then using Visual Studio, open those newly created files and add in the followin
 
 void UMyGameInstance::Init()
 {
-	FOnGSDKShutdown_Dyn OnGsdkShutdown;
-	OnGsdkShutdown.BindDynamic(this, &UMyGameInstance::OnGSDKShutdown);
-	FOnGSDKHealthCheck_Dyn OnGsdkHealthCheck;
-	OnGsdkHealthCheck.BindDynamic(this, &UMyGameInstance::OnGSDKHealthCheck);
+    FOnGSDKShutdown_Dyn OnGsdkShutdown;
+    OnGsdkShutdown.BindDynamic(this, &UMyGameInstance::OnGSDKShutdown);
+    FOnGSDKHealthCheck_Dyn OnGsdkHealthCheck;
+    OnGsdkHealthCheck.BindDynamic(this, &UMyGameInstance::OnGSDKHealthCheck);
 
-	UGSDKUtils::RegisterGSDKShutdownDelegate(OnGsdkShutdown);
-	UGSDKUtils::RegisterGSDKHealthCheckDelegate(OnGsdkHealthCheck);
+    UGSDKUtils::RegisterGSDKShutdownDelegate(OnGsdkShutdown);
+    UGSDKUtils::RegisterGSDKHealthCheckDelegate(OnGsdkHealthCheck);
 }
 
 void UMyGameInstance::OnStart()
 {
-	UE_LOG(LogTemp, Warning, TEXT("Reached onStart!"));
-	if (!UGSDKUtils::ReadyForPlayers())
-	{
-		FPlatformMisc::RequestExit(false);
-	}
+    UE_LOG(LogTemp, Warning, TEXT("Reached onStart!"));
+    if (!UGSDKUtils::ReadyForPlayers())
+    {
+        FPlatformMisc::RequestExit(false);
+    }
 }
 
 void UMyGameInstance::OnGSDKShutdown()
 {
-	UE_LOG(LogTemp, Warning, TEXT("Shutdown!"));
-	FPlatformMisc::RequestExit(false);
+    UE_LOG(LogTemp, Warning, TEXT("Shutdown!"));
+    FPlatformMisc::RequestExit(false);
 }
 
 bool UMyGameInstance::OnGSDKHealthCheck()
 {
-	UE_LOG(LogTemp, Warning, TEXT("Healthy!"));
-	return true;
+    UE_LOG(LogTemp, Warning, TEXT("Healthy!"));
+    return true;
 }
 ```
 
@@ -178,20 +178,20 @@ bool UMyGameInstance::OnGSDKHealthCheck()
 UCLASS()
 class THIRDPERSONMP_API UMyGameInstance : public UGameInstance
 {
-	GENERATED_BODY()
+    GENERATED_BODY()
 
 public:
 
-	virtual void Init() override;
-	virtual void OnStart() override;
+    virtual void Init() override;
+    virtual void OnStart() override;
 
 protected:
 
-	UFUNCTION()
-	void OnGSDKShutdown();
-	
-	UFUNCTION()
-	bool OnGSDKHealthCheck();
+    UFUNCTION()
+    void OnGSDKShutdown();
+    
+    UFUNCTION()
+    bool OnGSDKHealthCheck();
 };
 ```
 In your MyGameInstance.h file make sure you replace the line that says class THIRDPERSONMP_API should say class [YOUR GAME NAME IN ALL CAPS_API].
