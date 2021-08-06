@@ -55,9 +55,9 @@ See the example below:
 Update <modulename>.Build.cs file to add "PlayfabGSDK" into the PublicDependencyModuleNames.AddRange(); list as follows:
 
 ```csharp
-        PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "HeadMountedDisplay", "PlayfabGSDK"});
+PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "HeadMountedDisplay", "PlayfabGSDK"});
 
-        PrivateDependencyModuleNames.AddRange(new string[] { });
+PrivateDependencyModuleNames.AddRange(new string[] { });
 ```
 
 There are two ways to update the Game Instance Class - either through the Unreal Engine editor or by editing DefaultEngine.ini directly. 
