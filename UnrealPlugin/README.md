@@ -11,8 +11,7 @@ It was tested with Unreal Engine 4.26.2, but should work with other engines as w
 The sample game these instructions were created with was called ThirdPersonMP, so replace anywhere you see that with your game name.
 
 # Prerequisites:
-- Download Unreal Engine Source Build by following [these instructions](https://docs.unrealengine.com/4.26/en-US/ProgrammingAndScripting/ProgrammingWithCPP/DownloadingSourceCode/) from the Unreal website
-- Download Unreal Engine (this was tested on 4.26.2)
+- Download Unreal Engine Source Build by following [these instructions](https://docs.unrealengine.com/4.26/en-US/ProgrammingAndScripting/ProgrammingWithCPP/DownloadingSourceCode/) from the Unreal Engine website (this was tested on 4.26.2)
 - Download the [Unreal PlayfabGSDK Plugin folder](https://github.com/PlayFab/gsdk/tree/master/UnrealPlugin)
 - Download Visual Studio (the [community version is free](https://visualstudio.microsoft.com/vs/community/))
 
