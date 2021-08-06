@@ -126,12 +126,16 @@ Then using Visual Studio, open those newly created files and add in the followin
 #include "MyGameInstance.h"
 
 #include "GSDKUtils.h"
-#include "PlayfabGSDK.h"
 
 void UMyGameInstance::Init()
 {
-	FPlayfabGSDKModule::Get().OnShutdown.BindUObject(this, &UMyGameInstance::OnGSDKShutdown);
-	FPlayfabGSDKModule::Get().OnHealthCheck.BindUObject(this, &UMyGameInstance::OnGSDKHealthCheck);
+	FOnGSDKShutdown_Dyn OnGsdkShutdown;
+	OnGsdkShutdown.BindDynamic(this, &UMyGameInstance::OnGSDKShutdown);
+	FOnGSDKHealthCheck_Dyn OnGsdkHealthCheck;
+	OnGsdkHealthCheck.BindDynamic(this, &UMyGameInstance::OnGSDKHealthCheck);
+
+	UGSDKUtils::RegisterGSDKShutdownDelegate(OnGsdkShutdown);
+	UGSDKUtils::RegisterGSDKHealthCheckDelegate(OnGsdkHealthCheck);
 }
 
 void UMyGameInstance::OnStart()
@@ -181,7 +185,10 @@ public:
 
 protected:
 
+	UFUNCTION()
 	void OnGSDKShutdown();
+	
+	UFUNCTION()
 	bool OnGSDKHealthCheck();
 };
 ```
