@@ -213,7 +213,7 @@ In the dropdown of the new node "Create matching function". **This is important,
 In the function make sure the return boolean value is checked.
 ![Playfab GSDK Health Check function](Documentation/BlueprintGSDKHealthCheckFunction.png)
 
-Dont forget to connect all the nodes to the Event Init node.
+Don't forget to connect all the nodes to the Event Init node.
 
 In the end add the "Ready for Players" to be able to react to the ready signal of Playfab.
 ![Playfab GSDK Full Graph](Documentation/BlueprintFullGraph.png)
