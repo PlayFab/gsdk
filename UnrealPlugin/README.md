@@ -42,12 +42,12 @@ See the example below:
 			]
 		}
 	],
-	"Plugins": [					// Add this if it doesn't exist
-		{							// Add this
-			"Name": "PlayfabGSDK",	// Add this
-			"Enabled": true			// Add this
-		}							// Add this
-	]								// Add this if it doesn't exist
+	"Plugins": [                    // Add this if it doesn't exist
+		{                           // Add this
+			"Name": "PlayfabGSDK",  // Add this
+			"Enabled": true         // Add this
+		}                           // Add this
+	]                               // Add this if it doesn't exist
 }
 ```
 
