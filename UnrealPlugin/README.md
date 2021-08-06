@@ -3,6 +3,9 @@ This Unreal Plugin is implementing the GSDK directly in Unreal Engine.
 
 This plugin offers both a Blueprint API and a C++ API. This does however not mean that the Blueprint API does not require the game to be a C++ project. If it is currently a Blueprint only project, then you need to convert it beforehand, before adding the plugin.
 
+The following nodes are supported:
+![Playfab GSDK Blueprint Nodes](Documentation/GSDKBlueprintNodes.png)
+
 It was tested with Unreal Engine 4.26.2, but should work with other engines as well.
 
 The sample game these instructions were created with was called ThirdPersonMP, so replace anywhere you see that with your game name.
