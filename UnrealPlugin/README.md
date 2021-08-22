@@ -223,13 +223,13 @@ GameInstanceClass=/Script/[game name].MyGameInstance
 ## Include Pre-requisites for Windows Dedicated Server
 There are two ways to include the app-local prerequisites - either through the Unreal Engine editor or by editing DefaultGame.ini.
 ### In the Unreal Editor
-In the editor go to Edit -> Project Settings. In the opened window navigate to Packaging on the left side. Scroll to the bottom of the list, and tick "Include app-local prerequisities".
+In the editor go to Edit -> Project Settings. In the opened window navigate to Packaging on the left side. Scroll to the bottom of the list, and tick "Include app-local prerequisites".
 
 ### In DefaultGame.ini
 Or you can update DefaultGame.ini to show the following:
 ```ini
 [/Script/UnrealEd.ProjectPackagingSettings]
-IncludeAppLocalPrerequesites=True
+IncludeAppLocalPrerequisites=True
 ```
 
 If the category already exists in your DefaultGame.ini, then just add the second line to it. This ensures that all app local dependencies ship with the game as well.
