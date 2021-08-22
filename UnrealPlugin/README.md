@@ -60,18 +60,6 @@ PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engi
 PrivateDependencyModuleNames.AddRange(new string[] { });
 ```
 
-There are two ways to update the Game Instance Class - either through the Unreal Engine editor or by editing DefaultEngine.ini directly. 
-###### In the Unreal Editor
-In the editor, This can also be set through the UI in the editor. In the editor go to Edit -> Project Settings. From that opened window,
-navigate to Maps&Modes on the left side. Scroll to the bottom, and then you can set the option "Game Instance Class" to your new game instance class directly, and avoid typos.
-
-###### In DefaultEngine.ini
-Or you can update DefaultEngine.ini file and add this:
-```ini
-[/Script/EngineSettings.GameMapsSettings]
-GameInstanceClass=/Script/[game name].MyGameInstance
-```
-
 Right click on the .uproject file and choose the option to "Switch Unreal Engine version", which is how you can quickly check which Unreal Engine version you are currently using. 
 The popup seen below should appear. If you already see that the Unreal Engine version is source build, you don’t need to change anything, so click Cancel. If the Unreal version is not 
 currently the source build, select it from the dropdown list and then click OK. 
@@ -217,6 +205,20 @@ Don't forget to connect all the nodes to the Event Init node.
 
 In the end add the "Ready for Players" to be able to react to the ready signal of Playfab.
 ![Playfab GSDK Full Graph](Documentation/BlueprintFullGraph.png)
+
+## Set the Game Instance class
+    
+After creating a custom game instance class that integrates with the gsdk, you have to configure your project to actually use this newly created game instance class. There are two ways to do this - either through the Unreal Engine editor or by editing DefaultEngine.ini directly. 
+###### In the Unreal Editor
+In the editor, This can also be set through the UI in the editor. In the editor go to Edit -> Project Settings. From that opened window,
+navigate to Maps&Modes on the left side. Scroll to the bottom, and then you can set the option "Game Instance Class" to your new game instance class directly, and avoid typos.
+
+###### In DefaultEngine.ini
+Or you can update DefaultEngine.ini file and add this:
+```ini
+[/Script/EngineSettings.GameMapsSettings]
+GameInstanceClass=/Script/[game name].MyGameInstance
+```
 
 ## Include Pre-requisites for Windows Dedicated Server
 There are two ways to include the app-local prerequisites - either through the Unreal Engine editor or by editing DefaultGame.ini.
