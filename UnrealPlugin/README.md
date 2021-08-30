@@ -20,7 +20,7 @@ The sample game these instructions were created with was called ThirdPersonMP, s
 ## Adding the plugin to the project
 When using the plugin a few things need to be taken care off.
 
-First, open File Explorer and create a folder called “Plugins” in your games' root directory and in the Plugins folder, create a folder called "PlayfabGSDK". Then, drag all the Playfab GSDK Unreal plugin files from here into the Plugins/PlayfabGSDK folder.
+First, open File Explorer and create a folder called “Plugins” in your games' root directory and in the Plugins folder, create a folder called "PlayfabGSDK". Then, drag all the files from the UnrealPlugin folder in this repo into the Plugins/PlayfabGSDK folder.
 
 Open the .uproject file in a text editor of your choice. In the plugins array add the PlayfabGSDK.
 
