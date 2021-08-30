@@ -20,7 +20,7 @@ The sample game these instructions were created with was called ThirdPersonMP, s
 ## Adding the plugin to the project
 When using the plugin a few things need to be taken care off.
 
-First, open your File Explorer and create a folder called “Plugins” in your games' root directory. Then drag the Playfab GSDK plugin file into the Plugins folder.
+First, open File Explorer and create a folder called “Plugins” in your games' root directory and in the Plugins folder, create a folder called "PlayfabGSDK". Then, drag all the files from the UnrealPlugin folder in this repo into the Plugins/PlayfabGSDK folder.
 
 Open the .uproject file in a text editor of your choice. In the plugins array add the PlayfabGSDK.
 
@@ -58,18 +58,6 @@ Update <modulename>.Build.cs file to add "PlayfabGSDK" into the PublicDependency
 PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "HeadMountedDisplay", "PlayfabGSDK"});
 
 PrivateDependencyModuleNames.AddRange(new string[] { });
-```
-
-There are two ways to update the Game Instance Class - either through the Unreal Engine editor or by editing DefaultEngine.ini directly. 
-###### In the Unreal Editor
-In the editor, This can also be set through the UI in the editor. In the editor go to Edit -> Project Settings. From that opened window,
-navigate to Maps&Modes on the left side. Scroll to the bottom, and then you can set the option "Game Instance Class" to your new game instance class directly, and avoid typos.
-
-###### In DefaultEngine.ini
-Or you can update DefaultEngine.ini file and add this:
-```ini
-[/Script/EngineSettings.GameMapsSettings]
-GameInstanceClass=/Script/[game name].MyGameInstance
 ```
 
 Right click on the .uproject file and choose the option to "Switch Unreal Engine version", which is how you can quickly check which Unreal Engine version you are currently using. 
@@ -218,16 +206,32 @@ Don't forget to connect all the nodes to the Event Init node.
 In the end add the "Ready for Players" to be able to react to the ready signal of Playfab.
 ![Playfab GSDK Full Graph](Documentation/BlueprintFullGraph.png)
 
+## Set the Game Instance class
+    
+After creating a custom game instance class that integrates with the gsdk, you have to configure your project to actually use this newly created game instance class. There are two ways to do this - either through the Unreal Engine editor or by editing DefaultEngine.ini directly.
+
+###### In the Unreal Editor
+In the editor, this can also be set through the UI in the editor. In the editor go to Edit -> Project Settings. From that opened window,
+navigate to Maps&Modes on the left side. Scroll to the bottom, and then you can set the option "Game Instance Class" to your new game instance class directly, and avoid typos.
+
+###### In DefaultEngine.ini
+Or you can update DefaultEngine.ini file and add this:
+```ini
+[/Script/EngineSettings.GameMapsSettings]
+GameInstanceClass=/Script/[game name].MyGameInstance
+```
+
 ## Include Pre-requisites for Windows Dedicated Server
 There are two ways to include the app-local prerequisites - either through the Unreal Engine editor or by editing DefaultGame.ini.
+
 ### In the Unreal Editor
-In the editor go to Edit -> Project Settings. In the opened window navigate to Packaging on the left side. Scroll to the bottom of the list, and tick "Include app-local prerequisities".
+In the editor go to Edit -> Project Settings. In the opened window navigate to Packaging on the left side. Scroll to the bottom of the list, and tick "Include app-local prerequisites".
 
 ### In DefaultGame.ini
 Or you can update DefaultGame.ini to show the following:
 ```ini
 [/Script/UnrealEd.ProjectPackagingSettings]
-IncludeAppLocalPrerequesites=True
+IncludeAppLocalPrerequisites=True
 ```
 
 If the category already exists in your DefaultGame.ini, then just add the second line to it. This ensures that all app local dependencies ship with the game as well.
