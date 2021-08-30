@@ -283,7 +283,7 @@ CMD ./startup.sh
 ### startup&#46;sh bash script:
 ```bash
 logFolderName=$(cat $GSDK_CONFIG_FOLDER | jq .logFolder)
-chown -R ue.ue $logfolderName
+chown -R ue.ue $logFolderName
 su ue -c ./<projectname>Server.sh
 ```
 Make sure that the line endings in the startup&#46;sh file are LF (\\n) and not CRLF (\\r\\n).
