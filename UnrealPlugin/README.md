@@ -208,7 +208,8 @@ In the end add the "Ready for Players" to be able to react to the ready signal o
 
 ## Set the Game Instance class
     
-After creating a custom game instance class that integrates with the gsdk, you have to configure your project to actually use this newly created game instance class. There are two ways to do this - either through the Unreal Engine editor or by editing DefaultEngine.ini directly. 
+After creating a custom game instance class that integrates with the gsdk, you have to configure your project to actually use this newly created game instance class. There are two ways to do this - either through the Unreal Engine editor or by editing DefaultEngine.ini directly.
+
 ###### In the Unreal Editor
 In the editor, this can also be set through the UI in the editor. In the editor go to Edit -> Project Settings. From that opened window,
 navigate to Maps&Modes on the left side. Scroll to the bottom, and then you can set the option "Game Instance Class" to your new game instance class directly, and avoid typos.
@@ -222,6 +223,7 @@ GameInstanceClass=/Script/[game name].MyGameInstance
 
 ## Include Pre-requisites for Windows Dedicated Server
 There are two ways to include the app-local prerequisites - either through the Unreal Engine editor or by editing DefaultGame.ini.
+
 ### In the Unreal Editor
 In the editor go to Edit -> Project Settings. In the opened window navigate to Packaging on the left side. Scroll to the bottom of the list, and tick "Include app-local prerequisites".
 
