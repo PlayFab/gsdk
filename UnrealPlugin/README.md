@@ -210,7 +210,7 @@ In the end add the "Ready for Players" to be able to react to the ready signal o
     
 After creating a custom game instance class that integrates with the gsdk, you have to configure your project to actually use this newly created game instance class. There are two ways to do this - either through the Unreal Engine editor or by editing DefaultEngine.ini directly. 
 ###### In the Unreal Editor
-In the editor, This can also be set through the UI in the editor. In the editor go to Edit -> Project Settings. From that opened window,
+In the editor, this can also be set through the UI in the editor. In the editor go to Edit -> Project Settings. From that opened window,
 navigate to Maps&Modes on the left side. Scroll to the bottom, and then you can set the option "Game Instance Class" to your new game instance class directly, and avoid typos.
 
 ###### In DefaultEngine.ini
