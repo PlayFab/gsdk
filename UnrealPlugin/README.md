@@ -286,4 +286,3 @@ su ue -c ./<projectname>Server.sh
 Make sure that the line endings in the startup&#46;sh file are LF (\\n) and not CRLF (\\r\\n).
 
 Thank you to [narthur157](https://github.com/narthur157) for his amazing [Dockerfile](https://github.com/narthur157/playfab-gsdk-ue4), which this Dockerfile is based on.
-Thank you to [narthur157](https://github.com/narthur157) for his amazing [Dockerfile](https://github.com/narthur157/playfab-gsdk-ue4), which this Dockerfile is based on.
