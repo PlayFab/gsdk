@@ -264,8 +264,6 @@ During testing the following Dockerfile + startup.sh script worked excellent wit
 ```Dockerfile
 FROM ubuntu:18.04
 
-RUN apt install -y jq
-
 # Unreal refuses to run as root user, so we must create a user to run as
 # Docker uses root by default
 RUN useradd --system ue
@@ -282,8 +280,7 @@ CMD ./startup.sh
 
 ### startup&#46;sh bash script:
 ```bash
-logFolderName=$(cat $GSDK_CONFIG_FOLDER | jq .logFolder)
-chown -R ue.ue $logFolderName
+chown -R ue.ue $PF_SERVER_LOG_DIRECTORY
 su ue -c ./<projectname>Server.sh
 ```
 Make sure that the line endings in the startup&#46;sh file are LF (\\n) and not CRLF (\\r\\n).
