@@ -102,21 +102,32 @@ public class <projectname>ServerTarget : TargetRules
 }
 ```
 
-## Example integration
+## Example C++ integration
 
-## C++ integration
+## Updating the GameInstance Class
 
-### Instructions for An Existing GameInstance Class
+### Creating a GameInstance Class
 
-If you are using a game that already has a GameInstance class, (for example, ShooterGame from Unreal's sample library), then use the following instructions.
+If you are in the process of creating a game from scratch and do not yet have a GameInstance class, then first follow these example instructions to create a GameInstance class. 
 
-*Otherwise,* If you are in the process of creating a game from scratch and do not yet have a GameInstance class, then go to the next section below titled
-**"Instructions for No Existing GameInstance Class"**.
+If you are using a game that already has a GameInstance class, (for example, ShooterGame from Unreal's sample library), then move on to the section titled _**Modify the GameInstance Class**_.
 
-Locate your GameInstance class, which is most likely called something similar to [your game name]GameInstance. From now on, your game instance class will
+----
+
+In the Unreal Editor, go to Files->Create a new C++ class and select the option to "Show all classes". Then search for GameInstance. 
+By selecting it directly, everything should be generated correctly and then you can add the functions we detail below.
+
+Then close Unreal and generate project files in source build mode again.
+
+Then using Visual Studio, open those newly created files and follow instructions to modify the Game Instance class.
+
+### Modify the Game Instance Class
+Locate your GameInstance class, which is most likely called something similar to [your game name]GameInstance or MyGameInstance. From now on, your game instance class will
 be denoted with [YourGameInstanceClassName].
 
-First, check the include statements and ensure that the following are included:
+#### Modifying the GameInstance header file
+
+First, check the include statements and ensure that the following are included in the header file for your GameInstance class ([YourGameInstanceClassName].h):
 
 ```cpp
 #include "CoreMinimal.h"
@@ -124,8 +135,8 @@ First, check the include statements and ensure that the following are included:
 #include "MyGameInstance.generated.h"
 ```
 
-In the header file for your GameInstance class ([YourGameInstanceClassName].h), add the following declarations to the public section:
-(If you already have an Init() function, do not include this)
+Then, add the following declarations to the public section:
+(If you already have an Init() function, there is no need to include another declaration)
 
 ```cpp
 public:
@@ -146,7 +157,9 @@ protected:
 };
 ```
 
-Then, locate your [YourGameInstanceClassName].cpp file.
+#### Modifying the GameInstance Cpp file
+
+Then, locate the [YourGameInstanceClassName].cpp file. 
 
 Make sure that the following are included:
 
@@ -156,9 +169,27 @@ Make sure that the following are included:
 #include "GSDKUtils.h"
 ```
 
-Then, check in [YourGameInstanceClassName].cpp file to see if you have a boolean or variable that indicates whether the instance is 
+Then locate your Init() function. If you _**don't**_ have an Init() function yet, then add in the function as such:
+
+##### Creating Init() function
+```cpp 
+void U[YourGameInstanceClassName]::Init()
+{
+    FOnGSDKShutdown_Dyn OnGsdkShutdown;
+    OnGsdkShutdown.BindDynamic(this, &UMyGameInstance::OnGSDKShutdown);
+    FOnGSDKHealthCheck_Dyn OnGsdkHealthCheck;
+    OnGsdkHealthCheck.BindDynamic(this, &UMyGameInstance::OnGSDKHealthCheck);
+
+    UGSDKUtils::RegisterGSDKShutdownDelegate(OnGsdkShutdown);
+    UGSDKUtils::RegisterGSDKHealthCheckDelegate(OnGsdkHealthCheck);
+}
+``` 
+----
+If you already **had** an Init() function,
+go to check in [YourGameInstanceClassName].cpp file to see if you have a variable that indicates whether the instance is 
 for a dedicated server. **If you can find this variable**, then add in this in at the end of your Init() function:
 
+##### Modifying Existing Init() function
 ```cpp
 	if (IsDedicatedServerInstance() == true)
 	{
@@ -184,8 +215,9 @@ a dedicated server, so you could wrap the call to ReadyForPlayers() as such at t
     }
 #endif
 ```
+----
 
-And add these method implementations to the bottom of [YourGameInstanceClassName].cpp:
+Lastly, add these method implementations to the bottom of [YourGameInstanceClassName].cpp file:
 
 ```cpp
 void UMyGameInstance::OnStart()
@@ -209,89 +241,6 @@ bool UMyGameInstance::OnGSDKHealthCheck()
     return true;
 }
 ```
-
-### Instructions for No Existing GameInstance Class
-If you are in the process of creating a game from scratch and do not yet have a GameInstance class, then follow these example instructions.
-
-In the Unreal Editor, go to Files->Create a new C++ class and select the option to "Show all classes". Then search for GameInstance. 
-By selecting it directly, everything should be generated correctly and then you can add the functions we detail below.
-
-Then close Unreal and generate project files in source build mode again.
-
-Then using Visual Studio, open those newly created files and add in the following methods for MyGameInstance.cpp and MyGameInstance.h.
-
-#### MyGameInstance.cpp
-```cpp 
-#include "MyGameInstance.h"
-
-#include "GSDKUtils.h"
-
-void UMyGameInstance::Init()
-{
-    FOnGSDKShutdown_Dyn OnGsdkShutdown;
-    OnGsdkShutdown.BindDynamic(this, &UMyGameInstance::OnGSDKShutdown);
-    FOnGSDKHealthCheck_Dyn OnGsdkHealthCheck;
-    OnGsdkHealthCheck.BindDynamic(this, &UMyGameInstance::OnGSDKHealthCheck);
-
-    UGSDKUtils::RegisterGSDKShutdownDelegate(OnGsdkShutdown);
-    UGSDKUtils::RegisterGSDKHealthCheckDelegate(OnGsdkHealthCheck);
-}
-
-void UMyGameInstance::OnStart()
-{
-    UE_LOG(LogTemp, Warning, TEXT("Reached onStart!"));
-    if (!UGSDKUtils::ReadyForPlayers())
-    {
-        FPlatformMisc::RequestExit(false);
-    }
-}
-
-void UMyGameInstance::OnGSDKShutdown()
-{
-    UE_LOG(LogTemp, Warning, TEXT("Shutdown!"));
-    FPlatformMisc::RequestExit(false);
-}
-
-bool UMyGameInstance::OnGSDKHealthCheck()
-{
-    UE_LOG(LogTemp, Warning, TEXT("Healthy!"));
-    return true;
-}
-```
-
-#### MyGameInstance.h:
-```cpp
-// Fill out your copyright notice in the Description page of Project Settings.
-
-#pragma once
-
-#include "CoreMinimal.h"
-#include "Engine/GameInstance.h"
-#include "MyGameInstance.generated.h"
-
-/**
- *
- */
-UCLASS()
-class THIRDPERSONMP_API UMyGameInstance : public UGameInstance
-{
-    GENERATED_BODY()
-
-public:
-
-    virtual void Init() override;
-    virtual void OnStart() override;
-
-protected:
-
-    UFUNCTION()
-    void OnGSDKShutdown();
-    
-    UFUNCTION()
-    bool OnGSDKHealthCheck();
-};
-```
-In your MyGameInstance.h file make sure you replace the line that says class THIRDPERSONMP_API should say class [YOUR GAME NAME IN ALL CAPS_API].
 
 ## Blueprint implementation
 In a folder of your choice in the Content Browser right-click and create a Blueprint class. In the All classes dropdown menu find the GameInstance class. In this example the blueprint is named "BP_GameInstance".
