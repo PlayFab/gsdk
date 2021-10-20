@@ -1,10 +1,10 @@
-# Instructions on Integrating the Playfab GSDK Unreal Plugin Preview
+# Instructions on Integrating the PlayFab GSDK Unreal Plugin Preview
 This Unreal Plugin is implementing the GSDK directly in Unreal Engine.
 
 This plugin offers both a Blueprint API and a C++ API. This does however not mean that the Blueprint API does not require the game to be a C++ project. If it is currently a Blueprint only project, then you need to convert it beforehand, before adding the plugin.
 
 The following nodes are supported:
-![Playfab GSDK Blueprint Nodes](Documentation/GSDKBlueprintNodes.png)
+![PlayFab GSDK Blueprint Nodes](Documentation/GSDKBlueprintNodes.png)
 
 It was tested with Unreal Engine 4.26.2, but should work with other engines as well.
 
@@ -12,7 +12,7 @@ The sample game these instructions were created with was called ThirdPersonMP, s
 
 # Prerequisites:
 - Download Unreal Engine Source Build by following [these instructions](https://docs.unrealengine.com/4.26/en-US/ProgrammingAndScripting/ProgrammingWithCPP/DownloadingSourceCode/) from the Unreal Engine website (this was tested on 4.26.2)
-- Download the [Unreal PlayfabGSDK Plugin folder](https://github.com/PlayFab/gsdk/tree/master/UnrealPlugin)
+- Download the [Unreal PlayFabGSDK Plugin folder](https://github.com/PlayFab/gsdk/tree/master/UnrealPlugin)
 - Download Visual Studio (the [community version is free](https://visualstudio.microsoft.com/vs/community/))
 
 # Setup
@@ -20,9 +20,9 @@ The sample game these instructions were created with was called ThirdPersonMP, s
 ## Adding the plugin to the project
 When using the plugin a few things need to be taken care off.
 
-First, open File Explorer and create a folder called “Plugins” in your games' root directory and in the Plugins folder, create a folder called "PlayfabGSDK". Then, drag all the files from the UnrealPlugin folder in this repo into the Plugins/PlayfabGSDK folder.
+First, open File Explorer and create a folder called “Plugins” in your games' root directory and in the Plugins folder, create a folder called "PlayFabGSDK". Then, drag all the files from the UnrealPlugin folder in this repo into the Plugins/PlayFabGSDK folder.
 
-Open the .uproject file in a text editor of your choice. In the plugins array add the PlayfabGSDK.
+Open the .uproject file in a text editor of your choice. In the plugins array add the PlayFabGSDK.
 
 See the example below:
 
@@ -44,7 +44,7 @@ See the example below:
     ],
     "Plugins": [                    // Add this if it doesn't exist
         {                           // Add this
-            "Name": "PlayfabGSDK",  // Add this
+            "Name": "PlayFabGSDK",  // Add this
             "Enabled": true         // Add this
         }                           // Add this
     ]                               // Add this if it doesn't exist
@@ -52,10 +52,10 @@ See the example below:
 ```
 
 ## Include the plugin in your modules
-Update <modulename>.Build.cs file to add "PlayfabGSDK" into the PublicDependencyModuleNames.AddRange(); list as follows:
+Update <modulename>.Build.cs file to add "PlayFabGSDK" into the PublicDependencyModuleNames.AddRange(); list as follows:
 
 ```csharp
-PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "HeadMountedDisplay", "PlayfabGSDK"});
+PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "HeadMountedDisplay", "PlayFabGSDK"});
 
 PrivateDependencyModuleNames.AddRange(new string[] { });
 ```
@@ -252,17 +252,17 @@ Right-click in the graph and add in all register GSDK function.
 For GSDK Shutdown and Maintenance Delegate drag out the a line from the red square, and select "Add Custom Event". 
 
 For "Register GSDK Health Check Delegate" select the "Create Event" in the "Event Dispatchers".
-![Playfab GSDK Health Check select function](Documentation/BlueprintAddRegisterHealthCheckDelegate.png)
+![PlayFab GSDK Health Check select function](Documentation/BlueprintAddRegisterHealthCheckDelegate.png)
 In the dropdown of the new node "Create matching function". **This is important, as the GSDK Health Check Delegate has a return value.**
-![Playfab GSDK Health Check select function](Documentation/BlueprintRegisterHealthCheckDelegate.png)
+![PlayFab GSDK Health Check select function](Documentation/BlueprintRegisterHealthCheckDelegate.png)
 
 In the function make sure the return boolean value is checked.
-![Playfab GSDK Health Check function](Documentation/BlueprintGSDKHealthCheckFunction.png)
+![PlayFab GSDK Health Check function](Documentation/BlueprintGSDKHealthCheckFunction.png)
 
 Don't forget to connect all the nodes to the Event Init node.
 
-In the end add the "Ready for Players" to be able to react to the ready signal of Playfab.
-![Playfab GSDK Full Graph](Documentation/BlueprintFullGraph.png)
+In the end add the "Ready for Players" to be able to react to the ready signal of PlayFab.
+![PlayFab GSDK Full Graph](Documentation/BlueprintFullGraph.png)
 
 ## Set the Game Instance class
     
@@ -306,17 +306,17 @@ Then open the .uproject file.
 
 In the top left of the Unreal editor menu, click on File -> Package -> Target Configuration -> [game name]Server and then go to File -> Package -> Windowsx64. 
 You can now use this packaged version of your game server to [test with LocalMultiplayerAgent](https://docs.microsoft.com/en-us/gaming/playfab/features/multiplayer/servers/locally-debugging-game-servers-and-integration-with-playfab) 
-or to use it directly with Playfab by [creating a build](https://developer.playfab.com/) and then using [Playfab MpsAllocatorSample](https://github.com/PlayFab/MpsSamples/blob/master/MpsAllocatorSample/README.md).
+or to use it directly with PlayFab by [creating a build](https://developer.playfab.com/) and then using [PlayFab MpsAllocatorSample](https://github.com/PlayFab/MpsSamples/blob/master/MpsAllocatorSample/README.md).
 
-## Setting up a Windows Dedicated Server on Playfab
+## Setting up a Windows Dedicated Server on PlayFab
 An important note about this is that you need to set the start command in process-based mode to \<root folder\>\\Binaries\\Win64\\\<project name\>Server.exe (or however the executable is called in the folder).
 
 In container-based mode use \<mount folder\>\\\<root folder\>\\Binaries\\Win64\\\<project name\>Server.exe (or however the executable is called in the folder).
 
-**If you use the executable in the root folder, the server will fail to initialize with the Playfab system.**
+**If you use the executable in the root folder, the server will fail to initialize with the PlayFab system.**
 
-## Setting up a Linux Dedicated Server on Playfab
-During testing the following Dockerfile + startup.sh script worked excellent with the Playfab Linux VM:
+## Setting up a Linux Dedicated Server on PlayFab
+During testing the following Dockerfile + startup.sh script worked excellent with the PlayFab Linux VM:
 
 ### The Dockerfile:
 ```Dockerfile

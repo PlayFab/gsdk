@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "PlayfabGSDK.h"
+#include "PlayFabGSDK.h"
 
 #include "GSDKConfiguration.h"
 #if UE_SERVER
@@ -20,11 +20,11 @@
 #include "Misc/ScopeLock.h"
 #endif
 
-DEFINE_LOG_CATEGORY(LogPlayfabGSDK);
+DEFINE_LOG_CATEGORY(LogPlayFabGSDK);
 
-#define LOCTEXT_NAMESPACE "FPlayfabGSDKModule"
+#define LOCTEXT_NAMESPACE "FPlayFabGSDKModule"
 
-void FPlayfabGSDKModule::StartupModule()
+void FPlayFabGSDKModule::StartupModule()
 {
 #if UE_SERVER
 	GSDKInternal = new FGSDKInternal();
@@ -55,7 +55,7 @@ void FPlayfabGSDKModule::StartupModule()
 #endif
 }
 
-void FPlayfabGSDKModule::ShutdownModule()
+void FPlayFabGSDKModule::ShutdownModule()
 {
 #if UE_SERVER
 	if (GSDKInternal)
@@ -66,7 +66,7 @@ void FPlayfabGSDKModule::ShutdownModule()
 #endif
 }
 
-bool FPlayfabGSDKModule::ReadyForPlayers()
+bool FPlayFabGSDKModule::ReadyForPlayers()
 {
 #if UE_SERVER
 	if (GSDKInternal->GetHeartbeatRequest().CurrentGameState != EGameState::Active)
@@ -81,7 +81,7 @@ bool FPlayfabGSDKModule::ReadyForPlayers()
 #endif
 }
 
-const FGameServerConnectionInfo FPlayfabGSDKModule::GetGameServerConnectionInfo()
+const FGameServerConnectionInfo FPlayFabGSDKModule::GetGameServerConnectionInfo()
 {
 #if UE_SERVER
 	return GSDKInternal->GetConnectionInfo();
@@ -90,7 +90,7 @@ const FGameServerConnectionInfo FPlayfabGSDKModule::GetGameServerConnectionInfo(
 #endif
 }
 
-const TMap<FString, FString> FPlayfabGSDKModule::GetConfigSettings()
+const TMap<FString, FString> FPlayFabGSDKModule::GetConfigSettings()
 {
 #if UE_SERVER
 	return GSDKInternal->GetConfigSettings();
@@ -99,14 +99,14 @@ const TMap<FString, FString> FPlayfabGSDKModule::GetConfigSettings()
 #endif
 }
 
-void FPlayfabGSDKModule::UpdateConnectedPlayers(const TArray<FConnectedPlayer>& CurrentlyConnectedPlayers)
+void FPlayFabGSDKModule::UpdateConnectedPlayers(const TArray<FConnectedPlayer>& CurrentlyConnectedPlayers)
 {
 #if UE_SERVER
 	GSDKInternal->SetConnectedPlayers(CurrentlyConnectedPlayers);
 #endif
 }
 
-const FString FPlayfabGSDKModule::GetLogsDirectory()
+const FString FPlayFabGSDKModule::GetLogsDirectory()
 {
 #if UE_SERVER
 	FScopeLock ScopeLock(&GSDKInternal->GetConfigMutex());
@@ -122,7 +122,7 @@ const FString FPlayfabGSDKModule::GetLogsDirectory()
 	return TEXT("");
 }
 
-const FString FPlayfabGSDKModule::GetSharedContentDirectory()
+const FString FPlayFabGSDKModule::GetSharedContentDirectory()
 {
 #if UE_SERVER
 	FScopeLock ScopeLock(&GSDKInternal->GetConfigMutex());
@@ -138,7 +138,7 @@ const FString FPlayfabGSDKModule::GetSharedContentDirectory()
 	return TEXT("");
 }
 
-const TArray<FString> FPlayfabGSDKModule::GetInitialPlayers()
+const TArray<FString> FPlayFabGSDKModule::GetInitialPlayers()
 {
 #if UE_SERVER
 	return GSDKInternal->GetInitialPlayers();
@@ -149,4 +149,4 @@ const TArray<FString> FPlayfabGSDKModule::GetInitialPlayers()
 
 #undef LOCTEXT_NAMESPACE
 	
-IMPLEMENT_MODULE(FPlayfabGSDKModule, PlayfabGSDK)
+IMPLEMENT_MODULE(FPlayFabGSDKModule, PlayFabGSDK)

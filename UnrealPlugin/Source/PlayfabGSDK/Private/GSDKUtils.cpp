@@ -14,40 +14,40 @@
 
 #include "GSDKUtils.h"
 
-#include "PlayfabGSDK.h"
+#include "PlayFabGSDK.h"
 
 bool UGSDKUtils::ReadyForPlayers()
 {
-	return FPlayfabGSDKModule::Get().ReadyForPlayers();
+	return FPlayFabGSDKModule::Get().ReadyForPlayers();
 }
 
 const FGameServerConnectionInfo UGSDKUtils::GetGameServerConnectionInfo()
 {
-	return FPlayfabGSDKModule::Get().GetGameServerConnectionInfo();
+	return FPlayFabGSDKModule::Get().GetGameServerConnectionInfo();
 }
 
 void UGSDKUtils::UpdateConnectedPlayers(const TArray<FConnectedPlayer>& CurrentlyConnectedPlayers)
 {
-	return FPlayfabGSDKModule::Get().UpdateConnectedPlayers(CurrentlyConnectedPlayers);
+	return FPlayFabGSDKModule::Get().UpdateConnectedPlayers(CurrentlyConnectedPlayers);
 }
 
 const FString UGSDKUtils::GetLogsDirectory()
 {
-	return FPlayfabGSDKModule::Get().GetLogsDirectory();
+	return FPlayFabGSDKModule::Get().GetLogsDirectory();
 }
 
 const FString UGSDKUtils::GetSharedContentDirectory()
 {
-	return FPlayfabGSDKModule::Get().GetSharedContentDirectory();
+	return FPlayFabGSDKModule::Get().GetSharedContentDirectory();
 }
 
 const FString UGSDKUtils::GetMatchId()
 {
 	const TMap<FString, FString> Config = GetConfigSettings();
 
-	if (Config.Contains(FPlayfabGSDKModule::SESSION_ID_KEY))
+	if (Config.Contains(FPlayFabGSDKModule::SESSION_ID_KEY))
 	{
-		return Config[FPlayfabGSDKModule::SESSION_ID_KEY];
+		return Config[FPlayFabGSDKModule::SESSION_ID_KEY];
 	}
 
 	return TEXT("");
@@ -57,9 +57,9 @@ const FString UGSDKUtils::GetMatchSessionCookie()
 {
 	const TMap<FString, FString> Config = GetConfigSettings();
 
-	if (Config.Contains(FPlayfabGSDKModule::SESSION_COOKIE_KEY))
+	if (Config.Contains(FPlayFabGSDKModule::SESSION_COOKIE_KEY))
 	{
-		return Config[FPlayfabGSDKModule::SESSION_COOKIE_KEY];
+		return Config[FPlayFabGSDKModule::SESSION_COOKIE_KEY];
 	}
 
 	return TEXT("");
@@ -69,9 +69,9 @@ const FString UGSDKUtils::GetTitleId()
 {
 	const TMap<FString, FString> Config = GetConfigSettings();
 
-	if (Config.Contains(FPlayfabGSDKModule::TITLE_ID_KEY))
+	if (Config.Contains(FPlayFabGSDKModule::TITLE_ID_KEY))
 	{
-		return Config[FPlayfabGSDKModule::TITLE_ID_KEY];
+		return Config[FPlayFabGSDKModule::TITLE_ID_KEY];
 	}
 
 	return TEXT("");
@@ -81,9 +81,9 @@ const FString UGSDKUtils::GetRegionName()
 {
 	const TMap<FString, FString> Config = GetConfigSettings();
 
-	if (Config.Contains(FPlayfabGSDKModule::REGION_KEY))
+	if (Config.Contains(FPlayFabGSDKModule::REGION_KEY))
 	{
-		return Config[FPlayfabGSDKModule::REGION_KEY];
+		return Config[FPlayFabGSDKModule::REGION_KEY];
 	}
 
 	return TEXT("");
@@ -93,9 +93,9 @@ const FString UGSDKUtils::GetBuildId()
 {
 	const TMap<FString, FString> Config = GetConfigSettings();
 
-	if (Config.Contains(FPlayfabGSDKModule::BUILD_ID_KEY))
+	if (Config.Contains(FPlayFabGSDKModule::BUILD_ID_KEY))
 	{
-		return Config[FPlayfabGSDKModule::BUILD_ID_KEY];
+		return Config[FPlayFabGSDKModule::BUILD_ID_KEY];
 	}
 
 	return TEXT("");
@@ -105,9 +105,9 @@ const FString UGSDKUtils::GetVMId()
 {
 	const TMap<FString, FString> Config = GetConfigSettings();
 
-	if (Config.Contains(FPlayfabGSDKModule::VM_ID_KEY))
+	if (Config.Contains(FPlayFabGSDKModule::VM_ID_KEY))
 	{
-		return Config[FPlayfabGSDKModule::VM_ID_KEY];
+		return Config[FPlayFabGSDKModule::VM_ID_KEY];
 	}
 
 	return TEXT("");
@@ -117,9 +117,9 @@ const FString UGSDKUtils::GetServerId()
 {
 	const TMap<FString, FString> Config = GetConfigSettings();
 
-	if (Config.Contains(FPlayfabGSDKModule::SERVER_ID_KEY))
+	if (Config.Contains(FPlayFabGSDKModule::SERVER_ID_KEY))
 	{
-		return Config[FPlayfabGSDKModule::SERVER_ID_KEY];
+		return Config[FPlayFabGSDKModule::SERVER_ID_KEY];
 	}
 
 	return TEXT("");
@@ -139,18 +139,18 @@ const FString UGSDKUtils::GetMetaDataValue(const FString& MetaDataName)
 
 const TArray<FString> UGSDKUtils::GetInitialPlayers()
 {
-	return FPlayfabGSDKModule::Get().GetInitialPlayers();
+	return FPlayFabGSDKModule::Get().GetInitialPlayers();
 }
 
 void UGSDKUtils::RegisterGSDKShutdownDelegate(const FOnGSDKShutdown_Dyn& OnGSDKShutdownDelegate)
 {
-	if (FPlayfabGSDKModule::Get().OnMaintenance.IsBound())
+	if (FPlayFabGSDKModule::Get().OnMaintenance.IsBound())
 	{
-		UE_LOG(LogPlayfabGSDK, Error, TEXT("GSDK Shutdown Delegate is already bound! Will unbind the old binding!"));
+		UE_LOG(LogPlayFabGSDK, Error, TEXT("GSDK Shutdown Delegate is already bound! Will unbind the old binding!"));
 	}
 	
-	FPlayfabGSDKModule::Get().OnShutdown.Unbind();
-	FPlayfabGSDKModule::Get().OnShutdown.BindLambda([OnGSDKShutdownDelegate]()
+	FPlayFabGSDKModule::Get().OnShutdown.Unbind();
+	FPlayFabGSDKModule::Get().OnShutdown.BindLambda([OnGSDKShutdownDelegate]()
 	{
 		if (OnGSDKShutdownDelegate.IsBound())
 		{
@@ -161,13 +161,13 @@ void UGSDKUtils::RegisterGSDKShutdownDelegate(const FOnGSDKShutdown_Dyn& OnGSDKS
 
 void UGSDKUtils::RegisterGSDKHealthCheckDelegate(const FOnGSDKHealthCheck_Dyn& OnGSDKHealthCheckDelegate)
 {
-	if (FPlayfabGSDKModule::Get().OnHealthCheck.IsBound())
+	if (FPlayFabGSDKModule::Get().OnHealthCheck.IsBound())
 	{
-		UE_LOG(LogPlayfabGSDK, Error, TEXT("GSDK Health Delegate is already bound! Will unbind the old binding!"));
+		UE_LOG(LogPlayFabGSDK, Error, TEXT("GSDK Health Delegate is already bound! Will unbind the old binding!"));
 	}
 	
-	FPlayfabGSDKModule::Get().OnHealthCheck.Unbind();
-	FPlayfabGSDKModule::Get().OnHealthCheck.BindLambda([OnGSDKHealthCheckDelegate]()
+	FPlayFabGSDKModule::Get().OnHealthCheck.Unbind();
+	FPlayFabGSDKModule::Get().OnHealthCheck.BindLambda([OnGSDKHealthCheckDelegate]()
 	{
 		if (OnGSDKHealthCheckDelegate.IsBound())
 		{
@@ -180,13 +180,13 @@ void UGSDKUtils::RegisterGSDKHealthCheckDelegate(const FOnGSDKHealthCheck_Dyn& O
 
 void UGSDKUtils::RegisterGSDKMaintenanceDelegate(const FOnGSDKMaintenance_Dyn& OnGSDKMaintenanceDelegate)
 {
-	if (FPlayfabGSDKModule::Get().OnMaintenance.IsBound())
+	if (FPlayFabGSDKModule::Get().OnMaintenance.IsBound())
 	{
-		UE_LOG(LogPlayfabGSDK, Error, TEXT("GSDK Maintenance Delegate is already bound! Will unbind the old binding!"));
+		UE_LOG(LogPlayFabGSDK, Error, TEXT("GSDK Maintenance Delegate is already bound! Will unbind the old binding!"));
 	}
 	
-	FPlayfabGSDKModule::Get().OnMaintenance.Unbind();
-	FPlayfabGSDKModule::Get().OnMaintenance.BindLambda([OnGSDKMaintenanceDelegate](const FDateTime& MaintenanceTime)
+	FPlayFabGSDKModule::Get().OnMaintenance.Unbind();
+	FPlayFabGSDKModule::Get().OnMaintenance.BindLambda([OnGSDKMaintenanceDelegate](const FDateTime& MaintenanceTime)
 	{
 		if (OnGSDKMaintenanceDelegate.IsBound())
 		{
@@ -197,5 +197,5 @@ void UGSDKUtils::RegisterGSDKMaintenanceDelegate(const FOnGSDKMaintenance_Dyn& O
 
 const TMap<FString, FString> UGSDKUtils::GetConfigSettings()
 {
-	return FPlayfabGSDKModule::Get().GetConfigSettings();
+	return FPlayFabGSDKModule::Get().GetConfigSettings();
 }

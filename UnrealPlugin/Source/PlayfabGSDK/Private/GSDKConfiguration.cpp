@@ -15,7 +15,7 @@
 #include "GSDKConfiguration.h"
 
 #include "GSDKInternalUtils.h"
-#include "PlayfabGSDK.h"
+#include "PlayFabGSDK.h"
 #include "Logging/LogMacros.h"
 #include "Misc/FileHelper.h"
 
@@ -130,7 +130,7 @@ FJsonFileConfiguration::FJsonFileConfiguration(const FString& FileName)
 {
 	if (!FPaths::FileExists(FileName))
 	{
-		UE_LOG(LogPlayfabGSDK, Fatal, TEXT("Specified configuration file doesnt exist: %s"), *FileName);
+		UE_LOG(LogPlayFabGSDK, Fatal, TEXT("Specified configuration file doesnt exist: %s"), *FileName);
 		return;
 	}
 
@@ -138,7 +138,7 @@ FJsonFileConfiguration::FJsonFileConfiguration(const FString& FileName)
 
 	if (!FFileHelper::LoadFileToString(FileContent, *FileName))
 	{
-		UE_LOG(LogPlayfabGSDK, Fatal, TEXT("Failed to read configuration file: %s"), *FileName);
+		UE_LOG(LogPlayFabGSDK, Fatal, TEXT("Failed to read configuration file: %s"), *FileName);
 		return;
 	}
 
@@ -146,7 +146,7 @@ FJsonFileConfiguration::FJsonFileConfiguration(const FString& FileName)
 	TSharedRef<TJsonReader<>> JsonReader = TJsonReaderFactory<>::Create(FileContent);
 	if (!FJsonSerializer::Deserialize(JsonReader, ConfigJson))
 	{
-		UE_LOG(LogPlayfabGSDK, Fatal, TEXT("Failed to parse configuration file: %s"), *FileName);
+		UE_LOG(LogPlayFabGSDK, Fatal, TEXT("Failed to parse configuration file: %s"), *FileName);
 		return;
 	}
 
