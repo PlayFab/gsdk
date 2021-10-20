@@ -19,7 +19,7 @@
 #include "HttpModule.h"
 #include "Async/Async.h"
 #include "Json.h"
-#include "PlayfabGSDK.h"
+#include "PlayFabGSDK.h"
 #include "Interfaces/IHttpResponse.h"
 #include "Misc/Paths.h"
 #include "Logging/LogMacros.h"
@@ -61,20 +61,20 @@ FGSDKInternal::FGSDKInternal()
 		ConfigSettings.Add(Port);
 	}
 
-	ConfigSettings.Add(FPlayfabGSDKModule::HEARTBEAT_ENDPOINT_KEY, ConfigPtr->GetHeartbeatEndpoint());
-	ConfigSettings.Add(FPlayfabGSDKModule::SERVER_ID_KEY, ConfigPtr->GetServerId());
-	ConfigSettings.Add(FPlayfabGSDKModule::LOG_FOLDER_KEY, ConfigPtr->GetLogFolder());
-	ConfigSettings.Add(FPlayfabGSDKModule::SHARED_CONTENT_FOLDER_KEY, ConfigPtr->GetSharedContentFolder());
-	ConfigSettings.Add(FPlayfabGSDKModule::CERTIFICATE_FOLDER_KEY, ConfigPtr->GetCertificateFolder());
-	ConfigSettings.Add(FPlayfabGSDKModule::TITLE_ID_KEY, ConfigPtr->GetTitleId());
-	ConfigSettings.Add(FPlayfabGSDKModule::BUILD_ID_KEY, ConfigPtr->GetBuildId());
-	ConfigSettings.Add(FPlayfabGSDKModule::REGION_KEY, ConfigPtr->GetRegion());
-	ConfigSettings.Add(FPlayfabGSDKModule::PUBLIC_IP_V4_ADDRESS_KEY, ConfigPtr->GetPublicIpV4Address());
-	ConfigSettings.Add(FPlayfabGSDKModule::FULLY_QUALIFIED_DOMAIN_NAME_KEY, ConfigPtr->GetFullyQualifiedDomainName());
+	ConfigSettings.Add(FPlayFabGSDKModule::HEARTBEAT_ENDPOINT_KEY, ConfigPtr->GetHeartbeatEndpoint());
+	ConfigSettings.Add(FPlayFabGSDKModule::SERVER_ID_KEY, ConfigPtr->GetServerId());
+	ConfigSettings.Add(FPlayFabGSDKModule::LOG_FOLDER_KEY, ConfigPtr->GetLogFolder());
+	ConfigSettings.Add(FPlayFabGSDKModule::SHARED_CONTENT_FOLDER_KEY, ConfigPtr->GetSharedContentFolder());
+	ConfigSettings.Add(FPlayFabGSDKModule::CERTIFICATE_FOLDER_KEY, ConfigPtr->GetCertificateFolder());
+	ConfigSettings.Add(FPlayFabGSDKModule::TITLE_ID_KEY, ConfigPtr->GetTitleId());
+	ConfigSettings.Add(FPlayFabGSDKModule::BUILD_ID_KEY, ConfigPtr->GetBuildId());
+	ConfigSettings.Add(FPlayFabGSDKModule::REGION_KEY, ConfigPtr->GetRegion());
+	ConfigSettings.Add(FPlayFabGSDKModule::PUBLIC_IP_V4_ADDRESS_KEY, ConfigPtr->GetPublicIpV4Address());
+	ConfigSettings.Add(FPlayFabGSDKModule::FULLY_QUALIFIED_DOMAIN_NAME_KEY, ConfigPtr->GetFullyQualifiedDomainName());
 
-	if (ConfigSettings[FPlayfabGSDKModule::HEARTBEAT_ENDPOINT_KEY].IsEmpty() || ConfigSettings[FPlayfabGSDKModule::SERVER_ID_KEY].IsEmpty())
+	if (ConfigSettings[FPlayFabGSDKModule::HEARTBEAT_ENDPOINT_KEY].IsEmpty() || ConfigSettings[FPlayFabGSDKModule::SERVER_ID_KEY].IsEmpty())
 	{
-		UE_LOG(LogPlayfabGSDK, Fatal, TEXT("Heartbeat endpoint and Server id are required configuration values."));
+		UE_LOG(LogPlayFabGSDK, Fatal, TEXT("Heartbeat endpoint and Server id are required configuration values."));
 		return;
 	}
 
@@ -91,11 +91,11 @@ FGSDKInternal::FGSDKInternal()
 
 	MaximumUnexpectedOperationsErrorCount = ConfigPtr->GetMaximumAllowedUnexpectedOperationsCount();
 
-	const FString GsmBaseUrl = ConfigSettings[FPlayfabGSDKModule::HEARTBEAT_ENDPOINT_KEY];
-	const FString InstanceId = ConfigSettings[FPlayfabGSDKModule::SERVER_ID_KEY];
+	const FString GsmBaseUrl = ConfigSettings[FPlayFabGSDKModule::HEARTBEAT_ENDPOINT_KEY];
+	const FString InstanceId = ConfigSettings[FPlayFabGSDKModule::SERVER_ID_KEY];
 
-	UE_LOG(LogPlayfabGSDK, Log, TEXT("VM Agent Endpoint: %s"), *GsmBaseUrl);
-	UE_LOG(LogPlayfabGSDK, Log, TEXT("Instance Id: %s"), *InstanceId);
+	UE_LOG(LogPlayFabGSDK, Log, TEXT("VM Agent Endpoint: %s"), *GsmBaseUrl);
+	UE_LOG(LogPlayFabGSDK, Log, TEXT("Instance Id: %s"), *InstanceId);
 
 	HeartbeatUrl = FString::Printf(TEXT("http://%s/v1/sessionHosts/%s"), *GsmBaseUrl, *InstanceId);
 
@@ -154,7 +154,7 @@ void FGSDKInternal::StartLog()
 	FScopeLock ScopeLock(&ConfigMutex);
 
 	const FString LogFileName = FString::Printf(TEXT("GSDK_output_%lld.txt"), FDateTime::Now().GetTicks());
-	FString LogFolder = ConfigSettings[FPlayfabGSDKModule::LOG_FOLDER_KEY];
+	FString LogFolder = ConfigSettings[FPlayFabGSDKModule::LOG_FOLDER_KEY];
 
 	IPlatformFile& FileManager = FPlatformFileManager::Get().GetPlatformFile();
 
@@ -205,7 +205,7 @@ void FGSDKInternal::ReceiveHeartbeat()
 	
 	if (Response->GetResponseCode() >= 300)
 	{
-		UE_LOG(LogPlayfabGSDK, Error, TEXT("Received non-success code from Agent.  Status Code: %d Response Body: %s"), Response->GetResponseCode(), *Response->GetContentAsString());
+		UE_LOG(LogPlayFabGSDK, Error, TEXT("Received non-success code from Agent.  Status Code: %d Response Body: %s"), Response->GetResponseCode(), *Response->GetContentAsString());
 		return;
 	}
 
@@ -252,7 +252,7 @@ void FGSDKInternal::DecodeHeartbeatResponse(const FString& ResponseJson)
 
 	if (!FJsonSerializer::Deserialize(Reader, HeartbeatResponseJson))
 	{
-		UE_LOG(LogPlayfabGSDK, Error, TEXT("Failed to parse heartbeat"));
+		UE_LOG(LogPlayFabGSDK, Error, TEXT("Failed to parse heartbeat"));
 		return;
 	}
 
@@ -356,7 +356,7 @@ void FGSDKInternal::DecodeHeartbeatResponse(const FString& ResponseJson)
 			}
 		default:
 			{
-				UE_LOG(LogPlayfabGSDK, Error, TEXT("Unhandled operation received: %s"), OperationNames[static_cast<int32>(NextOperation)]);
+				UE_LOG(LogPlayFabGSDK, Error, TEXT("Unhandled operation received: %s"), OperationNames[static_cast<int32>(NextOperation)]);
 				bWasOperationValid = false;
 				break;
 			}
@@ -369,7 +369,7 @@ void FGSDKInternal::DecodeHeartbeatResponse(const FString& ResponseJson)
 			// Too many unexpected operations have been sent, time to shut down
 			if (UnexpectedOperationsErrorCount >= MaximumUnexpectedOperationsErrorCount)
 			{
-				UE_LOG(LogPlayfabGSDK, Error, TEXT("Too many unexpected operations received. Shutting down!"));
+				UE_LOG(LogPlayFabGSDK, Error, TEXT("Too many unexpected operations received. Shutting down!"));
 				TriggerShutdown();
 			}
 		}

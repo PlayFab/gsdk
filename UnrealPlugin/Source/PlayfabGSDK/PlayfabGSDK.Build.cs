@@ -14,9 +14,9 @@
 
 using UnrealBuildTool;
 
-public class PlayfabGSDK : ModuleRules
+public class PlayFabGSDK : ModuleRules
 {
-	public PlayfabGSDK(ReadOnlyTargetRules Target) : base(Target)
+	public PlayFabGSDK(ReadOnlyTargetRules Target) : base(Target)
 	{
 		PCHUsage = ModuleRules.PCHUsageMode.UseExplicitOrSharedPCHs;
 		

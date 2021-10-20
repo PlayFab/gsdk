@@ -36,7 +36,7 @@ public:
 	
 	/// Called when the game server is ready to accept clients.
 	/// This is a blocking call and will only return when this server is either allocated (a player is about to connect) or terminated.
-	UFUNCTION(BlueprintCallable, meta=(BlueprintInternalUseOnly = "true", WorldContext="WorldContextObject"), Category = "PlayFabGSDK|Players")
+	UFUNCTION(BlueprintCallable, meta=(BlueprintInternalUseOnly = "true", WorldContext="WorldContextObject"), Category = "PlayFab|GSDK|Players")
 	static UGSDKReadyForPlayersAction* ReadyForPlayers();
 
 	virtual void Activate() override;

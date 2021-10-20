@@ -21,11 +21,11 @@
 #include "GSDKInternal.h"
 #include "Modules/ModuleManager.h"
 
-DECLARE_LOG_CATEGORY_EXTERN(LogPlayfabGSDK, Log, All);
+DECLARE_LOG_CATEGORY_EXTERN(LogPlayFabGSDK, Log, All);
 
 
 
-class FPlayfabGSDKModule : public IModuleInterface
+class FPlayFabGSDKModule : public IModuleInterface
 {
 public:
 
@@ -33,7 +33,7 @@ public:
 	virtual void StartupModule() override;
 	virtual void ShutdownModule() override;
 
-	static FPlayfabGSDKModule& Get() { return FModuleManager::LoadModuleChecked<FPlayfabGSDKModule>(TEXT("PlayfabGSDK"));}
+	static FPlayFabGSDKModule& Get() { return FModuleManager::LoadModuleChecked<FPlayFabGSDKModule>(TEXT("PlayFabGSDK"));}
 
 	/// <summary>Renamed from WaitForSessionAssignment. Called when the game server is ready to accept clients.  If Start() hasn't been called by this point, it will be called implicitly here.</summary>
 	/// <remarks>Required. This is a blocking call and will only return when this server is either allocated (a player is about to connect) or terminated.</remarks>
