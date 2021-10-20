@@ -216,6 +216,25 @@ a dedicated server, so you could wrap the call to ReadyForPlayers() as such at t
 #endif
 ```
 ----
+##### Set the game server port number with MPS's configuration.
+```cpp
+    FGameServerConnectionInfo ConnectionInfo = UGSDKUtils::GetGameServerConnectionInfo();
+
+    for (auto& GamePorts : ConnectionInfo.GamePortsConfiguration) {
+        if (GamePorts.Name == TEXT("<Your game server port name on MPS dashboard>")) {
+            UE_LOG(LogTemp, Log, TEXT("GSDK Game port name: %s"), *GamePorts.Name);
+            UE_LOG(LogTemp, Log, TEXT("GSDK Game server listerning port: %d"), GamePorts.ServerListeningPort);
+            UE_LOG(LogTemp, Log, TEXT("GSDK Game client connection port: %d"), GamePorts.ClientConnectionPort);
+            FURL::UrlConfig.DefaultPort = GamePorts.ServerListeningPort;
+            break;
+        }
+    }
+```
+Add above codes after the code below
+```cpp
+UGSDKUtils::RegisterGSDKHealthCheckDelegate(OnGsdkHealthCheck)
+````
+----
 
 Lastly, add these method implementations to the bottom of [YourGameInstanceClassName].cpp file:
 
