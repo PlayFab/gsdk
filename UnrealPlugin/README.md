@@ -221,19 +221,35 @@ a dedicated server, so you could wrap the call to ReadyForPlayers() as such at t
     FGameServerConnectionInfo ConnectionInfo = UGSDKUtils::GetGameServerConnectionInfo();
 
     for (auto& GamePorts : ConnectionInfo.GamePortsConfiguration) {
-        if (GamePorts.Name == TEXT("<Your game server port name on MPS dashboard>")) {
+        if (GamePorts.Name == TEXT("<portname>")) {
             UE_LOG(LogTemp, Log, TEXT("GSDK Game port name: %s"), *GamePorts.Name);
-            UE_LOG(LogTemp, Log, TEXT("GSDK Game server listerning port: %d"), GamePorts.ServerListeningPort);
+            UE_LOG(LogTemp, Log, TEXT("GSDK Game server listening port: %d"), GamePorts.ServerListeningPort);
             UE_LOG(LogTemp, Log, TEXT("GSDK Game client connection port: %d"), GamePorts.ClientConnectionPort);
             FURL::UrlConfig.DefaultPort = GamePorts.ServerListeningPort;
             break;
         }
     }
 ```
-Add above codes after the code below
+Add above lines after the line below
 ```cpp
 UGSDKUtils::RegisterGSDKHealthCheckDelegate(OnGsdkHealthCheck)
 ````
+Update <portname> with the name you entered in the port name when creating a build on the MPS dashboard.
+When you use LocalMultiplayerAgent, match <portname> with value of "PortMappingsList.GamePort.Name" in MultiplayerSettings.json file.
+```json
+  "PortMappingsList": [
+    [
+      {
+        "NodePort": 7777,
+        "GamePort": {
+          "Name": "<portname>",
+          "Number": 80,
+          "Protocol": "UTP"
+        }
+      }
+    ]
+  ],
+```
 ----
 
 Lastly, add these method implementations to the bottom of [YourGameInstanceClassName].cpp file:
