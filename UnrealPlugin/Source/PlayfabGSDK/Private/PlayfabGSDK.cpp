@@ -144,9 +144,9 @@ const TArray<FString> FPlayFabGSDKModule::GetInitialPlayers()
 	return GSDKInternal->GetInitialPlayers();
 #else
 	return TArray<FString>();
-#endif	
+#endif
 }
 
 #undef LOCTEXT_NAMESPACE
-	
+
 IMPLEMENT_MODULE(FPlayFabGSDKModule, PlayFabGSDK)

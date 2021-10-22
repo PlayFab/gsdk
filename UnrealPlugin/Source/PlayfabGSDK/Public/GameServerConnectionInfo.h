@@ -52,7 +52,7 @@ struct FGameServerConnectionInfo
 public:
 	UPROPERTY(BlueprintReadOnly)
 	FString PublicIpV4Address;
-	
+
 	UPROPERTY(BlueprintReadOnly)
 	TArray<FGamePort> GamePortsConfiguration;
 };

@@ -21,7 +21,7 @@
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FEmptyDelegate);
 /**
- * 
+ *
  */
 UCLASS(MinimalAPI)
 class UGSDKReadyForPlayersAction : public UBlueprintAsyncActionBase
@@ -30,10 +30,10 @@ class UGSDKReadyForPlayersAction : public UBlueprintAsyncActionBase
 public:
 	UPROPERTY(BlueprintAssignable)
 	FEmptyDelegate OnReadyForPlayers;
-	
+
 	UPROPERTY(BlueprintAssignable)
 	FEmptyDelegate OnTerminating;
-	
+
 	/// Called when the game server is ready to accept clients.
 	/// This is a blocking call and will only return when this server is either allocated (a player is about to connect) or terminated.
 	UFUNCTION(BlueprintCallable, meta=(BlueprintInternalUseOnly = "true", WorldContext="WorldContextObject"), Category = "PlayFab|GSDK|Players")

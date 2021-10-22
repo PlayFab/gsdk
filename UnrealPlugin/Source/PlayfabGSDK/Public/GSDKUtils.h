@@ -27,7 +27,7 @@ DECLARE_DYNAMIC_DELEGATE_RetVal(bool, FOnGSDKHealthCheck_Dyn);
 DECLARE_DYNAMIC_DELEGATE_OneParam(FOnGSDKMaintenance_Dyn, const FDateTime&, MaintenanceTime);
 
 /**
- * 
+ *
  */
 UCLASS()
 class PLAYFABGSDK_API UGSDKUtils : public UBlueprintFunctionLibrary
@@ -48,7 +48,7 @@ public:
 	/// Tells the PlayFab service information on who is connected.
 	UFUNCTION(BlueprintCallable, Category="PlayFab|GSDK|Players")
 	static void UpdateConnectedPlayers(const TArray<FConnectedPlayer>& CurrentlyConnectedPlayers);
-	
+
 	/// Returns a path to the directory where logs will be mapped to the VM host
 	UFUNCTION(BlueprintPure, Category="PlayFab|GSDK|Server Info")
 	static const FString GetLogsDirectory();
@@ -56,15 +56,15 @@ public:
 	/// Returns a path to the directory shared by all game servers to cache data.
 	UFUNCTION(BlueprintPure, Category="PlayFab|GSDK|Server Info")
 	static const FString GetSharedContentDirectory();
-	
+
 	/// Returns the match id of the server. Is only valid after Ready For Players unblocks
 	UFUNCTION(BlueprintPure, Category="PlayFab|GSDK|Server Info")
 	static const FString GetMatchId();
-	
+
 	/// Returns the match session cookie of the server. Is only valid after Ready For Players unblocks
 	UFUNCTION(BlueprintPure, Category="PlayFab|GSDK|Server Info")
 	static const FString GetMatchSessionCookie();
-	
+
 	/// Returns the title id of the title this server is hosted for.
 	UFUNCTION(BlueprintPure, Category="PlayFab|GSDK|Server Info")
 	static const FString GetTitleId();
@@ -72,23 +72,23 @@ public:
 	/// Returns the region name where this server is located.
 	UFUNCTION(BlueprintPure, Category="PlayFab|GSDK|Server Info")
 	static const FString GetRegionName();
-	
+
 	/// Returns the build id used for this server.
 	UFUNCTION(BlueprintPure, Category="PlayFab|GSDK|Server Info")
 	static const FString GetBuildId();
-	
+
 	/// Returns the VM id this server is running on.
 	UFUNCTION(BlueprintPure, Category="PlayFab|GSDK|Server Info")
 	static const FString GetVMId();
-	
+
 	/// Returns the server id identifying this server
 	UFUNCTION(BlueprintPure, Category="PlayFab|GSDK|Server Info")
 	static const FString GetServerId();
-	
+
 	/// Returns custom set meta data value set at build creation
 	UFUNCTION(BlueprintPure, Category="PlayFab|GSDK|Server Info")
 	static const FString GetMetaDataValue(const FString& MetaDataName);
-	
+
 	/// After allocation, returns a list of the initial players that have access to this game server, used by PlayFab's Matchmaking offering
 	UFUNCTION(BlueprintPure, Category="PlayFab|GSDK|Players")
 	static const TArray<FString> GetInitialPlayers();
