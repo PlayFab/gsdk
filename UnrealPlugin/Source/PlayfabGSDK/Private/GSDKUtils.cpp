@@ -43,98 +43,42 @@ const FString UGSDKUtils::GetSharedContentDirectory()
 
 const FString UGSDKUtils::GetMatchId()
 {
-	const TMap<FString, FString> Config = GetConfigSettings();
-
-	if (Config.Contains(FPlayFabGSDKModule::SESSION_ID_KEY))
-	{
-		return Config[FPlayFabGSDKModule::SESSION_ID_KEY];
-	}
-
-	return TEXT("");
+	return GetConfig(FPlayFabGSDKModule::SESSION_ID_KEY);
 }
 
 const FString UGSDKUtils::GetMatchSessionCookie()
 {
-	const TMap<FString, FString> Config = GetConfigSettings();
-
-	if (Config.Contains(FPlayFabGSDKModule::SESSION_COOKIE_KEY))
-	{
-		return Config[FPlayFabGSDKModule::SESSION_COOKIE_KEY];
-	}
-
-	return TEXT("");
+	return GetConfig(FPlayFabGSDKModule::SESSION_COOKIE_KEY);
 }
 
 const FString UGSDKUtils::GetTitleId()
 {
-	const TMap<FString, FString> Config = GetConfigSettings();
-
-	if (Config.Contains(FPlayFabGSDKModule::TITLE_ID_KEY))
-	{
-		return Config[FPlayFabGSDKModule::TITLE_ID_KEY];
-	}
-
-	return TEXT("");
+	return GetConfig(FPlayFabGSDKModule::TITLE_ID_KEY);
 }
 
 const FString UGSDKUtils::GetRegionName()
 {
-	const TMap<FString, FString> Config = GetConfigSettings();
-
-	if (Config.Contains(FPlayFabGSDKModule::REGION_KEY))
-	{
-		return Config[FPlayFabGSDKModule::REGION_KEY];
-	}
-
-	return TEXT("");
+	return GetConfig(FPlayFabGSDKModule::REGION_KEY);
 }
 
 const FString UGSDKUtils::GetBuildId()
 {
-	const TMap<FString, FString> Config = GetConfigSettings();
-
-	if (Config.Contains(FPlayFabGSDKModule::BUILD_ID_KEY))
-	{
-		return Config[FPlayFabGSDKModule::BUILD_ID_KEY];
-	}
-
-	return TEXT("");
+	return GetConfig(FPlayFabGSDKModule::BUILD_ID_KEY);
 }
 
 const FString UGSDKUtils::GetVMId()
 {
-	const TMap<FString, FString> Config = GetConfigSettings();
-
-	if (Config.Contains(FPlayFabGSDKModule::VM_ID_KEY))
-	{
-		return Config[FPlayFabGSDKModule::VM_ID_KEY];
-	}
-
-	return TEXT("");
+	return GetConfig(FPlayFabGSDKModule::VM_ID_KEY);
 }
 
 const FString UGSDKUtils::GetServerId()
 {
-	const TMap<FString, FString> Config = GetConfigSettings();
-
-	if (Config.Contains(FPlayFabGSDKModule::SERVER_ID_KEY))
-	{
-		return Config[FPlayFabGSDKModule::SERVER_ID_KEY];
-	}
-
-	return TEXT("");
+	return GetConfig(FPlayFabGSDKModule::SERVER_ID_KEY);
 }
 
 const FString UGSDKUtils::GetMetaDataValue(const FString& MetaDataName)
 {
-	const TMap<FString, FString> Config = GetConfigSettings();
-
-	if (Config.Contains(MetaDataName))
-	{
-		return Config[MetaDataName];
-	}
-
-	return TEXT("");
+	return GetConfig(MetaDataName);
 }
 
 const TArray<FString> UGSDKUtils::GetInitialPlayers()
@@ -195,7 +139,7 @@ void UGSDKUtils::RegisterGSDKMaintenanceDelegate(const FOnGSDKMaintenance_Dyn& O
 	});
 }
 
-const TMap<FString, FString> UGSDKUtils::GetConfigSettings()
+FString UGSDKUtils::GetConfig(const FString& Key)
 {
-	return FPlayFabGSDKModule::Get().GetConfigSettings();
+	return FPlayFabGSDKModule::Get().GetConfig(Key);
 }

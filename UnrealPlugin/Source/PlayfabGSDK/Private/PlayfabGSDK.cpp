@@ -90,10 +90,10 @@ const FGameServerConnectionInfo FPlayFabGSDKModule::GetGameServerConnectionInfo(
 #endif
 }
 
-const TMap<FString, FString> FPlayFabGSDKModule::GetConfigSettings()
+FString FPlayFabGSDKModule::GetConfigValue(const FString& Key)
 {
 #if UE_SERVER
-	return GSDKInternal->GetConfigSettings();
+	return GSDKInternal->GetConfigValue(Key);
 #else
 	return TMap<FString, FString>();
 #endif
@@ -109,30 +109,15 @@ void FPlayFabGSDKModule::UpdateConnectedPlayers(const TArray<FConnectedPlayer>& 
 const FString FPlayFabGSDKModule::GetLogsDirectory()
 {
 #if UE_SERVER
-	FScopeLock ScopeLock(&GSDKInternal->GetConfigMutex());
-
-	const TMap<FString, FString> Config = GSDKInternal->GetConfigSettings();
-
-	if (Config.Contains(LOG_FOLDER_KEY))
-	{
-		return Config[LOG_FOLDER_KEY];
-	}
+	return GSDKInternal->GetConfigValue(LOG_FOLDER_KEY);
 #endif
-
 	return TEXT("");
 }
 
 const FString FPlayFabGSDKModule::GetSharedContentDirectory()
 {
 #if UE_SERVER
-	FScopeLock ScopeLock(&GSDKInternal->GetConfigMutex());
-
-	const TMap<FString, FString> Config = GSDKInternal->GetConfigSettings();
-
-	if (Config.Contains(SHARED_CONTENT_FOLDER_KEY))
-	{
-		return Config[SHARED_CONTENT_FOLDER_KEY];
-	}
+	return GSDKInternal->GetConfigValue(SHARED_CONTENT_FOLDER_KEY);
 #endif
 
 	return TEXT("");

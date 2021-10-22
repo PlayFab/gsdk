@@ -135,16 +135,6 @@ public:
 		return InitialPlayers;
 	}
 
-	FCriticalSection& GetConfigMutex()
-	{
-		return ConfigMutex;
-	}
-
-	TMap<FString, FString> GetConfigSettings() const
-	{
-		return ConfigSettings;
-	}
-
 	FGameServerConnectionInfo GetConnectionInfo() const
 	{
 		return ConnectionInfo;
@@ -159,6 +149,8 @@ public:
 	{
 		return HeartbeatRequest;
 	}
+
+	FString GetConfig(const FString& Key) const;
 	void SetState(EGameState State);
 	void SetConnectedPlayers(const TArray<FConnectedPlayer>& CurrentConnectedPlayers);
 

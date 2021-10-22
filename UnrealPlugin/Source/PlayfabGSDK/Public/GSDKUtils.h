@@ -108,6 +108,5 @@ public:
 protected:
 	/// Returns all configuration settings
 	/// Returns a map of configuration setting values
-	static const TMap<FString, FString> GetConfigSettings();
-
+	FString GetConfig(const FString& Key);
 };

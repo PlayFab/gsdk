@@ -49,7 +49,7 @@ public:
 
     /// <summary>Returns all configuration settings</summary>
     /// <returns>unordered map of string key:value configuration setting values</returns>
-    const TMap<FString, FString> GetConfigSettings();
+	FString GetConfig(const FString& Key);
 
     /// <summary>Tells the Xcloud service information on who is connected.</summary>
     /// <param name="CurrentlyConnectedPlayers">Array of player ids</param>
