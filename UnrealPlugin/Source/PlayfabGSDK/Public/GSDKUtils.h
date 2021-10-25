@@ -108,5 +108,5 @@ public:
 protected:
 	/// Returns all configuration settings
 	/// Returns a map of configuration setting values
-	FString GetConfig(const FString& Key);
+	static FString GetConfigValue(const FString& Key);
 };

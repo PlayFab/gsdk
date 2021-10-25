@@ -95,7 +95,7 @@ FString FPlayFabGSDKModule::GetConfigValue(const FString& Key)
 #if UE_SERVER
 	return GSDKInternal->GetConfigValue(Key);
 #else
-	return TMap<FString, FString>();
+	return TEXT("");
 #endif
 }
 

@@ -426,9 +426,9 @@ void FGSDKInternal::TriggerShutdown()
 	});
 }
 
-FString FGSDKInternal::GetConfig(const FString& Key) const
+FString FGSDKInternal::GetConfigValue(const FString& Key) const
 {
-	FScopeLock ScopeLock(&ConfigMutex);
+	FScopeLock ScopeLock(const_cast<FCriticalSection*>(&ConfigMutex));
 	if (ConfigSettings.Contains(Key))
 	{
 		return ConfigSettings[Key];

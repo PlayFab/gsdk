@@ -43,42 +43,42 @@ const FString UGSDKUtils::GetSharedContentDirectory()
 
 const FString UGSDKUtils::GetMatchId()
 {
-	return GetConfig(FPlayFabGSDKModule::SESSION_ID_KEY);
+	return GetConfigValue(FPlayFabGSDKModule::SESSION_ID_KEY);
 }
 
 const FString UGSDKUtils::GetMatchSessionCookie()
 {
-	return GetConfig(FPlayFabGSDKModule::SESSION_COOKIE_KEY);
+	return GetConfigValue(FPlayFabGSDKModule::SESSION_COOKIE_KEY);
 }
 
 const FString UGSDKUtils::GetTitleId()
 {
-	return GetConfig(FPlayFabGSDKModule::TITLE_ID_KEY);
+	return GetConfigValue(FPlayFabGSDKModule::TITLE_ID_KEY);
 }
 
 const FString UGSDKUtils::GetRegionName()
 {
-	return GetConfig(FPlayFabGSDKModule::REGION_KEY);
+	return GetConfigValue(FPlayFabGSDKModule::REGION_KEY);
 }
 
 const FString UGSDKUtils::GetBuildId()
 {
-	return GetConfig(FPlayFabGSDKModule::BUILD_ID_KEY);
+	return GetConfigValue(FPlayFabGSDKModule::BUILD_ID_KEY);
 }
 
 const FString UGSDKUtils::GetVMId()
 {
-	return GetConfig(FPlayFabGSDKModule::VM_ID_KEY);
+	return GetConfigValue(FPlayFabGSDKModule::VM_ID_KEY);
 }
 
 const FString UGSDKUtils::GetServerId()
 {
-	return GetConfig(FPlayFabGSDKModule::SERVER_ID_KEY);
+	return GetConfigValue(FPlayFabGSDKModule::SERVER_ID_KEY);
 }
 
 const FString UGSDKUtils::GetMetaDataValue(const FString& MetaDataName)
 {
-	return GetConfig(MetaDataName);
+	return GetConfigValue(MetaDataName);
 }
 
 const TArray<FString> UGSDKUtils::GetInitialPlayers()
@@ -139,7 +139,7 @@ void UGSDKUtils::RegisterGSDKMaintenanceDelegate(const FOnGSDKMaintenance_Dyn& O
 	});
 }
 
-FString UGSDKUtils::GetConfig(const FString& Key)
+FString UGSDKUtils::GetConfigValue(const FString& Key)
 {
-	return FPlayFabGSDKModule::Get().GetConfig(Key);
+	return FPlayFabGSDKModule::Get().GetConfigValue(Key);
 }
