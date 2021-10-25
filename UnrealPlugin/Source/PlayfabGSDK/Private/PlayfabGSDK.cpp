@@ -14,8 +14,16 @@
 
 #include "PlayFabGSDK.h"
 
-#include "GSDKConfiguration.h"
 #if UE_SERVER
+	#define PLAYFAB_GSDK_SERVER true
+#else
+	#define PLAYFAB_GSDK_SERVER false
+#endif
+
+
+
+#include "GSDKConfiguration.h"
+#if PLAYFAB_GSDK_SERVER
 #include "GSDKUtils.h"
 #include "Misc/ScopeLock.h"
 #endif
@@ -26,7 +34,7 @@ DEFINE_LOG_CATEGORY(LogPlayFabGSDK);
 
 void FPlayFabGSDKModule::StartupModule()
 {
-#if UE_SERVER
+#if PLAYFAB_GSDK_SERVER
 	GSDKInternal = new FGSDKInternal();
 
 	GSDKInternal->OnShutdown.BindLambda([this]()
@@ -57,7 +65,7 @@ void FPlayFabGSDKModule::StartupModule()
 
 void FPlayFabGSDKModule::ShutdownModule()
 {
-#if UE_SERVER
+#if PLAYFAB_GSDK_SERVER
 	if (GSDKInternal)
 	{
 		delete GSDKInternal;
@@ -68,7 +76,7 @@ void FPlayFabGSDKModule::ShutdownModule()
 
 bool FPlayFabGSDKModule::ReadyForPlayers()
 {
-#if UE_SERVER
+#if PLAYFAB_GSDK_SERVER
 	if (GSDKInternal->GetHeartbeatRequest().CurrentGameState != EGameState::Active)
 	{
 		GSDKInternal->SetState(EGameState::StandingBy);
@@ -83,7 +91,7 @@ bool FPlayFabGSDKModule::ReadyForPlayers()
 
 const FGameServerConnectionInfo FPlayFabGSDKModule::GetGameServerConnectionInfo()
 {
-#if UE_SERVER
+#if PLAYFAB_GSDK_SERVER
 	return GSDKInternal->GetConnectionInfo();
 #else
 	return FGameServerConnectionInfo();
@@ -92,7 +100,7 @@ const FGameServerConnectionInfo FPlayFabGSDKModule::GetGameServerConnectionInfo(
 
 FString FPlayFabGSDKModule::GetConfigValue(const FString& Key)
 {
-#if UE_SERVER
+#if PLAYFAB_GSDK_SERVER
 	return GSDKInternal->GetConfigValue(Key);
 #else
 	return TEXT("");
@@ -101,14 +109,14 @@ FString FPlayFabGSDKModule::GetConfigValue(const FString& Key)
 
 void FPlayFabGSDKModule::UpdateConnectedPlayers(const TArray<FConnectedPlayer>& CurrentlyConnectedPlayers)
 {
-#if UE_SERVER
+#if PLAYFAB_GSDK_SERVER
 	GSDKInternal->SetConnectedPlayers(CurrentlyConnectedPlayers);
 #endif
 }
 
 const FString FPlayFabGSDKModule::GetLogsDirectory()
 {
-#if UE_SERVER
+#if PLAYFAB_GSDK_SERVER
 	return GSDKInternal->GetConfigValue(LOG_FOLDER_KEY);
 #endif
 	return TEXT("");
@@ -116,7 +124,7 @@ const FString FPlayFabGSDKModule::GetLogsDirectory()
 
 const FString FPlayFabGSDKModule::GetSharedContentDirectory()
 {
-#if UE_SERVER
+#if PLAYFAB_GSDK_SERVER
 	return GSDKInternal->GetConfigValue(SHARED_CONTENT_FOLDER_KEY);
 #endif
 
@@ -125,7 +133,7 @@ const FString FPlayFabGSDKModule::GetSharedContentDirectory()
 
 const TArray<FString> FPlayFabGSDKModule::GetInitialPlayers()
 {
-#if UE_SERVER
+#if PLAYFAB_GSDK_SERVER
 	return GSDKInternal->GetInitialPlayers();
 #else
 	return TArray<FString>();
