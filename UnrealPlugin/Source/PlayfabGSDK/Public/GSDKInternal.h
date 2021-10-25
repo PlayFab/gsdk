@@ -150,7 +150,7 @@ public:
 		return HeartbeatRequest;
 	}
 
-	FString GetConfigValue(const FString& Key) const;
+	FString GetConfigValue(const FString& Key);
 	void SetState(EGameState State);
 	void SetConnectedPlayers(const TArray<FConnectedPlayer>& CurrentConnectedPlayers);
 
