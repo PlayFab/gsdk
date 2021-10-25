@@ -258,52 +258,59 @@ void FGSDKInternal::DecodeHeartbeatResponse(const FString& ResponseJson)
 
 	if (HeartbeatResponseJson->HasField(TEXT("sessionConfig")))
 	{
-		FScopeLock ScopeLock(&ConfigMutex);
-
 		TSharedPtr<FJsonObject> SessionConfigJson = HeartbeatResponseJson->GetObjectField(TEXT("sessionConfig"));
-		for (const auto& SessionConfigJsonValue: SessionConfigJson->Values)
-		{
-			FString ValueString;
-			if (SessionConfigJsonValue.Value->TryGetString(ValueString))
-			{
-				if (ConfigSettings.Contains(SessionConfigJsonValue.Key))
-				{
-					ConfigSettings[SessionConfigJsonValue.Key] = ValueString;
-				}
-				else
-				{
-					ConfigSettings.Add(SessionConfigJsonValue.Key, ValueString);
-				}
-			}
-		}
 
 		// Update initial players only if this is the first time populating it.
 		if (InitialPlayers.Num() == 0 && SessionConfigJson->HasField(TEXT("initialPlayers")))
 		{
 			TArray<TSharedPtr<FJsonValue>> PlayersJson = SessionConfigJson->GetArrayField(TEXT("initialPlayers"));
 
-			for (auto PlayerJson: PlayersJson)
+			for (auto PlayerJson : PlayersJson)
 			{
 				InitialPlayers.Add(PlayerJson->AsString());
 			}
 		}
 
-		if (SessionConfigJson->HasField(TEXT("metadata")))
-		{
-			TSharedPtr<FJsonObject> MetaDatasJson = SessionConfigJson->GetObjectField(TEXT("metadata"));
+		const bool hasConfigValues = SessionConfigJson->Values.Num() > 0;
+		const bool hasMetaData = SessionConfigJson->HasField(TEXT("metadata"));
 
-			for (const auto& MetaDataJson: MetaDatasJson->Values)
+		if (hasConfigValues || hasMetaData)
+		{
+			FScopeLock ScopeLock(&ConfigMutex);
+
+			for (const auto& SessionConfigJsonValue : SessionConfigJson->Values)
 			{
 				FString ValueString;
-				if (MetaDataJson.Value->TryGetString(ValueString))
+				if (SessionConfigJsonValue.Value->TryGetString(ValueString))
 				{
-					if (ConfigSettings.Contains(MetaDataJson.Key))
+					if (ConfigSettings.Contains(SessionConfigJsonValue.Key))
 					{
-						ConfigSettings[MetaDataJson.Key] = ValueString;
+						ConfigSettings[SessionConfigJsonValue.Key] = ValueString;
 					}
 					else
 					{
-						ConfigSettings.Add(MetaDataJson.Key, ValueString);
+						ConfigSettings.Add(SessionConfigJsonValue.Key, ValueString);
+					}
+				}
+			}
+
+			if (hasMetaData)
+			{
+				TSharedPtr<FJsonObject> MetaDatasJson = SessionConfigJson->GetObjectField(TEXT("metadata"));
+
+				for (const auto& MetaDataJson : MetaDatasJson->Values)
+				{
+					FString ValueString;
+					if (MetaDataJson.Value->TryGetString(ValueString))
+					{
+						if (ConfigSettings.Contains(MetaDataJson.Key))
+						{
+							ConfigSettings[MetaDataJson.Key] = ValueString;
+						}
+						else
+						{
+							ConfigSettings.Add(MetaDataJson.Key, ValueString);
+						}
 					}
 				}
 			}
@@ -417,6 +424,17 @@ void FGSDKInternal::TriggerShutdown()
 			this->OnShutdown.Execute();
 		}
 	});
+}
+
+FString FGSDKInternal::GetConfigValue(const FString& Key)
+{
+	FScopeLock ScopeLock(&ConfigMutex);
+	if (ConfigSettings.Contains(Key))
+	{
+		return ConfigSettings[Key];
+	}
+	UE_LOG(LogPlayFabGSDK, Error, TEXT("Config value for key %s not found!"), *Key);
+	return TEXT("");
 }
 
 void FGSDKInternal::SetState(EGameState State)
