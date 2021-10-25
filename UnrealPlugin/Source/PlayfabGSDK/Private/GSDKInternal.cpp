@@ -433,6 +433,7 @@ FString FGSDKInternal::GetConfigValue(const FString& Key) const
 	{
 		return ConfigSettings[Key];
 	}
+	UE_LOG(LogPlayFabGSDK, Error, TEXT("Config value for key %s not found"), *Key);
 	return TEXT("");
 }
 
