@@ -160,7 +160,7 @@ void FGSDKInternal::StartLog()
 
 	if (!FileManager.CreateDirectoryTree(*LogFolder))
 	{
-		LogFolder = "";
+		LogFolder = TEXT("");
 	}
 
 	const FString GSDKLogPath = FString::Printf(TEXT("%s/%s"), *LogFolder, *LogFileName);
@@ -199,10 +199,10 @@ void FGSDKInternal::ReceiveHeartbeat()
 	if (Response->GetContentAsString().Len() != Response->GetContentLength())
 	{
 		return;
-	}	
+	}
 
 	HeartBeats.RemoveAt(0);
-	
+
 	if (Response->GetResponseCode() >= 300)
 	{
 		UE_LOG(LogPlayFabGSDK, Error, TEXT("Received non-success code from Agent.  Status Code: %d Response Body: %s"), Response->GetResponseCode(), *Response->GetContentAsString());
@@ -231,7 +231,7 @@ FString FGSDKInternal::EncodeHeartbeatRequest()
 		TSharedPtr<FJsonObject> ConnectedPlayerJsonObject = MakeShared<FJsonObject>();
 
 		ConnectedPlayerJsonObject->SetStringField(TEXT("PlayerId"), ConnectedPlayer.PlayerId);
-		
+
 		TSharedPtr<FJsonValueObject> ConnectedPlayerJson = MakeShared<FJsonValueObject>(ConnectedPlayerJsonObject);
 		ConnectedPlayersJson.Add(ConnectedPlayerJson);
 	}
@@ -275,7 +275,7 @@ void FGSDKInternal::DecodeHeartbeatResponse(const FString& ResponseJson)
 					ConfigSettings.Add(SessionConfigJsonValue.Key, ValueString);
 				}
 			}
-		}		
+		}
 
 		// Update initial players only if this is the first time populating it.
 		if (InitialPlayers.Num() == 0 && SessionConfigJson->HasField(TEXT("initialPlayers")))
@@ -310,7 +310,7 @@ void FGSDKInternal::DecodeHeartbeatResponse(const FString& ResponseJson)
 		}
 	}
 
-	if (HeartbeatResponseJson->HasField("nextScheduledMaintenanceUtc"))
+	if (HeartbeatResponseJson->HasField(TEXT("nextScheduledMaintenanceUtc")))
 	{
 		FDateTime NextMaintenance = ParseDate(HeartbeatResponseJson->GetStringField(TEXT("nextScheduledMaintenanceUtc")));
 		FTimespan Diff = NextMaintenance - CachedScheduledMaintenance;
@@ -348,7 +348,7 @@ void FGSDKInternal::DecodeHeartbeatResponse(const FString& ResponseJson)
 				if (HeartbeatRequest.CurrentGameState != EGameState::Terminating)
 				{
 					SetState(EGameState::Terminating);
-					
+
 					TransitionToActiveEvent->Trigger();
 					TriggerShutdown();
 				}
@@ -403,15 +403,15 @@ void FGSDKInternal::TriggerShutdown()
 	AsyncTask(ENamedThreads::AnyThread, [this]()
 	{
 		this->KeepHeartbeatRunning = false;
-		
+
 		for (auto Heartbeat: HeartBeats)
 		{
 			Heartbeat->CancelRequest();
 		}
 
 		HeartBeats.Empty();
-		
-		
+
+
 		if (this->OnShutdown.IsBound())
 		{
 			this->OnShutdown.Execute();

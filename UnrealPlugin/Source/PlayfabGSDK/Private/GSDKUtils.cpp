@@ -148,7 +148,7 @@ void UGSDKUtils::RegisterGSDKShutdownDelegate(const FOnGSDKShutdown_Dyn& OnGSDKS
 	{
 		UE_LOG(LogPlayFabGSDK, Error, TEXT("GSDK Shutdown Delegate is already bound! Will unbind the old binding!"));
 	}
-	
+
 	FPlayFabGSDKModule::Get().OnShutdown.Unbind();
 	FPlayFabGSDKModule::Get().OnShutdown.BindLambda([OnGSDKShutdownDelegate]()
 	{
@@ -165,7 +165,7 @@ void UGSDKUtils::RegisterGSDKHealthCheckDelegate(const FOnGSDKHealthCheck_Dyn& O
 	{
 		UE_LOG(LogPlayFabGSDK, Error, TEXT("GSDK Health Delegate is already bound! Will unbind the old binding!"));
 	}
-	
+
 	FPlayFabGSDKModule::Get().OnHealthCheck.Unbind();
 	FPlayFabGSDKModule::Get().OnHealthCheck.BindLambda([OnGSDKHealthCheckDelegate]()
 	{
@@ -184,7 +184,7 @@ void UGSDKUtils::RegisterGSDKMaintenanceDelegate(const FOnGSDKMaintenance_Dyn& O
 	{
 		UE_LOG(LogPlayFabGSDK, Error, TEXT("GSDK Maintenance Delegate is already bound! Will unbind the old binding!"));
 	}
-	
+
 	FPlayFabGSDKModule::Get().OnMaintenance.Unbind();
 	FPlayFabGSDKModule::Get().OnMaintenance.BindLambda([OnGSDKMaintenanceDelegate](const FDateTime& MaintenanceTime)
 	{

@@ -165,7 +165,7 @@ public:
 	DECLARE_DELEGATE(FOnShutdown);
 	DECLARE_DELEGATE_RetVal(bool, FOnHealthCheck);
 	DECLARE_DELEGATE_OneParam(FOnMaintenance, const FDateTime&)
-	
+
 	FOnShutdown OnShutdown;
 	FOnMaintenance OnMaintenance;
 	FOnHealthCheck OnHealthCheck;
@@ -180,14 +180,14 @@ private:
 
 		return ReturnMap;
 	}
-	
+
 	// NOTE: Making this map non-static, because otherwise the heartbeat thread
 	// will throw an access violation exception when the game server main loop returns
 	// (As C++ starts getting rid of all statics)
 	const TMap<FString, EOperation> OperationMap = InitializeOperationMap();
 	int32 MaximumUnexpectedOperationsErrorCount;
 	int32 UnexpectedOperationsErrorCount = 0;
-	
+
 	FString AgentEntpoint;
 	FHeartbeatRequest HeartbeatRequest;
 	FString SessionCookie;
@@ -195,8 +195,8 @@ private:
 	FString HeartbeatUrl;
 	TFuture<void> HeartbeatThread;
 	FOutputDeviceFile* OutputDevice;
-	
-	
+
+
 	FGameServerConnectionInfo ConnectionInfo;
 	TMap<FString, FString> ConfigSettings;
 	FDateTime CachedScheduledMaintenance;
@@ -220,10 +220,8 @@ private:
 	void OnReceiveHeartbeatResponse(FHttpRequestPtr Request, FHttpResponsePtr Response, bool bConnectedSuccessfully);
 	FCriticalSection ConfigMutex;
 
-	FCriticalSection LogMutex;
-
 	TArray<TSharedRef<IHttpRequest, ESPMode::ThreadSafe>> HeartBeats;
-	
+
 	void StartLog();
 	void SendHeartbeat();
 	void ReceiveHeartbeat();
