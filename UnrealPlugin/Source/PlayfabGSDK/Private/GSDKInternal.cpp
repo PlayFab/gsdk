@@ -91,13 +91,13 @@ FGSDKInternal::FGSDKInternal()
 
 	MaximumUnexpectedOperationsErrorCount = ConfigPtr->GetMaximumAllowedUnexpectedOperationsCount();
 
-	const FString GsmBaseUrl = ConfigSettings[FPlayFabGSDKModule::HEARTBEAT_ENDPOINT_KEY];
-	const FString InstanceId = ConfigSettings[FPlayFabGSDKModule::SERVER_ID_KEY];
+	const FString HeartbeatEndpoint = ConfigSettings[FPlayFabGSDKModule::HEARTBEAT_ENDPOINT_KEY];
+	const FString ServerId = ConfigSettings[FPlayFabGSDKModule::SERVER_ID_KEY];
 
-	UE_LOG(LogPlayFabGSDK, Log, TEXT("VM Agent Endpoint: %s"), *GsmBaseUrl);
-	UE_LOG(LogPlayFabGSDK, Log, TEXT("Instance Id: %s"), *InstanceId);
+	UE_LOG(LogPlayFabGSDK, Log, TEXT("VM Agent Endpoint: %s"), *HeartbeatEndpoint);
+	UE_LOG(LogPlayFabGSDK, Log, TEXT("Server Instance Id: %s"), *ServerId);
 
-	HeartbeatUrl = FString::Printf(TEXT("http://%s/v1/sessionHosts/%s"), *GsmBaseUrl, *InstanceId);
+	HeartbeatUrl = FString::Printf(TEXT("http://%s/v1/sessionHosts/%s"), *HeartbeatEndpoint, *ServerId);
 
 	CachedScheduledMaintenance = FDateTime(0);
 
