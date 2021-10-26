@@ -200,7 +200,7 @@ namespace Microsoft
                 // These two methods are used for unit testing
                 std::string encodeHeartbeatRequest();
                 void decodeHeartbeatResponse(const std::string &responseJson);
-				std::mutex m_configMutex;
+                std::mutex m_configMutex;
 
                 std::tm parseDate(const std::string &dateStr);
                 void setState(GameState state);

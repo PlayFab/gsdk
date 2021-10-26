@@ -64,7 +64,7 @@ const std::string &Microsoft::Azure::Gaming::EnvironmentVariableConfiguration::g
 
 const std::string &Microsoft::Azure::Gaming::EnvironmentVariableConfiguration::getSharedContentFolder()
 {
-	return m_sharedContentFolder;
+    return m_sharedContentFolder;
 }
 
 
