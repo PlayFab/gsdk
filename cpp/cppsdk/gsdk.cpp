@@ -156,10 +156,10 @@ namespace Microsoft
                 catch (const std::exception& ex)
                 {
                     GSDK::logMessage(ex.what());
-                    return false;                    
+                    return false;
                 }
 
-                m_isInitialized= true;
+                m_isInitialized = true;
                 return true;
             }
 
@@ -184,7 +184,7 @@ namespace Microsoft
                 // Close the log file
                 stopLog();
 
-                m_isInitialized= false;
+                m_isInitialized = false;
             }
 
             //Do not need to acquire lock for configuration becase startLog is only called from the constructor.
@@ -501,13 +501,13 @@ namespace Microsoft
                 if (GSDKInternal::m_instance != nullptr)
                 {
                     GSDKInternal::m_instance->dispose();
-                    GSDKInternal::m_instance= nullptr;
+                    GSDKInternal::m_instance = nullptr;
                 }
             }
 
             bool GSDK::readyForPlayers()
             {
-                auto& gsdk= GSDKInternal::get();
+                auto& gsdk = GSDKInternal::get();
                 if (gsdk == nullptr)
                     return false;
 
@@ -520,11 +520,11 @@ namespace Microsoft
                 return gsdk->m_heartbeatRequest.m_currentGameState == GameState::Active;
             }
 
-            const Microsoft::Azure::Gaming::GameServerConnectionInfo &GSDK::getGameServerConnectionInfo()
+            const Microsoft::Azure::Gaming::GameServerConnectionInfo& GSDK::getGameServerConnectionInfo()
             {
                 static Microsoft::Azure::Gaming::GameServerConnectionInfo empty;
 
-                auto& gsdk= GSDKInternal::get();
+                auto& gsdk = GSDKInternal::get();
                 if (gsdk != nullptr)
                 {
                     return gsdk->m_connectionInfo;
@@ -537,7 +537,7 @@ namespace Microsoft
 
             const std::unordered_map<std::string, std::string> GSDK::getConfigSettings()
             {
-                auto& gsdk= GSDKInternal::get();
+                auto& gsdk = GSDKInternal::get();
                 if (gsdk == nullptr)
                     return std::unordered_map<std::string, std::string>();
 
@@ -547,7 +547,7 @@ namespace Microsoft
 
             void GSDK::updateConnectedPlayers(const std::vector<ConnectedPlayer>& currentlyConnectedPlayers)
             {
-                auto& gsdk= GSDKInternal::get();
+                auto& gsdk = GSDKInternal::get();
                 if (gsdk != nullptr)
                 {
                     gsdk->setConnectedPlayers(currentlyConnectedPlayers);
@@ -556,7 +556,7 @@ namespace Microsoft
 
             void GSDK::registerShutdownCallback(std::function< void() > callback)
             {
-                auto& gsdk= GSDKInternal::get();
+                auto& gsdk = GSDKInternal::get();
                 if (gsdk != nullptr)
                 {
                     gsdk->m_shutdownCallback = callback;
@@ -565,7 +565,7 @@ namespace Microsoft
 
             void GSDK::registerHealthCallback(std::function< bool() > callback)
             {
-                auto& gsdk= GSDKInternal::get();
+                auto& gsdk = GSDKInternal::get();
                 if (gsdk != nullptr)
                 {
                     gsdk->m_healthCallback = callback;
@@ -574,7 +574,7 @@ namespace Microsoft
 
             void GSDK::registerMaintenanceCallback(std::function< void(const tm&) > callback)
             {
-                auto& gsdk= GSDKInternal::get();
+                auto& gsdk = GSDKInternal::get();
                 if (gsdk != nullptr)
                 {
                     gsdk->m_maintenanceCallback = callback;
@@ -595,7 +595,7 @@ namespace Microsoft
 
             const std::string GSDK::getLogsDirectory()
             {
-                auto& gsdk= GSDKInternal::get();
+                auto& gsdk = GSDKInternal::get();
                 if (gsdk == nullptr)
                     return std::string();
 
@@ -619,7 +619,7 @@ namespace Microsoft
 
             const std::string GSDK::getSharedContentDirectory()
             {
-                auto& gsdk= GSDKInternal::get();
+                auto& gsdk = GSDKInternal::get();
                 if (gsdk == nullptr)
                     return std::string();
 
@@ -643,7 +643,7 @@ namespace Microsoft
             {
                 static std::vector<std::string> empty;
 
-                auto& gsdk= GSDKInternal::get();
+                auto& gsdk = GSDKInternal::get();
                 if (gsdk != nullptr)
                 {
                     return gsdk->m_initialPlayers;
