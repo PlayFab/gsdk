@@ -150,6 +150,7 @@ namespace Microsoft
                 std::function<void(const tm &)> m_maintenanceCallback;
 
                 GameServerConnectionInfo m_connectionInfo;
+                std::mutex m_configMutex;
                 std::unordered_map<std::string, std::string> m_configSettings;
                 tm m_cachedScheduledMaintenance;
 
@@ -200,7 +201,6 @@ namespace Microsoft
                 // These two methods are used for unit testing
                 std::string encodeHeartbeatRequest();
                 void decodeHeartbeatResponse(const std::string &responseJson);
-                std::mutex m_configMutex;
 
                 std::tm parseDate(const std::string &dateStr);
                 void setState(GameState state);

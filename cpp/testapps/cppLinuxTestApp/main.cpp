@@ -3,6 +3,7 @@
 
 #include <ctime>
 #include <cstdio>
+#include <string>
 #include "gsdk.h"
 #include <playfab/PlayFabClientApi.h>
 #include <playfab/PlayFabClientDataModels.h>
@@ -67,11 +68,8 @@ int main()
         Microsoft::Azure::Gaming::GSDK::registerMaintenanceCallback(&maintenanceScheduled);
 
         // Test grabbing config
-        printf(" Config before Active.\n");
-        for (auto config : Microsoft::Azure::Gaming::GSDK::getConfigSettings())
-        {
-            printf("%s: %s\n", config.first.c_str(), config.second.c_str());
-        }
+        std::string configJson = Microsoft::Azure::Gaming::GSDK::getConfigAsJson();
+        printf(" Config before Active:\n%s\n", configJson.c_str());
 
         printf("\tStanding by!\n");
         if (Microsoft::Azure::Gaming::GSDK::readyForPlayers())
@@ -83,11 +81,8 @@ int main()
             players.push_back(Microsoft::Azure::Gaming::ConnectedPlayer("player2"));
             Microsoft::Azure::Gaming::GSDK::updateConnectedPlayers(players);
 
-            printf(" Config after Active.\n");
-            for (auto config : Microsoft::Azure::Gaming::GSDK::getConfigSettings())
-            {
-                printf("%s: %s\n", config.first.c_str(), config.second.c_str());
-            }
+            configJson = Microsoft::Azure::Gaming::GSDK::getConfigAsJson();
+            printf(" Config after Active:\n%s\n", configJson.c_str());
 
             printf("Logs directory is: %s\n", Microsoft::Azure::Gaming::GSDK::getLogsDirectory().c_str());
         }

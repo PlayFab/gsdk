@@ -48,23 +48,22 @@ namespace Microsoft
                     ports["port2"] = "2222";
                     GSDKInternal::testConfiguration = std::make_unique<TestConfig>(heartbeatEndpoint, serverId, logFolder, sharedContentFolder, certFolder, gameCerts, titleId, buildId, region, metadata, ports);
                     GSDK::start();
-                    const std::unordered_map<std::string, std::string> config = GSDK::getConfigSettings();
-                    Assert::AreEqual(heartbeatEndpoint, config.at("gsmsBaseUrl"), L"Ensuring heartbeat endpoint was set.");
-                    Assert::AreEqual(serverId, config.at("instanceId"), L"Ensuring server id was set.");
-                    Assert::AreEqual(logFolder, config.at("logFolder"), L"Ensuring log folder was set.");
-                    Assert::AreEqual(sharedContentFolder, config.at("sharedContentFolder"), L"Ensuring shared content folder was set.");
+                    Assert::AreEqual(heartbeatEndpoint, GSDK::getConfigValue("gsmsBaseUrl"), L"Ensuring heartbeat endpoint was set.");
+                    Assert::AreEqual(serverId, GSDK::getConfigValue("instanceId"), L"Ensuring server id was set.");
+                    Assert::AreEqual(logFolder, GSDK::getConfigValue("logFolder"), L"Ensuring log folder was set.");
+                    Assert::AreEqual(sharedContentFolder, GSDK::getConfigValue("sharedContentFolder"), L"Ensuring shared content folder was set.");
                     Assert::AreEqual(logFolder, GSDK::getLogsDirectory(), L"Ensuring  get log folder works.");
                     Assert::AreEqual(sharedContentFolder, GSDK::getSharedContentDirectory(), L"Ensuring  get shared content folder works.");
-                    Assert::AreEqual(certFolder, config.at("certificateFolder"), L"Ensuring cert folder was set.");
-                    Assert::AreEqual(std::string("thumbprint1"), config.at("cert1"), L"Ensuring cert1 thumbprint was set.");
-                    Assert::AreEqual(std::string("thumbprint2"), config.at("cert2"), L"Ensuring cert2 thumbprint was set.");
-                    Assert::AreEqual(titleId, config.at("titleId"), L"Ensuring titleId was set.");
-                    Assert::AreEqual(buildId, config.at("buildId"), L"Ensuring buildId was set.");
-                    Assert::AreEqual(region, config.at("region"), L"Ensuring region was set.");
-                    Assert::AreEqual(std::string("value1"), config.at("key1"), L"Ensuring key1 was set.");
-                    Assert::AreEqual(std::string("value2"), config.at("key2"), L"Ensuring key2 was set.");
-                    Assert::AreEqual(std::string("1111"), config.at("port1"), L"Ensuring port1 was set.");
-                    Assert::AreEqual(std::string("2222"), config.at("port2"), L"Ensuring port2 was set.");
+                    Assert::AreEqual(certFolder, GSDK::getConfigValue("certificateFolder"), L"Ensuring cert folder was set.");
+                    Assert::AreEqual(std::string("thumbprint1"), GSDK::getConfigValue("cert1"), L"Ensuring cert1 thumbprint was set.");
+                    Assert::AreEqual(std::string("thumbprint2"), GSDK::getConfigValue("cert2"), L"Ensuring cert2 thumbprint was set.");
+                    Assert::AreEqual(titleId, GSDK::getConfigValue("titleId"), L"Ensuring titleId was set.");
+                    Assert::AreEqual(buildId, GSDK::getConfigValue("buildId"), L"Ensuring buildId was set.");
+                    Assert::AreEqual(region, GSDK::getConfigValue("region"), L"Ensuring region was set.");
+                    Assert::AreEqual(std::string("value1"), GSDK::getConfigValue("key1"), L"Ensuring key1 was set.");
+                    Assert::AreEqual(std::string("value2"), GSDK::getConfigValue("key2"), L"Ensuring key2 was set.");
+                    Assert::AreEqual(std::string("1111"), GSDK::getConfigValue("port1"), L"Ensuring port1 was set.");
+                    Assert::AreEqual(std::string("2222"), GSDK::getConfigValue("port2"), L"Ensuring port2 was set.");
                 }
 
                 TEST_METHOD(LogFolderNotSetInitializesFine)
@@ -161,9 +160,10 @@ namespace Microsoft
                     GSDKInternal::m_instance->decodeHeartbeatResponse(responseJson);
 
                     // Test heartbeat response handled correctly
-                    const std::unordered_map<std::string, std::string> config = GSDK::getConfigSettings();
-                    Assert::IsTrue("eca7e870-da2e-45f9-bb66-30d89064313a" == config.at("sessionId"), L"Verify session id was captured from the heartbeat.");
-                    Assert::IsTrue("OreoCookie" == config.at("sessionCookie"), L"Verify session cookie was captured from the heartbeat.");
+                    const std::string actualSessionId = GSDK::getConfigValue("sessionId");
+                    const std::string actualSessionCookie = GSDK::getConfigValue("sessionCookie");
+                    Assert::IsTrue("eca7e870-da2e-45f9-bb66-30d89064313a" == actualSessionId, L"Verify session id was captured from the heartbeat.");
+                    Assert::IsTrue("OreoCookie" == actualSessionCookie, L"Verify session cookie was captured from the heartbeat.");
                     Assert::IsTrue(1523552310LL == maintenanceTime, L"Verify maintenance callback with correct time was called.");
                     Assert::IsTrue(GSDKInternal::m_instance->m_heartbeatRequest.m_currentGameState == GameState::Active, L"Verify state was changed.");
                 }
@@ -274,8 +274,8 @@ namespace Microsoft
                     GSDKInternal::m_instance->decodeHeartbeatResponse(responseJson);
 
                     // Test heartbeat response handled correctly
-                    const std::unordered_map<std::string, std::string> config = GSDK::getConfigSettings();
-                    Assert::AreEqual(std::string("testValue"), config.at("testKey"), L"Ensuring session metadata was set.");
+                    const std::string actualTestValue = GSDK::getConfigValue("testKey");
+                    Assert::AreEqual(std::string("testValue"), actualTestValue, L"Ensuring session metadata was set.");
                 }
 
                 TEST_METHOD(AgentOperationStateChangesHandledCorrectly)

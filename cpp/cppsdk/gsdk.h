@@ -97,7 +97,9 @@ namespace Microsoft
 
                 /// <summary>Returns all configuration settings</summary>
                 /// <returns>unordered map of string key:value configuration setting values</returns>
-                static const std::unordered_map<std::string, std::string> getConfigSettings();
+                static const std::string getConfigValue(const std::string& key);
+                static bool setTestConfigValue(const std::string& key, const std::string& value);
+                static const std::string getConfigAsJson();
 
                 /// <summary>Kicks off communication threads, heartbeats, etc.  Called implicitly by ReadyForPlayers if not called beforehand.</summary>
                 /// <param name="debugLogs">Enables outputting additional logs to the GSDK log file.</param>
@@ -131,8 +133,7 @@ namespace Microsoft
                 /// <summary>After allocation, returns a list of the initial players that have access to this game server, used by PlayFab's Matchmaking offering</summary>
                 static const std::vector<std::string> &getInitialPlayers();
 
-                // Keys for the map returned by getConfigSettings
-
+                // Keys for specific known entries from getConfigValue()
                 static constexpr const char* HEARTBEAT_ENDPOINT_KEY = "gsmsBaseUrl";
                 static constexpr const char* SERVER_ID_KEY = "instanceId";
                 static constexpr const char* LOG_FOLDER_KEY = "logFolder";

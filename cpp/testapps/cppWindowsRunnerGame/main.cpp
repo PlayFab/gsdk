@@ -11,6 +11,7 @@
 #include <fstream>
 #include <algorithm>
 #include <future>
+
 #include <winsock2.h>
 #include <stdio.h>
 #include <windows.h>
@@ -35,7 +36,7 @@ static std::vector<Microsoft::Azure::Gaming::ConnectedPlayer> players;
 
 static std::future<void> processRequestsThread;
 static struct sockaddr_in address;
-static int server_fd;
+static SOCKET server_fd;
 
 
 void inShutdown()
@@ -60,7 +61,7 @@ void maintenanceScheduled(tm t)
     isMaintenancedScheduled = true;
 }
 
-std::string escape(std::string const &s)
+std::string escape(std::string const& s)
 {
     std::size_t n = s.length();
     std::string escaped;
@@ -88,7 +89,7 @@ std::string getExecutablePath()
 std::string getExecutableDirectory()
 {
     std::string path = getExecutablePath();
-    int lastIndex = path.find_last_of('\\');
+    size_t lastIndex = path.find_last_of('\\');
     return path.substr(0, lastIndex);
 }
 
@@ -96,7 +97,7 @@ void processRequests()
 {
     while (true)
     {
-        int new_socket;
+        SOCKET new_socket;
         int valread;
         int addrlen = sizeof(address);
         char buffer[1024] = { 0 };
@@ -115,12 +116,9 @@ void processRequests()
         requestCount++;
         Microsoft::Azure::Gaming::GSDK::updateConnectedPlayers(players);
 
-        std::unordered_map<std::string, std::string> config = Microsoft::Azure::Gaming::GSDK::getConfigSettings();
-
         // First, check if we need to delay shutdown for testing
-        auto it = config.find(Microsoft::Azure::Gaming::GSDK::SESSION_COOKIE_KEY);
-
-        if (it != config.end() && strcmp(it->second.c_str(), "delayshutdown") == 0)
+        std::string sessionCookieValue = Microsoft::Azure::Gaming::GSDK::getConfigValue(Microsoft::Azure::Gaming::GSDK::SESSION_COOKIE_KEY);
+        if (strcmp(sessionCookieValue.c_str(), "delayshutdown") == 0)
         {
             delayShutdown = true;
         }
@@ -133,14 +131,14 @@ void processRequests()
                 playersJoinedAsString += (playersJoinedAsString.empty() ? "" : ",") + player;
             }
 
-            config["initialPlayers"] = playersJoinedAsString;
+            Microsoft::Azure::Gaming::GSDK::setTestConfigValue("initialPlayers", playersJoinedAsString);
         }
 
-        config["isActivated"] = isActivated ? "true" : "false";
-        config["isShutdown"] = isShutdown ? "true" : "false";
-        config["assetFileText"] = assetFileText;
-        config["installedCertThumbprint"] = installedCertThumbprint;
-        config["cmdArgs"] = cmdArgs;
+        Microsoft::Azure::Gaming::GSDK::setTestConfigValue("isActivated", isActivated ? "true" : "false");
+        Microsoft::Azure::Gaming::GSDK::setTestConfigValue("isShutdown", isShutdown ? "true" : "false");
+        Microsoft::Azure::Gaming::GSDK::setTestConfigValue("assetFileText", assetFileText);
+        Microsoft::Azure::Gaming::GSDK::setTestConfigValue("installedCertThumbprint", installedCertThumbprint);
+        Microsoft::Azure::Gaming::GSDK::setTestConfigValue("cmdArgs", cmdArgs);
 
         if (isMaintenancedScheduled)
         {
@@ -150,32 +148,10 @@ void processRequests()
             asctime_s(buffer, sizeof(buffer), &tm);
             std::string timeStr(buffer);
             timeStr.erase(std::remove(timeStr.begin(), timeStr.end(), '\n'), timeStr.end());
-            config["nextMaintenance"] = timeStr;
+            Microsoft::Azure::Gaming::GSDK::setTestConfigValue("nextMaintenance", timeStr);
         }
 
-        // Format the response
-        bool first = true;
-        std::string content;
-        content.reserve(1024);
-        content += "{\r\n";
-        for (auto configVal : config)
-        {
-            if (!first) {
-                content += ",\r\n";
-            }
-
-            content += "\"";
-            content += configVal.first;
-            content += "\"";
-            content += ": ";
-            content += "\"";
-            content += escape(configVal.second);
-            content += "\"";
-
-            first = false;
-        }
-        content += "\r\n}";
-
+        const std::string content = Microsoft::Azure::Gaming::GSDK::getConfigAsJson();
         char dateBuf[1000];
         time_t now = time(0);
         struct tm tm;
@@ -191,7 +167,7 @@ void processRequests()
         reply += "\r\n\r\n";
         reply += content;
 
-        send(new_socket, reply.c_str(), reply.size(), 0);
+        send(new_socket, reply.c_str(), static_cast<int>(reply.size()), 0);
 
         // If we were shutdown, that was the last reply we would send
         if (isShutdown)
@@ -232,9 +208,9 @@ bool DoesCertificateExist(std::string expectedThumbprint)
     }
 
     DWORD dwPropId = 0;
-    char pszNameString[256];
-    char pszStoreName[256];
-    void*            pvData;
+    //char pszNameString[256];
+    //char pszStoreName[256];
+    void* pvData;
     DWORD            cbData;
     PCCERT_CONTEXT   pCertContext = NULL;
     while (pCertContext = CertEnumCertificatesInStore(
@@ -292,16 +268,10 @@ bool DoesCertificateExist(std::string expectedThumbprint)
 
 void getTestCert()
 {
-    std::unordered_map<std::string, std::string> config = Microsoft::Azure::Gaming::GSDK::getConfigSettings();
-    auto it = config.find("winRunnerTestCert");
-
-    if (it != config.end())
+    const std::string expectedThumbprint = Microsoft::Azure::Gaming::GSDK::getConfigValue("winRunnerTestCert");
+    if (DoesCertificateExist(expectedThumbprint))
     {
-        std::string expectedThumbprint = config["winRunnerTestCert"];
-        if (DoesCertificateExist(expectedThumbprint))
-        {
-            installedCertThumbprint = expectedThumbprint;
-        }
+        installedCertThumbprint = expectedThumbprint;
     }
 }
 
@@ -331,7 +301,7 @@ int main(int argc, char* argv[])
             getline(assetFileTextStream, assetFileText);
             assetFileTextStream.close();
         }
-        
+
         // Grab cert
         getTestCert();
 
@@ -354,7 +324,7 @@ int main(int argc, char* argv[])
         address.sin_addr.s_addr = INADDR_ANY;
         address.sin_port = htons(PORT);
 
-        if (bind(server_fd, (struct sockaddr *)&address, sizeof(address)) < 0)
+        if (bind(server_fd, (struct sockaddr*)&address, sizeof(address)) < 0)
         {
             perror("bind failed");
             exit(EXIT_FAILURE);
@@ -375,7 +345,7 @@ int main(int argc, char* argv[])
 
         processRequestsThread.wait();
     }
-    catch (const std::exception &ex)
+    catch (const std::exception& ex)
     {
         printf("Exception encountered: %s", ex.what());
         Microsoft::Azure::Gaming::GSDK::logMessage(ex.what());

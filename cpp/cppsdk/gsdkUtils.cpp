@@ -33,7 +33,7 @@ namespace Microsoft
                 }
                 else
                 {
-                    return "";
+                    return std::string();
                 }
                 #else
                 size_t logFolderNameLength = 0;
@@ -44,7 +44,7 @@ namespace Microsoft
                 }
                 else
                 {
-                    return "";
+                    return std::string();
                 }
                 #endif
             }
