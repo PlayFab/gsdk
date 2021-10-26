@@ -155,7 +155,8 @@ namespace Microsoft
                                     "sessionId":"eca7e870-da2e-45f9-bb66-30d89064313a",
                                     "sessionCookie":"OreoCookie"
                                 },
-                                "nextScheduledMaintenanceUtc":"2018-04-12T16:58:30.1458776Z"
+                                "nextScheduledMaintenanceUtc":"2018-04-12T16:58:30.1458776Z",
+                                "nextHeartbeatIntervalMs":30000
                         }")";
                     GSDKInternal::m_instance->decodeHeartbeatResponse(responseJson);
 
@@ -166,6 +167,7 @@ namespace Microsoft
                     Assert::IsTrue("OreoCookie" == actualSessionCookie, L"Verify session cookie was captured from the heartbeat.");
                     Assert::IsTrue(1523552310LL == maintenanceTime, L"Verify maintenance callback with correct time was called.");
                     Assert::IsTrue(GSDKInternal::m_instance->m_heartbeatRequest.m_currentGameState == GameState::Active, L"Verify state was changed.");
+                    Assert::AreEqual(GSDKInternal::m_instance->m_nextHeartbeatIntervalMs, 30000, L"Verify heartbeat interval was captured from the heartbeat");
                 }
 
                 TEST_METHOD(DecodeAgentResponse_JsonDoesntCrash)
@@ -212,6 +214,71 @@ namespace Microsoft
                                 "nextScheduledMaintenanceUtc":"2018-04-12T16:58:30.1458776Z",
                         }")";
                     GSDKInternal::m_instance->decodeHeartbeatResponse(responseJson);
+                }
+
+                TEST_METHOD(DecodeAgentResponseJson_ClampedTooSmallHeartbeatInterval)
+                {
+                    GSDKInternal::testConfiguration = std::make_unique<TestConfig>("heartbeatEndpoint", "serverId", "logFolder", "sharedContentFolder");
+                    GSDK::start();
+
+                    time_t maintenanceTime;
+                    GSDK::registerMaintenanceCallback([&maintenanceTime](tm t) -> void { maintenanceTime = _mkgmtime(&t); });
+
+                    std::string responseJson = 
+                        R"({
+                                "operation":"Active",
+                                "sessionConfig":
+                                {
+                                    "sessionId":"eca7e870-da2e-45f9-bb66-30d89064313a",
+                                    "sessionCookie":"OreoCookie"
+                                },
+                                "nextScheduledMaintenanceUtc":"2018-04-12T16:58:30.1458776Z",
+                                "nextHeartbeatIntervalMs":999
+                        }")";
+                    GSDKInternal::m_instance->decodeHeartbeatResponse(responseJson);
+
+                    Assert::AreEqual(GSDKInternal::m_instance->m_nextHeartbeatIntervalMs, 1000, L"Verify heartbeat interval was clamped to minimum allowed.");
+                }
+
+                TEST_METHOD(DecodeAgentResponseJson_HandleMissingHeartbeatInterval)
+                {
+                    GSDKInternal::testConfiguration = std::make_unique<TestConfig>("heartbeatEndpoint", "serverId", "logFolder", "sharedContentFolder");
+                    GSDK::start();
+
+                    time_t maintenanceTime;
+                    GSDK::registerMaintenanceCallback([&maintenanceTime](tm t) -> void { maintenanceTime = _mkgmtime(&t); });
+
+                    // First heartbeat contains a heartbeat interval set.
+                    std::string responseJson =
+                        R"({
+                                "operation":"Active",
+                                "sessionConfig":
+                                {
+                                    "sessionId":"eca7e870-da2e-45f9-bb66-30d89064313a",
+                                    "sessionCookie":"OreoCookie"
+                                },
+                                "nextScheduledMaintenanceUtc":"2018-04-12T16:58:30.1458776Z",
+                                "nextHeartbeatIntervalMs":30000
+                        }")";
+                    GSDKInternal::m_instance->decodeHeartbeatResponse(responseJson);
+
+                    Assert::AreEqual(GSDKInternal::m_instance->m_nextHeartbeatIntervalMs, 30000, L"Verify heartbeat interval was captured from the heartbeat");
+
+                    // Second heartbeat is missing the nextHeartbeatIntervalMs field.
+                    responseJson =
+                        R"({
+                                "operation":"Active",
+                                "sessionConfig":
+                                {
+                                    "sessionId":"eca7e870-da2e-45f9-bb66-30d89064313a",
+                                    "sessionCookie":"OreoCookie"
+                                },
+                                "nextScheduledMaintenanceUtc":"2018-04-12T16:58:30.1458776Z"
+                        }")";
+                    GSDKInternal::m_instance->decodeHeartbeatResponse(responseJson);
+
+                    // The heartbeat should default to the minimum allowed in the absence of a field in the response.
+                    Assert::AreEqual(GSDKInternal::m_instance->m_nextHeartbeatIntervalMs, 1000, L"Verify heartbeat interval was set to minimum allowed.");
                 }
 
                 TEST_METHOD(ReturnInitialPlayerListFromJson)

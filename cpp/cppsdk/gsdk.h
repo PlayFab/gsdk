@@ -9,6 +9,7 @@
 #include <exception>
 #include <stdexcept>
 #include <vector>
+#include <stdexcept>
 
 namespace Microsoft
 {

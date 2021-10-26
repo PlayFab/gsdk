@@ -1,0 +1,113 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Microsoft.Playfab.Gaming.GSDK.CSharp</name>
+    </assembly>
+    <members>
+        <member name="T:Microsoft.Playfab.Gaming.GSDK.CSharp.GamePort">
+            <summary>
+            A class that captures details about a game server port.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Playfab.Gaming.GSDK.CSharp.GamePort.Name">
+            <summary>
+            The friendly name / identifier for the port, specified by the game developer in the Build configuration.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Playfab.Gaming.GSDK.CSharp.GamePort.ServerListeningPort">
+            <summary>
+            The port at which the game server should listen on (maps externally to <see cref="P:Microsoft.Playfab.Gaming.GSDK.CSharp.GamePort.ClientConnectionPort" />).
+            For process based servers, this is determined by Control Plane, based on the ports available on the VM.
+            For containers, this is specified by the game developer in the Build configuration.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Playfab.Gaming.GSDK.CSharp.GamePort.ClientConnectionPort">
+            <summary>
+            The public port to which clients should connect (maps internally to <see cref="P:Microsoft.Playfab.Gaming.GSDK.CSharp.GamePort.ServerListeningPort" />).
+            </summary>
+        </member>
+        <member name="M:Microsoft.Playfab.Gaming.GSDK.CSharp.GameserverSDK.ReadyForPlayers">
+            <summary>
+            Called when the game server is ready to accept clients.
+            If Start() hasn't been called by this point, it will be
+            called implicitly here.
+            </summary>
+            <remarks>Required</remarks>
+            <returns>
+            True if the game server was allocated (clients are about to connect).
+            False if the game server was terminated and is about to be shut down.
+            </returns>
+        </member>
+        <member name="M:Microsoft.Playfab.Gaming.GSDK.CSharp.GameserverSDK.GetGameServerConnectionInfo">
+            <summary>
+            Gets information (ipAddress and ports) for connecting to the game server, as well as the ports the
+            game server should listen on.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Microsoft.Playfab.Gaming.GSDK.CSharp.GameserverSDK.getConfigSettings">
+            <summary>
+            Returns all configuration settings
+            </summary>
+            <returns>Optional</returns>
+        </member>
+        <member name="M:Microsoft.Playfab.Gaming.GSDK.CSharp.GameserverSDK.Start(System.Boolean)">
+            <summary>
+            Kicks off communication threads, heartbeats, etc.
+            Called implicitly by ReadyForPlayers if not called beforehand.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Playfab.Gaming.GSDK.CSharp.GameserverSDK.UpdateConnectedPlayers(System.Collections.Generic.IList{Microsoft.Playfab.Gaming.GSDK.CSharp.ConnectedPlayer})">
+            <summary>
+            Tells the PlayFab service information on who is connected.
+            </summary>
+            <param name="currentlyConnectedPlayers"></param>
+        </member>
+        <member name="M:Microsoft.Playfab.Gaming.GSDK.CSharp.GameserverSDK.RegisterShutdownCallback(System.Action)">
+            <summary>
+            Gets called if the server is shutting us down
+            </summary>
+            <param name="callback">The callback</param>
+        </member>
+        <member name="M:Microsoft.Playfab.Gaming.GSDK.CSharp.GameserverSDK.RegisterHealthCallback(System.Func{System.Boolean})">
+            <summary>
+            Gets called when the agent needs to check on the
+            game's health
+            </summary>
+            <param name="callback">The callback</param>
+        </member>
+        <member name="M:Microsoft.Playfab.Gaming.GSDK.CSharp.GameserverSDK.RegisterMaintenanceCallback(System.Action{System.DateTimeOffset})">
+            <summary>
+            Gets called if the server is getting a scheduled maintenance,
+            it will get the UTC Datetime of the maintenance event as an argument.
+            </summary>
+            <param name="callback">The callback</param>
+        </member>
+        <member name="M:Microsoft.Playfab.Gaming.GSDK.CSharp.GameserverSDK.GetLogsDirectory">
+            <summary>
+            Returns the directory whose contents will be uploaded so logs
+            can be easily retrieved
+            </summary>
+            <returns>A path to the directory to place logs in</returns>
+        </member>
+        <member name="M:Microsoft.Playfab.Gaming.GSDK.CSharp.GameserverSDK.GetSharedContentDirectory">
+            <summary>
+            Returns the directory whose contents are shared among all game servers within a VM.
+            </summary>
+            <returns>A path to the directory where shared content can be stored (temporarily). </returns>
+        </member>
+        <member name="M:Microsoft.Playfab.Gaming.GSDK.CSharp.GameserverSDK.GetInitialPlayers">
+            <summary>
+            After allocation, returns a list of the initial players that have access to this game server, used by PlayFab's
+            Matchmaking offering
+            </summary>
+            <returns>A list of player ids of the initial players that will connect</returns>
+        </member>
+        <member name="M:Microsoft.Playfab.Gaming.GSDK.CSharp.GameserverSDK.LogMessage(System.String)">
+            <summary>
+            Adds a custom log message to the GSDK log output
+            </summary>
+            <param name="message">The message to be logged</param>
+        </member>
+    </members>
+</doc>

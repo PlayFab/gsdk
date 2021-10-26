@@ -13,6 +13,7 @@ namespace Microsoft
     {
         namespace Gaming
         {
+            constexpr int c_minHeartbeatIntervalMs = 1000;
             std::unique_ptr<GSDKInternal> GSDKInternal::m_instance = nullptr;
             volatile long long GSDKInternal::m_exitStatus = 0;
             std::mutex GSDKInternal::m_logLock;
@@ -118,6 +119,9 @@ namespace Microsoft
 
                 m_connectionInfo = config->getGameServerConnectionInfo();
 
+                // Use highest frequency permitted heartbeat interval until VMAgent tells an updated one.
+                m_nextHeartbeatIntervalMs = c_minHeartbeatIntervalMs;
+
                 GSDKLogMethod method_logger(__func__);
                 try
                 {
@@ -203,7 +207,17 @@ namespace Microsoft
                 {
                     logFolder = "";
                 }
-
+#if _WIN32
+                if (!logFolder.empty() && logFolder.back() != '/' && logFolder.back() != '\\')
+                {
+                    logFolder.append("\\");
+                }
+#else
+                if (!logFolder.empty() && logFolder.back() != '/')
+                {
+                    logFolder.append("/");
+                }
+#endif
                 std::string logPath = logFolder + logFile;
                 m_logFile.open(logPath.c_str(), std::ofstream::out);
             }
@@ -222,7 +236,7 @@ namespace Microsoft
             {
                 while (m_keepHeartbeatRunning)
                 {
-                    if (m_signalHeartbeatEvent.Wait(1000))
+                    if (m_signalHeartbeatEvent.Wait(m_nextHeartbeatIntervalMs))
                     {
                         if (m_debug) GSDK::logMessage("State transition signaled an early heartbeat.");
                         m_signalHeartbeatEvent.Reset(); // We've handled this signal, so reset the event
@@ -451,6 +465,22 @@ namespace Microsoft
                         {
                             GSDK::logMessage("Unknown operation received: " + heartbeatResponse["operation"].asString());
                         }
+                    }
+
+                    if (heartbeatResponse.isMember("nextHeartbeatIntervalMs"))
+                    {
+                        m_nextHeartbeatIntervalMs = heartbeatResponse["nextHeartbeatIntervalMs"].asInt();
+
+                        // Clamp to the minimum permitted interval.
+                        if (m_nextHeartbeatIntervalMs < c_minHeartbeatIntervalMs)
+                        {
+                            m_nextHeartbeatIntervalMs = c_minHeartbeatIntervalMs;
+                        }
+                    }
+                    else
+                    {
+                        // If VMagent didn't specify a heartbeat interval, default to higher frequency for safety.
+                        m_nextHeartbeatIntervalMs = c_minHeartbeatIntervalMs;
                     }
                 }
                 catch (Json::Exception& ex) {
