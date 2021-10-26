@@ -188,28 +188,40 @@ void FGSDKInternal::SendHeartbeat()
 
 void FGSDKInternal::ReceiveHeartbeat()
 {
-	if (HeartBeats.Num() == 0 || !HeartBeats[0]->GetResponse().IsValid())
+	if (HeartBeats.Num() == 0)
 	{
 		return;
 	}
 
-	auto Request = HeartBeats[0];
-	auto Response = HeartBeats[0]->GetResponse();
-
-	if (Response->GetContentAsString().Len() != Response->GetContentLength())
+	int killIndex = -1;
+	for (int i = 0; i < HeartBeats.Num(); i++)
 	{
-		return;
+		auto EachHeartbeat = HeartBeats[i];
+		auto Response = EachHeartbeat->GetResponse();
+		if (!Response.IsValid())
+		{
+			continue;
+		}
+
+		FString ContentString = Response->GetContentAsString();
+		if (ContentString.Len() != Response->GetContentLength())
+		{
+			continue;
+		}
+
+		killIndex = i;
+		if (Response->GetResponseCode() >= 300)
+		{
+			UE_LOG(LogPlayFabGSDK, Error, TEXT("Received non-success code from Agent.  Status Code: %d Response Body: %s"), Response->GetResponseCode(), *ContentString);
+			continue;
+		}
+		DecodeHeartbeatResponse(ContentString);
 	}
 
-	HeartBeats.RemoveAt(0);
-
-	if (Response->GetResponseCode() >= 300)
+	for (int i = 0; i < killIndex; i++)
 	{
-		UE_LOG(LogPlayFabGSDK, Error, TEXT("Received non-success code from Agent.  Status Code: %d Response Body: %s"), Response->GetResponseCode(), *Response->GetContentAsString());
-		return;
+		HeartBeats.RemoveAt(0);
 	}
-
-	DecodeHeartbeatResponse(Response->GetContentAsString());
 }
 
 FString FGSDKInternal::EncodeHeartbeatRequest()
@@ -357,6 +369,7 @@ void FGSDKInternal::DecodeHeartbeatResponse(const FString& ResponseJson)
 					SetState(EGameState::Terminating);
 
 					TransitionToActiveEvent->Trigger();
+					UE_LOG(LogPlayFabGSDK, Warning, TEXT("Received Termination State"));
 					TriggerShutdown();
 				}
 				break;
