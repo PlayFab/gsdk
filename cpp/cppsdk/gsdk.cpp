@@ -13,7 +13,7 @@ namespace Microsoft
     {
         namespace Gaming
         {
-            GSDKInternal* GSDKInternal::m_instance = nullptr;
+            std::unique_ptr<GSDKInternal> GSDKInternal::m_instance = nullptr;
             volatile long long GSDKInternal::m_exitStatus = 0;
             std::mutex GSDKInternal::m_logLock;
             std::ofstream GSDKInternal::m_logFile;
@@ -330,7 +330,7 @@ namespace Microsoft
 
             void GSDKInternal::runShutdownCallback()
 			{
-				auto* gsdk = GSDKInternal::get();
+				auto& gsdk = GSDKInternal::get();
 				if (gsdk == nullptr)
 					return;
 
@@ -472,7 +472,7 @@ namespace Microsoft
                 decodeHeartbeatResponse(m_receivedData);
             }
 
-            Microsoft::Azure::Gaming::GSDKInternal* GSDKInternal::get()
+            std::unique_ptr<GSDKInternal>& GSDKInternal::get()
             {
                 return m_instance;
             }
@@ -485,15 +485,11 @@ namespace Microsoft
 
                 GSDKInternal::m_debug = debugLogs;
 
-                auto *instance = new Microsoft::Azure::Gaming::GSDKInternal();
-                if (instance->init())
+                GSDKInternal::m_instance = std::make_unique<GSDKInternal>();
+                if (!GSDKInternal::m_instance->init())
                 {
-                    GSDKInternal::m_instance= instance;
-                }
-                else
-                {
-                    instance->dispose();
-                    delete instance;
+                    GSDKInternal::m_instance->dispose();
+                    GSDKInternal::m_instance = nullptr;
                 }
 
                 return GSDKInternal::m_instance != nullptr;
@@ -505,14 +501,13 @@ namespace Microsoft
                 if (GSDKInternal::m_instance != nullptr)
                 {
                     GSDKInternal::m_instance->dispose();
-                    delete GSDKInternal::m_instance;
                     GSDKInternal::m_instance= nullptr;
                 }
             }
 
             bool GSDK::readyForPlayers()
             {
-                auto* gsdk= GSDKInternal::get();
+                auto& gsdk= GSDKInternal::get();
                 if (gsdk == nullptr)
                     return false;
 
@@ -529,7 +524,7 @@ namespace Microsoft
             {
                 static Microsoft::Azure::Gaming::GameServerConnectionInfo empty;
 
-				auto* gsdk = GSDKInternal::get();
+				auto& gsdk= GSDKInternal::get();
                 if (gsdk != nullptr)
                 {
 					return gsdk->m_connectionInfo;
@@ -542,7 +537,7 @@ namespace Microsoft
 
             const std::unordered_map<std::string, std::string> GSDK::getConfigSettings()
             {
-				auto* gsdk = GSDKInternal::get();
+				auto& gsdk= GSDKInternal::get();
 				if (gsdk == nullptr)
 					return std::unordered_map<std::string, std::string>();
 
@@ -552,7 +547,7 @@ namespace Microsoft
 
             void GSDK::updateConnectedPlayers(const std::vector<ConnectedPlayer>& currentlyConnectedPlayers)
             {
-				auto* gsdk = GSDKInternal::get();
+				auto& gsdk= GSDKInternal::get();
                 if (gsdk != nullptr)
                 {
                     gsdk->setConnectedPlayers(currentlyConnectedPlayers);
@@ -561,7 +556,7 @@ namespace Microsoft
 
             void GSDK::registerShutdownCallback(std::function< void() > callback)
             {
-				auto* gsdk = GSDKInternal::get();
+				auto& gsdk= GSDKInternal::get();
 				if (gsdk != nullptr)
 				{
                     gsdk->m_shutdownCallback = callback;
@@ -570,7 +565,7 @@ namespace Microsoft
 
             void GSDK::registerHealthCallback(std::function< bool() > callback)
             {
-				auto* gsdk = GSDKInternal::get();
+				auto& gsdk= GSDKInternal::get();
 				if (gsdk != nullptr)
 				{
                     gsdk->m_healthCallback = callback;
@@ -579,7 +574,7 @@ namespace Microsoft
 
             void GSDK::registerMaintenanceCallback(std::function< void(const tm&) > callback)
             {
-				auto* gsdk = GSDKInternal::get();
+				auto& gsdk= GSDKInternal::get();
 				if (gsdk != nullptr)
 				{
                     gsdk->m_maintenanceCallback = callback;
@@ -600,7 +595,7 @@ namespace Microsoft
 
             const std::string GSDK::getLogsDirectory()
             {
-                auto* gsdk = GSDKInternal::get();
+                auto& gsdk= GSDKInternal::get();
                 if (gsdk == nullptr)
                     return std::string();
 
@@ -624,7 +619,7 @@ namespace Microsoft
 
             const std::string GSDK::getSharedContentDirectory()
             {
-				auto* gsdk = GSDKInternal::get();
+				auto& gsdk= GSDKInternal::get();
 				if (gsdk == nullptr)
 					return std::string();
 
@@ -648,7 +643,7 @@ namespace Microsoft
             {
                 static std::vector<std::string> empty;
 
-				auto* gsdk = GSDKInternal::get();
+				auto& gsdk= GSDKInternal::get();
                 if (gsdk != nullptr)
                 {
 					return gsdk->m_initialPlayers;

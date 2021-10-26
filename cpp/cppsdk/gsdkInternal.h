@@ -177,7 +177,7 @@ namespace Microsoft
 
                 std::vector<std::string> m_initialPlayers;
 
-                static GSDKInternal *m_instance;
+                static std::unique_ptr<GSDKInternal> m_instance;
 
                 static volatile long long m_exitStatus;
                 static std::mutex m_logLock;
@@ -206,7 +206,7 @@ namespace Microsoft
                 void setState(GameState state);
                 void setConnectedPlayers(const std::vector<ConnectedPlayer> &currentConnectedPlayers);
 
-                static GSDKInternal *get();
+                static std::unique_ptr<GSDKInternal>& get();
                 static std::unique_ptr<Configuration> testConfiguration; // may be overriden by unit tests
             };
 
