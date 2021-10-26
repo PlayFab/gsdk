@@ -95,7 +95,7 @@ FGSDKInternal::FGSDKInternal()
 	const FString ServerId = ConfigSettings[FPlayFabGSDKModule::SERVER_ID_KEY];
 
 	UE_LOG(LogPlayFabGSDK, Log, TEXT("VM Agent Endpoint: %s"), *HeartbeatEndpoint);
-	UE_LOG(LogPlayFabGSDK, Log, TEXT("Instance Id: %s"), *ServerId);
+	UE_LOG(LogPlayFabGSDK, Log, TEXT("Server Instance Id: %s"), *ServerId);
 
 	HeartbeatUrl = FString::Printf(TEXT("http://%s/v1/sessionHosts/%s"), *HeartbeatEndpoint, *ServerId);
 
