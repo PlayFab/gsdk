@@ -240,7 +240,7 @@ void FGSDKInternal::ReceiveHeartbeat()
 		// Don't modify Heartbeats once the heartbeat has been turned off (and should already be empty)
 		if (this->KeepHeartbeatRunning)
 		{
-			for (int i = 0; i < killIndex; i++)
+			for (int i = 0; i <= killIndex; i++)
 			{
 				Heartbeats.RemoveAt(0);
 			}
