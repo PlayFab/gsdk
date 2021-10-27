@@ -209,10 +209,10 @@ private:
 	TArray<FString> InitialPlayers;
 
 	void HeartbeatAsyncTaskFunction();
-	void OnReceiveHeartbeatResponse(FHttpRequestPtr Request, FHttpResponsePtr Response, bool bConnectedSuccessfully);
 	FCriticalSection ConfigMutex;
 
-	TArray<TSharedRef<IHttpRequest, ESPMode::ThreadSafe>> HeartBeats;
+	FCriticalSection HeartbeatMutex;
+	TArray<TSharedRef<IHttpRequest, ESPMode::ThreadSafe>> Heartbeats;
 
 	void StartLog();
 	void SendHeartbeat();

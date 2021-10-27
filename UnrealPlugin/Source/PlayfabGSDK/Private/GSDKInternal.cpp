@@ -44,19 +44,19 @@ FGSDKInternal::FGSDKInternal()
 	}
 
 	TMap<FString, FString> GameCerts = ConfigPtr->GetGameCertificates();
-	for (const auto& GameCert: GameCerts)
+	for (const auto& GameCert : GameCerts)
 	{
 		ConfigSettings.Add(GameCert);
 	}
 
 	TMap<FString, FString> MetaDatas = ConfigPtr->GetBuildMetadata();
-	for (const auto& MetaData: MetaDatas)
+	for (const auto& MetaData : MetaDatas)
 	{
 		ConfigSettings.Add(MetaData);
 	}
 
 	TMap<FString, FString> Ports = ConfigPtr->GetGamePorts();
-	for (const auto& Port: Ports)
+	for (const auto& Port : Ports)
 	{
 		ConfigSettings.Add(Port);
 	}
@@ -110,10 +110,10 @@ FGSDKInternal::FGSDKInternal()
 	KeepHeartbeatRunning = ConfigPtr->ShouldHeartbeat();
 
 	HeartbeatThread = Async(EAsyncExecution::Thread,
-	[this]()
-        {
-            HeartbeatAsyncTaskFunction();
-        }
+		[this]()
+		{
+			HeartbeatAsyncTaskFunction();
+		}
 	);
 }
 
@@ -172,7 +172,7 @@ void FGSDKInternal::StartLog()
 void FGSDKInternal::SendHeartbeat()
 {
 	TSharedRef<IHttpRequest, ESPMode::ThreadSafe> Request = FHttpModule::Get().CreateRequest();
-	for (const auto& HttpHeader: HttpHeaders)
+	for (const auto& HttpHeader : HttpHeaders)
 	{
 		Request->SetHeader(HttpHeader.Key, HttpHeader.Value);
 	}
@@ -181,35 +181,71 @@ void FGSDKInternal::SendHeartbeat()
 	Request->SetVerb(TEXT("PATCH"));
 	Request->SetContentAsString(EncodeHeartbeatRequest());
 
-	HeartBeats.Add(Request);
+	{
+		FScopeLock ScopeLock(&HeartbeatMutex);
+		Heartbeats.Add(Request);
+	}
 
 	Request->ProcessRequest();
 }
 
 void FGSDKInternal::ReceiveHeartbeat()
 {
-	if (HeartBeats.Num() == 0 || !HeartBeats[0]->GetResponse().IsValid())
+	// TempHeartbeats holds all the heartbeats in thread-local memory so that we don't have a near-perpetual lock on HeartbeatMutex
+	TArray<TSharedRef<IHttpRequest, ESPMode::ThreadSafe>> TempHeartbeats;
 	{
-		return;
+		if (Heartbeats.Num() == 0)
+		{
+			return;
+		}
+
+		FScopeLock ScopeLock(&HeartbeatMutex);
+		for (auto EachHeartbeat : Heartbeats)
+		{
+			TempHeartbeats.Add(EachHeartbeat);
+		}
 	}
 
-	auto Request = HeartBeats[0];
-	auto Response = HeartBeats[0]->GetResponse();
-
-	if (Response->GetContentAsString().Len() != Response->GetContentLength())
+	int killIndex = -1;
+	for (int i = 0; i < TempHeartbeats.Num(); i++)
 	{
-		return;
+		FHttpRequestPtr EachHeartbeat = TempHeartbeats[i];
+		const FHttpResponsePtr Response = EachHeartbeat->GetResponse();
+		if (!Response.IsValid())
+		{
+			continue;
+		}
+
+		FString ContentString = Response->GetContentAsString();
+		if (ContentString.Len() != Response->GetContentLength())
+		{
+			continue;
+		}
+
+		killIndex = i;
+		if (Response->GetResponseCode() >= 300)
+		{
+			UE_LOG(LogPlayFabGSDK, Error, TEXT("Received non-success code from Agent.  Status Code: %d Response Body: %s"), Response->GetResponseCode(), *ContentString);
+			continue;
+		}
+		// A trivial optimization to shortcut some work near shutdown time
+		if (this->KeepHeartbeatRunning)
+		{
+			DecodeHeartbeatResponse(ContentString);
+		}
 	}
 
-	HeartBeats.RemoveAt(0);
-
-	if (Response->GetResponseCode() >= 300)
 	{
-		UE_LOG(LogPlayFabGSDK, Error, TEXT("Received non-success code from Agent.  Status Code: %d Response Body: %s"), Response->GetResponseCode(), *Response->GetContentAsString());
-		return;
+		FScopeLock ScopeLock(&HeartbeatMutex);
+		// Don't modify Heartbeats once the heartbeat has been turned off (and should already be empty)
+		if (this->KeepHeartbeatRunning)
+		{
+			for (int i = 0; i <= killIndex; i++)
+			{
+				Heartbeats.RemoveAt(0);
+			}
+		}
 	}
-
-	DecodeHeartbeatResponse(Response->GetContentAsString());
 }
 
 FString FGSDKInternal::EncodeHeartbeatRequest()
@@ -226,7 +262,7 @@ FString FGSDKInternal::EncodeHeartbeatRequest()
 	HeartbeatRequestJson->SetStringField(TEXT("CurrentGameHealth"), HeartbeatRequest.IsGameHealthy ? TEXT("Healthy") : TEXT("Unhealthy"));
 
 	TArray<TSharedPtr<FJsonValue>> ConnectedPlayersJson;
-	for (const FConnectedPlayer& ConnectedPlayer: HeartbeatRequest.ConnectedPlayers)
+	for (const FConnectedPlayer& ConnectedPlayer : HeartbeatRequest.ConnectedPlayers)
 	{
 		TSharedPtr<FJsonObject> ConnectedPlayerJsonObject = MakeShared<FJsonObject>();
 
@@ -338,35 +374,36 @@ void FGSDKInternal::DecodeHeartbeatResponse(const FString& ResponseJson)
 		switch (NextOperation)
 		{
 		case EOperation::Continue:
-			{
-				break;
-			}
+		{
+			break;
+		}
 		case EOperation::Active:
+		{
+			if (HeartbeatRequest.CurrentGameState != EGameState::Active)
 			{
-				if (HeartbeatRequest.CurrentGameState != EGameState::Active)
-				{
-					SetState(EGameState::Active);
-					TransitionToActiveEvent->Trigger();
-				}
-				break;
+				SetState(EGameState::Active);
+				TransitionToActiveEvent->Trigger();
 			}
+			break;
+		}
 		case EOperation::Terminate:
+		{
+			if (HeartbeatRequest.CurrentGameState != EGameState::Terminating)
 			{
-				if (HeartbeatRequest.CurrentGameState != EGameState::Terminating)
-				{
-					SetState(EGameState::Terminating);
+				SetState(EGameState::Terminating);
 
-					TransitionToActiveEvent->Trigger();
-					TriggerShutdown();
-				}
-				break;
+				TransitionToActiveEvent->Trigger();
+				UE_LOG(LogPlayFabGSDK, Warning, TEXT("Received Termination State"));
+				TriggerShutdown();
 			}
+			break;
+		}
 		default:
-			{
-				UE_LOG(LogPlayFabGSDK, Error, TEXT("Unhandled operation received: %s"), OperationNames[static_cast<int32>(NextOperation)]);
-				bWasOperationValid = false;
-				break;
-			}
+		{
+			UE_LOG(LogPlayFabGSDK, Error, TEXT("Unhandled operation received: %s"), OperationNames[static_cast<int32>(NextOperation)]);
+			bWasOperationValid = false;
+			break;
+		}
 		}
 
 		if (!bWasOperationValid)
@@ -408,22 +445,22 @@ FDateTime FGSDKInternal::ParseDate(const FString& DateStr)
 void FGSDKInternal::TriggerShutdown()
 {
 	AsyncTask(ENamedThreads::AnyThread, [this]()
-	{
-		this->KeepHeartbeatRunning = false;
-
-		for (auto Heartbeat: HeartBeats)
 		{
-			Heartbeat->CancelRequest();
-		}
+			{
+				FScopeLock ScopeLock(&HeartbeatMutex);
+				this->KeepHeartbeatRunning = false;
+				for (auto Heartbeat : Heartbeats)
+				{
+					Heartbeat->CancelRequest();
+				}
+				Heartbeats.Empty();
+			}
 
-		HeartBeats.Empty();
-
-
-		if (this->OnShutdown.IsBound())
-		{
-			this->OnShutdown.Execute();
-		}
-	});
+			if (this->OnShutdown.IsBound())
+			{
+				this->OnShutdown.Execute();
+			}
+		});
 }
 
 FString FGSDKInternal::GetConfigValue(const FString& Key)
