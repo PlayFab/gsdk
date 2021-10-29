@@ -11,9 +11,11 @@ It was tested with Unreal Engine 4.26.2, but should work with other engines as w
 The sample game these instructions were created with was called ThirdPersonMP, so replace anywhere you see that with your game name.
 
 # Prerequisites:
-- Download Unreal Engine Source Build by following [these instructions](https://docs.unrealengine.com/4.26/en-US/ProgrammingAndScripting/ProgrammingWithCPP/DownloadingSourceCode/) from the Unreal Engine website (this was tested on 4.26.2)
+- Download Unreal Engine Source Build by following [these instructions](https://docs.unrealengine.com/4.26/en-US/ProgrammingAndScripting/ProgrammingWithCPP/DownloadingSourceCode/) from the Unreal Engine website. This was tested on [4.26.2](https://github.com/EpicGames/UnrealEngine/releases/tag/4.26.2-release) (Link requires permissions)
 - Download the [Unreal PlayFabGSDK Plugin folder](https://github.com/PlayFab/gsdk/tree/master/UnrealPlugin)
+- [Optional] Download the [LocalMultiplayerAgent](https://github.com/PlayFab/MpsAgent/tree/main/LocalMultiplayerAgent)
 - Download Visual Studio (the [community version is free](https://visualstudio.microsoft.com/vs/community/))
+	- Requires Workloads: .NET desktop development, and Desktop development with C++
 
 # Setup
 
@@ -72,19 +74,16 @@ Then, build the project in Visual Studio and start the Editor by selecting the D
 
 ![image depicting Visual Studio with the option to build in Development Editor Mode](Documentation/DevelopmentEditor.png)
 
-## Disabling Plugins
-When you add Dedicated Server support to your project, you will definitely have created a <projectname>Server.Target.cs file.
+## Project Setup
 
-Update [game name]Server.target.cs and add the following lines to the constructor of this class:
+Unreal GSDK is installed into the server project. You will need a server-enabled project. If you do not have one, you can follow these examples. Once finished, return here and continue.
 
-```csharp 
-DisablePlugins.Add("WMFMediaPlayer");
-DisablePlugins.Add("AsyncLoadingScreen"); //if you are using this plugin
-DisablePlugins.Add("WindowsMoviePlayer");
-DisablePlugins.Add("MediaFoundationMediaPlayer");
-```
+* https://docs.unrealengine.com/4.27/en-US/Resources/Templates/ThirdPerson/
+* https://docs.unrealengine.com/4.27/en-US/InteractiveExperiences/Networking/HowTo/DedicatedServers/
 
-Result should be:
+Once your project has enabled server mode, you will have a <projectname>Server.Target.cs file.
+
+Result should similar to:
 ```csharp 
 public class <projectname>ServerTarget : TargetRules
 {
@@ -93,14 +92,20 @@ public class <projectname>ServerTarget : TargetRules
         Type = TargetType.Server;
         DefaultBuildSettings = BuildSettingsVersion.V2;
         ExtraModuleNames.AddRange( new string[] { "<projectname>" } );
-        
-        DisablePlugins.Add("WMFMediaPlayer");
-        DisablePlugins.Add("AsyncLoadingScreen"); //if you are using this plugin
-        DisablePlugins.Add("WindowsMoviePlayer");
-        DisablePlugins.Add("MediaFoundationMediaPlayer");
+
+	// You may have additional configuration based on your server needs
     }
 }
 ```
+
+For Windows builds, you may need to add these optional configuations:
+```csharp
+DisablePlugins.Add("WMFMediaPlayer");
+DisablePlugins.Add("AsyncLoadingScreen"); //if you are using this plugin
+DisablePlugins.Add("WindowsMoviePlayer");
+DisablePlugins.Add("MediaFoundationMediaPlayer");
+```
+However, these configurations are invalid for a Linux server build.
 
 ## Example C++ integration
 
