@@ -80,10 +80,7 @@ Then, build the project in Visual Studio and start the Editor by selecting the D
 
 ## Project Setup
 
-Unreal GSDK is installed into the server project. You will need a server-enabled project. If you do not have one, you can follow these examples. Once finished, return here and continue.
-
-* https://docs.unrealengine.com/4.27/en-US/Resources/Templates/ThirdPerson/
-* https://docs.unrealengine.com/4.27/en-US/InteractiveExperiences/Networking/HowTo/DedicatedServers/
+Unreal GSDK is installed into the server project. You will need a network-enabled multiplayer Unreal project with a dedicated-server mode. If you do not have one, you can follow our [Unreal prerequsitie setup](ThirdPersonMPSetup.md) guide. Once you have a network-enabled, multiplayer game, with a dedicated server, return here and continue.
 
 Once your project has enabled server mode, you will have a <projectname>Server.Target.cs file.
 
@@ -109,7 +106,7 @@ DisablePlugins.Add("AsyncLoadingScreen"); //if you are using this plugin
 DisablePlugins.Add("WindowsMoviePlayer");
 DisablePlugins.Add("MediaFoundationMediaPlayer");
 ```
-However, these configurations are invalid for a Linux server build.
+NOTE: These configurations are invalid for a Linux server build.
 
 ## Example C++ integration
 
