@@ -26,4 +26,4 @@ Once finished with the above guide, you will have a working multiplayer game cli
 
 Once finished with both guides, you will have a network-enabled multiplayer game with a dedicated game server.
 
-You can now proceed to install PlayFab MPS using the [Unreal GSDK Plugin](UnrealPlugin/README.md) guide.
+You can now proceed to install PlayFab MPS using the [Unreal GSDK Plugin](README.md) guide.
