@@ -1,6 +1,6 @@
 # ThirdPersonMP Example Project Setup
 
-This guide coveres the construction of an example project which can operate as a game-client and game-server. This will set up the minimum requirements for an Unreal game that can be hosted on PlayFab Multiplayer Services.
+This guide coveres the construction of an example project which can operate as a game-client and dedicated game-server. This will set up the minimum requirements for an Unreal game that can be hosted on PlayFab Multiplayer Services.
 
 ## Goals
 
@@ -9,7 +9,6 @@ The project needs to have the following capabilities and features:
 * Networking
 * Multiplayer
 * Dedicated Game-Server
-* PlayFab MPS Support -- ??? NEXT GUIDE ?!?
 
 To accomplish this, we will construct a project from scratch using Unreal tutorials.
 
@@ -24,7 +23,7 @@ All of the necessary instructions are in the Unreal Tutorials. First, download U
 
 Next, you should follow the Unreal [Third Person Template](https://docs.unrealengine.com/4.27/en-US/Resources/Templates/ThirdPerson/) tutorial. This creates the basic project we will use for the rest of this document.
 
-Then, you should proceed to the Unreal [Multiplayer Programming Quick Start](https://docs.unrealengine.com/4.27/en-US/InteractiveExperiences/Networking/QuickStart/) tutorial. NOTE, the first step of this tutorial is an abbreviated version of the one above. It upgrades the ThirdPerson project to a multiplayer project.
+Then, you should proceed to the Unreal [Multiplayer Programming Quick Start](https://docs.unrealengine.com/4.27/en-US/InteractiveExperiences/Networking/QuickStart/) tutorial. Note, the first step of this tutorial is an abbreviated version of the one above. This guide upgrades the ThirdPersonMP project to a multiplayer project.
 
 Once finished with the above guides, you will have a working multiplayer game client. Next, we need a dedicated server. At this point, you should proceed to the Unreal [Setting Up Dedicated Servers](https://docs.unrealengine.com/4.27/en-US/InteractiveExperiences/Networking/HowTo/DedicatedServers/) tutorial.
 
