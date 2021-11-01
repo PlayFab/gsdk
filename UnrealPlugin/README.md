@@ -1,4 +1,5 @@
 # Instructions on Integrating the PlayFab GSDK Unreal Plugin Preview
+
 This Unreal Plugin is implementing the GSDK directly in Unreal Engine.
 
 This plugin offers both a Blueprint API and a C++ API. This does however not mean that the Blueprint API does not require the game to be a C++ project. If it is currently a Blueprint only project, then you need to convert it beforehand, before adding the plugin.
@@ -11,6 +12,7 @@ It was tested with Unreal Engine 4.26.2, but should work with other engines as w
 The sample game these instructions were created with was called ThirdPersonMP, so replace anywhere you see that with your game name.
 
 # Prerequisites:
+
 - Download Unreal Engine Source Build by following [these instructions](https://docs.unrealengine.com/4.26/en-US/ProgrammingAndScripting/ProgrammingWithCPP/DownloadingSourceCode/) from the Unreal Engine website. This was tested on [4.26.2](https://github.com/EpicGames/UnrealEngine/releases/tag/4.26.2-release) (Link requires permissions)
 - Download the [Unreal PlayFabGSDK Plugin folder](https://github.com/PlayFab/gsdk/tree/master/UnrealPlugin)
 - [Optional] Download the [LocalMultiplayerAgent](https://github.com/PlayFab/MpsAgent/tree/main/LocalMultiplayerAgent)
@@ -20,6 +22,7 @@ The sample game these instructions were created with was called ThirdPersonMP, s
 # Setup
 
 ## Adding the plugin to the project
+
 When using the plugin a few things need to be taken care off.
 
 First, open File Explorer and create a folder called “Plugins” in your games' root directory and in the Plugins folder, create a folder called "PlayFabGSDK". Then, drag all the files from the UnrealPlugin folder in this repo into the Plugins/PlayFabGSDK folder.
@@ -54,6 +57,7 @@ See the example below:
 ```
 
 ## Include the plugin in your modules
+
 Update <modulename>.Build.cs file to add "PlayFabGSDK" into the PublicDependencyModuleNames.AddRange(); list as follows:
 
 ```csharp
@@ -127,6 +131,7 @@ Then close Unreal and generate project files in source build mode again.
 Then using Visual Studio, open those newly created files and follow instructions to modify the Game Instance class.
 
 ### Modify the Game Instance Class
+
 Locate your GameInstance class, which is most likely called something similar to [your game name]GameInstance or MyGameInstance. From now on, your game instance class will
 be denoted with [YourGameInstanceClassName].
 
@@ -177,6 +182,7 @@ Make sure that the following are included:
 Then locate your Init() function. If you _**don't**_ have an Init() function yet, then add in the function as such:
 
 ##### Creating Init() function
+
 ```cpp 
 void U[YourGameInstanceClassName]::Init()
 {
@@ -195,6 +201,7 @@ go to check in [YourGameInstanceClassName].cpp file to see if you have a variabl
 for a dedicated server. **If you can find this variable**, then add in this in at the end of your Init() function:
 
 ##### Modifying Existing Init() function
+
 ```cpp
 	if (IsDedicatedServerInstance() == true)
 	{
@@ -248,6 +255,7 @@ bool UMyGameInstance::OnGSDKHealthCheck()
 ```
 
 ## Blueprint implementation
+
 In a folder of your choice in the Content Browser right-click and create a Blueprint class. In the All classes dropdown menu find the GameInstance class. In this example the blueprint is named "BP_GameInstance".
 
 Double-click the blueprint and on the left side hover over the function field and click the Override dropdown. Select the Init function.
@@ -274,10 +282,12 @@ In the end add the "Ready for Players" to be able to react to the ready signal o
 After creating a custom game instance class that integrates with the gsdk, you have to configure your project to actually use this newly created game instance class. There are two ways to do this - either through the Unreal Engine editor or by editing DefaultEngine.ini directly.
 
 ###### In the Unreal Editor
+
 In the editor, this can also be set through the UI in the editor. In the editor go to Edit -> Project Settings. From that opened window,
 navigate to Maps&Modes on the left side. Scroll to the bottom, and then you can set the option "Game Instance Class" to your new game instance class directly, and avoid typos.
 
 ###### In DefaultEngine.ini
+
 Or you can update DefaultEngine.ini file and add this:
 ```ini
 [/Script/EngineSettings.GameMapsSettings]
@@ -285,12 +295,15 @@ GameInstanceClass=/Script/[game name].MyGameInstance
 ```
 
 ## Include Pre-requisites for Windows Dedicated Server
+
 There are two ways to include the app-local prerequisites - either through the Unreal Engine editor or by editing DefaultGame.ini.
 
 ### In the Unreal Editor
+
 In the editor go to Edit -> Project Settings. In the opened window navigate to Packaging on the left side. Scroll to the bottom of the list, and tick "Include app-local prerequisites".
 
 ### In DefaultGame.ini
+
 Or you can update DefaultGame.ini to show the following:
 ```ini
 [/Script/UnrealEd.ProjectPackagingSettings]
@@ -314,6 +327,7 @@ You can now use this packaged version of your game server to [test with LocalMul
 or to use it directly with PlayFab by [creating a build](https://developer.playfab.com/) and then using [PlayFab MpsAllocatorSample](https://github.com/PlayFab/MpsSamples/blob/master/MpsAllocatorSample/README.md).
 
 ## Setting up a Windows Dedicated Server on PlayFab
+
 An important note about this is that you need to set the start command in process-based mode to \<root folder\>\\Binaries\\Win64\\\<project name\>Server.exe (or however the executable is called in the folder).
 
 In container-based mode use \<mount folder\>\\\<root folder\>\\Binaries\\Win64\\\<project name\>Server.exe (or however the executable is called in the folder).
@@ -321,9 +335,11 @@ In container-based mode use \<mount folder\>\\\<root folder\>\\Binaries\\Win64\\
 **If you use the executable in the root folder, the server will fail to initialize with the PlayFab system.**
 
 ## Setting up a Linux Dedicated Server on PlayFab
+
 During testing the following Dockerfile + startup.sh script worked excellent with the PlayFab Linux VM:
 
 ### The Dockerfile:
+
 ```Dockerfile
 FROM ubuntu:18.04
 
@@ -342,6 +358,7 @@ CMD ./startup.sh
 ```
 
 ### startup&#46;sh bash script:
+
 ```bash
 chown -R ue.ue $PF_SERVER_LOG_DIRECTORY
 su ue -c ./<projectname>Server.sh
