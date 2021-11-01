@@ -25,7 +25,7 @@ Next, you should follow the Unreal [Third Person Template](https://docs.unrealen
 
 Then, you should proceed to the Unreal [Multiplayer Programming Quick Start](https://docs.unrealengine.com/4.27/en-US/InteractiveExperiences/Networking/QuickStart/) tutorial. Note, the first step of this tutorial is an abbreviated version of the one above. This guide upgrades the ThirdPersonMP project to a multiplayer project.
 
-Once finished with the above guides, you will have a working multiplayer game client. Next, we need a dedicated server. At this point, you should proceed to the Unreal [Setting Up Dedicated Servers](https://docs.unrealengine.com/4.27/en-US/InteractiveExperiences/Networking/HowTo/DedicatedServers/) tutorial.
+Once finished with the above guides, you will have a working multiplayer game client. Next, we need a dedicated server. At this point, you should proceed to the Unreal [Setting Up Dedicated Servers](https://docs.unrealengine.com/4.27/en-US/InteractiveExperiences/Networking/HowTo/DedicatedServers/) tutorial. This will set up a dedicated server for your game, and concludes our list of requirements.
 
 Once finished with all guides, you will have a network-enabled multiplayer game with a dedicated game server.
 
