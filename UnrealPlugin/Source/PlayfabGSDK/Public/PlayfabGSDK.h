@@ -41,19 +41,19 @@ public:
 	bool ReadyForPlayers();
 
 	/// <summary>
-    /// Gets information (ipAddress and ports) for connecting to the game server, as well as the ports the
-    /// game server should listen on.
-    /// </summary>
-    /// <returns></returns>
-    const FGameServerConnectionInfo GetGameServerConnectionInfo();
+	/// Gets information (ipAddress and ports) for connecting to the game server, as well as the ports the
+	/// game server should listen on.
+	/// </summary>
+	/// <returns></returns>
+	const FGameServerConnectionInfo GetGameServerConnectionInfo();
 
-    /// <summary>Returns all configuration settings</summary>
-    /// <returns>unordered map of string key:value configuration setting values</returns>
+	/// <summary>Returns all configuration settings</summary>
+	/// <returns>unordered map of string key:value configuration setting values</returns>
 	FString GetConfigValue(const FString& Key);
 
-    /// <summary>Tells the Xcloud service information on who is connected.</summary>
-    /// <param name="CurrentlyConnectedPlayers">Array of player ids</param>
-    void UpdateConnectedPlayers(const TArray<FConnectedPlayer>& CurrentlyConnectedPlayers);
+	/// <summary>Tells the Xcloud service information on who is connected.</summary>
+	/// <param name="CurrentlyConnectedPlayers">Array of player ids</param>
+	void UpdateConnectedPlayers(const TArray<FConnectedPlayer>& CurrentlyConnectedPlayers);
 
 protected:
 	DECLARE_DELEGATE(FOnShutdown);
@@ -70,14 +70,14 @@ public:
 	/// <summary>Gets called if the server is getting a scheduled maintenance, it will get the UTC time of the maintenance event as an argument.</summary>
 	FOnMaintenance OnMaintenance;
 
-    /// <summary>Returns a path to the directory where logs will be mapped to the VM host</summary>
-    const FString GetLogsDirectory();
+	/// <summary>Returns a path to the directory where logs will be mapped to the VM host</summary>
+	const FString GetLogsDirectory();
 
-    /// <summary>Returns a path to the directory shared by all game servers to cache data.</summary>
-    const FString GetSharedContentDirectory();
+	/// <summary>Returns a path to the directory shared by all game servers to cache data.</summary>
+	const FString GetSharedContentDirectory();
 
-    /// <summary>After allocation, returns a list of the initial players that have access to this game server, used by PlayFab's Matchmaking offering</summary>
-    const TArray<FString> GetInitialPlayers();
+	/// <summary>After allocation, returns a list of the initial players that have access to this game server, used by PlayFab's Matchmaking offering</summary>
+	const TArray<FString> GetInitialPlayers();
 
 	static constexpr const TCHAR* HEARTBEAT_ENDPOINT_KEY = TEXT("gsmsBaseUrl");
 	static constexpr const TCHAR* SERVER_ID_KEY = TEXT("instanceId");
