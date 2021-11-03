@@ -27,9 +27,13 @@ Unreal GSDK is installed into an Unreal server project. You will need a network-
 
 With a multiplayer project configured for both a network connected game-client and game-server, you're ready to [install the GSDK](ThirdPersonMPGSDKSetup.md). This will allow your server to run on PlayFab Multiplayer Services.
 
-# Test Local Deployment
+# Unreal Project Build Configurations
 
-Once the GSDK is installed and configured in your project, you can [test the MPS deployment process locally](ThirdPersonMPLocalDeploy.md), and verify your server works.
+Once the GSDK is installed and configured in your project, you can [build your Unreal project](ThirdPersonMPBuild.md). There are multiple build configurations you will need to execute the full range of tests in future steps.
+
+# Test Local Server Deployment
+
+Once you have any client build, and a "Development Server" build, you can [test the MPS deployment process locally](ThirdPersonMPLocalDeploy.md), and verify your server works.
 
 # Deploy to PlayFab
 
@@ -39,8 +43,7 @@ Finally, you're ready to deploy your game-server to PlayFab, and test with real 
 
 
 
-
-TODO: MOVE THIS TO DEPLOY FILE
+TODO: MOVE THIS TO PLAYFAB-DEPLOY FILE
 
 ## Packaging the game server
 

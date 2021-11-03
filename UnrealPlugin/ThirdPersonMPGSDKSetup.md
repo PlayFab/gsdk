@@ -16,10 +16,12 @@ We will add and configure the Playfab Unreal GSDK to your project, and test it l
 
 ## Requirements
 
-- Download Visual Studio (the [community version is free](https://visualstudio.microsoft.com/vs/community/))
-	- Requires Workloads: .NET desktop development, and Desktop development with C++
-- Download Unreal Engine Source Build by following [these instructions](https://docs.unrealengine.com/4.26/en-US/ProgrammingAndScripting/ProgrammingWithCPP/DownloadingSourceCode/) from the Unreal Engine website. This was tested on [4.26.2](https://github.com/EpicGames/UnrealEngine/releases/tag/4.26.2-release) (Link requires permissions)
-- A completed [ThirdPersonMP Example Project](ThirdPersonMPSetup.md), or a project with similar capabilities
+* Download Visual Studio (the [community version is free](https://visualstudio.microsoft.com/vs/community/))
+	* Requires Workloads: .NET desktop development, and Desktop development with C++
+* Download Unreal Engine Source Build by following [these instructions](https://docs.unrealengine.com/4.26/en-US/ProgrammingAndScripting/ProgrammingWithCPP/DownloadingSourceCode/) from the Unreal Engine website. This was tested on [4.26.2](https://github.com/EpicGames/UnrealEngine/releases/tag/4.26.2-release) (Link requires permissions)
+* A completed [ThirdPersonMP Example Project](ThirdPersonMPSetup.md), or a project with similar capabilities
+* [PlayFab Unreal GSDK plugin](https://github.com/PlayFab/gsdk/tree/master/UnrealPlugin)
+* [Optional] [PlayFab Marketplace plugin](https://www.unrealengine.com/marketplace/en-US/product/playfab-sdk) or the [source version on GitHub](https://github.com/PlayFab/UnrealMarketplacePlugin/tree/master/4.26/PlayFabPlugin/PlayFab) (Not required for GSDK, but required for most other PlayFab services, including login)
 
 ## C++ Implementation
 
@@ -310,6 +312,6 @@ If you are using Continuous Integration (CI), then you could add it to your setu
 
 ## Navigation
 
-You are now ready to run a [test deployment](ThirdPersonMPLocalDeploy.md) of this project on your local machine.
+You are now ready to [build your project](ThirdPersonMPBuild.md) on your local machine.
 
-Alternately, you can return to the main [Unreal GSDK Plugin](README.md#project-gsdk-setup) guide.
+Alternately, you can return to the main [Unreal GSDK Plugin](README.md#unreal_project_build_configurations) guide.
