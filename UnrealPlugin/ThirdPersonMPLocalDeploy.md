@@ -39,7 +39,7 @@ First, you will need to configure your LocalMultiplayerAgent to execute your ser
 
 In Explorer, find and open the file: ```{depot}\MpsAgent\LocalMultiplayerAgent\MultiplayerSettings.json```. An abbreviated version of this file with the parts important to this guide are as follows [NOTE the escaped \'s in the paths - this is a json file, and thus it's required to escape all \'s as \\]:
 
-json```
+```json
 {
   "RunContainer": false,
   ...
