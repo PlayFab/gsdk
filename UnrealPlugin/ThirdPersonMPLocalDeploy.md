@@ -1,4 +1,4 @@
-# ThirdPersonMP Example Project Deployment
+# ThirdPersonMP Example Project Local Deployment and Debugging
 
 The purpose of this guide is to demonstrate running your game-server on your local machine, in a MPS-compliant way, so you can test and debug your server before uploading it to PlayFab.
 
@@ -10,14 +10,11 @@ The purpose of this guide is to demonstrate running your game-server on your loc
 
 ## Requirements
 
-- Download Visual Studio (the [community version is free](https://visualstudio.microsoft.com/vs/community/))
+* Download Visual Studio (the [community version is free](https://visualstudio.microsoft.com/vs/community/))
 	- Requires Workloads: .NET desktop development, and Desktop development with C++
-- Download Unreal Engine Source Build by following [these instructions](https://docs.unrealengine.com/4.26/en-US/ProgrammingAndScripting/ProgrammingWithCPP/DownloadingSourceCode/) from the Unreal Engine website. This was tested on [4.26.2](https://github.com/EpicGames/UnrealEngine/releases/tag/4.26.2-release) (Link requires permissions)
+* Download Unreal Engine Source Build by following [these instructions](https://docs.unrealengine.com/4.26/en-US/ProgrammingAndScripting/ProgrammingWithCPP/DownloadingSourceCode/) from the Unreal Engine website. This was tested on [4.26.2](https://github.com/EpicGames/UnrealEngine/releases/tag/4.26.2-release) (Link requires permissions)
 * [Completed Unreal Project](ThirdPersonMPSetup.md) with [PlayFab Unreal GSDK](ThirdPersonMPGSDKSetup.md) installed and configured
-
-!!!TODO new guide: Build instructions for development editor, client, development server, and release server!!!
-* "Development Server" configuration of your project built from Visual Studio
-
+* ["Development Server"](ThirdPersonMPBuild.md) configuration of your project built from Visual Studio
 * Download the [LocalMultiplayerAgent](https://github.com/PlayFab/MpsAgent/tree/main/LocalMultiplayerAgent)
 * "Debug" or "Release" configuration of LocalMultiplayerAgent built from this repo with Visual Studio
 	* Load [MpsAgent.sln](https://github.com/PlayFab/MpsAgent/blob/main/MpsAgent.sln) in Visual Studio, select configuration, build LocalMultiplayerAgent project
@@ -25,12 +22,12 @@ The purpose of this guide is to demonstrate running your game-server on your loc
 
 ## Notation
 
-{depot} will refer to the full windows path for the location where you download your Git projects. These can be anywhere you like, such as: C:\depot, S:\depot, Z:\gitrepos or whichever drive and path is convienient for you. It is typically recommended (especially for Unreal), that your {depot} path be very short, if possible. For the author, {depot} resolves to: ```M:\\depot\\GSDK```. For example, with the requirements list above, you will likely have some or all of the following:
+{depot} will refer to the full windows path for the location where you download your Git projects. These can be anywhere you like, such as: C:\depot, S:\depot, Z:\gitrepos or whichever drive and path is convienient for you. It is typically recommended (especially for Unreal), that your {depot} path be very short, if possible. For the author, {depot} resolves to: ```M:\depot\GSDK```. For example, with the requirements list above, you will likely have some or all of the following:
 
 * {depot}/ThirdPersonMP
 * {depot}/MpsAgent
 * [Optional] {depot}/gsdk [This contains the PlayFab Unreal GSDK plugin previously installed into ThirdPersonMP]
-* [Optional] {depot}/UnrealMarketplacePlugin  [This contains the PlayFab Unreal Marketplace plugin, which is not required for MPS, but almost certainly required for other PlayFab features]
+* [Optional] {depot}/UnrealMarketplacePlugin  [This contains the PlayFab Unreal Marketplace plugin, which is not required for this guide, but almost certainly required for other PlayFab features]
 
 It is not required that you have all of these in the same location, but it is likely useful to do so, and for organization, this guide encourages you to do so.
 
@@ -105,6 +102,6 @@ NOTE: Unreal provides multiple build configurations and multiple ways to build y
 
 ## Navigation
 
-You are now ready to ... TODO LINK TO THE NEXT DOCUMENT
+You are now ready to deploy [your server to the cloud](ThirdPersonMPCloudDeploy.md).
 
 Alternately, you can return to the main [Unreal GSDK Plugin](README.md#deploy-to-playfab) guide.

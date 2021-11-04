@@ -29,7 +29,7 @@ We will add and configure the Playfab Unreal GSDK to your project, and test it l
 
 When using the plugin a few things need to be taken care off.
 
-First, open File Explorer and create a folder called “Plugins” in your games' root directory and in the Plugins folder, create a folder called "PlayFabGSDK". Then, drag all the files from the UnrealPlugin folder in this repo into the Plugins/PlayFabGSDK folder.
+First, open File Explorer and create a folder called "Plugins" in your games' root directory and in the Plugins folder, create a folder called "PlayFabGSDK". Then, drag all the files from the UnrealPlugin folder in this repo into the Plugins/PlayFabGSDK folder.
 
 Open the .uproject file in a text editor of your choice. In the plugins array add the PlayFabGSDK.
 
@@ -74,7 +74,7 @@ currently the source build, select it from the dropdown list and then click OK.
 
 ![image depicting a window that says "Select Unreal Engine Version"](Documentation/SelectUnrealEngineVersion.png)
 
-Right click on the .uproject file again and select “Generate Visual Studio Project Files".
+Right click on the .uproject file again and select "Generate Visual Studio Project Files".
 
 Then, build the project in Visual Studio and start the Editor by selecting the Development Editor configuration.
 
@@ -248,7 +248,6 @@ bool UMyGameInstance::OnGSDKHealthCheck()
     return true;
 }
 ```
-
 
 ## Blueprint implementation
 
