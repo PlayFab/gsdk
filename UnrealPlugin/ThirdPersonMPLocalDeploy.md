@@ -37,7 +37,7 @@ It is not required that you have all of these in the same location, but it is li
 
 First, you will need to configure your LocalMultiplayerAgent to execute your server project. The first iteration will run the process directly on your local PC without any isolation.
 
-In Explorer, find and open the file: ```{depot}\MpsAgent\LocalMultiplayerAgent\MultiplayerSettings.json```. An abbreviated version of this file with the parts important to this guide are as follows [NOTE the escaped \'s in the paths - this is a json file, and thus it's required to escape all \'s as \\]:
+In Explorer, find and open the file: ```{depot}\MpsAgent\LocalMultiplayerAgent\MultiplayerSettings.json```. An abbreviated version of this file with the parts important to this guide are as follows [NOTE the escaped \\'s for paths in the json - this is a json file, and thus it's required to escape all \\'s as \\\\]:
 
 ```json
 {
