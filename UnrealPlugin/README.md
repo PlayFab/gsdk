@@ -44,4 +44,4 @@ Finally, you're ready to [deploy your game-server to PlayFab](ThirdPersonMPCloud
 
 Thank you to [Nick Arthur](https://github.com/narthur157) for his amazing [Dockerfile](https://github.com/narthur157/playfab-gsdk-ue4).
 
-Thank you to [Adam Rehn]{https://github.com/adamrehn) for all his work with Unreal and Docker, including code, samples, examples, and tutorials.
+Thank you to [Adam Rehn](https://github.com/adamrehn) for all his work with Unreal and Docker, including code, samples, examples, and tutorials.
