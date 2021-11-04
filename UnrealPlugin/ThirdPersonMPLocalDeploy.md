@@ -60,13 +60,14 @@ In Explorer, find and open the file: ```{depot}\MpsAgent\LocalMultiplayerAgent\M
 }
 ```
 
-The parts of the file obscured by ```...``` above, can be ignored in this guide. The purpose and values for the important fields are as follows:
+For the purposes of this guide, the parts of the json file obscured by ```...``` above, just utilize the project defaults. The purpose and values for the important fields are as follows:
 
 * RunContainer: For this guide, this will always be false. Setting this to true requires Docker.
     * When true, the zip file in <PATH TO ZIP> must contain the entire project server release build
 	* When true, the ProcessStartParameters/StartGameCommand is ignored, and ContainerStartParameters/StartGameCommand is used instead
-	* When true, everything is built and run in a docker container, rather than on the local machine
+	* When true, everything is built and run in a docker container, rather than on the local machine context
 	* This guide covers the scenario when RunContainer is false, so that we can more easily debug the server process
+	* Setting this to true requires a Shipping Server build, additional [Windows](https://docs.adamrehn.com/ue4-docker/configuration/configuring-windows-server) or [Linux](https://unrealcontainers.com/blog/identifying-application-runtime-dependencies/) DLLs, and [Docker for Windows](https://www.docker.com/products/docker-desktop)
 * AssetDetails/LocalFilePath: <PATH TO ZIP>
 	* This location must be fully defined, and a valid zip file must exist at this location
 	* When RunContainer==false, this file is ignored, but its existence is still required
