@@ -15,7 +15,8 @@ The purpose of this guide is to demonstrate running your game-server on your loc
 * Download Unreal Engine Source Build by following [these instructions](https://docs.unrealengine.com/4.26/en-US/ProgrammingAndScripting/ProgrammingWithCPP/DownloadingSourceCode/) from the Unreal Engine website. This was tested on [4.26.2](https://github.com/EpicGames/UnrealEngine/releases/tag/4.26.2-release) (Link requires permissions)
 * [Completed Unreal Project](ThirdPersonMPSetup.md) with [PlayFab Unreal GSDK](ThirdPersonMPGSDKSetup.md) installed and configured
 * ["Development Server"](ThirdPersonMPBuild.md) configuration of your project built from Visual Studio
-* Download the [LocalMultiplayerAgent](https://github.com/PlayFab/MpsAgent/tree/main/LocalMultiplayerAgent)
+* [Optional] Download the [LocalMultiplayerAgent](https://github.com/PlayFab/MpsAgent/releases)
+	* [Optional] Alternately, download the [LocalMultiplayerAgent source](https://github.com/PlayFab/MpsAgent/tree/main/LocalMultiplayerAgent)
 * "Debug" or "Release" configuration of LocalMultiplayerAgent built from this repo with Visual Studio
 	* Load [MpsAgent.sln](https://github.com/PlayFab/MpsAgent/blob/main/MpsAgent.sln) in Visual Studio, select configuration, build LocalMultiplayerAgent project
 * [Optional] Install [Docker for Windows](https://www.docker.com/products/docker-desktop)
