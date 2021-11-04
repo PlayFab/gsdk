@@ -75,10 +75,10 @@ For the purposes of this guide, the parts of the json file obscured by ```...```
 	* This requirement is a low priority polish item that hasn't been reconsidered yet
 	* For this example, this could be: ```{depot}\\empty.zip```
 	* For the author, this is: ```"M:\\depot\\GSDK\\ThirdPersonMPGSDK\\Binaries\\Win64\\ThirdPersonMPServer.zip```, with an empty zip file at that location
-	* NOTE: When RunContainer==true, the contents of this file will be relevant and used
+	* NOTE: When RunContainer==true, the contents of this file will be relevant and used, and should contain your Shipping Server
 * ContainerStartParameters/StartGameCommand: While RunContainer is false, this is unused.
 	* When RunContainer==true, it supercedes the ProcessStartParameters/StartGameCommand
-	* This path is the internal path within the docker container, and will be the sum of AssetDetails/MountPath, plus the internal path-to-exe in your zip file
+	* This path is the internal path within the docker container, and will be the sum of AssetDetails/MountPath, plus the internal path-to-exe in your zip file defined by AssetDetails/LocalFilePath
 	* For this example, this could be: ```C:\\Assets\\ThirdPersonMPServer.exe -log```
 * ProcessStartParameters/StartGameCommand: This command will effectively be the path to your exe, and any command-line parameters used to start your game server
 	* -log is an Unreal command to instruct the game-server to save an execution log
@@ -92,14 +92,13 @@ Once you have created your zip file and set all of these lines to appropriate va
 
 You can run LocalMultiplayerAgent from Visual Studio with the "Start New Instance" command, sometimes bound to F5, or you can navigate to ```{depot}\LocalMultiplayerAgent\bin\{configuration}\netcoreapp3.1``` and double click "LocalMultiplayerAgent.exe". You can also run this from within a cmd window to observe or capture debug log information.
 
-Running LocalMultiplayerAgent.exe should start your game server. You can find your game server process ID in the Details column. If there are multiple instances, you may need to use Task 
-Manager to force-close instances that are lingering from previous attempts. If your LocalMultiplayerAgent _starts_ multiple instances, look for the process ID with a comparatively high memory use (Some Unreal build configurations have multiple executables, and both are in the task manager for the duration).
+Running LocalMultiplayerAgent.exe should start your game server. You will usually want to have Task Manager open for this. You can find your game server process ID in the Details tab of Task Manager. If there are multiple instances listed, you may need to use Task Manager to force-close instances that are lingering from previous attempts. If your LocalMultiplayerAgent _starts_ multiple instances, look for the process ID with a comparatively high memory use (Some Unreal build configurations have multiple executables, and both are in the task manager for the duration).
 
 Once you see your ThirdPersonMPServer process running in Task Manager, you can return to Visual Studio, select the Debug dropdown -> Attach to Process. From the popup window, you can search your process name: ThirdPersonMPServer, and then select the proper process ID, identified from Task Manager.
 
-At this point, you should be able to perform moderate debugging into your game.
+At this point, you should be able to perform typical debugging into your game server.
 
-NOTE: Unreal provides multiple build configurations and multiple ways to build your server. For best results, use the "Development Server" configuration, and output, built directly from Visual Studio. Release builds, or builds built from the Development Editor may work better for other situations, but the configuration built directly from Visual Studio will be easier to attach, and debug in Visual Studio.
+NOTE: Unreal provides multiple build configurations and multiple ways to build your server. For best results, use the "Development Server" configuration, and output, built directly from Visual Studio. Shipping builds, or builds built from the Development Editor may work better for other situations, but the "Development Server" configuration built directly from Visual Studio will be easier to attach and debug in Visual Studio.
 
 ## Navigation
 
