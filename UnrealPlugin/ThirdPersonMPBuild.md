@@ -65,6 +65,6 @@ Run the Development Editor, and from the development editor window, pick these o
 
 ## Navigation
 
-You are now ready to [deploy your game server](ThirdPersonMPLocalDeploy.md) to PlayFab MPS and test your project in the cloud.
+You are now ready to [test your game server](ThirdPersonMPLocalDeploy.md) on your local machine.
 
 Alternately, you can return to the main [Unreal GSDK Plugin](README.md#deploy-to-playfab) guide.
