@@ -13,13 +13,13 @@ The purpose of this guide is to describe all the build configurations needed to 
 
 * Download Visual Studio (the [community version is free](https://visualstudio.microsoft.com/vs/community/))
 	- Requires Workloads: .NET desktop development, and Desktop development with C++
-* Download Unreal Engine Source Build by following [these instructions](https://docs.unrealengine.com/4.26/en-US/ProgrammingAndScripting/ProgrammingWithCPP/DownloadingSourceCode/) from the Unreal Engine website. This was tested on [4.26.2](https://github.com/EpicGames/UnrealEngine/releases/tag/4.26.2-release) (Link requires permissions)
+* Download Unreal Engine Source Build by following [these instructions](https://docs.unrealengine.com/4.26/ProgrammingAndScripting/ProgrammingWithCPP/DownloadingSourceCode/) from the Unreal Engine website. This was tested on [4.26.2](https://github.com/EpicGames/UnrealEngine/releases/tag/4.26.2-release) (Link requires permissions)
 * [Completed Unreal Project](ThirdPersonMPSetup.md) with [PlayFab Unreal GSDK](ThirdPersonMPGSDKSetup.md) installed and configured
-* Knowledge about [Unreal Build Configuration](https://docs.unrealengine.com/4.27/en-US/ProductionPipelines/DevelopmentSetup/CompilingProjects/) options
+* Knowledge about [Unreal Build Configuration](https://docs.unrealengine.com/4.27/ProductionPipelines/DevelopmentSetup/CompilingProjects/) options
 
 ## Instructions
 
-The [GSDK setup](ThirdPersonMPGSDKSetup.md) guide previously described the steps to "Switch Unreal Engine Version" and "Generate Visual Studio project files". There is also an [Unreal guide](https://docs.unrealengine.com/4.27/en-US/ProductionPipelines/DevelopmentSetup/CompilingProjects/) about the various compilation options, which you should review.
+The [GSDK setup](ThirdPersonMPGSDKSetup.md) guide previously described the steps to "Switch Unreal Engine Version" and "Generate Visual Studio project files". There is also an [Unreal guide](https://docs.unrealengine.com/4.27/ProductionPipelines/DevelopmentSetup/CompilingProjects/) about the various compilation options, which you should review.
 
 ### Development Editor
 
