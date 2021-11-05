@@ -67,7 +67,7 @@ CMD ./startup.sh
 chown -R ue.ue $PF_SERVER_LOG_DIRECTORY
 su ue -c ./<projectname>Server.sh
 ```
-Make sure that the line endings in the startup&#46;sh file are LF (\\n) and not CRLF (\\r\\n).
+Make sure that the line endings in the startup.sh file are LF (\\n) and not CRLF (\\r\\n).
 
 # Navigation
 
