@@ -31,7 +31,7 @@ When using the plugin a few things need to be taken care off.
 
 First, open File Explorer and create a folder called "Plugins" in your games' root directory and in the Plugins folder, create a folder called "PlayFabGSDK". Then, drag all the files from the UnrealPlugin folder in this repo into the Plugins/PlayFabGSDK folder.
 
-Open the .uproject file in a text editor of your choice. In the plugins array add the PlayFabGSDK.
+Open the .uproject file in a text editor of your choice. In the plugins array add the PlayFabGSDK plugin.
 
 See the example below:
 
@@ -68,9 +68,7 @@ Update <modulename>.Build.cs file to add "PlayFabGSDK" into the PublicDependency
 PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "HeadMountedDisplay", "PlayFabGSDK" });
 ```
 
-Right click on the .uproject file and choose the option to "Switch Unreal Engine version", which is how you can quickly check which Unreal Engine version you are currently using. 
-The popup seen below should appear. If you already see that the Unreal Engine version is source build, you don’t need to change anything, so click Cancel. If the Unreal version is not 
-currently the source build, select it from the dropdown list and then click OK. 
+Right click on the .uproject file and choose the option to "Switch Unreal Engine version", which is how you can quickly check which Unreal Engine version you are currently using. The popup seen below should appear. If you already see that the Unreal Engine version is source build, you don’t need to change anything, so click Cancel. If the Unreal version is not currently the source build, select it from the dropdown list and then click OK. 
 
 ![image depicting a window that says "Select Unreal Engine Version"](Documentation/SelectUnrealEngineVersion.png)
 
@@ -84,7 +82,8 @@ Then, build the project in Visual Studio and start the Editor by selecting the D
 
 Once your project has enabled server mode, you will have a <projectname>Server.Target.cs file.
 
-Result should similar to:
+Result should look similar to:
+
 ```csharp 
 public class <projectname>ServerTarget : TargetRules
 {
@@ -99,7 +98,8 @@ public class <projectname>ServerTarget : TargetRules
 }
 ```
 
-For Windows builds, you may need to add these optional configuations:
+For Windows builds, you may need to add these optional configurations:
+
 ```csharp
 DisablePlugins.Add("WMFMediaPlayer");
 DisablePlugins.Add("AsyncLoadingScreen"); //if you are using this plugin
@@ -112,14 +112,11 @@ NOTE: These configurations are invalid for a Linux server build.
 
 #### Creating a GameInstance Class
 
-If you are in the process of creating a game from scratch and do not yet have a GameInstance class, then first follow these example instructions to create a GameInstance class. 
-
-If you are using a game that already has a GameInstance class, (for example, ShooterGame from Unreal's sample library), then move on to the section titled _**Modify the GameInstance Class**_.
+If you are in the process of creating a game from scratch and do not yet have a GameInstance class, then first follow these example instructions to create a GameInstance class. If you are using a game that already has a GameInstance class, (for example, ShooterGame from Unreal's sample library), then move on to the section titled _**Modify the GameInstance Class**_.
 
 ----
 
-In the Unreal Editor, go to Files->Create a new C++ class and select the option to "Show all classes". Then search for GameInstance. 
-By selecting it directly, everything should be generated correctly and then you can add the functions we detail below.
+In the Unreal Editor, go to Files->Create a new C++ class and select the option to "Show all classes". Then search for GameInstance. By selecting it directly, everything should be generated correctly and then you can add the functions we detail below.
 
 Then close Unreal and generate project files in source build mode again.
 
@@ -127,8 +124,7 @@ Then using Visual Studio, open those newly created files and follow instructions
 
 #### Modify the Game Instance Class
 
-Locate your GameInstance class, which is most likely called something similar to [your game name]GameInstance or MyGameInstance. From now on, your game instance class will
-be denoted with [YourGameInstanceClassName].
+Locate your GameInstance class, which is most likely called something similar to [your game name]GameInstance or MyGameInstance. From now on, your game instance class will be denoted with [YourGameInstanceClassName].
 
 ##### Modifying the GameInstance header file
 
@@ -140,8 +136,7 @@ First, check the include statements and ensure that the following are included i
 #include "MyGameInstance.generated.h"
 ```
 
-Then, add the following declarations to the public section:
-(If you already have an Init() function, there is no need to include another declaration)
+Then, add the following declarations to the public section: (If you already have an Init() function, there is no need to include another declaration)
 
 ```cpp
 public:
@@ -151,6 +146,7 @@ public:
 ```
 
 Then, add the following declarations to the protected section of methods:
+
 ```cpp
 protected:
 
@@ -189,11 +185,11 @@ void U[YourGameInstanceClassName]::Init()
     UGSDKUtils::RegisterGSDKShutdownDelegate(OnGsdkShutdown);
     UGSDKUtils::RegisterGSDKHealthCheckDelegate(OnGsdkHealthCheck);
 }
-``` 
+```
+
 ----
-If you already **had** an Init() function,
-go to check in [YourGameInstanceClassName].cpp file to see if you have a variable that indicates whether the instance is 
-for a dedicated server. **If you can find this variable**, then add in this in at the end of your Init() function:
+
+If you already **had** an Init() function, go to check in [YourGameInstanceClassName].cpp file to see if you have a variable that indicates whether the instance is for a dedicated server. **If you can find this variable**, then add in this in at the end of your Init() function:
 
 ###### Modifying Existing Init() function
 
@@ -211,8 +207,8 @@ for a dedicated server. **If you can find this variable**, then add in this in a
 		OnStart();
 	}
 ```
-**If you can't find a variable like IsDedicatedServerInstance(),** we still want to make sure that ReadyForPlayers() and onStart() are used when using 
-a dedicated server, so you could wrap the call to ReadyForPlayers() as such at the bottom of the Init function:
+
+**If you can't find a variable like IsDedicatedServerInstance(),** we still want to make sure that ReadyForPlayers() and onStart() are used when using a dedicated server, so you could wrap the call to ReadyForPlayers() as such at the bottom of the Init function:
 
 ```cpp
 #if UE_SERVER
@@ -222,6 +218,7 @@ a dedicated server, so you could wrap the call to ReadyForPlayers() as such at t
     }
 #endif
 ```
+
 ----
 
 Lastly, add these method implementations to the bottom of [YourGameInstanceClassName].cpp file:
@@ -284,6 +281,7 @@ navigate to Maps&Modes on the left side. Scroll to the bottom, and then you can 
 ### In DefaultEngine.ini
 
 Or you can update DefaultEngine.ini file and add this:
+
 ```ini
 [/Script/EngineSettings.GameMapsSettings]
 GameInstanceClass=/Script/[game name].MyGameInstance
@@ -300,6 +298,7 @@ In the editor go to Edit -> Project Settings. In the opened window navigate to P
 ### In DefaultGame.ini
 
 Or you can update DefaultGame.ini to show the following:
+
 ```ini
 [/Script/UnrealEd.ProjectPackagingSettings]
 IncludeAppLocalPrerequisites=True
