@@ -73,7 +73,7 @@ For the purposes of this guide, the parts of the json file obscured by ```...```
 	* This location must be fully defined, and a valid zip file must exist at this location
 	* When RunContainer==false, this file is ignored, but its existence is still required
 	* The zip file can be empty
-	* This requirement is a low priority polish item that hasn't been reconsidered yet
+	* This requirement is a low priority polish item that hasn't been resolved yet
 	* For this example, this could be: ```{depot}\\empty.zip```
 	* For the author, this is: ```"M:\\depot\\GSDK\\ThirdPersonMPGSDK\\Binaries\\Win64\\ThirdPersonMPServer.zip```, with an empty zip file at that location
 	* NOTE: When RunContainer==true, the contents of this file will be relevant and used, and should contain your Shipping Server
@@ -93,13 +93,23 @@ Once you have created your zip file and set all of these lines to appropriate va
 
 You can run LocalMultiplayerAgent from Visual Studio with the "Start New Instance" command, sometimes bound to F5, or you can navigate to ```{depot}\LocalMultiplayerAgent\bin\{configuration}\netcoreapp3.1``` and double click "LocalMultiplayerAgent.exe". You can also run this from within a cmd window to observe or capture debug log information.
 
-Running LocalMultiplayerAgent.exe should start your game server. You will usually want to have Task Manager open for this. You can find your game server process ID in the Details tab of Task Manager. If there are multiple instances listed, you may need to use Task Manager to force-close instances that are lingering from previous attempts. If your LocalMultiplayerAgent _starts_ multiple instances, look for the process ID with a comparatively high memory use (Some Unreal build configurations have multiple executables, and both are in the task manager for the duration).
+Running LocalMultiplayerAgent.exe should start your game server. You will usually want to have Task Manager open for this. You can find your game server process ID in the Details tab of Task Manager.
 
 Once you see your ThirdPersonMPServer process running in Task Manager, you can return to Visual Studio, select the Debug dropdown -> Attach to Process. From the popup window, you can search your process name: ThirdPersonMPServer, and then select the proper process ID, identified from Task Manager.
 
 At this point, you should be able to perform typical debugging into your game server.
 
 NOTE: Unreal provides multiple build configurations and multiple ways to build your server. For best results, use the "Development Server" configuration, and output, built directly from Visual Studio. Shipping builds, or builds built from the Development Editor may work better for other situations, but the "Development Server" configuration built directly from Visual Studio will be easier to attach and debug in Visual Studio.
+
+## Troubleshooting
+
+### Many instances of ThirdPersonMPServer in Task Manager
+
+If there are multiple instances listed (usually 3 or more), you may need to use Task Manager to force-close instances that are lingering from previous attempts.
+
+### LocalMultiplayerAgent launches 2 instances of ThirdPersonMPServer
+
+If your LocalMultiplayerAgent _starts_ multiple instances, look for the process ID with a comparatively high memory use. Some configurations of the game server generate two executables, which run as a pair. You will want to attach to the one with a much higher memory use.
 
 ## Navigation
 
