@@ -14,7 +14,7 @@ func Start() {
 	ig.startInternal()
 }
 
-// StartStartWithDebugLogs is like Start(), but with debug logs enabled
+// StartWithDebugLogs is like Start(), but with debug logs enabled
 func StartWithDebugLogs() {
 	ig.debugLogs = true
 	ig.startInternal()
@@ -53,8 +53,8 @@ func GetGameServerConnectionInfo() GameServerConnectionInfo {
 	return ig.configuration.GameServerConnectionInfo
 }
 
-// RegisterMaintananceCallback gets called if the server is getting a scheduled maintenance, it will get the UTC Datetime of the maintenance event as an argument.
-func RegisterMaintananceCallback(callback func(time.Time)) {
+// RegisterMaintenanceCallback gets called if the server is getting a scheduled maintenance, it will get the UTC Datetime of the maintenance event as an argument.
+func RegisterMaintenanceCallback(callback func(time.Time)) {
 	ig.startInternal()
 	ig.maintenanceCallback = callback
 }

@@ -38,7 +38,7 @@ func (suite *GsdkTestSuite) SetupSuite() {
 		CertificateFolder:        "./certs",
 		SharedContentFolder:      "./shared",
 		BuildMetadata:            map[string]string{"k": "v"},
-		GamePorts:                map[string]int{"game": 8080},
+		GamePorts:                map[string]string{"game": "8080"},
 		IpV4Address:              "127.0.0.1",
 		GameCertificates:         map[string]string{"game": "cert"},
 		FullyQualifiedDomainName: "test.domain.com",
@@ -108,8 +108,7 @@ func (httpServerForMarkAllocatedGsdk) ServeHTTP(w http.ResponseWriter, req *http
 	json.NewEncoder(w).Encode(hr)
 }
 
-// All methods that begin with "Test" are run as tests within a
-// suite.
+// TestExample tests the "normal" GSDK path
 func (suite *GsdkTestSuite) TestExample() {
 	ig = newInternalGsdk()
 	timesRun = 0
@@ -143,6 +142,7 @@ func (suite *GsdkTestSuite) TestExample() {
 	srv.Shutdown(context.TODO())
 }
 
+// TestMarkAllocated tests the GSDK path with the MarkAllocated method
 func (suite *GsdkTestSuite) TestMarkAllocated() {
 	ig = newInternalGsdk()
 	timesRun = 0

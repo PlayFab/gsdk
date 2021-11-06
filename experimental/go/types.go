@@ -82,7 +82,7 @@ type GsdkConfig struct {
 	GameCertificates         map[string]string        `json:"gameCertificates"`
 	SharedContentFolder      string                   `json:"sharedContentFolder"`
 	BuildMetadata            map[string]string        `json:"buildMetadata"`
-	GamePorts                map[string]int           `json:"gamePorts"`
+	GamePorts                map[string]string        `json:"gamePorts"`
 	IpV4Address              string                   `json:"IpV4Address"`
 	GameServerConnectionInfo GameServerConnectionInfo `json:"gameServerConnectionInfo"`
 	ServerInstanceNumber     int                      `json:"serverInstanceNumber"`

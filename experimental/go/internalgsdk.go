@@ -9,7 +9,6 @@ import (
 	"log"
 	"net/http"
 	"os"
-	"strconv"
 	"sync"
 	"time"
 )
@@ -184,18 +183,14 @@ func (i *internalGsdk) updateStateFromHeartbeat(hr *HeartbeatResponse) {
 				// so, unblock ReadyForPlayers()
 				i.transitionToActiveEvent <- struct{}{}
 				// signal an early heartbeat
-				go func() {
-					i.signalHeartbeatEvent <- struct{}{}
-				}()
+				go i.signalEarlyHeartbeat()
 			}
 		}
 	case GameOperationTerminate:
 		{
 			if i.currentGameState != GameStateTerminating {
 				i.currentGameState = GameStateTerminating
-				go func() {
-					i.signalHeartbeatEvent <- struct{}{}
-				}()
+				go i.signalEarlyHeartbeat()
 				if i.shutdownCallback != nil {
 					i.shutdownCallback()
 				}
@@ -203,13 +198,18 @@ func (i *internalGsdk) updateStateFromHeartbeat(hr *HeartbeatResponse) {
 					logWarn("trying to close already closed transitionToActiveEvent channel")
 					return
 				}
-				// we're terminating, so signal that no more messages will be sent to the channe
+				// we're terminating, so signal that no more messages will be sent to the channel
 				close(i.transitionToActiveEvent)
 				i.transitionToActiveEventClosed = true
 			}
 		}
 	}
 
+}
+
+// signalEarlyHeartbeat will signal an early heartbeat. It may block so it's best to be called in a goroutine
+func (i *internalGsdk) signalEarlyHeartbeat() {
+	i.signalHeartbeatEvent <- struct{}{}
 }
 
 func (i *internalGsdk) getConfiguration() (*GsdkConfig, error) {
@@ -227,7 +227,10 @@ func (i *internalGsdk) getConfiguration() (*GsdkConfig, error) {
 		return nil, err
 	}
 	var gsdkConfig *GsdkConfig
-	json.Unmarshal(byteValue, &gsdkConfig)
+	err = json.Unmarshal(byteValue, &gsdkConfig)
+	if err != nil {
+		return nil, err
+	}
 	return gsdkConfig, nil
 }
 
@@ -240,7 +243,7 @@ func (i *internalGsdk) createConfigMap(gsdkConfig *GsdkConfig) map[string]string
 		configMap[k] = v
 	}
 	for k, v := range gsdkConfig.GamePorts {
-		configMap[k] = strconv.Itoa(v)
+		configMap[k] = v
 	}
 
 	configMap[HeartbeatEndpointKey] = gsdkConfig.HeartbeatEndpoint
