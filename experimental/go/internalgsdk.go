@@ -128,6 +128,13 @@ func (i *internalGsdk) sendHeartbeat(heartbeatEndpoint string) {
 	}
 
 	defer resp.Body.Close()
+
+	statusOK := resp.StatusCode >= 200 && resp.StatusCode < 300
+	if !statusOK {
+		logError(fmt.Sprintf("Error sending heartbeat %s", resp.Status))
+		return
+	}
+
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
 		logWarn(fmt.Sprintf("Error reading heartbeat response %s", err))
