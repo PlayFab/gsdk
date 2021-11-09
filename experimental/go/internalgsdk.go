@@ -168,11 +168,16 @@ func (i *internalGsdk) updateStateFromHeartbeat(hr *HeartbeatResponse) {
 	}
 
 	if hr.NextScheduledMaintenanceUtc != "" {
-		nextScheduledMaintenanceUtc, _ := time.Parse(time.RFC3339, hr.NextScheduledMaintenanceUtc)
-		if i.cachedScheduledMaintenanceUtc.IsZero() || nextScheduledMaintenanceUtc.After(i.cachedScheduledMaintenanceUtc) {
-			i.cachedScheduledMaintenanceUtc = nextScheduledMaintenanceUtc
-			if i.maintenanceCallback != nil {
-				i.maintenanceCallback(nextScheduledMaintenanceUtc)
+		nextScheduledMaintenanceUtc, err := time.Parse(time.RFC3339, hr.NextScheduledMaintenanceUtc)
+		if err != nil {
+			logError(fmt.Sprintf("Error parsing next scheduled maintenance time %s", err))
+		} else {
+			nextScheduledMaintenanceUtc = nextScheduledMaintenanceUtc.UTC()
+			if i.cachedScheduledMaintenanceUtc.IsZero() || nextScheduledMaintenanceUtc.After(i.cachedScheduledMaintenanceUtc) {
+				i.cachedScheduledMaintenanceUtc = nextScheduledMaintenanceUtc
+				if i.maintenanceCallback != nil {
+					i.maintenanceCallback(nextScheduledMaintenanceUtc)
+				}
 			}
 		}
 	}
