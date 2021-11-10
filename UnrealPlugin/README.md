@@ -16,7 +16,9 @@ The sample game these instructions were created with was called ThirdPersonMP, s
 * Download Visual Studio. The [community version](https://visualstudio.microsoft.com/vs/community/) is free.
 	* Required workloads: .NET desktop development and Desktop development with C++
 * Download Unreal Engine Source Code. This plugin was tested on Unreal Engine 4.26.2. For instructions, see [Downloading Unreal Engine Source code (external)](https://docs.unrealengine.com/4.26/en-US/ProgrammingAndScripting/ProgrammingWithCPP/DownloadingSourceCode/).
-* Download [Unreal PlayFabGSDK Plugin](https://github.com/PlayFab/gsdk/tree/master/UnrealPlugin).
+* If you haven't already, please git clone this repo to your local machinne
+	* ```git clone https://github.com/PlayFab/gsdk.git```
+	* Later steps will involve integrating files from this repo to your project
 * [Optional] Download the [LocalMultiplayerAgent](https://github.com/PlayFab/MpsAgent/releases)
 	* [Optional] Alternatively, download [LocalMultiplayerAgent source](https://github.com/PlayFab/MpsAgent/tree/main/LocalMultiplayerAgent).
 * [Optional] [PlayFab Marketplace plugin](https://www.unrealengine.com/marketplace/product/playfab-sdk) or the [source version on GitHub](https://github.com/PlayFab/UnrealMarketplacePlugin/tree/master/4.26/PlayFabPlugin/PlayFab). This plugin is not required for GSDK but is required for many PlayFab services, including login.
