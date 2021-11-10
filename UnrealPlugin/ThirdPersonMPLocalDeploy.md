@@ -10,13 +10,13 @@ The purpose of this guide is to demonstrate running your game-server on your loc
 
 ## Requirements
 
-* Download Visual Studio (the [community version is free](https://visualstudio.microsoft.com/vs/community/))
-	- Requires Workloads: .NET desktop development, and Desktop development with C++
-* Download Unreal Engine Source Build by following [these instructions](https://docs.unrealengine.com/4.26/ProgrammingAndScripting/ProgrammingWithCPP/DownloadingSourceCode/) from the Unreal Engine website. This was tested on [4.26.2](https://github.com/EpicGames/UnrealEngine/releases/tag/4.26.2-release) (Link requires permissions)
+* Download Visual Studio. The [community version](https://visualstudio.microsoft.com/vs/community/) is free.
+	* Required workloads: .NET desktop development and Desktop development with C++
+* Download Unreal Engine Source Code. This plugin was tested on Unreal Engine 4.26.2. For instructions, see [Downloading Unreal Engine Source code (external)](https://docs.unrealengine.com/4.26/en-US/ProgrammingAndScripting/ProgrammingWithCPP/DownloadingSourceCode/).
 * [Completed Unreal Project](ThirdPersonMPSetup.md) with [PlayFab Unreal GSDK](ThirdPersonMPGSDKSetup.md) installed and configured
 * ["Development Server"](ThirdPersonMPBuild.md) configuration of your project built from Visual Studio
 * [Optional] Download the [LocalMultiplayerAgent](https://github.com/PlayFab/MpsAgent/releases)
-	* [Optional] Alternately, download the [LocalMultiplayerAgent source](https://github.com/PlayFab/MpsAgent/tree/main/LocalMultiplayerAgent)
+	* [Optional] Alternatively, download [LocalMultiplayerAgent source](https://github.com/PlayFab/MpsAgent/tree/main/LocalMultiplayerAgent).
 * "Debug" or "Release" configuration of LocalMultiplayerAgent built from this repo with Visual Studio
 	* Load [MpsAgent.sln](https://github.com/PlayFab/MpsAgent/blob/main/MpsAgent.sln) in Visual Studio, select configuration, build LocalMultiplayerAgent project
 * [Optional] Install [Docker for Windows](https://www.docker.com/products/docker-desktop)

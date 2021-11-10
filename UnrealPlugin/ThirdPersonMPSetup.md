@@ -16,9 +16,9 @@ To accomplish this, we will construct a project from scratch using Unreal tutori
 
 ## Requirements
 
-* Download Visual Studio (the [community version is free](https://visualstudio.microsoft.com/vs/community/))
-	- Requires Workloads: .NET desktop development, and Desktop development with C++
-* Download Unreal Engine Source Build by following [these instructions](https://docs.unrealengine.com/4.26/ProgrammingAndScripting/ProgrammingWithCPP/DownloadingSourceCode/) from the Unreal Engine website. This was tested on [4.26.2](https://github.com/EpicGames/UnrealEngine/releases/tag/4.26.2-release) (Link requires permissions)
+* Download Visual Studio. The [community version](https://visualstudio.microsoft.com/vs/community/) is free.
+	* Required workloads: .NET desktop development and Desktop development with C++
+* Download Unreal Engine Source Code. This plugin was tested on Unreal Engine 4.26.2. For instructions, see [Downloading Unreal Engine Source code (external)](https://docs.unrealengine.com/4.26/en-US/ProgrammingAndScripting/ProgrammingWithCPP/DownloadingSourceCode/).
 
 ## Instructions
 

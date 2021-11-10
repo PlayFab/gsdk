@@ -13,21 +13,36 @@ The sample game these instructions were created with was called ThirdPersonMP, s
 
 ## Requirements
 
-* Download Visual Studio (the [community version is free](https://visualstudio.microsoft.com/vs/community/))
-	- Requires Workloads: .NET desktop development, and Desktop development with C++
-* Download Unreal Engine Source Build by following [these instructions](https://docs.unrealengine.com/4.26/ProgrammingAndScripting/ProgrammingWithCPP/DownloadingSourceCode/) from the Unreal Engine website. This was tested on [4.26.2](https://github.com/EpicGames/UnrealEngine/releases/tag/4.26.2-release) (Link requires permissions)
-* Download the [Unreal PlayFabGSDK Plugin folder](https://github.com/PlayFab/gsdk/tree/master/UnrealPlugin)
+* Download Visual Studio. The [community version](https://visualstudio.microsoft.com/vs/community/) is free.
+	* Required workloads: .NET desktop development and Desktop development with C++
+* Download Unreal Engine Source Code. This plugin was tested on Unreal Engine 4.26.2. For instructions, see [Downloading Unreal Engine Source code (external)](https://docs.unrealengine.com/4.26/en-US/ProgrammingAndScripting/ProgrammingWithCPP/DownloadingSourceCode/).
+* Download [Unreal PlayFabGSDK Plugin](https://github.com/PlayFab/gsdk/tree/master/UnrealPlugin).
 * [Optional] Download the [LocalMultiplayerAgent](https://github.com/PlayFab/MpsAgent/releases)
-	* [Optional] Alternately, download the [LocalMultiplayerAgent source](https://github.com/PlayFab/MpsAgent/tree/main/LocalMultiplayerAgent)
-* [Optional] [PlayFab Marketplace plugin](https://www.unrealengine.com/marketplace/product/playfab-sdk) or the [source version on GitHub](https://github.com/PlayFab/UnrealMarketplacePlugin/tree/master/4.26/PlayFabPlugin/PlayFab) (Not required for GSDK, but required for most other PlayFab services, including login)
+	* [Optional] Alternatively, download [LocalMultiplayerAgent source](https://github.com/PlayFab/MpsAgent/tree/main/LocalMultiplayerAgent).
+* [Optional] [PlayFab Marketplace plugin](https://www.unrealengine.com/marketplace/product/playfab-sdk) or the [source version on GitHub](https://github.com/PlayFab/UnrealMarketplacePlugin/tree/master/4.26/PlayFabPlugin/PlayFab). This plugin is not required for GSDK but is required for many PlayFab services, including login.
 
 ## Project creation
 
-Unreal GSDK is installed into an Unreal server project. You will need a network-enabled multiplayer Unreal project with a dedicated-server mode. If you do not have one, you can follow our [Unreal prerequsitie setup](ThirdPersonMPSetup.md) guide. Once you have a network-enabled, multiplayer game, with a dedicated server, return here and continue.
+The Unreal server project needs to be a network-enabled multiplayer Unreal project with a dedicated-server mode. If you don't have a project that meets these prerequisites, follow our [Unreal prerequisite set up guide](ThirdPersonMPSetup.md) to set one up. Once you have a network-enabled, multiplayer game, with a dedicated server, return to this step and continue.
+
+When ready, open your network-enabled multiplayer Unreal server project, and continue to the next step to install the Unreal GSDK.
 
 ## Project GSDK setup
 
-With a multiplayer project configured for both a network connected game-client and game-server, you're ready to [install the GSDK](ThirdPersonMPGSDKSetup.md). This will allow your server to run on PlayFab Multiplayer Services.
+* GSDK Project Prerequisite details
+	* Dedicated Server:
+		* Your project should have a separate {ProjectName}Server.Target.cs file
+		* This file should contain ```Type = TargetType.Server;``` to enable dedicated server mode
+		* When built in "development server" configuration for Win64, your output contains {ProjectName}Server.exe
+	* Network-enabled:
+		* There are multiple ways to meet this requirement, but the simple answer is: your client can establish a network connection with a game server on a separate machine, and communicate meaningfully
+		* Our instructions direct you to do this through Unreal's built-in data replication system which handles most of this for you
+		* A more direct way to do this is with direct socket use, such as through the ISocketSubsystem, which is a much more advanced topic
+	* Multiplayer:
+		* Your game server can accept multiple incoming client connections, and communicate properly with both
+		* Again, with Unreal's built-in data replication, this is mostly handled for you
+
+With a properly configure multiplayer project, you're ready to [install the GSDK](ThirdPersonMPGSDKSetup.md). This will allow your server to run on PlayFab Multiplayer Services.
 
 ## Unreal Project Build Configurations
 
@@ -39,7 +54,7 @@ Once you have any client build, and a "Development Server" build, you can [test 
 
 ## Deploy to PlayFab
 
-Finally, you're ready to [deploy your game-server to PlayFab](ThirdPersonMPCloudDeploy.md), and test with real game servers in the cloud.
+Finally, you're ready to [create game servers in the cloud](ThirdPersonMPCloudDeploy.md) using PlayFab Multiplayer Services.
 
 # Acknowledgements
 

@@ -11,9 +11,9 @@ The purpose of this guide is to describe all the build configurations needed to 
 
 ## Requirements
 
-* Download Visual Studio (the [community version is free](https://visualstudio.microsoft.com/vs/community/))
-	- Requires Workloads: .NET desktop development, and Desktop development with C++
-* Download Unreal Engine Source Build by following [these instructions](https://docs.unrealengine.com/4.26/ProgrammingAndScripting/ProgrammingWithCPP/DownloadingSourceCode/) from the Unreal Engine website. This was tested on [4.26.2](https://github.com/EpicGames/UnrealEngine/releases/tag/4.26.2-release) (Link requires permissions)
+* Download Visual Studio. The [community version](https://visualstudio.microsoft.com/vs/community/) is free.
+	* Required workloads: .NET desktop development and Desktop development with C++
+* Download Unreal Engine Source Code. This plugin was tested on Unreal Engine 4.26.2. For instructions, see [Downloading Unreal Engine Source code (external)](https://docs.unrealengine.com/4.26/en-US/ProgrammingAndScripting/ProgrammingWithCPP/DownloadingSourceCode/).
 * [Completed Unreal Project](ThirdPersonMPSetup.md) with [PlayFab Unreal GSDK](ThirdPersonMPGSDKSetup.md) installed and configured
 * Knowledge about [Unreal Build Configuration](https://docs.unrealengine.com/4.27/ProductionPipelines/DevelopmentSetup/CompilingProjects/) options
 
