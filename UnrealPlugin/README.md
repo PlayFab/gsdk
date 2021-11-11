@@ -1,4 +1,4 @@
-# Instructions on Integrating the PlayFab GSDK Unreal Plugin Preview
+# How to use PlayFab GSDK Unreal plugin
 
 This article describes how to integrate PlayFab Multiplayer Server SDK (GSDK) Unreal Online Subsystem (OSS) plugin with your Unreal game project.
 
