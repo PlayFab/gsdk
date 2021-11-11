@@ -94,3 +94,9 @@ func UpdateConnectedPlayers(players []ConnectedPlayer) {
 	ig.startInternal()
 	ig.connectedPlayers = players
 }
+
+// GetConfigSettings returns the configuration settings for this game server
+func GetConfigSettings() map[string]string {
+	ig.startInternal()
+	return ig.configMap
+}
