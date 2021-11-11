@@ -27,11 +27,12 @@ We will add and configure the Playfab Unreal GSDK to your project, and test it l
 
 ### Adding the plugin to the project
 
-When using the plugin a few things need to be taken care off.
+Follow these steps to add the Unreal GSDK to your project:
 
-First, open File Explorer and create a folder called "Plugins" in your games' root directory and in the Plugins folder, create a folder called "PlayFabGSDK". Then, drag all the files from the UnrealPlugin folder in this repo into the Plugins/PlayFabGSDK folder.
-
-Open the .uproject file in a text editor of your choice. In the plugins array add the PlayFabGSDK plugin.
+* Go to your Unreal game project
+* Open File Explorer and create a **Plugins** folder in your games' root directory. In the Plugins folder, create a folder called **PlayFabGSDK.**
+* Go to **{depot}\\GSDK\\gsdk\\UnrealPlugin**. Drag all the files from the **UnrealPlugin** folder into the **Plugins/PlayFabGSDK** folder.
+* Lastly, open your game project's **.uproject** file in a text editor of your choice. In the plugins array, add the "PlayFabGSDK" plugin.
 
 See the example below:
 
@@ -68,7 +69,7 @@ Update <modulename>.Build.cs file to add "PlayFabGSDK" into the PublicDependency
 PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "HeadMountedDisplay", "PlayFabGSDK" });
 ```
 
-Right click on the .uproject file and choose the option to "Switch Unreal Engine version", which is how you can quickly check which Unreal Engine version you are currently using. The popup seen below should appear. If you already see that the Unreal Engine version is source build, you don’t need to change anything, so click Cancel. If the Unreal version is not currently the source build, select it from the dropdown list and then click OK. 
+Right click on the .uproject file and choose the option to "Switch Unreal Engine version", which is how you can quickly check which Unreal Engine version you are currently using. The popup seen below should appear. If you already see that the Unreal Engine version is source build, you don’t need to change anything, so click Cancel. If the Unreal version is not currently the source build, select it from the dropdown list and then click OK.
 
 ![image depicting a window that says "Select Unreal Engine Version"](Documentation/SelectUnrealEngineVersion.png)
 
@@ -84,7 +85,7 @@ Once your project has enabled server mode, you will have a <projectname>Server.T
 
 Result should look similar to:
 
-```csharp 
+```csharp
 public class <projectname>ServerTarget : TargetRules
 {
     public <projectname>ServerTarget( TargetInfo Target) : base(Target)
@@ -152,7 +153,7 @@ protected:
 
     UFUNCTION()
     void OnGSDKShutdown();
-    
+
     UFUNCTION()
     bool OnGSDKHealthCheck();
 };
@@ -160,11 +161,11 @@ protected:
 
 ##### Modifying the GameInstance Cpp file
 
-Then, locate the [YourGameInstanceClassName].cpp file. 
+Then, locate the [YourGameInstanceClassName].cpp file.
 
 Make sure that the following are included:
 
-```cpp 
+```cpp
 #include "[YourGameInstanceClassName].h"
 #include "PlayfabGSDK.h"
 #include "GSDKUtils.h"
@@ -174,7 +175,7 @@ Then locate your Init() function. If you _**don't**_ have an Init() function yet
 
 ###### Creating Init() function
 
-```cpp 
+```cpp
 void U[YourGameInstanceClassName]::Init()
 {
     FOnGSDKShutdown_Dyn OnGsdkShutdown;
@@ -248,29 +249,28 @@ bool UMyGameInstance::OnGSDKHealthCheck()
 
 ## Blueprint implementation
 
-In a folder of your choice in the Content Browser right-click and create a Blueprint class. In the All classes dropdown menu find the GameInstance class. In this example the blueprint is named "BP_GameInstance".
-
-Double-click the blueprint and on the left side hover over the function field and click the Override dropdown. Select the Init function.
-
-Right-click in the graph and add in all register GSDK function. 
-
-For GSDK Shutdown and Maintenance Delegate drag out the a line from the red square, and select "Add Custom Event". 
-
-For "Register GSDK Health Check Delegate" select the "Create Event" in the "Event Dispatchers".
-![PlayFab GSDK Health Check select function](Documentation/BlueprintAddRegisterHealthCheckDelegate.png)
-In the dropdown of the new node "Create matching function". **This is important, as the GSDK Health Check Delegate has a return value.**
-![PlayFab GSDK Health Check select function](Documentation/BlueprintRegisterHealthCheckDelegate.png)
-
-In the function make sure the return boolean value is checked.
-![PlayFab GSDK Health Check function](Documentation/BlueprintGSDKHealthCheckFunction.png)
-
-Don't forget to connect all the nodes to the Event Init node.
-
-In the end add the "Ready for Players" to be able to react to the ready signal of PlayFab.
-![PlayFab GSDK Full Graph](Documentation/BlueprintFullGraph.png)
+* Observe the Content Browser window in the Unreal Editor
+* Pick or create a folder to contain new Blueprints
+* Right-Click and create a Blueprint class
+* In the All classes dropdown menu find your GameInstance class
+	* In this example the blueprint is named "MyGameInstance"
+* Double-click the blueprint
+* On the left side hover over the function field and click the Override dropdown
+* Select the Init function
+* Right-click in the graph and add in all register GSDK function
+* For GSDK Shutdown and Maintenance Delegate drag out the a line from the red square, and select "Add Custom Event"
+* For "Register GSDK Health Check Delegate" select the "Create Event" in the "Event Dispatchers".
+* ![PlayFab GSDK Health Check select function](Documentation/BlueprintAddRegisterHealthCheckDelegate.png)
+* In the dropdown of the new node "Create matching function". **This is important, as the GSDK Health Check Delegate has a return value.**
+* ![PlayFab GSDK Health Check select function](Documentation/BlueprintRegisterHealthCheckDelegate.png)
+* In the function make sure the return boolean value is checked.
+* ![PlayFab GSDK Health Check function](Documentation/BlueprintGSDKHealthCheckFunction.png)
+* Don't forget to connect all the nodes to the Event Init node.
+* In the end add the "Ready for Players" to be able to react to the ready signal of PlayFab.
+* ![PlayFab GSDK Full Graph](Documentation/BlueprintFullGraph.png)
 
 ## Set the Game Instance class
-    
+
 After creating a custom game instance class that integrates with the gsdk, you have to configure your project to actually use this newly created game instance class. There are two ways to do this - either through the Unreal Engine editor or by editing DefaultEngine.ini directly.
 
 ### In the Unreal Editor

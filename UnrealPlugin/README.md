@@ -1,8 +1,8 @@
 # Instructions on Integrating the PlayFab GSDK Unreal Plugin Preview
 
-This Unreal Plugin is implementing the GSDK directly in Unreal Engine.
+This article describes how to integrate PlayFab Multiplayer Server SDK (GSDK) Unreal Online Subsystem (OSS) plugin with your Unreal game project.
 
-This plugin offers both a Blueprint API and a C++ API. This does however not mean that the Blueprint API does not require the game to be a C++ project. If it is currently a Blueprint only project, then you need to convert it beforehand, before adding the plugin.
+This plugin offers both a Blueprint API and a C++ API. The Blueprint API still requires your Unreal Project to be a C++ project, and will not work on a Blueprint only project. If it is currently a Blueprint only project, then you need to convert to a C++ project beforehand, before adding the plugin.
 
 The following nodes are supported:
 ![PlayFab GSDK Blueprint Nodes](Documentation/GSDKBlueprintNodes.png)

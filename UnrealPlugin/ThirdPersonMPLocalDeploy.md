@@ -18,7 +18,7 @@ The purpose of this guide is to demonstrate running your game-server on your loc
 * [Optional] Download the [LocalMultiplayerAgent](https://github.com/PlayFab/MpsAgent/releases)
 	* [Optional] Alternatively, download [LocalMultiplayerAgent source](https://github.com/PlayFab/MpsAgent/tree/main/LocalMultiplayerAgent).
 * "Debug" or "Release" configuration of LocalMultiplayerAgent built from this repo with Visual Studio
-	* Load [MpsAgent.sln](https://github.com/PlayFab/MpsAgent/blob/main/MpsAgent.sln) in Visual Studio, select configuration, build LocalMultiplayerAgent project
+	* Using Visual Studio, Open [MpsAgent.sln](https://github.com/PlayFab/MpsAgent/blob/main/MpsAgent.sln), Select either Debug or Release configuation, and then build the LocalMultiplayerAgent.
 * [Optional] Install [Docker for Windows](https://www.docker.com/products/docker-desktop)
 
 ## Notation
