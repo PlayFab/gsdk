@@ -51,6 +51,18 @@ In Explorer, find and open the file: ```{depot}\MpsAgent\LocalMultiplayerAgent\M
     }
   ],
   ...
+  "PortMappingsList": [
+    [
+      {
+        "NodePort": 30000,
+        "GamePort": {
+          "Name": "UnrealServerGsdkHostPort",
+          "Number": 8888,
+          "Protocol": "UDP"
+        }
+      }
+    ]
+  ],
   "ProcessStartParameters": {
     "StartGameCommand": "<PATH TO EXE> -log"
   },
@@ -77,6 +89,12 @@ For the purposes of this guide, the parts of the json file obscured by ```...```
 	* For this example, this could be: ```{depot}\\empty.zip```
 	* For the author, this is: ```"M:\\depot\\GSDK\\ThirdPersonMPGSDK\\Binaries\\Win64\\ThirdPersonMPServer.zip```, with an empty zip file at that location
 	* NOTE: When RunContainer==true, the contents of this file will be relevant and used, and should contain your Shipping Server
+* PortMappingsList:
+	* This is the LocalMultiplayerAgent equivalent of defining the port in Game Manager
+	* The GSDK is hard-coded to look for a port with the name: UnrealServerGsdkHostPort
+	* The GSDK will internally override the internal Unreal Game Server hosting port to match this port
+	* This is because MPS must be the source of which port a game server will use, due to the way MPS launches servers, particularly when running multiple on the same cloud VM
+	* This json let's you locally test driving this port number from MPS, and ensures your GSDK plugin will receive it
 * ContainerStartParameters/StartGameCommand: While RunContainer is false, this is unused.
 	* When RunContainer==true, it supercedes the ProcessStartParameters/StartGameCommand
 	* This path is the internal path within the docker container, and will be the sum of AssetDetails/MountPath, plus the internal path-to-exe in your zip file defined by AssetDetails/LocalFilePath
