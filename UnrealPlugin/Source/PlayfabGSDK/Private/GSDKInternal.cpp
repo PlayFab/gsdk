@@ -79,6 +79,24 @@ FGSDKInternal::FGSDKInternal()
 	}
 
 	ConnectionInfo = ConfigPtr->GetGameServerConnectionInfo();
+	// Override the internal Unreal Game Server hosting port number, with one driven from Game Manager
+	// A game server hosted in MPS won't be accessible by clients unless it uses the port that MPS has configured for it.
+	int32 UnrealServerGsdkHostPort = -1;
+	for (auto& GamePorts : ConnectionInfo.GamePortsConfiguration) {
+		// "UnrealServerGsdkHostPort" is documented as the name of a required port when using the internal Unreal Game Server hosting mechanism
+		if (GamePorts.Name == TEXT("UnrealServerGsdkHostPort")) {
+			UE_LOG(LogTemp, Log, TEXT("GSDK Game server listening port: %d"), GamePorts.ServerListeningPort);
+			UE_LOG(LogTemp, Log, TEXT("GSDK Game client connection port: %d"), GamePorts.ClientConnectionPort);
+			UnrealServerGsdkHostPort = GamePorts.ServerListeningPort;
+			break;
+		}
+	}
+	if (UnrealServerGsdkHostPort == -1)
+	{
+		UE_LOG(LogPlayFabGSDK, Fatal, TEXT("Unreal GSDK requires a named port: UnrealServerGsdkHostPort. This was not provided by MPS build port-configuration."));
+		return;
+	}
+	FURL::UrlConfig.DefaultPort = UnrealServerGsdkHostPort;
 
 	if (ConfigPtr->ShouldLog())
 	{
@@ -463,7 +481,7 @@ void FGSDKInternal::TriggerShutdown()
 		});
 }
 
-FString FGSDKInternal::GetConfigValue(const FString& Key)
+FString FGSDKInternal::GetConfigValue(const FString& Key) const
 {
 	FScopeLock ScopeLock(&ConfigMutex);
 	if (ConfigSettings.Contains(Key))

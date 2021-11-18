@@ -35,7 +35,7 @@ DEFINE_LOG_CATEGORY(LogPlayFabGSDK);
 void FPlayFabGSDKModule::StartupModule()
 {
 #if PLAYFAB_GSDK_SERVER
-	GSDKInternal = new FGSDKInternal();
+	GSDKInternal = MakeUnique<FGSDKInternal>();
 
 	GSDKInternal->OnShutdown.BindLambda([this]()
 	{
@@ -68,7 +68,6 @@ void FPlayFabGSDKModule::ShutdownModule()
 #if PLAYFAB_GSDK_SERVER
 	if (GSDKInternal)
 	{
-		delete GSDKInternal;
 		GSDKInternal = nullptr;
 	}
 #endif
