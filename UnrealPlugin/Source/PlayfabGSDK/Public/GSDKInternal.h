@@ -150,7 +150,7 @@ public:
 		return HeartbeatRequest;
 	}
 
-	FString GetConfigValue(const FString& Key);
+	FString GetConfigValue(const FString& Key) const;
 	void SetState(EGameState State);
 	void SetConnectedPlayers(const TArray<FConnectedPlayer>& CurrentConnectedPlayers);
 
@@ -209,7 +209,7 @@ private:
 	TArray<FString> InitialPlayers;
 
 	void HeartbeatAsyncTaskFunction();
-	FCriticalSection ConfigMutex;
+	mutable FCriticalSection ConfigMutex;
 
 	FCriticalSection HeartbeatMutex;
 	TArray<TSharedRef<IHttpRequest, ESPMode::ThreadSafe>> Heartbeats;

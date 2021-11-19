@@ -13,7 +13,7 @@ The purpose of this guide is to describe all the build configurations needed to 
 
 * Download Visual Studio. The [community version](https://visualstudio.microsoft.com/vs/community/) is free.
 	* Required workloads: .NET desktop development and Desktop development with C++
-* Download Unreal Engine Source Code. This plugin was tested on Unreal Engine 4.26.2. For instructions, see [Downloading Unreal Engine Source code (external)](https://docs.unrealengine.com/4.26/en-US/ProgrammingAndScripting/ProgrammingWithCPP/DownloadingSourceCode/).
+* Download Unreal Engine Source Code. This plugin was tested on Unreal Engine 4.26.2. For instructions, see [Downloading Unreal Engine Source code (external)](https://docs.unrealengine.com/4.26/ProgrammingAndScripting/ProgrammingWithCPP/DownloadingSourceCode/).
 * [Completed Unreal Project](ThirdPersonMPSetup.md) with [PlayFab Unreal GSDK](ThirdPersonMPGSDKSetup.md) installed and configured
 * Knowledge about [Unreal Build Configuration](https://docs.unrealengine.com/4.27/ProductionPipelines/DevelopmentSetup/CompilingProjects/) options
 
@@ -23,7 +23,7 @@ The [GSDK setup](ThirdPersonMPGSDKSetup.md) guide previously described the steps
 
 ### Development Editor
 
-The development editor should be the first thing you build. To do this, find your ThirdPersonMP.uproject file, right click, and "Generate Visual Studio project files" (You may have already done this in the previous guide, in which case, you can skip this step. Once complete, you can open ThirdPersonMP.sln in Visual Studio.
+The development editor should be the first thing you build. To do this, find your ThirdPersonMP.uproject file, right-click, and "Generate Visual Studio project files" (You may have already done this in the previous guide, in which case, you can skip this step. Once complete, you can open ThirdPersonMP.sln in Visual Studio.
 
 Once Visual Studio loads, change your configuration to "Development Server". The Solution Configuration dropdown is sometimes hard to read, but can be resized in the toolbar customization options. Now, build. The first time you do this, it can take several hours, but you likely did this in the previous guide. Repeated builds should be fairly fast for a small project. Once finished, you can run/debug the project Solution/Games/ThirdPersonMP. This will start the Development Editor.
 

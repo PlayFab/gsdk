@@ -19,7 +19,9 @@
 #include "ConnectedPlayer.h"
 #include "GameServerConnectionInfo.h"
 #include "GSDKInternal.h"
+
 #include "Modules/ModuleManager.h"
+#include "Templates/UniquePtr.h"
 
 DECLARE_LOG_CATEGORY_EXTERN(LogPlayFabGSDK, Log, All);
 
@@ -97,5 +99,5 @@ public:
 
 private:
 
-	FGSDKInternal* GSDKInternal = nullptr;
+	TUniquePtr<FGSDKInternal> GSDKInternal = nullptr;
 };

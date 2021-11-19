@@ -105,6 +105,10 @@ public:
 	UFUNCTION(BlueprintCallable, Category="PlayFab|GSDK|Callbacks")
 	static void RegisterGSDKMaintenanceDelegate(const FOnGSDKMaintenance_Dyn& OnGSDKMaintenanceDelegate);
 
+	/// Read the port information from MPS, and assign the default server hosting port if applicable
+	UFUNCTION(BlueprintPure, Category = "PlayFab|GSDK|SetDefaultServerHostPort")
+	static bool SetDefaultServerHostPort();
+
 protected:
 	/// Returns all configuration settings
 	/// Returns a map of configuration setting values
