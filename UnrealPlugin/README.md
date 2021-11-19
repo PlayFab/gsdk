@@ -15,7 +15,7 @@ The sample game these instructions were created with was called ThirdPersonMP, s
 
 * Download Visual Studio. The [community version](https://visualstudio.microsoft.com/vs/community/) is free.
 	* Required workloads: .NET desktop development and Desktop development with C++
-* Download Unreal Engine Source Code. This plugin was tested on Unreal Engine 4.26.2. For instructions, see [Downloading Unreal Engine Source code (external)](https://docs.unrealengine.com/4.26/en-US/ProgrammingAndScripting/ProgrammingWithCPP/DownloadingSourceCode/).
+* Download Unreal Engine Source Code. This plugin was tested on Unreal Engine 4.26.2. For instructions, see [Downloading Unreal Engine Source code (external)](https://docs.unrealengine.com/4.26/ProgrammingAndScripting/ProgrammingWithCPP/DownloadingSourceCode/).
 * If you haven't already, please git clone this repo to your local machinne
 	* ```git clone https://github.com/PlayFab/gsdk.git```
 	* Later steps will involve integrating files from this repo to your project

@@ -27,13 +27,13 @@ This guide explains how to deploy your game to PlayFab Multiplayer Server (MPS) 
 	* Navigate to the .uproject file for your project
 	* Right-click on the .uproject file in your file editor and select "Generate Visual Studio Project Files"	
 	* Re-open the {ProjectName}.sln file in Visual Studio
-* Choose "development editor" configuration
+* Select __Development Editor__ configuration
 * Run your project
 * Observe the Unreal Editor, which should have loaded your project
 * In the top left of the Unreal editor menu, Select __File__ -> __Package__ -> __Build Target__ -> __{ProjectName}Server__
 * Select __File__ -> __Package__ -> __Build Configuration__ -> __Shipping__
 * Select __File__ -> __Package__ -> __Windowsx64__
-* Choose and remember an output location {ShippingServerFolder}
+* Select and remember an output location {ShippingServerFolder}
 * You can now use this packaged version of your game server to [test with LocalMultiplayerAgent](https://docs.microsoft.com/gaming/playfab/features/multiplayer/servers/locally-debugging-game-servers-and-integration-with-playfab)
 * Once verified with LocalMultiplayerAgent, see [creating a build guide](https://docs.microsoft.com/gaming/playfab/features/multiplayer/servers/deploying-playfab-multiplayer-server-builds)
 	* Testing on MPS at this point will require an intermediate tool from [PlayFab MpsAllocatorSample](https://github.com/PlayFab/MpsSamples/blob/master/MpsAllocatorSample/README.md)
@@ -57,7 +57,7 @@ This section will cover creating a build in PlayFab MPS, uploading your game ser
 	* Improving/Raising this number is based on the performance of your game server
 * Skip "Server details" (covered in the next step)
 * In the Assets block, drag your zip file from the previous section into the upload box
-	* If you're re-launching, you can choose "Use existing assets"
+	* If you're re-launching, you can select __Use existing assets__
 * Wait for the upload to complete
 * Skip "Start Command" (covered in the next step)
 * In the Network block, set the Port Name field to ```UnrealServerGsdkHostPort```
@@ -82,7 +82,7 @@ This option runs your game server(s) as a process directly on the VM. Your proce
 
 This option runs your game server(s) in docker containers, isolating them from eachother. Each server process will have a separate virtual drive, virtual network ports, etc. This option unzips your asset to a Mount Path you will define, and expects your start command to be a full path, based on the Mount Path.
 
-* In __Server Details__, choose __Process__ and __Windows__
+* In __Server Details__, select __Process__ and __Windows__
 * In __Assets__
 	* Set the "Mount Path" for your gameServer zip file to "C:\assets" (or something similar, denoted as {MountPath})
 	* Set the start command to: ```{MountPath}\{ProjectName}Server.exe``` or ```{MountPath}\{ProjectName}Server.exe -log``` if you want to generate log files
