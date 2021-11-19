@@ -128,7 +128,7 @@ Make sure that the line endings in the startup.sh file are LF (\\n) and not CRLF
 
 A new build is configured without regions, and will idle in an unfinished state. By adding regions, we'll launch actual servers, and be ready to connect.
 
-* Select the __New Build__ button. This will take you to the __Regions __ page of the newly created build.
+* Select the __New Build__ button. This will take you to the __Regions__ page of the newly created build.
 * Select __Add Region__
 	* In the prerequisites, you will have reserved some availability in some predefined regions.
 	* Select an available region close to you
@@ -136,11 +136,10 @@ A new build is configured without regions, and will idle in an unfinished state.
 	* Maximum: 1
 * Submit
 * Wait aproximately 10 minutes for a server to launch
-* Skip ahead to connect your game client
 
 ### Connect Game Client to MPS hosted build
 
-TODO
+(Under construction, coming soon!)
 
 # Navigation
 
