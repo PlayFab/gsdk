@@ -93,6 +93,8 @@ This option runs your game server(s) in docker containers, isolating them from e
 
 ### Setting up a Linux Dedicated Server on PlayFab
 
+A more detailed Linux guide can be found [here](https://github.com/PlayFab/MpsAgent/blob/main/LocalMultiplayerAgent/MultiplayerSettingsLinuxContainersOnWindowsSample.json)
+
 During testing the following Dockerfile + startup.sh script worked excellent with the PlayFab Linux VM:
 
 #### The Linux Dockerfile:
