@@ -66,10 +66,6 @@ void FPlayFabGSDKModule::StartupModule()
 void FPlayFabGSDKModule::ShutdownModule()
 {
 #if PLAYFAB_GSDK_SERVER
-	if (GSDKInternal)
-	{
-		GSDKInternal = nullptr;
-	}
 #endif
 }
 
