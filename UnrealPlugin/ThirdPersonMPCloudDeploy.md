@@ -55,11 +55,11 @@ This section will cover creating a build in PlayFab MPS, uploading your game ser
 * Select a Virtual Machine (For the samples described in these guides, the recommended option with the fewest cores is sufficient)
 * Servers per machine can be aproximately 1~10
 	* Improving/Raising this number is based on the performance of your game server
-* Skip "Server details" (covered in the next step)
+* Skip __Server details__ for now (covered in the next step)
 * In the Assets block, drag your zip file from the previous section into the upload box
 	* If you're re-launching, you can select __Use existing assets__
 * Wait for the upload to complete
-* Skip "Start Command" (covered in the next step)
+* Skip __Start Command__ for now (covered in the next step)
 * In the Network block, set the Port Name field to ```UnrealServerGsdkHostPort```
 	* It's mandatory to define the port that will be used to connect to your game server
 	* Unreal GSDK contains code to read this port automatically, and internaly override the Unreal Server host port according to this value
@@ -76,7 +76,7 @@ This option runs your game server(s) as a process directly on the VM. Your proce
 	* The start command is executed from the command line, using your unzipped asset files as the working directory
 	* If you chose to pack your zip file with sub-folders, you can specify a relative path such as: ```WindowsServer/{ProjectName}Server.exe``` to access your project with a relative sub-path
 * Select __Add Build__
-* Skip ahead to the (Configure Regions)[#Configure Regions] section below
+* Skip ahead to the [Configure Regions](#Configure Regions) section below
 
 #### Option 2: Windows Container Mode
 
@@ -89,7 +89,7 @@ This option runs your game server(s) in docker containers, isolating them from e
 	* The start command should represent a full path in the container, to your -Server.exe file
 	* If you chose to pack your zip file with sub-folders, you can specify an absolute path such as: ```{MountPath}\WindowsServer\{ProjectName}Server.exe``` to access your project with an absolute sub-path
 * Select __Add Build__
-* Skip ahead to the (Configure Regions)[#Configure Regions] section below
+* Skip ahead to the [Configure Regions](#Configure Regions) section below
 
 ### Setting up a Linux Dedicated Server on PlayFab
 
