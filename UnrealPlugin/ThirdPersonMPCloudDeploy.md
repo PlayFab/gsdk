@@ -76,7 +76,7 @@ This option runs your game server(s) as a process directly on the VM. Your proce
 	* The start command is executed from the command line, using your unzipped asset files as the working directory
 	* If you chose to pack your zip file with sub-folders, you can specify a relative path such as: ```WindowsServer/{ProjectName}Server.exe``` to access your project with a relative sub-path
 * Select __Add Build__
-* Skip ahead to the [Configure Regions](#ConfigureRegions) section below
+* Skip ahead to the __Configure Regions__ section below
 
 #### Option 2: Windows Container Mode
 
@@ -89,7 +89,7 @@ This option runs your game server(s) in docker containers, isolating them from e
 	* The start command should represent a full path in the container, to your -Server.exe file
 	* If you chose to pack your zip file with sub-folders, you can specify an absolute path such as: ```{MountPath}\WindowsServer\{ProjectName}Server.exe``` to access your project with an absolute sub-path
 * Select __Add Build__
-* Skip ahead to the [Configure Regions](#ConfigureRegions) section below
+* Skip ahead to the __Configure Regions__ section below
 
 ### Setting up a Linux Dedicated Server on PlayFab
 
