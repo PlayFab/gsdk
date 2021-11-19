@@ -56,7 +56,7 @@ This section will cover creating a build in PlayFab MPS, uploading your game ser
 * Servers per machine can be aproximately 1~10
 	* Improving/Raising this number is based on the performance of your game server
 * Skip "Server details" (covered in the next step)
-* In the Assets block, drag your zip file from the previous section into the  upload box
+* In the Assets block, drag your zip file from the previous section into the upload box
 	* If you're re-launching, you can choose "Use existing assets"
 * Wait for the upload to complete
 * Skip "Start Command" (covered in the next step)
