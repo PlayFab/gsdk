@@ -50,7 +50,7 @@ This guide explains how to deploy your game to PlayFab Multiplayer Server (MPS) 
 This section will cover creating a build in PlayFab MPS, uploading your game server, and connecting to it for the first time.
 
 * Navigate to Game Manager -> Multiplayer
-* Select "New Build"
+* Select __New Build__
 * Give the build a name
 * Select a Virtual Machine (For the samples described in these guides, the recommended option with the fewest cores is sufficient)
 * Servers per machine can be aproximately 1~10
@@ -76,7 +76,7 @@ This option runs your game server(s) as a process directly on the VM. Your proce
 	* The start command is executed from the command line, using your unzipped asset files as the working directory
 	* If you chose to pack your zip file with sub-folders, you can specify a relative path such as: ```WindowsServer/{ProjectName}Server.exe``` to access your project with a relative sub-path
 * Select __Add Build__
-* Skip ahead to the [Configure Regions](#Configure Regions) section below
+* Skip ahead to the [Configure Regions](#ConfigureRegions) section below
 
 #### Option 2: Windows Container Mode
 
@@ -84,12 +84,12 @@ This option runs your game server(s) in docker containers, isolating them from e
 
 * In __Server Details__, select __Process__ and __Windows__
 * In __Assets__
-	* Set the "Mount Path" for your gameServer zip file to "C:\assets" (or something similar, denoted as {MountPath})
+	* Set the __Mount Path__ for your gameServer zip file to ```C:\assets``` (or something similar, denoted as {MountPath})
 	* Set the start command to: ```{MountPath}\{ProjectName}Server.exe``` or ```{MountPath}\{ProjectName}Server.exe -log``` if you want to generate log files
 	* The start command should represent a full path in the container, to your -Server.exe file
 	* If you chose to pack your zip file with sub-folders, you can specify an absolute path such as: ```{MountPath}\WindowsServer\{ProjectName}Server.exe``` to access your project with an absolute sub-path
 * Select __Add Build__
-* Skip ahead to the [Configure Regions](#Configure Regions) section below
+* Skip ahead to the [Configure Regions](#ConfigureRegions) section below
 
 ### Setting up a Linux Dedicated Server on PlayFab
 
