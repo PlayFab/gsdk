@@ -12,7 +12,7 @@ The purpose of this guide is to demonstrate running your game-server on your loc
 
 * Download Visual Studio. The [community version](https://visualstudio.microsoft.com/vs/community/) is free.
 	* Required workloads: .NET desktop development and Desktop development with C++
-* Download Unreal Engine Source Code. This plugin was tested on Unreal Engine 4.26.2. For instructions, see [Downloading Unreal Engine Source code (external)](https://docs.unrealengine.com/4.26/en-US/ProgrammingAndScripting/ProgrammingWithCPP/DownloadingSourceCode/).
+* Download Unreal Engine Source Code. This plugin was tested on Unreal Engine 4.26.2. For instructions, see [Downloading Unreal Engine Source code (external)](https://docs.unrealengine.com/4.26/ProgrammingAndScripting/ProgrammingWithCPP/DownloadingSourceCode/).
 * [Completed Unreal Project](ThirdPersonMPSetup.md) with [PlayFab Unreal GSDK](ThirdPersonMPGSDKSetup.md) installed and configured
 * ["Development Server"](ThirdPersonMPBuild.md) configuration of your project built from Visual Studio
 * [Optional] Download the [LocalMultiplayerAgent](https://github.com/PlayFab/MpsAgent/releases)
@@ -76,19 +76,13 @@ In Explorer, find and open the file: ```{depot}\MpsAgent\LocalMultiplayerAgent\M
 For the purposes of this guide, the parts of the json file obscured by ```...``` above, just utilize the project defaults. The purpose and values for the important fields are as follows:
 
 * RunContainer: For this guide, this will always be false. Setting this to true requires Docker.
-    * When true, the zip file in <PATH TO ZIP> must contain the entire project server release build
 	* When true, the ProcessStartParameters/StartGameCommand is ignored, and ContainerStartParameters/StartGameCommand is used instead
 	* When true, everything is built and run in a docker container, rather than on the local machine context
 	* This guide covers the scenario when RunContainer is false, so that we can more easily debug the server process
 	* Setting this to true requires a Shipping Server build, additional [Windows](https://docs.adamrehn.com/ue4-docker/configuration/configuring-windows-server) or [Linux](https://unrealcontainers.com/blog/identifying-application-runtime-dependencies/) DLLs, and [Docker for Windows](https://www.docker.com/products/docker-desktop)
 * AssetDetails/LocalFilePath: <PATH TO ZIP>
 	* This location must be fully defined, and a valid zip file must exist at this location
-	* When RunContainer==false, this file is ignored, but its existence is still required
-	* The zip file can be empty
-	* This requirement is a low priority polish item that hasn't been resolved yet
-	* For this example, this could be: ```{depot}\\empty.zip```
-	* For the author, this is: ```"M:\\depot\\GSDK\\ThirdPersonMPGSDK\\Binaries\\Win64\\ThirdPersonMPServer.zip```, with an empty zip file at that location
-	* NOTE: When RunContainer==true, the contents of this file will be relevant and used, and should contain your Shipping Server
+	* This zip file should contain a fully constructed "Shipping Server" build
 * PortMappingsList:
 	* This is the LocalMultiplayerAgent equivalent of defining the port in Game Manager
 	* The GSDK is hard-coded to look for a port with the name: UnrealServerGsdkHostPort
@@ -101,15 +95,23 @@ For the purposes of this guide, the parts of the json file obscured by ```...```
 	* For this example, this could be: ```C:\\Assets\\ThirdPersonMPServer.exe -log```
 * ProcessStartParameters/StartGameCommand: This command will effectively be the path to your exe, and any command-line parameters used to start your game server
 	* -log is an Unreal command to instruct the game-server to save an execution log
-	* <PATH TO EXE> can be any local path to the exe for your game server, plus any command line parameters for your server
-	* For this example, this could be: ```{depot}\\ThirdPersonMP\\Binaries\\Win64\\ThirdPersonMPServer.exe -log```
-	* For the author, this is: ```M:\\depot\\GSDK\\ThirdPersonMPGSDK\\Binaries\\Win64\\ThirdPersonMPServer.exe -log```
+	* <PATH TO EXE> can be one of two choices:
+		* Any absolute path to an exe for your game server (even development game server), plus any command line parameters for your server
+			* This choice will ignore the contents of the zip file, and instead execute any arbitrary exe in any location
+			* This is a local debug option that only works on your local machine to debug development builds: It does not help you verify your zip file is ready to upload to MPS
+			* This choice should be used when testing a development server, suitable for attaching a VS debugger
+			* For this example, this could be: ```{depot}\\ThirdPersonMP\\Binaries\\Win64\\ThirdPersonMPServer.exe -log```
+			* For the author, this is: ```M:\\depot\\GSDK\\ThirdPersonMPGSDK\\Binaries\\Win64\\ThirdPersonMPServer.exe -log```
+		* A relative path, which should indicate the relative path into your zip file, to run your server
+			* This is the standard workflow that mirrors how it works on a MPS cloud instance
+			* This choice should be used when testing a shipping server, and helps verify your zip is ready to upload to MPS
+			* For this example, this could be: ```ThirdPersonMPServer.exe -log```
 
 Once you have created your zip file and set all of these lines to appropriate values, you can rebuild your LocalMultiplayerAgent, and prepare to debug your server.
 
 ### Debugging your server
 
-You can run LocalMultiplayerAgent from Visual Studio with the "Start New Instance" command, sometimes bound to F5, or you can navigate to ```{depot}\LocalMultiplayerAgent\bin\{configuration}\netcoreapp3.1``` and double click "LocalMultiplayerAgent.exe". You can also run this from within a cmd window to observe or capture debug log information.
+You can run LocalMultiplayerAgent from Visual Studio with the "Start New Instance" command, sometimes bound to F5, or you can navigate to ```{depot}\LocalMultiplayerAgent\bin\{configuration}\netcoreapp3.1``` and double-click "LocalMultiplayerAgent.exe". You can also run this from within a cmd window to observe or capture debug log information.
 
 Running LocalMultiplayerAgent.exe should start your game server. You will usually want to have Task Manager open for this. You can find your game server process ID in the Details tab of Task Manager.
 

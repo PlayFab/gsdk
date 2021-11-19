@@ -18,7 +18,7 @@ We will add and configure the Playfab Unreal GSDK to your project, and test it l
 
 * Download Visual Studio. The [community version](https://visualstudio.microsoft.com/vs/community/) is free.
 	* Required workloads: .NET desktop development and Desktop development with C++
-* Download Unreal Engine Source Code. This plugin was tested on Unreal Engine 4.26.2. For instructions, see [Downloading Unreal Engine Source code (external)](https://docs.unrealengine.com/4.26/en-US/ProgrammingAndScripting/ProgrammingWithCPP/DownloadingSourceCode/).
+* Download Unreal Engine Source Code. This plugin was tested on Unreal Engine 4.26.2. For instructions, see [Downloading Unreal Engine Source code (external)](https://docs.unrealengine.com/4.26/ProgrammingAndScripting/ProgrammingWithCPP/DownloadingSourceCode/).
 * A completed [ThirdPersonMP Example Project](ThirdPersonMPSetup.md), or a project with similar capabilities
 * [PlayFab Unreal GSDK plugin](https://github.com/PlayFab/gsdk/tree/master/UnrealPlugin)
 * [Optional] [PlayFab Marketplace plugin](https://www.unrealengine.com/marketplace/product/playfab-sdk) or the [source version on GitHub](https://github.com/PlayFab/UnrealMarketplacePlugin/tree/master/4.26/PlayFabPlugin/PlayFab). This plugin is not required for GSDK but is required for many PlayFab services, including login.
@@ -69,11 +69,11 @@ Update <modulename>.Build.cs file to add "PlayFabGSDK" into the PublicDependency
 PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "HeadMountedDisplay", "PlayFabGSDK" });
 ```
 
-Right click on the .uproject file and choose the option to "Switch Unreal Engine version", which is how you can quickly check which Unreal Engine version you are currently using. The popup seen below should appear. If you already see that the Unreal Engine version is source build, you don’t need to change anything, so click Cancel. If the Unreal version is not currently the source build, select it from the dropdown list and then click OK.
+Right-click on the .uproject file and choose the option to "Switch Unreal Engine version", which is how you can quickly check which Unreal Engine version you are currently using. The popup seen below should appear. If you already see that the Unreal Engine version is source build, you don’t need to change anything, so click Cancel. If the Unreal version is not currently the source build, select it from the dropdown list and then click OK.
 
 ![image depicting a window that says "Select Unreal Engine Version"](Documentation/SelectUnrealEngineVersion.png)
 
-Right click on the .uproject file again and select "Generate Visual Studio Project Files".
+Right-click on the .uproject file again and select "Generate Visual Studio Project Files".
 
 Then, build the project in Visual Studio and start the Editor by selecting the Development Editor configuration.
 
@@ -257,7 +257,7 @@ bool UMyGameInstance::OnGSDKHealthCheck()
 * In the All classes dropdown menu find your GameInstance class
 	* In this example the blueprint is named "MyGameInstance"
 * Double-click the blueprint
-* On the left side hover over the function field and click the Override dropdown
+* On the left side hover over the function field and select the Override dropdown
 * Select the Init function
 * Right-click in the graph and add in all register GSDK function
 * For GSDK Shutdown and Maintenance Delegate drag out the a line from the red square, and select "Add Custom Event"
