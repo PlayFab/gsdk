@@ -185,6 +185,8 @@ void U[YourGameInstanceClassName]::Init()
 
     UGSDKUtils::RegisterGSDKShutdownDelegate(OnGsdkShutdown);
     UGSDKUtils::RegisterGSDKHealthCheckDelegate(OnGsdkHealthCheck);
+
+    UGSDKUtils::SetDefaultServerHostPort();
 }
 ```
 
