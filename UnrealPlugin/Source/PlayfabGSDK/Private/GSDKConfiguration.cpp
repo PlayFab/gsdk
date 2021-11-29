@@ -15,7 +15,7 @@
 #include "GSDKConfiguration.h"
 
 #include "GSDKInternalUtils.h"
-#include "PlayFabGSDK.h"
+#include "PlayfabGSDK.h"
 #include "Logging/LogMacros.h"
 #include "Misc/FileHelper.h"
 
