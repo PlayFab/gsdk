@@ -14,7 +14,7 @@
 
 #include "GSDKUtils.h"
 
-#include "PlayFabGSDK.h"
+#include "PlayfabGSDK.h"
 
 bool UGSDKUtils::ReadyForPlayers()
 {
