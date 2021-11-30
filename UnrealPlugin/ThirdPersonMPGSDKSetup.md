@@ -185,8 +185,6 @@ void U[YourGameInstanceClassName]::Init()
 
     UGSDKUtils::RegisterGSDKShutdownDelegate(OnGsdkShutdown);
     UGSDKUtils::RegisterGSDKHealthCheckDelegate(OnGsdkHealthCheck);
-
-    UGSDKUtils::SetDefaultServerHostPort();
 }
 ```
 
@@ -215,6 +213,7 @@ If you already **had** an Init() function, go to check in [YourGameInstanceClass
 
 ```cpp
 #if UE_SERVER
+    UGSDKUtils::SetDefaultServerHostPort();
     if (!UGSDKUtils::ReadyForPlayers())
     {
         FPlatformMisc::RequestExit(false);
