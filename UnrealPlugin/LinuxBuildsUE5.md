@@ -67,6 +67,8 @@ At this point, you are ready to push your docker image in the Playfab Azure Cont
 * Select your title
 * Select the **Multiplayer** tab on the left
 * Select **New Build** on the right of the screen.
+* Choose a name
+* Select a VM type, for ThirdPersonMP projects **Dasv4 (2 cores)** will be sufficient
 * Under Server Details, set Server Type to **Container** and Operating System to **Linux**.
 * Click the **Upload to container registry** button.
 * On the window that pops up:
@@ -79,7 +81,17 @@ At this point, you are ready to push your docker image in the Playfab Azure Cont
     * Recall, AzureUsername was displayed on the PlayFab developer portal, and imageName and tag where chosen by you earlier.
 * Back on the Playfab website, under the Server Details on the New Build page, click Refresh next to Container image.
 * Click the arrow button and you should be able to see and select the docker image you just uploaded with the respective tag.
+* In the Regions block, select a region close to you, and set both Standby and Max to 1 (just for testing)
 * In the Network block, set the Port Name field to ```UnrealServerGsdkHostPort```
     * It's mandatory to define the port that will be used to connect to your game server
     * Unreal GSDK contains code to read this port automatically, and internaly override the Unreal Server host port according to this value
     * It requires that the name of this port be set properly to ```UnrealServerGsdkHostPort```
+* Select **Add Build**, and wait for your build status to become **Deployed**
+
+# Navigation
+
+Many users will want to test their server by [connecting a game client](ThirdPersonClientConnect.md).
+
+Other users may optionally continue on to rebuild and redeploy their servers using [Linux containers](LinuxBuildsUE5.md). This reduces the server hosting costs for large scale deployment.
+
+Otherwise, you can return to the main [Unreal GSDK Plugin](README.md) guide.

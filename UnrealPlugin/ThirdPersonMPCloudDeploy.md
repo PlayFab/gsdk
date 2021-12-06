@@ -92,12 +92,10 @@ This option runs your game server(s) in docker containers, isolating them from e
 * Select __Add Build__
 * Skip ahead to the __Configure Regions__ section below
 
-### Connect Game Client to MPS hosted build
-
-(Under construction, coming soon!)
-
 # Navigation
 
-For some users, this guide sequence is now finished. You can return to the main [Unreal GSDK Plugin](README.md) guide.
+Many users will want to test their server by [connecting a game client](ThirdPersonClientConnect.md).
 
 Other users may optionally continue on to rebuild and redeploy their servers using [Linux containers](LinuxBuildsUE5.md). This reduces the server hosting costs for large scale deployment.
+
+Otherwise, you can return to the main [Unreal GSDK Plugin](README.md) guide.
