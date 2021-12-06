@@ -9,14 +9,14 @@ and Unreal Engine 4.26 but the following steps will be specific to Unreal Engine
 
 ## Instructions
 
-* Download the toolchain for your engine and run the executable. Please note, like many parts of these guides, this will work only if your Unreal Engine build is from source.
-    * After the installation is complete, go to environment variables and confirm the following system variable exists: **LINUX_MULTIARCH_ROOT**.
-* In your source Unreal Engine build directory:
+* From **Unreal Linux prerequisites**, download the toolchain for your installed Unreal Engine and run the executable. Please note, like many parts of these guides, this will work only if your Unreal Engine built from source.
+    * After the installation is complete, examine your Windows environment variables and confirm the following system variable exists: **LINUX_MULTIARCH_ROOT**.
+* In your Unreal Engine source directory:
     * Rerun: ```Setup.bat```
     * Rerun: ```GenerateProjectFiles.bat```
 * Return to your own project:
     * Right-click your .uproject file, and **Generate Visual Studio project files**
-    * Open the .sln file in Visual studio
+    * Open the .sln file in Visual Studio
     * Set the configuration to **Development Editor**
     * Build and run the Unreal Editor
 * At this point, you should be able to package your project for Linux server in a directory of your choice.
