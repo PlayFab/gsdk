@@ -32,7 +32,7 @@ In this section, we'll set up a Docker image that contains your Linux Server
 * Edit the file with your editor of choice (notepad, vim, emacs etc.)
 * Copy - paste the content presented below. Make sure to replace [YourGameNameServer].sh with the name of your own linux server executable (in the same directory)
 
-```bash
+```Docker
 FROM ubuntu:18.04
 
 # Unreal refuses to run as root user, so we must create a user to run as
