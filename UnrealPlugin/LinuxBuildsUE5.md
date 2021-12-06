@@ -23,8 +23,9 @@ In a terminal of your choice, follow these steps:
 * cd into the LinuxServer directory that was selected for packaging.
 * Create a file named: dockerfile
 * Edit the file with your editor of choice (vim, emacs etc.)
-* Copy - paste the content presented below. Make sure to replace [run].sh with the name of your linux server executable.
+* Copy - paste the content presented below. Make sure to replace [YourGameNameServer].sh with the name of your linux server executable.
 
+```bash
 FROM ubuntu:18.04
 
 # Unreal refuses to run as root user, so we must create a user to run as
@@ -38,6 +39,7 @@ WORKDIR /server
 
 COPY --chown=ue:ue . /server
 CMD ./YourGameNameServer.sh
+```
 
 
 * Run: docker build -t "[imageName]:[tag]" .
