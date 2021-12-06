@@ -5,7 +5,7 @@ and Unreal Engine 4.26 but the following steps will be specific to Unreal Engine
 
 ## Requirements
 * Install [Unreal Linux prerequisites](https://docs.unrealengine.com/4.27/SharingAndReleasing/Linux/GettingStarted/)
-* [OPTIONAL] Install [Docker for Windows](https://docs.docker.com/desktop/windows/install/)
+* Install [Docker for Windows](https://docs.docker.com/desktop/windows/install/)
 
 ## Instructions
 
