@@ -14,7 +14,7 @@ There is an [Unreal guide](https://docs.unrealengine.com/4.27/en-US/SharingAndRe
 * After the installation is complete, go to environment variables and make sure this exists on your system variables: **LINUX_MULTIARCH_ROOT**.
 * In the directory of your source Unreal Engine build, run again Setup.bat and GenerateProjectFiles.bat.
 * Now you can go back to your Unreal Engine project, build it in Development Editor mode and open the Unreal Editor.
-* At this point, you should be able to package your project in Linux for both client and server in a directory of your choice. For Unreal Engine 5, click packaging and the Linux option should now be available to be selected.
+* At this point, you should be able to package your project in Linux for both client and server in a directory of your choice. For Unreal Engine 5, in the Editor, click packaging on the top right of the screen and the Linux option should now be available to be selected.
 
 ## Create Docker Image of the Linux Server.
 
@@ -42,7 +42,7 @@ CMD ./YourGameNameServer.sh
 ```
 
 
-* Run: ```docker build -t "[imageName]:[tag]" . ``` Where imageName and tag are options of your choice.
+* Run: ```docker build -t "[imageName]:[tag]" . ```, where imageName and tag are options of your choice.
 * Type **docker images** on the terminal to inspect the succesful creation of the docker image.
 
 ## Upload the Container Image on the Playfab Azure Registry
@@ -54,9 +54,9 @@ At this point, you are ready to push your docker image in the Playfab Azure Cont
 * Click the **Upload to container registry** button.
 * On the window that pops up, click the **Copy Docker Login Command**.
 * Paste the command on the terminal that was open for creating the docker image for the previous step. This will log you in the Azure Registry used by Playfab.
-* On the terminal, type: ```docker tag [imageName]:[tag] customerzpqyvylj3p36i.azurecr.io/[imageName]:[tag]```, where imageName and tag where chosen in the previous step. If you are not sure, you can type **docker images** on thet terminal and inspect them.
+* On the terminal, type: ```docker tag [imageName]:[tag] customerzpqyvylj3p36i.azurecr.io/[imageName]:[tag]```, where imageName and tag where chosen in the previous step. If you are not sure, you can type **docker images** on the terminal and inspect them.
 * Type: ```docker push customerzpqyvylj3p36i.azurecr.io/[imageName]:[tag]```
 * Back on the Playfab website, under the Server Details on the New Build page, click Refresh next to Container image.
-* Click the arrow button and you should be able to see and select the docker image you just uploaded.
+* Click the arrow button and you should be able to see and select the docker image you just uploaded with the respective tag.
 * Fill in the rest of the required information on this page and you will be able to deploy your linux server build on PlayFab Multiplayer Servers.
 
