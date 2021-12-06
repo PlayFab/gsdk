@@ -56,7 +56,7 @@ Once you have any client build, and a "Development Server" build, you can [test 
 
 ## Deploy to PlayFab
 
-Finally, you're ready to [create game servers in the cloud](ThirdPersonMPCloudDeploy.md) using PlayFab Multiplayer Services.
+Finally, you're ready to create game servers in the cloud using PlayFab Multiplayer Services. PlayFab MPS supports [Windows servers](ThirdPersonMPCloudDeploy.md) and [Linux servers](LinuxBuildsUE5.md).
 
 # Acknowledgements
 

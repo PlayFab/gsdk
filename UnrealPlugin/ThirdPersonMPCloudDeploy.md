@@ -1,6 +1,6 @@
 # ThirdPersonMP Example Project Cloud Deployment
 
-This guide explains how to deploy your game to PlayFab Multiplayer Server (MPS) cloud. This is the final step in the entire game server cloud deployment process.
+This guide explains how to deploy your Windows server build to PlayFab Multiplayer Server (MPS) cloud. This is great for testing and rapid iteration of your game server while in development. Many users will use [Linux servers](LinuxBuildsUE5.md) for a production release after testing with Windows.
 
 ## Goals
 
@@ -16,6 +16,7 @@ This guide explains how to deploy your game to PlayFab Multiplayer Server (MPS) 
 * [Release Server](ThirdPersonMPBuild.md) configuration of your project built from Visual Studio or Development Editor
 * [Client](ThirdPersonMPBuild.md) configuration of your project built from Visual Studio or Development Editor
 * MPS is [enabled for your title](https://docs.microsoft.com/gaming/playfab/features/multiplayer/servers/enable-playfab-multiplayer-servers), and billing is set up
+* [Optional] Install [Docker for Windows](https://docs.docker.com/desktop/windows/install/)
 
 ## Instructions
 
@@ -91,56 +92,12 @@ This option runs your game server(s) in docker containers, isolating them from e
 * Select __Add Build__
 * Skip ahead to the __Configure Regions__ section below
 
-### Setting up a Linux Dedicated Server on PlayFab
-
-A more detailed Linux guide can be found [here](https://github.com/PlayFab/MpsAgent/blob/main/LocalMultiplayerAgent/MultiplayerSettingsLinuxContainersOnWindowsSample.json)
-
-During testing the following Dockerfile + startup.sh script worked excellent with the PlayFab Linux VM:
-
-#### The Linux Dockerfile:
-
-```Dockerfile
-FROM ubuntu:18.04
-
-# Unreal refuses to run as root user, so we must create a user to run as
-# Docker uses root by default
-RUN useradd --system ue
-USER ue
-
-EXPOSE 7777/udp
-
-WORKDIR /server
-
-COPY --chown=ue:ue . /server
-USER root
-CMD ./startup.sh
-```
-
-### startup.sh bash script:
-
-```bash
-chown -R ue.ue $PF_SERVER_LOG_DIRECTORY
-su ue -c ./<projectname>Server.sh
-```
-Make sure that the line endings in the startup.sh file are LF (\\n) and not CRLF (\\r\\n).
-
-#### Configure Regions
-
-A new build is configured without regions, and will idle in an unfinished state. By adding regions, we'll launch actual servers, and be ready to connect.
-
-* Select the __New Build__ button. This will take you to the __Regions__ page of the newly created build.
-* Select __Add Region__
-	* In the prerequisites, you will have reserved some availability in some predefined regions.
-	* Select an available region close to you
-	* Target Standby: 1
-	* Maximum: 1
-* Submit
-* Wait aproximately 10 minutes for a server to launch
-
 ### Connect Game Client to MPS hosted build
 
 (Under construction, coming soon!)
 
 # Navigation
 
-This guide sequence is finished. You can return to the main [Unreal GSDK Plugin](README.md) guide.
+For some users, this guide sequence is now finished. You can return to the main [Unreal GSDK Plugin](README.md) guide.
+
+Other users may optionally continue on to rebuild and redeploy their servers using [Linux containers](LinuxBuildsUE5.md). This reduces the server hosting costs for large scale deployment.
