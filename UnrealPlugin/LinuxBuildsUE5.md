@@ -46,8 +46,9 @@ EXPOSE 7777/udp
 WORKDIR /server
 
 COPY --chown=ue:ue . /server
-CMD ./YourGameNameServer.sh
+USER root
 
+# Give permission to UE to write the logs on GameLogs 
 CMD chown -R ue.ue $PF_SERVER_LOG_DIRECTORY && su ue -c ./YourGameNameServer.sh
 ```
 
