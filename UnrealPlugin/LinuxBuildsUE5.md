@@ -47,6 +47,8 @@ WORKDIR /server
 
 COPY --chown=ue:ue . /server
 CMD ./YourGameNameServer.sh
+
+CMD chown -R ue.ue $PF_SERVER_LOG_DIRECTORY && su ue -c ./YourGameNameServer.sh
 ```
 
 * Using a terminal of your choice, navigate to the Linux server directory
