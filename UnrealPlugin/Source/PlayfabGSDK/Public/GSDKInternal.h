@@ -140,11 +140,6 @@ public:
 		return ConnectionInfo;
 	}
 
-	FEvent* GetTransitionToActiveEvent()
-	{
-		return TransitionToActiveEvent;
-	}
-
 	FHeartbeatRequest& GetHeartbeatRequest()
 	{
 		return HeartbeatRequest;
@@ -155,10 +150,12 @@ public:
 	void SetConnectedPlayers(const TArray<FConnectedPlayer>& CurrentConnectedPlayers);
 
 	DECLARE_DELEGATE(FOnShutdown);
+	DECLARE_DELEGATE(FOnransitionToActive);
 	DECLARE_DELEGATE_RetVal(bool, FOnHealthCheck);
 	DECLARE_DELEGATE_OneParam(FOnMaintenance, const FDateTime&)
 
 	FOnShutdown OnShutdown;
+	FOnransitionToActive OnTransitionToActive;
 	FOnMaintenance OnMaintenance;
 	FOnHealthCheck OnHealthCheck;
 private:
@@ -203,7 +200,6 @@ private:
 	FCriticalSection StateMutex;
 	FCriticalSection PlayersMutex;
 
-	FEvent* TransitionToActiveEvent;
 	FEvent* SignalHeartbeatEvent;
 
 	TArray<FString> InitialPlayers;

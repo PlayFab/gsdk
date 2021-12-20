@@ -23,6 +23,7 @@
 #include "GSDKUtils.generated.h"
 
 DECLARE_DYNAMIC_DELEGATE(FOnGSDKShutdown_Dyn);
+DECLARE_DYNAMIC_DELEGATE(FOnGSDKTransitionToActive_Dyn);
 DECLARE_DYNAMIC_DELEGATE_RetVal(bool, FOnGSDKHealthCheck_Dyn);
 DECLARE_DYNAMIC_DELEGATE_OneParam(FOnGSDKMaintenance_Dyn, const FDateTime&, MaintenanceTime);
 
@@ -96,6 +97,11 @@ public:
 	/// Register the GSDK Shutdown Delegate to get notified when the server gets shutdown by outside forces
 	UFUNCTION(BlueprintCallable, Category="PlayFab|GSDK|Callbacks")
 	static void RegisterGSDKShutdownDelegate(const FOnGSDKShutdown_Dyn& OnGSDKShutdownDelegate);
+
+	/// Register the GSDK Transition To Active State Delegate to get notified when the server
+	/// transitions from StandBy / Waiting to Active
+	UFUNCTION(BlueprintCallable, Category = "PlayFab|GSDK|Callbacks")
+	static void RegisterGSDKTransitionToActive(const FOnGSDKTransitionToActive_Dyn& OnGSDKTransitionToActiveDelegate);
 
 	/// Register the GSDK Health Delegate, which gets called on every heartbeat to ensure that the server is still healthy
 	UFUNCTION(BlueprintCallable, Category="PlayFab|GSDK|Callbacks")

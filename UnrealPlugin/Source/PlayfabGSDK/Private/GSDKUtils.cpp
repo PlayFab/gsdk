@@ -103,6 +103,27 @@ void UGSDKUtils::RegisterGSDKShutdownDelegate(const FOnGSDKShutdown_Dyn& OnGSDKS
 	});
 }
 
+void UGSDKUtils::RegisterGSDKTransitionToActive(const FOnGSDKTransitionToActive_Dyn& OnGSDKTransitionToActiveDelegate)
+{
+	if (FPlayFabGSDKModule::Get().OnTransitionToActive.IsBound())
+	{
+		UE_LOG(LogPlayFabGSDK, Error, TEXT("GSDK TransitionToActive Delegate is already bound! Will unbind the old binding!"));
+	}
+
+	FPlayFabGSDKModule::Get().OnTransitionToActive.Unbind();
+	FPlayFabGSDKModule::Get().OnTransitionToActive.BindLambda([OnGSDKTransitionToActiveDelegate]()
+	{
+		if (OnGSDKTransitionToActiveDelegate.IsBound())
+		{
+			OnGSDKTransitionToActiveDelegate.Execute();
+		}
+	});
+	/**
+	 * Server is transitioning to an active state. 
+	 * Optional: Add in the implementation any code that is needed for the game server when this transition occurs.
+	 */
+}
+
 void UGSDKUtils::RegisterGSDKHealthCheckDelegate(const FOnGSDKHealthCheck_Dyn& OnGSDKHealthCheckDelegate)
 {
 	if (FPlayFabGSDKModule::Get().OnHealthCheck.IsBound())

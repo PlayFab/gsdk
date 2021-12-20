@@ -59,12 +59,16 @@ public:
 
 protected:
 	DECLARE_DELEGATE(FOnShutdown);
+	DECLARE_DELEGATE(FOnTransitionToActive);
 	DECLARE_DELEGATE_RetVal(bool, FOnHealthCheck);
 	DECLARE_DELEGATE_OneParam(FOnMaintenance, const FDateTime&)
 
 public:
 	/// <summary>Gets called if the server is shutting us down</summary>
 	FOnShutdown OnShutdown;
+
+	/// </summary>Gets called when the server moves to an active state</summary>
+	FOnTransitionToActive OnTransitionToActive;
 
 	/// <summary>Gets called when the agent needs to check on the game's health</summary>
 	FOnHealthCheck OnHealthCheck;

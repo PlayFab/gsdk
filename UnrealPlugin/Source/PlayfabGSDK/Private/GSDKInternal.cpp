@@ -26,8 +26,7 @@
 #include "HAL/Event.h"
 
 FGSDKInternal::FGSDKInternal()
-	: TransitionToActiveEvent(FPlatformProcess::GetSynchEventFromPool(false))
-	, SignalHeartbeatEvent(FPlatformProcess::GetSynchEventFromPool(false))
+	: SignalHeartbeatEvent(FPlatformProcess::GetSynchEventFromPool(false))
 {
 	TUniquePtr<FConfiguration> ConfigPtr;
 
@@ -104,7 +103,6 @@ FGSDKInternal::FGSDKInternal()
 	HttpHeaders.Add(TEXT("Accept"), TEXT("application/json"));
 	HttpHeaders.Add(TEXT("Content-Type"), TEXT("application/json; charset=utf-8"));
 
-	TransitionToActiveEvent->Reset();
 	SignalHeartbeatEvent->Reset();
 
 	KeepHeartbeatRunning = ConfigPtr->ShouldHeartbeat();
@@ -120,7 +118,6 @@ FGSDKInternal::FGSDKInternal()
 FGSDKInternal::~FGSDKInternal()
 {
 	KeepHeartbeatRunning = false;
-	FPlatformProcess::ReturnSynchEventToPool(TransitionToActiveEvent);
 	FPlatformProcess::ReturnSynchEventToPool(SignalHeartbeatEvent);
 	HeartbeatThread.Wait();
 
@@ -382,7 +379,10 @@ void FGSDKInternal::DecodeHeartbeatResponse(const FString& ResponseJson)
 			if (HeartbeatRequest.CurrentGameState != EGameState::Active)
 			{
 				SetState(EGameState::Active);
-				TransitionToActiveEvent->Trigger();
+				if (this->OnTransitionToActive.IsBound())
+				{
+					this->OnTransitionToActive.Execute();
+				}
 			}
 			break;
 		}
@@ -392,7 +392,6 @@ void FGSDKInternal::DecodeHeartbeatResponse(const FString& ResponseJson)
 			{
 				SetState(EGameState::Terminating);
 
-				TransitionToActiveEvent->Trigger();
 				UE_LOG(LogPlayFabGSDK, Warning, TEXT("Received Termination State"));
 				TriggerShutdown();
 			}

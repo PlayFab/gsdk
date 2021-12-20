@@ -44,6 +44,14 @@ void FPlayFabGSDKModule::StartupModule()
 			OnShutdown.Execute();
 		}
 	});
+
+	GSDKInternal->OnTransitionToActive.BindLambda([this]()
+	{
+		if (OnTransitionToActive.IsBound())
+		{
+			OnTransitionToActive.Execute();
+		}
+	});
 	GSDKInternal->OnHealthCheck.BindLambda([this]()
 	{
 		if (OnHealthCheck.IsBound())
@@ -75,7 +83,6 @@ bool FPlayFabGSDKModule::ReadyForPlayers()
 	if (GSDKInternal->GetHeartbeatRequest().CurrentGameState != EGameState::Active)
 	{
 		GSDKInternal->SetState(EGameState::StandingBy);
-		GSDKInternal->GetTransitionToActiveEvent()->Wait();
 	}
 
 	return GSDKInternal->GetHeartbeatRequest().CurrentGameState == EGameState::Active;
