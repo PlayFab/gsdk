@@ -24,7 +24,7 @@ UGSDKReadyForPlayersAction* UGSDKReadyForPlayersAction::ReadyForPlayers()
 
 void UGSDKReadyForPlayersAction::Activate()
 {
-	if (!UGSDKUtils::ReadyForPlayers())
+	if (!UGSDKUtils::MarkAsReadyForPlayers())
 	{
 		OnTerminating.Broadcast();
 		return;

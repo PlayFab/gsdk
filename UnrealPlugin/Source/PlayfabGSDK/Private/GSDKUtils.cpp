@@ -16,9 +16,9 @@
 
 #include "PlayfabGSDK.h"
 
-bool UGSDKUtils::ReadyForPlayers()
+bool UGSDKUtils::MarkAsReadyForPlayers()
 {
-	return FPlayFabGSDKModule::Get().ReadyForPlayers();
+	return FPlayFabGSDKModule::Get().MarkAsReadyForPlayers();
 }
 
 const FGameServerConnectionInfo UGSDKUtils::GetGameServerConnectionInfo()
@@ -103,19 +103,19 @@ void UGSDKUtils::RegisterGSDKShutdownDelegate(const FOnGSDKShutdown_Dyn& OnGSDKS
 	});
 }
 
-void UGSDKUtils::RegisterGSDKTransitionToActive(const FOnGSDKTransitionToActive_Dyn& OnGSDKTransitionToActiveDelegate)
+void UGSDKUtils::RegisterGSDKServerActiveDelegate(const FOnGSDKServerActive_Dyn& OnGSDKServerActiveDelegate)
 {
-	if (FPlayFabGSDKModule::Get().OnTransitionToActive.IsBound())
+	if (FPlayFabGSDKModule::Get().OnServerActive.IsBound())
 	{
 		UE_LOG(LogPlayFabGSDK, Error, TEXT("GSDK TransitionToActive Delegate is already bound! Will unbind the old binding!"));
 	}
 
-	FPlayFabGSDKModule::Get().OnTransitionToActive.Unbind();
-	FPlayFabGSDKModule::Get().OnTransitionToActive.BindLambda([OnGSDKTransitionToActiveDelegate]()
+	FPlayFabGSDKModule::Get().OnServerActive.Unbind();
+	FPlayFabGSDKModule::Get().OnServerActive.BindLambda([OnGSDKServerActiveDelegate]()
 	{
-		if (OnGSDKTransitionToActiveDelegate.IsBound())
+		if (OnGSDKServerActiveDelegate.IsBound())
 		{
-			OnGSDKTransitionToActiveDelegate.Execute();
+			OnGSDKServerActiveDelegate.Execute();
 		}
 	});
 	/**

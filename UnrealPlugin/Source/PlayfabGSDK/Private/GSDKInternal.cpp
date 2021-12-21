@@ -379,10 +379,13 @@ void FGSDKInternal::DecodeHeartbeatResponse(const FString& ResponseJson)
 			if (HeartbeatRequest.CurrentGameState != EGameState::Active)
 			{
 				SetState(EGameState::Active);
-				if (this->OnTransitionToActive.IsBound())
+				AsyncTask(ENamedThreads::GameThread, [this]()
 				{
-					this->OnTransitionToActive.Execute();
-				}
+					if (this->OnServerActive.IsBound())
+					{
+						this->OnServerActive.Execute();
+					}
+				});
 			}
 			break;
 		}

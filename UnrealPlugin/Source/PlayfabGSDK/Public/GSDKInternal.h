@@ -150,12 +150,12 @@ public:
 	void SetConnectedPlayers(const TArray<FConnectedPlayer>& CurrentConnectedPlayers);
 
 	DECLARE_DELEGATE(FOnShutdown);
-	DECLARE_DELEGATE(FOnransitionToActive);
+	DECLARE_DELEGATE(FOnServerActive);
 	DECLARE_DELEGATE_RetVal(bool, FOnHealthCheck);
 	DECLARE_DELEGATE_OneParam(FOnMaintenance, const FDateTime&)
 
 	FOnShutdown OnShutdown;
-	FOnransitionToActive OnTransitionToActive;
+	FOnServerActive OnServerActive;
 	FOnMaintenance OnMaintenance;
 	FOnHealthCheck OnHealthCheck;
 private:

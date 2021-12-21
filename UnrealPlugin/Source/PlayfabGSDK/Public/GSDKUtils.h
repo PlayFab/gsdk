@@ -23,7 +23,7 @@
 #include "GSDKUtils.generated.h"
 
 DECLARE_DYNAMIC_DELEGATE(FOnGSDKShutdown_Dyn);
-DECLARE_DYNAMIC_DELEGATE(FOnGSDKTransitionToActive_Dyn);
+DECLARE_DYNAMIC_DELEGATE(FOnGSDKServerActive_Dyn);
 DECLARE_DYNAMIC_DELEGATE_RetVal(bool, FOnGSDKHealthCheck_Dyn);
 DECLARE_DYNAMIC_DELEGATE_OneParam(FOnGSDKMaintenance_Dyn, const FDateTime&, MaintenanceTime);
 
@@ -39,7 +39,7 @@ public:
 	///Called when the game server is ready to accept clients.
 	///This is a blocking call and will only return when this server is either allocated (a player is about to connect) or terminated.
 	///Returns true if the server is allocated (will receive players shortly). False if the server is terminated.
-	static bool ReadyForPlayers();
+	static bool MarkAsReadyForPlayers();
 
 	/// Gets information (ipAddress and ports) for connecting to the game server, as well as the ports the
 	/// game server should listen on.
@@ -101,7 +101,7 @@ public:
 	/// Register the GSDK Transition To Active State Delegate to get notified when the server
 	/// transitions from StandBy / Waiting to Active
 	UFUNCTION(BlueprintCallable, Category = "PlayFab|GSDK|Callbacks")
-	static void RegisterGSDKTransitionToActive(const FOnGSDKTransitionToActive_Dyn& OnGSDKTransitionToActiveDelegate);
+	static void RegisterGSDKServerActiveDelegate(const FOnGSDKServerActive_Dyn& OnGSDKServerActiveDelegate);
 
 	/// Register the GSDK Health Delegate, which gets called on every heartbeat to ensure that the server is still healthy
 	UFUNCTION(BlueprintCallable, Category="PlayFab|GSDK|Callbacks")

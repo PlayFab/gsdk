@@ -40,4 +40,14 @@ public:
 	static UGSDKReadyForPlayersAction* ReadyForPlayers();
 
 	virtual void Activate() override;
+protected:
+	DECLARE_DELEGATE(FOnShutdown);
+	DECLARE_DELEGATE(FOnServerActive);
+	DECLARE_DELEGATE_RetVal(bool, FOnHealthCheck);
+	DECLARE_DELEGATE_OneParam(FOnMaintenance, const FDateTime&)
+
+	FOnShutdown OnShutdown;
+	FOnServerActive OnServerActive;
+	FOnMaintenance OnMaintenance;
+	FOnHealthCheck OnHealthCheck;
 };

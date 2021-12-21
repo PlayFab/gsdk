@@ -40,7 +40,7 @@ public:
 	/// <summary>Renamed from WaitForSessionAssignment. Called when the game server is ready to accept clients.  If Start() hasn't been called by this point, it will be called implicitly here.</summary>
 	/// <remarks>Required. This is a blocking call and will only return when this server is either allocated (a player is about to connect) or terminated.</remarks>
 	/// <returns>True if the server is allocated (will receive players shortly). False if the server is terminated. </returns>
-	bool ReadyForPlayers();
+	bool MarkAsReadyForPlayers();
 
 	/// <summary>
 	/// Gets information (ipAddress and ports) for connecting to the game server, as well as the ports the
@@ -59,7 +59,7 @@ public:
 
 protected:
 	DECLARE_DELEGATE(FOnShutdown);
-	DECLARE_DELEGATE(FOnTransitionToActive);
+	DECLARE_DELEGATE(FOnServerActive);
 	DECLARE_DELEGATE_RetVal(bool, FOnHealthCheck);
 	DECLARE_DELEGATE_OneParam(FOnMaintenance, const FDateTime&)
 
@@ -68,7 +68,7 @@ public:
 	FOnShutdown OnShutdown;
 
 	/// </summary>Gets called when the server moves to an active state</summary>
-	FOnTransitionToActive OnTransitionToActive;
+	FOnServerActive OnServerActive;	
 
 	/// <summary>Gets called when the agent needs to check on the game's health</summary>
 	FOnHealthCheck OnHealthCheck;
