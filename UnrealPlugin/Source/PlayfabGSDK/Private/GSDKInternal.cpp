@@ -368,6 +368,12 @@ void FGSDKInternal::DecodeHeartbeatResponse(const FString& ResponseJson)
 
 		bool bWasOperationValid = true;
 
+		if (IsFirstHeartBeat)
+		{
+			IsFirstHeartBeat = false;
+			SetState(EGameState::StandingBy);
+		}
+
 		switch (NextOperation)
 		{
 		case EOperation::Continue:

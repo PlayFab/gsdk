@@ -210,6 +210,8 @@ private:
 	FCriticalSection HeartbeatMutex;
 	TArray<TSharedRef<IHttpRequest, ESPMode::ThreadSafe>> Heartbeats;
 
+	bool IsFirstHeartBeat = true;
+
 	void StartLog();
 	void SendHeartbeat();
 	void ReceiveHeartbeat();
