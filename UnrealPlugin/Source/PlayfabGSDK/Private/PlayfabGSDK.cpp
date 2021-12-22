@@ -77,20 +77,6 @@ void FPlayFabGSDKModule::ShutdownModule()
 #endif
 }
 
-bool FPlayFabGSDKModule::MarkAsReadyForPlayers()
-{
-#if PLAYFAB_GSDK_SERVER
-	if (GSDKInternal->GetHeartbeatRequest().CurrentGameState != EGameState::Active)
-	{
-		GSDKInternal->SetState(EGameState::StandingBy);
-	}
-
-	return GSDKInternal->GetHeartbeatRequest().CurrentGameState == EGameState::Active;
-#else
-	return true;
-#endif
-}
-
 const FGameServerConnectionInfo FPlayFabGSDKModule::GetGameServerConnectionInfo()
 {
 #if PLAYFAB_GSDK_SERVER

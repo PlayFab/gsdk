@@ -16,11 +16,6 @@
 
 #include "PlayfabGSDK.h"
 
-bool UGSDKUtils::MarkAsReadyForPlayers()
-{
-	return FPlayFabGSDKModule::Get().MarkAsReadyForPlayers();
-}
-
 const FGameServerConnectionInfo UGSDKUtils::GetGameServerConnectionInfo()
 {
 	return FPlayFabGSDKModule::Get().GetGameServerConnectionInfo();
@@ -107,7 +102,7 @@ void UGSDKUtils::RegisterGSDKServerActiveDelegate(const FOnGSDKServerActive_Dyn&
 {
 	if (FPlayFabGSDKModule::Get().OnServerActive.IsBound())
 	{
-		UE_LOG(LogPlayFabGSDK, Error, TEXT("GSDK TransitionToActive Delegate is already bound! Will unbind the old binding!"));
+		UE_LOG(LogPlayFabGSDK, Error, TEXT("GSDK ServerActive Delegate is already bound! Will unbind the old binding!"));
 	}
 
 	FPlayFabGSDKModule::Get().OnServerActive.Unbind();
@@ -118,10 +113,6 @@ void UGSDKUtils::RegisterGSDKServerActiveDelegate(const FOnGSDKServerActive_Dyn&
 			OnGSDKServerActiveDelegate.Execute();
 		}
 	});
-	/**
-	 * Server is transitioning to an active state. 
-	 * Optional: Add in the implementation any code that is needed for the game server when this transition occurs.
-	 */
 }
 
 void UGSDKUtils::RegisterGSDKHealthCheckDelegate(const FOnGSDKHealthCheck_Dyn& OnGSDKHealthCheckDelegate)

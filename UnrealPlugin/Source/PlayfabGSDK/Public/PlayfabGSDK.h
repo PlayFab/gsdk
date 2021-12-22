@@ -37,11 +37,6 @@ public:
 
 	static FPlayFabGSDKModule& Get() { return FModuleManager::LoadModuleChecked<FPlayFabGSDKModule>(TEXT("PlayFabGSDK"));}
 
-	/// <summary>Renamed from WaitForSessionAssignment. Called when the game server is ready to accept clients.  If Start() hasn't been called by this point, it will be called implicitly here.</summary>
-	/// <remarks>Required. This is a blocking call and will only return when this server is either allocated (a player is about to connect) or terminated.</remarks>
-	/// <returns>True if the server is allocated (will receive players shortly). False if the server is terminated. </returns>
-	bool MarkAsReadyForPlayers();
-
 	/// <summary>
 	/// Gets information (ipAddress and ports) for connecting to the game server, as well as the ports the
 	/// game server should listen on.

@@ -36,11 +36,6 @@ class PLAYFABGSDK_API UGSDKUtils : public UBlueprintFunctionLibrary
 	GENERATED_BODY()
 
 public:
-	///Called when the game server is ready to accept clients.
-	///This is a blocking call and will only return when this server is either allocated (a player is about to connect) or terminated.
-	///Returns true if the server is allocated (will receive players shortly). False if the server is terminated.
-	static bool MarkAsReadyForPlayers();
-
 	/// Gets information (ipAddress and ports) for connecting to the game server, as well as the ports the
 	/// game server should listen on.
 	UFUNCTION(BlueprintPure, Category="PlayFab|GSDK|Server Info")
@@ -58,11 +53,11 @@ public:
 	UFUNCTION(BlueprintPure, Category="PlayFab|GSDK|Server Info")
 	static const FString GetSharedContentDirectory();
 
-	/// Returns the match id of the server. Is only valid after Ready For Players unblocks
+	/// Returns the match id of the server.
 	UFUNCTION(BlueprintPure, Category="PlayFab|GSDK|Server Info")
 	static const FString GetMatchId();
 
-	/// Returns the match session cookie of the server. Is only valid after Ready For Players unblocks
+	/// Returns the match session cookie of the server.
 	UFUNCTION(BlueprintPure, Category="PlayFab|GSDK|Server Info")
 	static const FString GetMatchSessionCookie();
 
