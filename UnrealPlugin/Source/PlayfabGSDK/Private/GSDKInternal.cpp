@@ -368,12 +368,6 @@ void FGSDKInternal::DecodeHeartbeatResponse(const FString& ResponseJson)
 
 		bool bWasOperationValid = true;
 
-		if (IsFirstHeartBeat)
-		{
-			IsFirstHeartBeat = false;
-			SetState(EGameState::StandingBy);
-		}
-
 		switch (NextOperation)
 		{
 		case EOperation::Continue:
@@ -384,9 +378,9 @@ void FGSDKInternal::DecodeHeartbeatResponse(const FString& ResponseJson)
 		{
 			if (HeartbeatRequest.CurrentGameState != EGameState::Active)
 			{
-				SetState(EGameState::Active);
 				AsyncTask(ENamedThreads::GameThread, [this]()
 				{
+					SetState(EGameState::Active);
 					if (this->OnServerActive.IsBound())
 					{
 						this->OnServerActive.Execute();
@@ -497,4 +491,16 @@ void FGSDKInternal::SetConnectedPlayers(const TArray<FConnectedPlayer>& CurrentC
 {
 	FScopeLock ScopeLock(&PlayersMutex);
 	HeartbeatRequest.ConnectedPlayers = CurrentConnectedPlayers;
+}
+
+void FGSDKInternal::SetGameInitComplete()
+{
+	AsyncTask(ENamedThreads::GameThread, [this]()
+	{
+		SetState(EGameState::StandingBy);
+		if (OnSetGameInitComplete.IsBound())
+		{
+			OnSetGameInitComplete.Execute();
+		}
+	});
 }

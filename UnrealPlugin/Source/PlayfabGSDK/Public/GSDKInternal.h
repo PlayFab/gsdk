@@ -149,13 +149,18 @@ public:
 	void SetState(EGameState State);
 	void SetConnectedPlayers(const TArray<FConnectedPlayer>& CurrentConnectedPlayers);
 
+	// Sets state to StandBy to mark end of game initialization
+	void SetGameInitComplete();
+
 	DECLARE_DELEGATE(FOnShutdown);
 	DECLARE_DELEGATE(FOnServerActive);
+	DECLARE_DELEGATE(FOnSetGameInitComplete);
 	DECLARE_DELEGATE_RetVal(bool, FOnHealthCheck);
 	DECLARE_DELEGATE_OneParam(FOnMaintenance, const FDateTime&)
 
 	FOnShutdown OnShutdown;
 	FOnServerActive OnServerActive;
+	FOnSetGameInitComplete OnSetGameInitComplete;
 	FOnMaintenance OnMaintenance;
 	FOnHealthCheck OnHealthCheck;
 private:
@@ -209,8 +214,6 @@ private:
 
 	FCriticalSection HeartbeatMutex;
 	TArray<TSharedRef<IHttpRequest, ESPMode::ThreadSafe>> Heartbeats;
-
-	bool IsFirstHeartBeat = true;
 
 	void StartLog();
 	void SendHeartbeat();

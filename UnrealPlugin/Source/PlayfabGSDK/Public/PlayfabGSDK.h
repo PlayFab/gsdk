@@ -37,6 +37,9 @@ public:
 
 	static FPlayFabGSDKModule& Get() { return FModuleManager::LoadModuleChecked<FPlayFabGSDKModule>(TEXT("PlayFabGSDK"));}
 
+	// Sets state to StandBy to mark end of game initialization
+	void SetGameInitComplete();
+
 	/// <summary>
 	/// Gets information (ipAddress and ports) for connecting to the game server, as well as the ports the
 	/// game server should listen on.
@@ -55,6 +58,7 @@ public:
 protected:
 	DECLARE_DELEGATE(FOnShutdown);
 	DECLARE_DELEGATE(FOnServerActive);
+	DECLARE_DELEGATE(FOnSetGameInitComplete);
 	DECLARE_DELEGATE_RetVal(bool, FOnHealthCheck);
 	DECLARE_DELEGATE_OneParam(FOnMaintenance, const FDateTime&)
 
@@ -64,6 +68,9 @@ public:
 
 	/// </summary>Gets called when the server moves to an active state</summary>
 	FOnServerActive OnServerActive;	
+
+	/// </summary>Gets called when the server is ready to move from initialization to standby</summary>
+	FOnSetGameInitComplete OnSetGameInitComplete;
 
 	/// <summary>Gets called when the agent needs to check on the game's health</summary>
 	FOnHealthCheck OnHealthCheck;

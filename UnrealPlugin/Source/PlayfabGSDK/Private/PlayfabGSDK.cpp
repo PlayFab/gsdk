@@ -44,12 +44,18 @@ void FPlayFabGSDKModule::StartupModule()
 			OnShutdown.Execute();
 		}
 	});
-
 	GSDKInternal->OnServerActive.BindLambda([this]()
 	{
 		if (OnServerActive.IsBound())
 		{
 			OnServerActive.Execute();
+		}
+	});
+	GSDKInternal->OnSetGameInitComplete.BindLambda([this]()
+	{
+		if (OnSetGameInitComplete.IsBound())
+		{
+			OnSetGameInitComplete.Execute();
 		}
 	});
 	GSDKInternal->OnHealthCheck.BindLambda([this]()
@@ -74,6 +80,13 @@ void FPlayFabGSDKModule::StartupModule()
 void FPlayFabGSDKModule::ShutdownModule()
 {
 #if PLAYFAB_GSDK_SERVER
+#endif
+}
+
+void FPlayFabGSDKModule::SetGameInitComplete()
+{
+#if PLAYFAB_GSDK_SERVER
+	GSDKInternal->SetGameInitComplete();
 #endif
 }
 

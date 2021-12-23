@@ -115,6 +115,24 @@ void UGSDKUtils::RegisterGSDKServerActiveDelegate(const FOnGSDKServerActive_Dyn&
 	});
 }
 
+
+void UGSDKUtils::RegisterGSDKSetGameInitComplete(const FOnGSDKSetGameInitComplete_Dyn& OnGSDKSetGameInitCompleteDelegate)
+{
+	if (FPlayFabGSDKModule::Get().OnSetGameInitComplete.IsBound())
+	{
+		UE_LOG(LogPlayFabGSDK, Error, TEXT("GSDK SetGameInitComplete Delegate is already bound! Will unbind the old binding!"));
+	}
+
+	FPlayFabGSDKModule::Get().OnSetGameInitComplete.Unbind();
+	FPlayFabGSDKModule::Get().OnSetGameInitComplete.BindLambda([OnGSDKSetGameInitCompleteDelegate]()
+	{
+		if (OnGSDKSetGameInitCompleteDelegate.IsBound())
+		{
+			OnGSDKSetGameInitCompleteDelegate.Execute();
+	        }
+	});
+}
+
 void UGSDKUtils::RegisterGSDKHealthCheckDelegate(const FOnGSDKHealthCheck_Dyn& OnGSDKHealthCheckDelegate)
 {
 	if (FPlayFabGSDKModule::Get().OnHealthCheck.IsBound())
@@ -180,3 +198,9 @@ bool UGSDKUtils::SetDefaultServerHostPort()
 	FURL::UrlConfig.DefaultPort = UnrealServerGsdkHostPort;
 	return true;
 }
+
+void UGSDKUtils::SetGameInitComplete()
+{
+	FPlayFabGSDKModule::Get().SetGameInitComplete();
+}
+
