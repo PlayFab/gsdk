@@ -24,7 +24,7 @@
 
 DECLARE_DYNAMIC_DELEGATE(FOnGSDKShutdown_Dyn);
 DECLARE_DYNAMIC_DELEGATE(FOnGSDKServerActive_Dyn);
-DECLARE_DYNAMIC_DELEGATE(FOnGSDKSetGameInitComplete_Dyn);
+DECLARE_DYNAMIC_DELEGATE(FOnGSDKGameServerInitializationComplete_Dyn);
 DECLARE_DYNAMIC_DELEGATE_RetVal(bool, FOnGSDKHealthCheck_Dyn);
 DECLARE_DYNAMIC_DELEGATE_OneParam(FOnGSDKMaintenance_Dyn, const FDateTime&, MaintenanceTime);
 
@@ -37,8 +37,8 @@ class PLAYFABGSDK_API UGSDKUtils : public UBlueprintFunctionLibrary
 	GENERATED_BODY()
 
 public:
-	// Sets state to StandBy to mark end of game initialization
-	static void SetGameInitComplete();
+	// Sets state to StandBy to mark end of server initialization
+	static void SetServerInitializationComplete();
 
 	/// Gets information (ipAddress and ports) for connecting to the game server, as well as the ports the
 	/// game server should listen on.
@@ -104,7 +104,7 @@ public:
 	
 	/// Register the GSDK SetGameInitializationComplete Delegate which sets the game status to Standby
 	UFUNCTION(BlueprintCallable, Category="PlayFab|GSDK|Callbacks")
-	static void RegisterGSDKSetGameInitComplete(const FOnGSDKSetGameInitComplete_Dyn& OnGSDKSetGameInitCompleteDelegate);
+	static void RegisterGSDKOnGameServerInitializationComplete(const FOnGSDKGameServerInitializationComplete_Dyn& OnGSDKGameServerInitializationCompleteDelegate);
 
 
 	/// Register the GSDK Health Delegate, which gets called on every heartbeat to ensure that the server is still healthy

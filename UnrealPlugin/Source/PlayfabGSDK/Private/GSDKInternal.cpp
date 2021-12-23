@@ -493,14 +493,14 @@ void FGSDKInternal::SetConnectedPlayers(const TArray<FConnectedPlayer>& CurrentC
 	HeartbeatRequest.ConnectedPlayers = CurrentConnectedPlayers;
 }
 
-void FGSDKInternal::SetGameInitComplete()
+void FGSDKInternal::SetServerInitializationComplete()
 {
 	AsyncTask(ENamedThreads::GameThread, [this]()
 	{
 		SetState(EGameState::StandingBy);
-		if (OnSetGameInitComplete.IsBound())
+		if (OnGameServerInitializationComplete.IsBound())
 		{
-			OnSetGameInitComplete.Execute();
+			OnGameServerInitializationComplete.Execute();
 		}
 	});
 }

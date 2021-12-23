@@ -116,20 +116,20 @@ void UGSDKUtils::RegisterGSDKServerActiveDelegate(const FOnGSDKServerActive_Dyn&
 }
 
 
-void UGSDKUtils::RegisterGSDKSetGameInitComplete(const FOnGSDKSetGameInitComplete_Dyn& OnGSDKSetGameInitCompleteDelegate)
+void UGSDKUtils::RegisterGSDKOnGameServerInitializationComplete(const FOnGSDKGameServerInitializationComplete_Dyn& OnGSDKGameServerInitializationCompleteDelegate)
 {
-	if (FPlayFabGSDKModule::Get().OnSetGameInitComplete.IsBound())
+	if (FPlayFabGSDKModule::Get().OnGameServerInitializationComplete.IsBound())
 	{
 		UE_LOG(LogPlayFabGSDK, Error, TEXT("GSDK SetGameInitComplete Delegate is already bound! Will unbind the old binding!"));
 	}
 
-	FPlayFabGSDKModule::Get().OnSetGameInitComplete.Unbind();
-	FPlayFabGSDKModule::Get().OnSetGameInitComplete.BindLambda([OnGSDKSetGameInitCompleteDelegate]()
+	FPlayFabGSDKModule::Get().OnGameServerInitializationComplete.Unbind();
+	FPlayFabGSDKModule::Get().OnGameServerInitializationComplete.BindLambda([OnGSDKGameServerInitializationCompleteDelegate]()
 	{
-		if (OnGSDKSetGameInitCompleteDelegate.IsBound())
+		if (OnGSDKGameServerInitializationCompleteDelegate.IsBound())
 		{
-			OnGSDKSetGameInitCompleteDelegate.Execute();
-	        }
+			OnGSDKGameServerInitializationCompleteDelegate.Execute();
+	    }
 	});
 }
 
@@ -199,8 +199,8 @@ bool UGSDKUtils::SetDefaultServerHostPort()
 	return true;
 }
 
-void UGSDKUtils::SetGameInitComplete()
+void UGSDKUtils::SetServerInitializationComplete()
 {
-	FPlayFabGSDKModule::Get().SetGameInitComplete();
+	FPlayFabGSDKModule::Get().SetServerInitializationComplete();
 }
 
