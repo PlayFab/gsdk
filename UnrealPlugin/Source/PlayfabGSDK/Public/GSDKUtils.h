@@ -102,7 +102,7 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "PlayFab|GSDK|Callbacks")
 	static void RegisterGSDKServerActiveDelegate(const FOnGSDKServerActive_Dyn& OnGSDKServerActiveDelegate);
 	
-	/// Register the GSDK SetGameInitializationComplete Delegate which sets the game status to Standby
+	/// Register the GSDK GameServerInitializationComplete Delegate which sets the game status to Standby
 	UFUNCTION(BlueprintCallable, Category="PlayFab|GSDK|Callbacks")
 	static void RegisterGSDKOnGameServerInitializationComplete(const FOnGSDKGameServerInitializationComplete_Dyn& OnGSDKGameServerInitializationCompleteDelegate);
 

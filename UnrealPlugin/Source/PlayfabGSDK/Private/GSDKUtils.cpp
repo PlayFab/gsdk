@@ -120,7 +120,7 @@ void UGSDKUtils::RegisterGSDKOnGameServerInitializationComplete(const FOnGSDKGam
 {
 	if (FPlayFabGSDKModule::Get().OnGameServerInitializationComplete.IsBound())
 	{
-		UE_LOG(LogPlayFabGSDK, Error, TEXT("GSDK SetGameInitComplete Delegate is already bound! Will unbind the old binding!"));
+		UE_LOG(LogPlayFabGSDK, Error, TEXT("GSDK GameServerInitializationComplete Delegate is already bound! Will unbind the old binding!"));
 	}
 
 	FPlayFabGSDKModule::Get().OnGameServerInitializationComplete.Unbind();
