@@ -99,7 +99,7 @@ public:
 	static constexpr const TCHAR* PUBLIC_IP_V4_ADDRESS_KEY = TEXT("publicIpV4Address");
 	static constexpr const TCHAR* FULLY_QUALIFIED_DOMAIN_NAME_KEY = TEXT("fullyQualifiedDomainName");
 
-	// These two keys are only available after allocation (once readyForPlayers returns true)
+	// These two keys are only available after allocation
 	static constexpr const TCHAR* SESSION_COOKIE_KEY = TEXT("sessionCookie");
 	static constexpr const TCHAR* SESSION_ID_KEY = TEXT("sessionId";)
 
