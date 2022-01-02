@@ -44,6 +44,20 @@ void FPlayFabGSDKModule::StartupModule()
 			OnShutdown.Execute();
 		}
 	});
+	GSDKInternal->OnServerActive.BindLambda([this]()
+	{
+		if (OnServerActive.IsBound())
+		{
+			OnServerActive.Execute();
+		}
+	});
+	GSDKInternal->OnGameServerInitializationComplete.BindLambda([this]()
+	{
+		if (OnGameServerInitializationComplete.IsBound())
+		{
+			OnGameServerInitializationComplete.Execute();
+		}
+	});
 	GSDKInternal->OnHealthCheck.BindLambda([this]()
 	{
 		if (OnHealthCheck.IsBound())
@@ -69,18 +83,10 @@ void FPlayFabGSDKModule::ShutdownModule()
 #endif
 }
 
-bool FPlayFabGSDKModule::ReadyForPlayers()
+void FPlayFabGSDKModule::SetServerInitializationComplete()
 {
 #if PLAYFAB_GSDK_SERVER
-	if (GSDKInternal->GetHeartbeatRequest().CurrentGameState != EGameState::Active)
-	{
-		GSDKInternal->SetState(EGameState::StandingBy);
-		GSDKInternal->GetTransitionToActiveEvent()->Wait();
-	}
-
-	return GSDKInternal->GetHeartbeatRequest().CurrentGameState == EGameState::Active;
-#else
-	return true;
+	GSDKInternal->SetServerInitializationComplete();
 #endif
 }
 

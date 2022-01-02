@@ -140,11 +140,6 @@ public:
 		return ConnectionInfo;
 	}
 
-	FEvent* GetTransitionToActiveEvent()
-	{
-		return TransitionToActiveEvent;
-	}
-
 	FHeartbeatRequest& GetHeartbeatRequest()
 	{
 		return HeartbeatRequest;
@@ -154,11 +149,18 @@ public:
 	void SetState(EGameState State);
 	void SetConnectedPlayers(const TArray<FConnectedPlayer>& CurrentConnectedPlayers);
 
+	// Sets state to StandBy to mark end of server initialization
+	void SetServerInitializationComplete();
+
 	DECLARE_DELEGATE(FOnShutdown);
+	DECLARE_DELEGATE(FOnServerActive);
+	DECLARE_DELEGATE(FOnGameServerInitializationComplete);
 	DECLARE_DELEGATE_RetVal(bool, FOnHealthCheck);
 	DECLARE_DELEGATE_OneParam(FOnMaintenance, const FDateTime&)
 
 	FOnShutdown OnShutdown;
+	FOnServerActive OnServerActive;
+	FOnGameServerInitializationComplete OnGameServerInitializationComplete;
 	FOnMaintenance OnMaintenance;
 	FOnHealthCheck OnHealthCheck;
 private:
@@ -203,7 +205,6 @@ private:
 	FCriticalSection StateMutex;
 	FCriticalSection PlayersMutex;
 
-	FEvent* TransitionToActiveEvent;
 	FEvent* SignalHeartbeatEvent;
 
 	TArray<FString> InitialPlayers;

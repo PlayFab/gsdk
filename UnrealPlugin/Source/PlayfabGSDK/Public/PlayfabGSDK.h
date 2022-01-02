@@ -37,10 +37,8 @@ public:
 
 	static FPlayFabGSDKModule& Get() { return FModuleManager::LoadModuleChecked<FPlayFabGSDKModule>(TEXT("PlayFabGSDK"));}
 
-	/// <summary>Renamed from WaitForSessionAssignment. Called when the game server is ready to accept clients.  If Start() hasn't been called by this point, it will be called implicitly here.</summary>
-	/// <remarks>Required. This is a blocking call and will only return when this server is either allocated (a player is about to connect) or terminated.</remarks>
-	/// <returns>True if the server is allocated (will receive players shortly). False if the server is terminated. </returns>
-	bool ReadyForPlayers();
+	// Sets state to StandBy to mark end of server initialization
+	void SetServerInitializationComplete();
 
 	/// <summary>
 	/// Gets information (ipAddress and ports) for connecting to the game server, as well as the ports the
@@ -59,12 +57,20 @@ public:
 
 protected:
 	DECLARE_DELEGATE(FOnShutdown);
+	DECLARE_DELEGATE(FOnServerActive);
+	DECLARE_DELEGATE(FOnGameServerInitializationComplete);
 	DECLARE_DELEGATE_RetVal(bool, FOnHealthCheck);
 	DECLARE_DELEGATE_OneParam(FOnMaintenance, const FDateTime&)
 
 public:
 	/// <summary>Gets called if the server is shutting us down</summary>
 	FOnShutdown OnShutdown;
+
+	/// </summary>Gets called when the server moves to an active state</summary>
+	FOnServerActive OnServerActive;	
+
+	/// </summary>Gets called when the server is ready to move from initialization to standby</summary>
+	FOnGameServerInitializationComplete OnGameServerInitializationComplete;
 
 	/// <summary>Gets called when the agent needs to check on the game's health</summary>
 	FOnHealthCheck OnHealthCheck;
@@ -93,7 +99,7 @@ public:
 	static constexpr const TCHAR* PUBLIC_IP_V4_ADDRESS_KEY = TEXT("publicIpV4Address");
 	static constexpr const TCHAR* FULLY_QUALIFIED_DOMAIN_NAME_KEY = TEXT("fullyQualifiedDomainName");
 
-	// These two keys are only available after allocation (once readyForPlayers returns true)
+	// These two keys are only available after allocation
 	static constexpr const TCHAR* SESSION_COOKIE_KEY = TEXT("sessionCookie");
 	static constexpr const TCHAR* SESSION_ID_KEY = TEXT("sessionId";)
 

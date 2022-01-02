@@ -16,11 +16,6 @@
 
 #include "PlayfabGSDK.h"
 
-bool UGSDKUtils::ReadyForPlayers()
-{
-	return FPlayFabGSDKModule::Get().ReadyForPlayers();
-}
-
 const FGameServerConnectionInfo UGSDKUtils::GetGameServerConnectionInfo()
 {
 	return FPlayFabGSDKModule::Get().GetGameServerConnectionInfo();
@@ -103,6 +98,41 @@ void UGSDKUtils::RegisterGSDKShutdownDelegate(const FOnGSDKShutdown_Dyn& OnGSDKS
 	});
 }
 
+void UGSDKUtils::RegisterGSDKServerActiveDelegate(const FOnGSDKServerActive_Dyn& OnGSDKServerActiveDelegate)
+{
+	if (FPlayFabGSDKModule::Get().OnServerActive.IsBound())
+	{
+		UE_LOG(LogPlayFabGSDK, Error, TEXT("GSDK ServerActive Delegate is already bound! Will unbind the old binding!"));
+	}
+
+	FPlayFabGSDKModule::Get().OnServerActive.Unbind();
+	FPlayFabGSDKModule::Get().OnServerActive.BindLambda([OnGSDKServerActiveDelegate]()
+	{
+		if (OnGSDKServerActiveDelegate.IsBound())
+		{
+			OnGSDKServerActiveDelegate.Execute();
+		}
+	});
+}
+
+
+void UGSDKUtils::RegisterGSDKOnGameServerInitializationComplete(const FOnGSDKGameServerInitializationComplete_Dyn& OnGSDKGameServerInitializationCompleteDelegate)
+{
+	if (FPlayFabGSDKModule::Get().OnGameServerInitializationComplete.IsBound())
+	{
+		UE_LOG(LogPlayFabGSDK, Error, TEXT("GSDK GameServerInitializationComplete Delegate is already bound! Will unbind the old binding!"));
+	}
+
+	FPlayFabGSDKModule::Get().OnGameServerInitializationComplete.Unbind();
+	FPlayFabGSDKModule::Get().OnGameServerInitializationComplete.BindLambda([OnGSDKGameServerInitializationCompleteDelegate]()
+	{
+		if (OnGSDKGameServerInitializationCompleteDelegate.IsBound())
+		{
+			OnGSDKGameServerInitializationCompleteDelegate.Execute();
+	    }
+	});
+}
+
 void UGSDKUtils::RegisterGSDKHealthCheckDelegate(const FOnGSDKHealthCheck_Dyn& OnGSDKHealthCheckDelegate)
 {
 	if (FPlayFabGSDKModule::Get().OnHealthCheck.IsBound())
@@ -168,3 +198,9 @@ bool UGSDKUtils::SetDefaultServerHostPort()
 	FURL::UrlConfig.DefaultPort = UnrealServerGsdkHostPort;
 	return true;
 }
+
+void UGSDKUtils::SetServerInitializationComplete()
+{
+	FPlayFabGSDKModule::Get().SetServerInitializationComplete();
+}
+

@@ -23,6 +23,8 @@
 #include "GSDKUtils.generated.h"
 
 DECLARE_DYNAMIC_DELEGATE(FOnGSDKShutdown_Dyn);
+DECLARE_DYNAMIC_DELEGATE(FOnGSDKServerActive_Dyn);
+DECLARE_DYNAMIC_DELEGATE(FOnGSDKGameServerInitializationComplete_Dyn);
 DECLARE_DYNAMIC_DELEGATE_RetVal(bool, FOnGSDKHealthCheck_Dyn);
 DECLARE_DYNAMIC_DELEGATE_OneParam(FOnGSDKMaintenance_Dyn, const FDateTime&, MaintenanceTime);
 
@@ -35,10 +37,8 @@ class PLAYFABGSDK_API UGSDKUtils : public UBlueprintFunctionLibrary
 	GENERATED_BODY()
 
 public:
-	///Called when the game server is ready to accept clients.
-	///This is a blocking call and will only return when this server is either allocated (a player is about to connect) or terminated.
-	///Returns true if the server is allocated (will receive players shortly). False if the server is terminated.
-	static bool ReadyForPlayers();
+	// Sets state to StandBy to mark end of server initialization
+	static void SetServerInitializationComplete();
 
 	/// Gets information (ipAddress and ports) for connecting to the game server, as well as the ports the
 	/// game server should listen on.
@@ -57,11 +57,11 @@ public:
 	UFUNCTION(BlueprintPure, Category="PlayFab|GSDK|Server Info")
 	static const FString GetSharedContentDirectory();
 
-	/// Returns the match id of the server. Is only valid after Ready For Players unblocks
+	/// Returns the match id of the server.
 	UFUNCTION(BlueprintPure, Category="PlayFab|GSDK|Server Info")
 	static const FString GetMatchId();
 
-	/// Returns the match session cookie of the server. Is only valid after Ready For Players unblocks
+	/// Returns the match session cookie of the server.
 	UFUNCTION(BlueprintPure, Category="PlayFab|GSDK|Server Info")
 	static const FString GetMatchSessionCookie();
 
@@ -96,6 +96,16 @@ public:
 	/// Register the GSDK Shutdown Delegate to get notified when the server gets shutdown by outside forces
 	UFUNCTION(BlueprintCallable, Category="PlayFab|GSDK|Callbacks")
 	static void RegisterGSDKShutdownDelegate(const FOnGSDKShutdown_Dyn& OnGSDKShutdownDelegate);
+
+	/// Register the GSDK Transition To Active State Delegate to get notified when the server
+	/// transitions from StandBy / Waiting to Active
+	UFUNCTION(BlueprintCallable, Category = "PlayFab|GSDK|Callbacks")
+	static void RegisterGSDKServerActiveDelegate(const FOnGSDKServerActive_Dyn& OnGSDKServerActiveDelegate);
+	
+	/// Register the GSDK GameServerInitializationComplete Delegate which sets the game status to Standby
+	UFUNCTION(BlueprintCallable, Category="PlayFab|GSDK|Callbacks")
+	static void RegisterGSDKOnGameServerInitializationComplete(const FOnGSDKGameServerInitializationComplete_Dyn& OnGSDKGameServerInitializationCompleteDelegate);
+
 
 	/// Register the GSDK Health Delegate, which gets called on every heartbeat to ensure that the server is still healthy
 	UFUNCTION(BlueprintCallable, Category="PlayFab|GSDK|Callbacks")
