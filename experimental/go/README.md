@@ -7,7 +7,7 @@ This version of GSDK is pretty similar to the existing ones, apart from the fact
 Things to remember:
 
 - ReadyForPlayers is blocking, it unblocks when the game server is Active. However, it can always be used in a goroutine
-- MarkAllocated works only when the game server is on StandingBy, so it should be called after "ReadyForPlayers" is called
+- MarkAllocated works only when the game server is on StandingBy, so it should be called after "ReadyForPlayers" is called. For the time being, this method *should not* be used since it requires configuration settings on the Multiplayer Servers backend for each title.
 - RequestMultiplayerServer API must *not* be called on a Build that uses "MarkAllocated". It will probably work on the server side, but there is a small chance of concurrency issues if the two operations (RequestMultiplayerServer and MarkAllocated) happen at the same time.
 
 Here is a sample of calling GSDK:
@@ -34,6 +34,7 @@ func main() {
 }
 
 // doMarkAllocatedGSDK will start a goroutine which will call MarkAllocated after 5 minutes
+// this method is highly experimental and should NOT be used since it requires configuration settings on the Multiplayer Servers backend 
 func doMarkAllocatedGSDK() {
 	go func() {
 		gsdk.LogMessage("Sleeping for 300 seconds")
