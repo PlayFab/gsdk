@@ -5,7 +5,7 @@
 
 ## Overview
 
-PlayFab Game Server SDK for C#, C++, and Java environments.  The GSDK is used to integrate with PlayFab Multiplayer Servers.
+PlayFab Game Server SDK for C#, C++, and Java environments.  The GSDK is used to integrate with PlayFab Multiplayer Servers and modify the game server lifecycle (check [here](https://docs.microsoft.com/en-us/gaming/playfab/features/multiplayer/servers/multiplayer-game-server-lifecycle) for more info).
 
 ## Prerequisites
 
