@@ -222,17 +222,14 @@ If you already **had** an Init() function, go to check in [YourGameInstanceClass
         UGSDKUtils::RegisterGSDKHealthCheckDelegate(OnGsdkHealthCheck);
         UGSDKUtils::RegisterGSDKServerActiveDelegate(OnGSDKServerActive);
         UGSDKUtils::RegisterGSDKReadyForPlayers(OnGSDKReadyForPlayers);
-
-        OnStart();
     }
 ```
 
-**If you can't find a variable like IsDedicatedServerInstance(),** we still want to make sure that ReadyForPlayers() and onStart() are used when using a dedicated server, so you could wrap the call to ReadyForPlayers() as such at the bottom of the Init function:
+**Complete your Init function** by adding the following code that sets up the default port for MPS.
 
 ```cpp
 #if UE_SERVER
     UGSDKUtils::SetDefaultServerHostPort();
-    OnStart();
 #endif
 ```
 
