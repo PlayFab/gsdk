@@ -209,10 +209,10 @@ If you already **had** an Init() function, go to check in [YourGameInstanceClass
 ```cpp
 	if (IsDedicatedServerInstance() == true)
 	{
-		FOnGSDKShutdown_Dyn OnGsdkShutdown;
-		OnGsdkShutdown.BindDynamic(this, &UShooterGameInstance::OnGSDKShutdown);
-		FOnGSDKHealthCheck_Dyn OnGsdkHealthCheck;
-		OnGsdkHealthCheck.BindDynamic(this, &UShooterGameInstance::OnGSDKHealthCheck);
+        FOnGSDKShutdown_Dyn OnGsdkShutdown;
+        OnGsdkShutdown.BindDynamic(this, &UShooterGameInstance::OnGSDKShutdown);
+        FOnGSDKHealthCheck_Dyn OnGsdkHealthCheck;
+        OnGsdkHealthCheck.BindDynamic(this, &UShooterGameInstance::OnGSDKHealthCheck);
         FOnGSDKServerActive_Dyn OnGSDKServerActive;
         OnGSDKServerActive.BindDynamic(this, &UShooterGameInstance::OnGSDKServerActive);
         FOnGSDKReadyForPlayers_Dyn OnGSDKReadyForPlayers;
