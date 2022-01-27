@@ -116,7 +116,7 @@ void UGSDKUtils::RegisterGSDKServerActiveDelegate(const FOnGSDKServerActive_Dyn&
 }
 
 
-void UGSDKUtils::RegisterGSDKOnReadyForPlayers(const FOnGSDKReadyForPlayers_Dyn& OnGSDKReadyForPlayersDelegate)
+void UGSDKUtils::RegisterGSDKReadyForPlayers(const FOnGSDKReadyForPlayers_Dyn& OnGSDKReadyForPlayersDelegate)
 {
 	if (FPlayFabGSDKModule::Get().OnReadyForPlayers.IsBound())
 	{

@@ -107,7 +107,7 @@ public:
 	/// Register the GSDK GameServerInitializationComplete Delegate which sets the game status to Standby, marking that
 	/// the game is ready for players since all initialization is complete.
 	UFUNCTION(BlueprintCallable, Category="PlayFab|GSDK|Callbacks")
-	static void RegisterGSDKOnReadyForPlayers(const FOnGSDKReadyForPlayers_Dyn& OnGSDKReadyForPlayersDelegate);
+	static void RegisterGSDKReadyForPlayers(const FOnGSDKReadyForPlayers_Dyn& OnGSDKReadyForPlayersDelegate);
 
 
 	/// Register the GSDK Health Delegate, which gets called on every heartbeat to ensure that the server is still healthy
