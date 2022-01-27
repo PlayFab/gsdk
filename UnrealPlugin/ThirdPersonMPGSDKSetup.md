@@ -218,8 +218,8 @@ If you already **had** an Init() function, go to check in [YourGameInstanceClass
         FOnGSDKReadyForPlayers_Dyn OnGSDKReadyForPlayers;
         OnGSDKReadyForPlayers.BindDynamic(this, &UShooterGameInstance::OnGSDKReadyForPlayers);
 
-		UGSDKUtils::RegisterGSDKShutdownDelegate(OnGsdkShutdown);
-		UGSDKUtils::RegisterGSDKHealthCheckDelegate(OnGsdkHealthCheck);
+        UGSDKUtils::RegisterGSDKShutdownDelegate(OnGsdkShutdown);
+        UGSDKUtils::RegisterGSDKHealthCheckDelegate(OnGsdkHealthCheck);
         UGSDKUtils::RegisterGSDKServerActiveDelegate(OnGSDKServerActive);
         UGSDKUtils::RegisterGSDKReadyForPlayers(OnGSDKReadyForPlayers);
 
