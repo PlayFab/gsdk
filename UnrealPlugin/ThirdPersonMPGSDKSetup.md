@@ -156,6 +156,12 @@ protected:
 
     UFUNCTION()
     bool OnGSDKHealthCheck();
+
+    UFUNCTION()
+    void OnGSDKServerActive();
+
+    UFUNCTION()
+    void OnGSDKReadyForPlayers();
 };
 ```
 
@@ -182,9 +188,15 @@ void U[YourGameInstanceClassName]::Init()
     OnGsdkShutdown.BindDynamic(this, &UMyGameInstance::OnGSDKShutdown);
     FOnGSDKHealthCheck_Dyn OnGsdkHealthCheck;
     OnGsdkHealthCheck.BindDynamic(this, &UMyGameInstance::OnGSDKHealthCheck);
+    FOnGSDKServerActive_Dyn OnGSDKServerActive;
+    OnGSDKServerActive.BindDynamic(this, &UMyGameInstance::OnGSDKServerActive);
+    FOnGSDKReadyForPlayers_Dyn OnGSDKReadyForPlayers;
+    OnGSDKReadyForPlayers.BindDynamic(this, &UMyGameInstance::OnGSDKReadyForPlayers);
 
     UGSDKUtils::RegisterGSDKShutdownDelegate(OnGsdkShutdown);
     UGSDKUtils::RegisterGSDKHealthCheckDelegate(OnGsdkHealthCheck);
+    UGSDKUtils::RegisterGSDKServerActiveDelegate(OnGSDKServerActive);
+    UGSDKUtils::RegisterGSDKReadyForPlayers(OnGSDKReadyForPlayers);
 }
 ```
 
@@ -195,29 +207,29 @@ If you already **had** an Init() function, go to check in [YourGameInstanceClass
 ###### Modifying Existing Init() function
 
 ```cpp
-	if (IsDedicatedServerInstance() == true)
-	{
-		FOnGSDKShutdown_Dyn OnGsdkShutdown;
-		OnGsdkShutdown.BindDynamic(this, &UShooterGameInstance::OnGSDKShutdown);
-		FOnGSDKHealthCheck_Dyn OnGsdkHealthCheck;
-		OnGsdkHealthCheck.BindDynamic(this, &UShooterGameInstance::OnGSDKHealthCheck);
+    if (IsDedicatedServerInstance() == true)
+    {
+        FOnGSDKShutdown_Dyn OnGsdkShutdown;
+        OnGsdkShutdown.BindDynamic(this, &UShooterGameInstance::OnGSDKShutdown);
+        FOnGSDKHealthCheck_Dyn OnGsdkHealthCheck;
+        OnGsdkHealthCheck.BindDynamic(this, &UShooterGameInstance::OnGSDKHealthCheck);
+        FOnGSDKServerActive_Dyn OnGSDKServerActive;
+        OnGSDKServerActive.BindDynamic(this, &UShooterGameInstance::OnGSDKServerActive);
+        FOnGSDKReadyForPlayers_Dyn OnGSDKReadyForPlayers;
+        OnGSDKReadyForPlayers.BindDynamic(this, &UShooterGameInstance::OnGSDKReadyForPlayers);
 
-		UGSDKUtils::RegisterGSDKShutdownDelegate(OnGsdkShutdown);
-		UGSDKUtils::RegisterGSDKHealthCheckDelegate(OnGsdkHealthCheck);
-
-		OnStart();
-	}
+        UGSDKUtils::RegisterGSDKShutdownDelegate(OnGsdkShutdown);
+        UGSDKUtils::RegisterGSDKHealthCheckDelegate(OnGsdkHealthCheck);
+        UGSDKUtils::RegisterGSDKServerActiveDelegate(OnGSDKServerActive);
+        UGSDKUtils::RegisterGSDKReadyForPlayers(OnGSDKReadyForPlayers);
+    }
 ```
 
-**If you can't find a variable like IsDedicatedServerInstance(),** we still want to make sure that ReadyForPlayers() and onStart() are used when using a dedicated server, so you could wrap the call to ReadyForPlayers() as such at the bottom of the Init function:
+**Complete your Init function** by adding the following code that sets up the default port for MPS.
 
 ```cpp
 #if UE_SERVER
     UGSDKUtils::SetDefaultServerHostPort();
-    if (!UGSDKUtils::ReadyForPlayers())
-    {
-        FPlatformMisc::RequestExit(false);
-    }
 #endif
 ```
 
@@ -229,10 +241,7 @@ Lastly, add these method implementations to the bottom of [YourGameInstanceClass
 void UMyGameInstance::OnStart()
 {
     UE_LOG(LogTemp, Warning, TEXT("Reached onStart!"));
-    if (!UGSDKUtils::ReadyForPlayers())
-    {
-        FPlatformMisc::RequestExit(false);
-    }
+    UGSDKUtils::ReadyForPlayers();
 }
 
 void UMyGameInstance::OnGSDKShutdown()
@@ -245,6 +254,27 @@ bool UMyGameInstance::OnGSDKHealthCheck()
 {
     UE_LOG(LogTemp, Warning, TEXT("Healthy!"));
     return true;
+}
+
+void UMyGameInstance::OnGSDKServerActive()
+{
+    /**
+     * Server is transitioning to an active state.
+     * Optional: Add in the implementation any code that is needed for the game server when
+     * this transition occurs.
+     */
+    UE_LOG(LogTemp, Warning, TEXT("Active!"));
+}
+
+void UMyGameInstance::OnGSDKReadyForPlayers()
+{
+    /**
+     * Server is transitioning to a StandBy state. Game initialization is complete and the game is ready
+     * to accept players.
+     * Optional: Add in the implementation any code that is needed for the game server before
+     * initialization completes.
+     */
+    UE_LOG(LogTemp, Warning, TEXT("Finished Initialization - Moving to StandBy!"));
 }
 ```
 

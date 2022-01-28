@@ -149,18 +149,20 @@ public:
 	void SetState(EGameState State);
 	void SetConnectedPlayers(const TArray<FConnectedPlayer>& CurrentConnectedPlayers);
 
-	// Sets state to StandBy to mark end of server initialization
-	void SetServerInitializationComplete();
+	// Sets state to StandBy to mark end of server initialization. Name follows convention of GSDK where once
+	// game initialization is complete, the game is ready for players and once MPS allocates the server they ll 
+	// be able to connect.
+	void ReadyForPlayers();
 
 	DECLARE_DELEGATE(FOnShutdown);
 	DECLARE_DELEGATE(FOnServerActive);
-	DECLARE_DELEGATE(FOnGameServerInitializationComplete);
+	DECLARE_DELEGATE(FOnReadyForPlayers);
 	DECLARE_DELEGATE_RetVal(bool, FOnHealthCheck);
 	DECLARE_DELEGATE_OneParam(FOnMaintenance, const FDateTime&)
 
 	FOnShutdown OnShutdown;
 	FOnServerActive OnServerActive;
-	FOnGameServerInitializationComplete OnGameServerInitializationComplete;
+	FOnReadyForPlayers OnReadyForPlayers;
 	FOnMaintenance OnMaintenance;
 	FOnHealthCheck OnHealthCheck;
 private:

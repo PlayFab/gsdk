@@ -24,7 +24,7 @@
 
 DECLARE_DYNAMIC_DELEGATE(FOnGSDKShutdown_Dyn);
 DECLARE_DYNAMIC_DELEGATE(FOnGSDKServerActive_Dyn);
-DECLARE_DYNAMIC_DELEGATE(FOnGSDKGameServerInitializationComplete_Dyn);
+DECLARE_DYNAMIC_DELEGATE(FOnGSDKReadyForPlayers_Dyn);
 DECLARE_DYNAMIC_DELEGATE_RetVal(bool, FOnGSDKHealthCheck_Dyn);
 DECLARE_DYNAMIC_DELEGATE_OneParam(FOnGSDKMaintenance_Dyn, const FDateTime&, MaintenanceTime);
 
@@ -37,8 +37,10 @@ class PLAYFABGSDK_API UGSDKUtils : public UBlueprintFunctionLibrary
 	GENERATED_BODY()
 
 public:
-	// Sets state to StandBy to mark end of server initialization
-	static void SetServerInitializationComplete();
+	// Sets state to StandBy to mark end of server initialization. Name follows convention of GSDK where once
+	// game initialization is complete, the game is ready for players and once MPS allocates the server they ll 
+	// be able to connect.
+	static void ReadyForPlayers();
 
 	/// Gets information (ipAddress and ports) for connecting to the game server, as well as the ports the
 	/// game server should listen on.
@@ -102,9 +104,10 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "PlayFab|GSDK|Callbacks")
 	static void RegisterGSDKServerActiveDelegate(const FOnGSDKServerActive_Dyn& OnGSDKServerActiveDelegate);
 	
-	/// Register the GSDK GameServerInitializationComplete Delegate which sets the game status to Standby
+	/// Register the GSDK GameServerInitializationComplete Delegate which sets the game status to Standby, marking that
+	/// the game is ready for players since all initialization is complete.
 	UFUNCTION(BlueprintCallable, Category="PlayFab|GSDK|Callbacks")
-	static void RegisterGSDKOnGameServerInitializationComplete(const FOnGSDKGameServerInitializationComplete_Dyn& OnGSDKGameServerInitializationCompleteDelegate);
+	static void RegisterGSDKReadyForPlayers(const FOnGSDKReadyForPlayers_Dyn& OnGSDKReadyForPlayersDelegate);
 
 
 	/// Register the GSDK Health Delegate, which gets called on every heartbeat to ensure that the server is still healthy

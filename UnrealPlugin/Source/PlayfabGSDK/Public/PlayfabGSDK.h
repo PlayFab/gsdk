@@ -37,8 +37,10 @@ public:
 
 	static FPlayFabGSDKModule& Get() { return FModuleManager::LoadModuleChecked<FPlayFabGSDKModule>(TEXT("PlayFabGSDK"));}
 
-	// Sets state to StandBy to mark end of server initialization
-	void SetServerInitializationComplete();
+	// Sets state to StandBy to mark end of server initialization. Name follows convention of GSDK where once
+	// game initialization is complete, the game is ready for players and once MPS allocates the server they ll 
+	// be able to connect.
+	void ReadyForPlayers();
 
 	/// <summary>
 	/// Gets information (ipAddress and ports) for connecting to the game server, as well as the ports the
@@ -58,7 +60,7 @@ public:
 protected:
 	DECLARE_DELEGATE(FOnShutdown);
 	DECLARE_DELEGATE(FOnServerActive);
-	DECLARE_DELEGATE(FOnGameServerInitializationComplete);
+	DECLARE_DELEGATE(FOnReadyForPlayers);
 	DECLARE_DELEGATE_RetVal(bool, FOnHealthCheck);
 	DECLARE_DELEGATE_OneParam(FOnMaintenance, const FDateTime&)
 
@@ -70,7 +72,7 @@ public:
 	FOnServerActive OnServerActive;	
 
 	/// </summary>Gets called when the server is ready to move from initialization to standby</summary>
-	FOnGameServerInitializationComplete OnGameServerInitializationComplete;
+	FOnReadyForPlayers OnReadyForPlayers;
 
 	/// <summary>Gets called when the agent needs to check on the game's health</summary>
 	FOnHealthCheck OnHealthCheck;

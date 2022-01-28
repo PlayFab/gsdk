@@ -51,11 +51,11 @@ void FPlayFabGSDKModule::StartupModule()
 			OnServerActive.Execute();
 		}
 	});
-	GSDKInternal->OnGameServerInitializationComplete.BindLambda([this]()
+	GSDKInternal->OnReadyForPlayers.BindLambda([this]()
 	{
-		if (OnGameServerInitializationComplete.IsBound())
+		if (OnReadyForPlayers.IsBound())
 		{
-			OnGameServerInitializationComplete.Execute();
+			OnReadyForPlayers.Execute();
 		}
 	});
 	GSDKInternal->OnHealthCheck.BindLambda([this]()
@@ -83,10 +83,10 @@ void FPlayFabGSDKModule::ShutdownModule()
 #endif
 }
 
-void FPlayFabGSDKModule::SetServerInitializationComplete()
+void FPlayFabGSDKModule::ReadyForPlayers()
 {
 #if PLAYFAB_GSDK_SERVER
-	GSDKInternal->SetServerInitializationComplete();
+	GSDKInternal->ReadyForPlayers();
 #endif
 }
 
