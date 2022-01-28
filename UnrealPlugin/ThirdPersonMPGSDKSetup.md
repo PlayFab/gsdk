@@ -175,6 +175,10 @@ Make sure that the following are included:
 #include "[YourGameInstanceClassName].h"
 #include "PlayfabGSDK.h"
 #include "GSDKUtils.h"
+
+#if !UE_SERVER
+DEFINE_LOG_CATEGORY(LogPlayFabGSDK);
+#endif
 ```
 
 Then locate your Init() function. If you _**don't**_ have an Init() function yet, then add in the function as such:
@@ -240,19 +244,19 @@ Lastly, add these method implementations to the bottom of [YourGameInstanceClass
 ```cpp
 void UMyGameInstance::OnStart()
 {
-    UE_LOG(LogTemp, Warning, TEXT("Reached onStart!"));
+    UE_LOG(LogPlayFabGSDK, Warning, TEXT("Reached onStart!"));
     UGSDKUtils::ReadyForPlayers();
 }
 
 void UMyGameInstance::OnGSDKShutdown()
 {
-    UE_LOG(LogTemp, Warning, TEXT("Shutdown!"));
+    UE_LOG(LogPlayFabGSDK, Warning, TEXT("Shutdown!"));
     FPlatformMisc::RequestExit(false);
 }
 
 bool UMyGameInstance::OnGSDKHealthCheck()
 {
-    UE_LOG(LogTemp, Warning, TEXT("Healthy!"));
+    UE_LOG(LogPlayFabGSDK, Warning, TEXT("Healthy!"));
     return true;
 }
 
@@ -263,7 +267,7 @@ void UMyGameInstance::OnGSDKServerActive()
      * Optional: Add in the implementation any code that is needed for the game server when
      * this transition occurs.
      */
-    UE_LOG(LogTemp, Warning, TEXT("Active!"));
+    UE_LOG(LogPlayFabGSDK, Warning, TEXT("Active!"));
 }
 
 void UMyGameInstance::OnGSDKReadyForPlayers()
@@ -274,7 +278,7 @@ void UMyGameInstance::OnGSDKReadyForPlayers()
      * Optional: Add in the implementation any code that is needed for the game server before
      * initialization completes.
      */
-    UE_LOG(LogTemp, Warning, TEXT("Finished Initialization - Moving to StandBy!"));
+    UE_LOG(LogPlayFabGSDK, Warning, TEXT("Finished Initialization - Moving to StandBy!"));
 }
 ```
 
