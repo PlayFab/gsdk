@@ -134,7 +134,7 @@ First, check the include statements and ensure that the following are included i
 ```cpp
 #include "CoreMinimal.h"
 #include "Engine/GameInstance.h"
-#include "MyGameInstance.generated.h"
+#include "[YourGameInstanceClassName].generated.h"
 ```
 
 Then, add the following declarations to the public section: (If you already have an Init() function, there is no need to include another declaration)
