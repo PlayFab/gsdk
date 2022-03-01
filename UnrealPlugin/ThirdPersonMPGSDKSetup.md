@@ -189,13 +189,13 @@ Then locate your Init() function. If you _**don't**_ have an Init() function yet
 void U[YourGameInstanceClassName]::Init()
 {
     FOnGSDKShutdown_Dyn OnGsdkShutdown;
-    OnGsdkShutdown.BindDynamic(this, &UMyGameInstance::OnGSDKShutdown);
+    OnGsdkShutdown.BindDynamic(this, &U[YourGameInstanceClassName]::OnGSDKShutdown);
     FOnGSDKHealthCheck_Dyn OnGsdkHealthCheck;
-    OnGsdkHealthCheck.BindDynamic(this, &UMyGameInstance::OnGSDKHealthCheck);
+    OnGsdkHealthCheck.BindDynamic(this, &U[YourGameInstanceClassName]::OnGSDKHealthCheck);
     FOnGSDKServerActive_Dyn OnGSDKServerActive;
-    OnGSDKServerActive.BindDynamic(this, &UMyGameInstance::OnGSDKServerActive);
+    OnGSDKServerActive.BindDynamic(this, &U[YourGameInstanceClassName]::OnGSDKServerActive);
     FOnGSDKReadyForPlayers_Dyn OnGSDKReadyForPlayers;
-    OnGSDKReadyForPlayers.BindDynamic(this, &UMyGameInstance::OnGSDKReadyForPlayers);
+    OnGSDKReadyForPlayers.BindDynamic(this, &U[YourGameInstanceClassName]::OnGSDKReadyForPlayers);
 
     UGSDKUtils::RegisterGSDKShutdownDelegate(OnGsdkShutdown);
     UGSDKUtils::RegisterGSDKHealthCheckDelegate(OnGsdkHealthCheck);
@@ -242,25 +242,25 @@ If you already **had** an Init() function, go to check in [YourGameInstanceClass
 Lastly, add these method implementations to the bottom of [YourGameInstanceClassName].cpp file:
 
 ```cpp
-void UMyGameInstance::OnStart()
+void U[YourGameInstanceClassName]::OnStart()
 {
     UE_LOG(LogPlayFabGSDK, Warning, TEXT("Reached onStart!"));
     UGSDKUtils::ReadyForPlayers();
 }
 
-void UMyGameInstance::OnGSDKShutdown()
+void U[YourGameInstanceClassName]::OnGSDKShutdown()
 {
     UE_LOG(LogPlayFabGSDK, Warning, TEXT("Shutdown!"));
     FPlatformMisc::RequestExit(false);
 }
 
-bool UMyGameInstance::OnGSDKHealthCheck()
+bool U[YourGameInstanceClassName]::OnGSDKHealthCheck()
 {
     UE_LOG(LogPlayFabGSDK, Warning, TEXT("Healthy!"));
     return true;
 }
 
-void UMyGameInstance::OnGSDKServerActive()
+void U[YourGameInstanceClassName]::OnGSDKServerActive()
 {
     /**
      * Server is transitioning to an active state.
@@ -270,7 +270,7 @@ void UMyGameInstance::OnGSDKServerActive()
     UE_LOG(LogPlayFabGSDK, Warning, TEXT("Active!"));
 }
 
-void UMyGameInstance::OnGSDKReadyForPlayers()
+void U[YourGameInstanceClassName]::OnGSDKReadyForPlayers()
 {
     /**
      * Server is transitioning to a StandBy state. Game initialization is complete and the game is ready
