@@ -83,7 +83,7 @@ const TArray<FString> UGSDKUtils::GetInitialPlayers()
 
 void UGSDKUtils::RegisterGSDKShutdownDelegate(const FOnGSDKShutdown_Dyn& OnGSDKShutdownDelegate)
 {
-	if (FPlayFabGSDKModule::Get().OnMaintenance.IsBound())
+	if (FPlayFabGSDKModule::Get().OnShutdown.IsBound())
 	{
 		UE_LOG(LogPlayFabGSDK, Error, TEXT("GSDK Shutdown Delegate is already bound! Will unbind the old binding!"));
 	}
