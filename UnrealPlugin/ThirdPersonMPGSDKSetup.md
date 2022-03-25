@@ -137,6 +137,13 @@ First, check the include statements and ensure that the following are included i
 #include "[YourGameInstanceClassName].generated.h"
 ```
 
+[Optional]
+With the following code, the user can introduce a log channel specifically for the GameInstance. Alternatively, logging with LogTemp is sufficient.
+
+```cpp
+DECLARE_LOG_CATEGORY_EXTERN(LogPlayFabGSDKGameInstance, Log, All);
+```
+
 Then, add the following declarations to the public section: (If you already have an Init() function, there is no need to include another declaration)
 
 ```cpp
@@ -175,10 +182,11 @@ Make sure that the following are included:
 #include "[YourGameInstanceClassName].h"
 #include "PlayfabGSDK.h"
 #include "GSDKUtils.h"
+```
 
-#if !UE_SERVER
-DEFINE_LOG_CATEGORY(LogPlayFabGSDK);
-#endif
+If the custom log channel has been introduced in the header file, then the following code is necessary:
+```cpp
+DEFINE_LOG_CATEGORY(LogPlayFabGSDKGameInstance);
 ```
 
 Then locate your Init() function. If you _**don't**_ have an Init() function yet, then add in the function as such:
@@ -244,19 +252,19 @@ Lastly, add these method implementations to the bottom of [YourGameInstanceClass
 ```cpp
 void U[YourGameInstanceClassName]::OnStart()
 {
-    UE_LOG(LogPlayFabGSDK, Warning, TEXT("Reached onStart!"));
+    UE_LOG(LogPlayFabGSDKGameInstance, Warning, TEXT("Reached onStart!"));
     UGSDKUtils::ReadyForPlayers();
 }
 
 void U[YourGameInstanceClassName]::OnGSDKShutdown()
 {
-    UE_LOG(LogPlayFabGSDK, Warning, TEXT("Shutdown!"));
+    UE_LOG(LogPlayFabGSDKGameInstance, Warning, TEXT("Shutdown!"));
     FPlatformMisc::RequestExit(false);
 }
 
 bool U[YourGameInstanceClassName]::OnGSDKHealthCheck()
 {
-    UE_LOG(LogPlayFabGSDK, Warning, TEXT("Healthy!"));
+    UE_LOG(LogPlayFabGSDKGameInstance, Warning, TEXT("Healthy!"));
     return true;
 }
 
@@ -267,7 +275,7 @@ void U[YourGameInstanceClassName]::OnGSDKServerActive()
      * Optional: Add in the implementation any code that is needed for the game server when
      * this transition occurs.
      */
-    UE_LOG(LogPlayFabGSDK, Warning, TEXT("Active!"));
+    UE_LOG(LogPlayFabGSDKGameInstance, Warning, TEXT("Active!"));
 }
 
 void U[YourGameInstanceClassName]::OnGSDKReadyForPlayers()
@@ -278,7 +286,7 @@ void U[YourGameInstanceClassName]::OnGSDKReadyForPlayers()
      * Optional: Add in the implementation any code that is needed for the game server before
      * initialization completes.
      */
-    UE_LOG(LogPlayFabGSDK, Warning, TEXT("Finished Initialization - Moving to StandBy!"));
+    UE_LOG(LogPlayFabGSDKGameInstance, Warning, TEXT("Finished Initialization - Moving to StandBy!"));
 }
 ```
 
