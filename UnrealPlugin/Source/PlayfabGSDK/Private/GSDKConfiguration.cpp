@@ -185,9 +185,9 @@ FJsonFileConfiguration::FJsonFileConfiguration(const FString& FileName)
 	if (ConfigJson->HasField(TEXT("gamePorts")))
 	{
 		TSharedPtr<FJsonObject> GamePortsJson = ConfigJson->GetObjectField(TEXT("gamePorts"));
-		for (const auto& GamePort: GamePortsJson->Values)
+		for (const auto& GamePortCur: GamePortsJson->Values)
 		{
-			Ports.Add(GamePort.Key, GamePort.Value->AsString());
+			Ports.Add(GamePortCur.Key, GamePortCur.Value->AsString());
 		}
 	}
 
