@@ -169,7 +169,6 @@ protected:
 
     UFUNCTION()
     void OnGSDKReadyForPlayers();
-};
 ```
 
 ##### Modifying the GameInstance Cpp file
