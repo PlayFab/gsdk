@@ -2,12 +2,10 @@
 
 This article describes how to integrate PlayFab Multiplayer Server SDK (GSDK) Unreal Online Subsystem (OSS) plugin with your Unreal game project.
 
-This plugin offers both a Blueprint API and a C++ API. The Blueprint API still requires your Unreal Project to be a C++ project, and will not work on a Blueprint only project. If it is currently a Blueprint only project, then you need to convert to a C++ project beforehand, before adding the plugin.
+This plugin offers both a Blueprint API and a C++ API. The Blueprint API still requires your Unreal Project to be a C++ project, and will not work on a Blueprint only project. If it is currently a Blueprint only project, then you need to convert to a C++ project beforehand, before adding the plugin. Disclaimer, the Blueprint implementation documentation is outdated currently. We advise users to use the pure C++ implementation.
 
-The following nodes are supported:
-![PlayFab GSDK Blueprint Nodes](Documentation/GSDKBlueprintNodes.png)
 
-It was tested with Unreal Engine 4.26.2, but should work with other engines as well.
+**The implementation has been tested for the following versions: 4.26, 4.27, 5 - early access and 5 - official release.**
 
 The sample game these instructions were created with was called ThirdPersonMP, so replace anywhere you see that with your game name.
 

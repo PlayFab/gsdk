@@ -39,7 +39,7 @@ See the example below:
 ```json
 {
     "FileVersion": 3,
-    "EngineAssociation": "4.26",
+    "EngineAssociation": "<your engine version>",
     "Category": "",
     "Description": "",
     "Modules": [
@@ -69,13 +69,13 @@ Update <modulename>.Build.cs file to add "PlayFabGSDK" into the PublicDependency
 PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "HeadMountedDisplay", "PlayFabGSDK" });
 ```
 
-Right-click on the .uproject file and select the option to __Switch Unreal Engine version__, which is how you can quickly check which Unreal Engine version you are currently using. The popup seen below should appear. If you already see that the Unreal Engine version is source build, you don’t need to change anything, so click Cancel. If the Unreal version is not currently the source build, select it from the dropdown list and then click OK.
+* Right-click on the .uproject file and select the option to __Switch Unreal Engine version__, which is how you can quickly check which Unreal Engine version you are currently using. The popup seen below should appear. If you already see that the Unreal Engine version is source build, you don’t need to change anything, so click Cancel. If the Unreal version is not currently the source build, select it from the dropdown list and then click OK.
 
 ![image depicting a window that says "Select Unreal Engine Version"](Documentation/SelectUnrealEngineVersion.png)
 
-Right-click on the .uproject file again and select "Generate Visual Studio Project Files".
+* Right-click on the .uproject file again and select "Generate Visual Studio Project Files". This is a very important step, if Unreal produces any errors then make sure that your UnrealBuildTool works correctly.
 
-Then, build the project in Visual Studio and start the Editor by selecting the Development Editor configuration.
+* Finally, build the project in Visual Studio and start the Editor by selecting the Development Editor configuration.
 
 ![image depicting Visual Studio with the option to build in Development Editor Mode](Documentation/DevelopmentEditor.png)
 
@@ -291,6 +291,8 @@ void U[YourGameInstanceClassName]::OnGSDKReadyForPlayers()
 
 ## Blueprint implementation
 
+This part is only needed if you have decided to not proceed with the pure C++ implementation and prefer the Blueprint implementation. The nodes described here are currently outdated, we advise users to consult the C++ implementation and create the respective nodes for the Blueprint implementation.
+
 * Observe the Content Browser window in the Unreal Editor
 * Pick or create a folder to contain new Blueprints
 * Right-Click and create a Blueprint class
@@ -313,12 +315,14 @@ void U[YourGameInstanceClassName]::OnGSDKReadyForPlayers()
 
 ## Set the Game Instance class
 
-After creating a custom game instance class that integrates with the gsdk, you have to configure your project to actually use this newly created game instance class. There are two ways to do this - either through the Unreal Engine editor or by editing DefaultEngine.ini directly.
+After creating a custom game instance class (either through the pure C++ implementation or the Blueprint implementation) that integrates with the gsdk, you have to configure your project to actually use this newly created game instance class. There are two ways to do this - either through the Unreal Engine editor or by editing DefaultEngine.ini directly.
 
 ### In the Unreal Editor
 
-In the editor, this can also be set through the UI in the editor. In the editor go to Edit -> Project Settings. From that opened window,
-navigate to Maps&Modes on the left side. Scroll to the bottom, and then you can set the option "Game Instance Class" to your new game instance class directly, and avoid typos.
+In the editor, this can also be set through the UI.
+* Go to Edit -> Project Settings.
+* From that opened window, navigate to Maps&Modes on the left side.
+* Scroll to the bottom, and then you can set the option "Game Instance Class" to your new game instance class directly, and avoid typos.
 
 ### In DefaultEngine.ini
 
