@@ -89,8 +89,8 @@ public:
 	/// <summary>After allocation, returns a list of the initial players that have access to this game server, used by PlayFab's Matchmaking offering</summary>
 	const TArray<FString> GetInitialPlayers();
 
-	/// <summary>Returns whether GSDK calls should be executed (if noGSDK then we are most likely running a local test server, so no MPS agent)</summary>
-	const bool GetIsUsingGsdk() const { return bNoGSDK; }
+	/// <summary>Returns whether GSDK calls should be executed (if noGSDK flag was found then we are most likely running a local test server, so no MPS agent)</summary>
+	const bool GetIsUsingGsdk() const { return !bNoGSDK; }
 
 	static constexpr const TCHAR* HEARTBEAT_ENDPOINT_KEY = TEXT("gsmsBaseUrl");
 	static constexpr const TCHAR* SERVER_ID_KEY = TEXT("instanceId");
