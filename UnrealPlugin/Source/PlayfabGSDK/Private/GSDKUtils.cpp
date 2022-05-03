@@ -176,6 +176,9 @@ FString UGSDKUtils::GetConfigValue(const FString& Key)
 
 bool UGSDKUtils::SetDefaultServerHostPort()
 {
+	//If we're running a local test server then we don't want to check the host port as the MPS won't be present
+	if(FPlayFabGSDKModule::Get().GetIsUsingGsdk() == false) return true;
+
 	auto ConnectionInfo = GetGameServerConnectionInfo();
 	// Override the internal Unreal Game Server hosting port number, with one driven from Game Manager
 	// A game server hosted in MPS won't be accessible by clients unless it uses the port that MPS has configured for it.
