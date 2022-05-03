@@ -90,7 +90,7 @@ public:
 	const TArray<FString> GetInitialPlayers();
 
 	/// <summary>Returns whether GSDK calls should be executed (if noGSDK flag was found then we are most likely running a local test server, so no MPS agent)</summary>
-	const bool GetIsUsingGsdk() const { return !bNoGSDK; }
+	const bool GetIsUsingGsdk() const { return !NoGSDK; }
 
 	static constexpr const TCHAR* HEARTBEAT_ENDPOINT_KEY = TEXT("gsmsBaseUrl");
 	static constexpr const TCHAR* SERVER_ID_KEY = TEXT("instanceId");
@@ -112,5 +112,5 @@ private:
 
 	TUniquePtr<FGSDKInternal> GSDKInternal = nullptr;
 
-	bool bNoGSDK = false;
+	bool NoGSDK = false;
 };
