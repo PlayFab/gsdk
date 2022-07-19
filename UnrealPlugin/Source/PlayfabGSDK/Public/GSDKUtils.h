@@ -38,8 +38,8 @@ class PLAYFABGSDK_API UGSDKUtils : public UBlueprintFunctionLibrary
 
 public:
 	// Sets state to StandBy to mark end of server initialization. Name follows convention of GSDK where once
-	// game initialization is complete, the game is ready for players and once MPS allocates the server they ll 
-	// be able to connect.
+	// game initialization is complete, the game is ready for players and once MPS allocates the server they 
+	// will be able to connect.
 	static void ReadyForPlayers();
 
 	/// Gets information (ipAddress and ports) for connecting to the game server, as well as the ports the

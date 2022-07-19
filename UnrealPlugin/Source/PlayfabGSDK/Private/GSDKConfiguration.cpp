@@ -130,7 +130,7 @@ FJsonFileConfiguration::FJsonFileConfiguration(const FString& FileName)
 {
 	if (!FPaths::FileExists(FileName))
 	{
-		UE_LOG(LogPlayFabGSDK, Fatal, TEXT("Specified configuration file doesnt exist: %s"), *FileName);
+		UE_LOG(LogPlayFabGSDK, Fatal, TEXT("Specified configuration file does not exist: %s"), *FileName);
 		return;
 	}
 
