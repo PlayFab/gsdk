@@ -15,7 +15,7 @@ The sample game these instructions were created with was called ThirdPersonMP, s
 	* Required workloads: .NET desktop development and Desktop development with C++
 * Download Unreal Engine Source Code. For instructions, see [Downloading Unreal Engine Source code (external)](https://docs.unrealengine.com/4.26/ProgrammingAndScripting/ProgrammingWithCPP/DownloadingSourceCode/).
 * If you haven't already, please git clone this repo to your local machinne
-	* ```git clone https://github.com/PlayFab/gsdk```
+	* ```git clone https://github.com/PlayFab/gsdk.git```
 	* Later steps will involve integrating files from this repo to your project
 * [Optional] Download the [LocalMultiplayerAgent](https://github.com/PlayFab/MpsAgent/releases)
 	* [Optional] Alternatively, download [LocalMultiplayerAgent source](https://github.com/PlayFab/MpsAgent/tree/main/LocalMultiplayerAgent).
