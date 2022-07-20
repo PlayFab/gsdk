@@ -2,7 +2,7 @@
 
 This article describes how to integrate PlayFab Multiplayer Server SDK (GSDK) Unreal Online Subsystem (OSS) plugin with your Unreal game project.
 
-This plugin offers both a Blueprint API and a C++ API. The Blueprint API still requires your Unreal Project to be a C++ project, and will not work on a Blueprint only project. If it is currently a Blueprint only project, then you need to convert to a C++ project beforehand, before adding the plugin. Disclaimer, the Blueprint implementation documentation is outdated currently. We advise users to use the pure C++ implementation.
+This plugin offers both a Blueprint API and a C++ API. The Blueprint API still requires your Unreal Project to be a C++ project, and will not work on a Blueprint only project. If it is currently a Blueprint only project, then you need to convert to a C++ project beforehand, before adding the plugin.
 
 
 **The implementation has been tested for the following versions: 4.26, 4.27, 5 - early access and 5 - official release.**
@@ -13,9 +13,9 @@ The sample game these instructions were created with was called ThirdPersonMP, s
 
 * Download Visual Studio. The [community version](https://visualstudio.microsoft.com/vs/community/) is free.
 	* Required workloads: .NET desktop development and Desktop development with C++
-* Download Unreal Engine Source Code. This plugin was tested on Unreal Engine 4.26.2. For instructions, see [Downloading Unreal Engine Source code (external)](https://docs.unrealengine.com/4.26/ProgrammingAndScripting/ProgrammingWithCPP/DownloadingSourceCode/).
+* Download Unreal Engine Source Code. For instructions, see [Downloading Unreal Engine Source code (external)](https://docs.unrealengine.com/4.26/ProgrammingAndScripting/ProgrammingWithCPP/DownloadingSourceCode/).
 * If you haven't already, please git clone this repo to your local machinne
-	* ```git clone https://github.com/PlayFab/gsdk.git```
+	* ```git clone https://github.com/PlayFab/gsdk```
 	* Later steps will involve integrating files from this repo to your project
 * [Optional] Download the [LocalMultiplayerAgent](https://github.com/PlayFab/MpsAgent/releases)
 	* [Optional] Alternatively, download [LocalMultiplayerAgent source](https://github.com/PlayFab/MpsAgent/tree/main/LocalMultiplayerAgent).

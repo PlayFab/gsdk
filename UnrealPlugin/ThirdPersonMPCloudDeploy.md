@@ -36,7 +36,7 @@ This guide explains how to deploy your game to PlayFab Multiplayer Server (MPS) 
 * Select and remember an output location {ShippingServerFolder}
 * You can now use this packaged version of your game server to [test with LocalMultiplayerAgent](https://docs.microsoft.com/gaming/playfab/features/multiplayer/servers/locally-debugging-game-servers-and-integration-with-playfab)
 * Once verified with LocalMultiplayerAgent, see [creating a build guide](https://docs.microsoft.com/gaming/playfab/features/multiplayer/servers/deploying-playfab-multiplayer-server-builds)
-	* Testing on MPS at this point will require an intermediate tool from [PlayFab MpsAllocatorSample](https://github.com/PlayFab/MpsSamples/blob/master/MpsAllocatorSample/README.md)
+	* Testing on MPS at this point will require an intermediate tool from [PlayFab MpsAllocatorSample](https://github.com/PlayFab/MpsSamples/blob/main/MpsAllocatorSample/README.md)
 	* This tool bypasses some client work for now, and allows us to allocate a server without a direct request from the game client
 	* The proper way to do this on a client is a separate topic covered in the [allocation guide](https://docs.microsoft.com/gaming/playfab/features/multiplayer/servers/allocating-game-servers-and-configuring-vs-debugging-tools).
 * Zip your Shipping Server build from {ShippingServerFolder} above
@@ -60,10 +60,10 @@ This section will cover creating a build in PlayFab MPS, uploading your game ser
 	* If you're re-launching, you can select __Use existing assets__
 * Wait for the upload to complete
 * Skip __Start Command__ for now (covered in the next step)
-* In the Network block, set the Port Name field to ```UnrealServerGsdkHostPort```
+* In the Network block, set the Port Name field to ```gameport```
 	* It's mandatory to define the port that will be used to connect to your game server
 	* Unreal GSDK contains code to read this port automatically, and internaly override the Unreal Server host port according to this value
-	* It requires that the name of this port be set properly to ```UnrealServerGsdkHostPort```
+	* It requires that the name of this port be set properly to ```gameport```
 * Continue to the next step that matches the "Server Details" that you want to configure
 
 #### Option 1: Windows Process Mode
