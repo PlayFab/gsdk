@@ -495,6 +495,7 @@ void FGSDKInternal::SetConnectedPlayers(const TArray<FConnectedPlayer>& CurrentC
 
 void FGSDKInternal::ReadyForPlayers()
 {
+	UE_LOG(LogPlayFabGSDK, Display, TEXT("ReadyForPlayers, setting game state to StandingBy!"));
 	AsyncTask(ENamedThreads::GameThread, [this]()
 	{
 		SetState(EGameState::StandingBy);

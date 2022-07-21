@@ -40,6 +40,7 @@ public:
 	// Sets state to StandBy to mark end of server initialization. Name follows convention of GSDK where once
 	// game initialization is complete, the game is ready for players and once MPS allocates the server they 
 	// will be able to connect.
+	UFUNCTION(BlueprintCallable, Category = "PlayFab|GSDK|ReadyForPlayers")
 	static void ReadyForPlayers();
 
 	/// Gets information (ipAddress and ports) for connecting to the game server, as well as the ports the
@@ -119,7 +120,7 @@ public:
 	static void RegisterGSDKMaintenanceDelegate(const FOnGSDKMaintenance_Dyn& OnGSDKMaintenanceDelegate);
 
 	/// Read the port information from MPS, and assign the default server hosting port if applicable
-	UFUNCTION(BlueprintPure, Category = "PlayFab|GSDK|SetDefaultServerHostPort")
+	UFUNCTION(BlueprintCallable, Category = "PlayFab|GSDK|SetDefaultServerHostPort")
 	static bool SetDefaultServerHostPort();
 
 protected:

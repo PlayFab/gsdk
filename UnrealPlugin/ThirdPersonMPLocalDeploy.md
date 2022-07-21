@@ -56,7 +56,7 @@ In Explorer, find and open the file: ```{depot}\MpsAgent\LocalMultiplayerAgent\M
       {
         "NodePort": 30000,
         "GamePort": {
-          "Name": "UnrealServerGsdkHostPort",
+          "Name": "gameport",
           "Number": 8888,
           "Protocol": "UDP"
         }
@@ -85,7 +85,7 @@ For the purposes of this guide, the parts of the json file obscured by ```...```
 	* This zip file should contain a fully constructed "Shipping Server" build
 * PortMappingsList:
 	* This is the LocalMultiplayerAgent equivalent of defining the port in Game Manager
-	* The GSDK is hard-coded to look for a port with the name: UnrealServerGsdkHostPort
+	* The GSDK is hard-coded to look for a port with the name: gameport
 	* The GSDK [SetDefaultServerHostPort](https://github.com/PlayFab/gsdk/blob/master/UnrealPlugin/Source/PlayfabGSDK/Private/GSDKUtils.cpp#L147) method will internally override the internal Unreal Game Server hosting port to match this port
 	* This is because MPS must be the source of which port a game server will use, due to the way MPS launches servers, particularly when running multiple on the same cloud VM
 	* This json let's you locally test driving this port number from MPS, and ensures your GSDK plugin will receive it

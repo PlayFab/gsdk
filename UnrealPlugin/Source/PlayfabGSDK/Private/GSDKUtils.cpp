@@ -185,7 +185,7 @@ bool UGSDKUtils::SetDefaultServerHostPort()
 	int32 UnrealServerGsdkHostPort = -1;
 	for (auto& GamePorts : ConnectionInfo.GamePortsConfiguration) {
 		// "UnrealServerGsdkHostPort" is documented as the name of a required port when using the internal Unreal Game Server hosting mechanism
-		if (GamePorts.Name == TEXT("UnrealServerGsdkHostPort")) {
+		if (GamePorts.Name == TEXT("gameport")) {
 			UE_LOG(LogPlayFabGSDK, Warning, TEXT("GSDK Game server listening port: %d"), GamePorts.ServerListeningPort);
 			UE_LOG(LogPlayFabGSDK, Warning, TEXT("GSDK Game client connection port: %d"), GamePorts.ClientConnectionPort);
 			UnrealServerGsdkHostPort = GamePorts.ServerListeningPort;
@@ -194,7 +194,7 @@ bool UGSDKUtils::SetDefaultServerHostPort()
 	}
 	if (UnrealServerGsdkHostPort == -1)
 	{
-		UE_LOG(LogPlayFabGSDK, Fatal, TEXT("Unreal GSDK requires a named port: UnrealServerGsdkHostPort. This was not provided by MPS build port-configuration."));
+		UE_LOG(LogPlayFabGSDK, Fatal, TEXT("Unreal GSDK requires a named port: gameport. This was not provided by MPS build port-configuration."));
 		return false;
 	}
 	UE_LOG(LogPlayFabGSDK, Warning, TEXT("Assigning Unreal Server Host Port to MPS port: %d"), UnrealServerGsdkHostPort);

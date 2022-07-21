@@ -18,14 +18,12 @@ We will add and configure the Playfab Unreal GSDK to your project, and test it l
 
 * Download Visual Studio. The [community version](https://visualstudio.microsoft.com/vs/community/) is free.
 	* Required workloads: .NET desktop development and Desktop development with C++
-* Download Unreal Engine Source Code. This plugin was tested on Unreal Engine 4.26.2. For instructions, see [Downloading Unreal Engine Source code (external)](https://docs.unrealengine.com/4.26/ProgrammingAndScripting/ProgrammingWithCPP/DownloadingSourceCode/).
+* Download Unreal Engine Source Code. For instructions, see [Downloading Unreal Engine Source code (external)](https://docs.unrealengine.com/4.26/ProgrammingAndScripting/ProgrammingWithCPP/DownloadingSourceCode/).
 * A completed [ThirdPersonMP Example Project](ThirdPersonMPSetup.md), or a project with similar capabilities
-* [PlayFab Unreal GSDK plugin](https://github.com/PlayFab/gsdk/tree/master/UnrealPlugin)
+* [PlayFab Unreal GSDK plugin](https://github.com/PlayFab/gsdk/tree/main/UnrealPlugin)
 * [Optional] [PlayFab Marketplace plugin](https://www.unrealengine.com/marketplace/product/playfab-sdk) or the [source version on GitHub](https://github.com/PlayFab/UnrealMarketplacePlugin/tree/master/4.26/PlayFabPlugin/PlayFab). This plugin is not required for GSDK but is required for many PlayFab services, including login.
 
-## C++ Implementation
-
-### Adding the plugin to the project
+## Adding the plugin to the project
 
 Follow these steps to add the Unreal GSDK to your project:
 
@@ -79,8 +77,6 @@ PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engi
 
 ![image depicting Visual Studio with the option to build in Development Editor Mode](Documentation/DevelopmentEditor.png)
 
-### Project Setup
-
 Once your project has enabled server mode, you will have a <projectname>Server.Target.cs file.
 
 Result should look similar to:
@@ -109,6 +105,10 @@ DisablePlugins.Add("MediaFoundationMediaPlayer");
 ```
 NOTE: These configurations are invalid for a Linux server build.
 
+## Project Setup
+
+Depending on the setup of your game / project, you can choose to integrate GSDK in your game using the C++ or the Blueprint implementation that are both described below. First, you need to make sure that a GameInstance class exists, if not, follow the next steps.
+
 ### Creating/Updating the GameInstance Class
 
 #### Creating a GameInstance Class
@@ -122,6 +122,8 @@ In the Unreal Editor, go to Files->Create a new C++ class and select the option 
 Then close Unreal and generate project files in source build mode again.
 
 Then using Visual Studio, open those newly created files and follow instructions to modify the Game Instance class.
+
+## C++ Implementation
 
 #### Modify the Game Instance Class
 
@@ -291,13 +293,13 @@ void U[YourGameInstanceClassName]::OnGSDKReadyForPlayers()
 
 ## Blueprint implementation
 
-This part is only needed if you have decided to not proceed with the pure C++ implementation and prefer the Blueprint implementation. The nodes described here are currently outdated, we advise users to consult the C++ implementation and create the respective nodes for the Blueprint implementation.
+This part is only needed if you have decided to not proceed with the pure C++ implementation for the GameInstance class that is described above and prefer the Blueprint implementation. Both of them have been equally tested.
 
 * Observe the Content Browser window in the Unreal Editor
 * Pick or create a folder to contain new Blueprints
 * Right-Click and create a Blueprint class
 * In the All classes dropdown menu find your GameInstance class
-	* In this example the blueprint is named "MyGameInstance"
+	* In this example the blueprint is named "<ProjectName>GameInstance"
 * Double-click the blueprint
 * On the left side hover over the function field and select the Override dropdown
 * Select the Init function
@@ -310,7 +312,9 @@ This part is only needed if you have decided to not proceed with the pure C++ im
 * In the function make sure the return boolean value is checked.
 * ![PlayFab GSDK Health Check function](Documentation/BlueprintGSDKHealthCheckFunction.png)
 * Don't forget to connect all the nodes to the Event Init node.
-* In the end add the "Ready for Players" to be able to react to the ready signal of PlayFab.
+* In the end add the "ReadyforPlayers" to be able to react to the ready signal of PlayFab.
+* Also, dont forget to add the "SetDefaultServerHostPort" node to connect to the port that GSDK expects.
+* In general, if you are creating the Blueprint off the base GameInstance class of your game that you created above, or that your game already has, then all these functions will be displayed once you start typing them in every node, under PlayFab/GSDK.
 * ![PlayFab GSDK Full Graph](Documentation/BlueprintFullGraph.png)
 
 ## Set the Game Instance class
@@ -323,6 +327,7 @@ In the editor, this can also be set through the UI.
 * Go to Edit -> Project Settings.
 * From that opened window, navigate to Maps&Modes on the left side.
 * Scroll to the bottom, and then you can set the option "Game Instance Class" to your new game instance class directly, and avoid typos.
+* If you are using the Blueprint implementation, make sure that the name matches the one used for your Blueprint.
 
 ### In DefaultEngine.ini
 
