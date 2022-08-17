@@ -12,7 +12,7 @@ If not, you will need to return to the [ThirdPersonMP Example Project Setup](Thi
 
 ## Goals
 
-We will add and configure the Playfab Unreal GSDK to your project, and test it locally to verify it is expected to work on PlayFab Multiplayer Services.
+We will add and configure the PlayFab Unreal GSDK to your project, and test it locally to verify it is expected to work on PlayFab Multiplayer Services.
 
 ## Requirements
 
