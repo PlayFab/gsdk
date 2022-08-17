@@ -181,7 +181,7 @@ Make sure that the following are included:
 
 ```cpp
 #include "[YourGameInstanceClassName].h"
-#include "PlayfabGSDK.h"
+#include "PlayFabGSDK.h"
 #include "GSDKUtils.h"
 ```
 

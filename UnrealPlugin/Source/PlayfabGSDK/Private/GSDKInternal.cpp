@@ -19,7 +19,7 @@
 #include "HttpModule.h"
 #include "Async/Async.h"
 #include "Json.h"
-#include "PlayfabGSDK.h"
+#include "PlayFabGSDK.h"
 #include "Interfaces/IHttpResponse.h"
 #include "Misc/Paths.h"
 #include "Logging/LogMacros.h"
