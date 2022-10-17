@@ -58,6 +58,8 @@ Finally, you're ready to [create game servers in the cloud](ThirdPersonMPCloudDe
 
 # Acknowledgements
 
-Thank you to [Nick Arthur](https://github.com/narthur157) for his amazing [Dockerfile](https://github.com/narthur157/playfab-gsdk-ue4).
+We would like to express our gratitude to the following people and projects for their contributions to this project:
 
-Thank you to [Adam Rehn](https://github.com/adamrehn) for all his work with Unreal and Docker, including code, samples, examples, and tutorials.
+- [Stefan Krismann](https://github.com/stkrwork) for the excellent work implementing this plugin and contributing it to the community.
+- [Nick Arthur](https://github.com/narthur157) for his amazing [Dockerfile](https://github.com/narthur157/playfab-gsdk-ue4).
+- [Adam Rehn](https://github.com/adamrehn) for all his work with Unreal and Docker, including code, samples, examples, and tutorials.
