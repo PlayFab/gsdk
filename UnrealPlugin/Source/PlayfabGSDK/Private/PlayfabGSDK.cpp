@@ -1,3 +1,5 @@
+// Copyright (C) Microsoft Corporation. All rights reserved.
+
 #include "PlayfabGSDK.h"
 
 #if UE_SERVER

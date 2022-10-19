@@ -1,4 +1,6 @@
-﻿#include "GSDKUtils.h"
+﻿// Copyright (C) Microsoft Corporation. All rights reserved.
+
+#include "GSDKUtils.h"
 
 #include "PlayfabGSDK.h"
 
