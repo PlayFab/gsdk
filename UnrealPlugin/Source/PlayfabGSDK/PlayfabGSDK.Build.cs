@@ -1,3 +1,5 @@
+// Copyright (C) Microsoft Corporation. All rights reserved.
+
 using UnrealBuildTool;
 
 public class PlayFabGSDK : ModuleRules

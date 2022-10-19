@@ -1,4 +1,6 @@
-﻿#include "GSDKInternal.h"
+﻿// Copyright (C) Microsoft Corporation. All rights reserved.
+
+#include "GSDKInternal.h"
 
 #include "GSDKConfiguration.h"
 #include "GSDKInternalUtils.h"

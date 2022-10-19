@@ -1,4 +1,6 @@
-﻿#include "GSDKConfiguration.h"
+﻿// Copyright (C) Microsoft Corporation. All rights reserved.
+
+#include "GSDKConfiguration.h"
 
 #include "GSDKInternalUtils.h"
 #include "PlayfabGSDK.h"

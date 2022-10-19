@@ -1,4 +1,6 @@
-﻿#include "GSDKInternalUtils.h"
+﻿// Copyright (C) Microsoft Corporation. All rights reserved.
+
+#include "GSDKInternalUtils.h"
 
 #include "HAL/PlatformMisc.h"
 
