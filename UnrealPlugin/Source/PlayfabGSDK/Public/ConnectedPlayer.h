@@ -5,7 +5,7 @@
 #include "CoreMinimal.h"
 
 #include "ConnectedPlayer.generated.h"
-
+FString PlayerId;
 USTRUCT(BlueprintType)
 struct FConnectedPlayer
 {
