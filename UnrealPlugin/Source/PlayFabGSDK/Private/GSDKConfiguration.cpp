@@ -3,7 +3,7 @@
 #include "GSDKConfiguration.h"
 
 #include "GSDKInternalUtils.h"
-#include "PlayfabGSDK.h"
+#include "PlayFabGSDK.h"
 #include "Logging/LogMacros.h"
 #include "Misc/FileHelper.h"
 
