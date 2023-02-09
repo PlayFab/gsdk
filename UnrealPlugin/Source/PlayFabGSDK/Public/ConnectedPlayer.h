@@ -11,6 +11,6 @@ struct FConnectedPlayer
 {
 	GENERATED_BODY()
 public:
-	UPROPERTY(BlueprintReadOnly)
+	UPROPERTY(BlueprintReadWrite)
 	FString PlayerId;
 };
