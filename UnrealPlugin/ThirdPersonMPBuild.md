@@ -13,13 +13,13 @@ The purpose of this guide is to describe all the build configurations needed to 
 
 * Download Visual Studio. The [community version](https://visualstudio.microsoft.com/vs/community/) is free.
 	* Required workloads: .NET desktop development and Desktop development with C++
-* Download Unreal Engine Source Code. This plugin was tested on Unreal Engine 4.26.2. For instructions, see [Downloading Unreal Engine Source code (external)](https://docs.unrealengine.com/4.26/ProgrammingAndScripting/ProgrammingWithCPP/DownloadingSourceCode/).
+* Download Unreal Engine Source Code. For instructions, see [Downloading Unreal Engine Source code (external)](https://docs.unrealengine.com/5.1/en-US/downloading-unreal-engine-source-code/).
 * [Completed Unreal Project](ThirdPersonMPSetup.md) with [PlayFab Unreal GSDK](ThirdPersonMPGSDKSetup.md) installed and configured
-* Knowledge about [Unreal Build Configuration](https://docs.unrealengine.com/4.27/ProductionPipelines/DevelopmentSetup/CompilingProjects/) options
+* Knowledge about [Unreal Build Configuration](https://docs.unrealengine.com/5.1/en-US/compiling-game-projects-in-unreal-engine-using-cplusplus/) options
 
 ## Instructions
 
-The [GSDK setup](ThirdPersonMPGSDKSetup.md) guide previously described the steps to "Switch Unreal Engine Version" and "Generate Visual Studio project files". There is also an [Unreal guide](https://docs.unrealengine.com/4.27/ProductionPipelines/DevelopmentSetup/CompilingProjects/) about the various compilation options, which you should review.
+The [GSDK setup](ThirdPersonMPGSDKSetup.md) guide previously described the steps to "Switch Unreal Engine Version" and "Generate Visual Studio project files". There is also an [Unreal guide](https://docs.unrealengine.com/5.1/en-US/compiling-game-projects-in-unreal-engine-using-cplusplus/) about the various compilation options, which you should review.
 
 ### Development Editor
 

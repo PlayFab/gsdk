@@ -18,10 +18,10 @@ We will add and configure the PlayFab Unreal GSDK to your project, and test it l
 
 * Download Visual Studio. The [community version](https://visualstudio.microsoft.com/vs/community/) is free.
 	* Required workloads: .NET desktop development and Desktop development with C++
-* Download Unreal Engine Source Code. For instructions, see [Downloading Unreal Engine Source code (external)](https://docs.unrealengine.com/4.26/ProgrammingAndScripting/ProgrammingWithCPP/DownloadingSourceCode/).
+* Download Unreal Engine Source Code. For instructions, see [Downloading Unreal Engine Source code (external)](https://docs.unrealengine.com/5.1/en-US/downloading-unreal-engine-source-code/).
 * A completed [ThirdPersonMP Example Project](ThirdPersonMPSetup.md), or a project with similar capabilities
 * [PlayFab Unreal GSDK plugin](https://github.com/PlayFab/gsdk/tree/main/UnrealPlugin)
-* [Optional] [PlayFab Marketplace plugin](https://www.unrealengine.com/marketplace/product/playfab-sdk) or the [source version on GitHub](https://github.com/PlayFab/UnrealMarketplacePlugin/tree/master/4.26/PlayFabPlugin/PlayFab). This plugin is not required for GSDK but is required for many PlayFab services, including login.
+* [Optional] [PlayFab Marketplace plugin](https://www.unrealengine.com/marketplace/product/playfab-sdk) or the [source version on GitHub](https://github.com/PlayFab/UnrealMarketplacePlugin/tree/master/5.1/PlayFabPlugin). This plugin is not required for GSDK but is required for many PlayFab services, including login.
 
 ## Adding the plugin to the project
 

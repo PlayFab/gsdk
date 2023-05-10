@@ -5,7 +5,7 @@ This article describes how to integrate PlayFab Multiplayer Server SDK (GSDK) Un
 This plugin offers both a Blueprint API and a C++ API. The Blueprint API still requires your Unreal Project to be a C++ project, and will not work on a Blueprint only project. If it is currently a Blueprint only project, then you need to convert to a C++ project beforehand, before adding the plugin.
 
 
-**The implementation has been tested for the following versions: 4.26, 4.27, 5 - early access and 5 - official release.**
+**The implementation has been tested for the following versions: 4.26, 4.27, 5.0 and, 5.1.**
 
 The sample game these instructions were created with was called ThirdPersonMP, so replace anywhere you see that with your game name.
 
@@ -13,13 +13,13 @@ The sample game these instructions were created with was called ThirdPersonMP, s
 
 * Download Visual Studio. The [community version](https://visualstudio.microsoft.com/vs/community/) is free.
 	* Required workloads: .NET desktop development and Desktop development with C++
-* Download Unreal Engine Source Code. For instructions, see [Downloading Unreal Engine Source code (external)](https://docs.unrealengine.com/4.26/ProgrammingAndScripting/ProgrammingWithCPP/DownloadingSourceCode/).
+* Download Unreal Engine Source Code. For instructions, see [Downloading Unreal Engine Source code (external)](https://docs.unrealengine.com/5.1/en-US/downloading-unreal-engine-source-code/).
 * If you haven't already, please git clone this repo to your local machinne
 	* ```git clone https://github.com/PlayFab/gsdk.git```
 	* Later steps will involve integrating files from this repo to your project
 * [Optional] Download the [LocalMultiplayerAgent](https://github.com/PlayFab/MpsAgent/releases)
 	* [Optional] Alternatively, download [LocalMultiplayerAgent source](https://github.com/PlayFab/MpsAgent/tree/main/LocalMultiplayerAgent).
-* [Optional] [PlayFab Marketplace plugin](https://www.unrealengine.com/marketplace/product/playfab-sdk) or the [source version on GitHub](https://github.com/PlayFab/UnrealMarketplacePlugin/tree/master/4.26/PlayFabPlugin/PlayFab). This plugin is not required for GSDK but is required for many PlayFab services, including login.
+* [Optional] [PlayFab Marketplace plugin](https://www.unrealengine.com/marketplace/product/playfab-sdk) or the [source version on GitHub](https://github.com/PlayFab/UnrealMarketplacePlugin/tree/master/5.1/PlayFabPlugin). This plugin is not required for GSDK but is required for many PlayFab services, including login.
 
 ## Project creation
 
