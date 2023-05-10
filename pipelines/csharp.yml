@@ -1,12 +1,6 @@
-trigger:
-  branches:
-    include:
-    - main
-  paths:
-    include:
-    - /csharp/
+trigger: none # this is only supposed to be run manually
 
-name: $(Year:yyyy).$(Month).$(DayOfMonth)$(Rev:.r)-beta
+name: $(Year:yyyy).$(Month).$(DayOfMonth)$(Rev:.r)
 
 pool:
   vmImage: 'ubuntu-latest'
@@ -14,13 +8,14 @@ pool:
 variables:
   buildConfiguration: 'Release'
   projectName: 'GSDK_CSharp_Standard'
+  folderName: 'csharp'
 
 steps:
 - task: DotNetCoreCLI@2
   name: 'test'
   inputs:
     command: 'test'
-    projects: 'Tests/Tests.csproj'
+    projects: '$(folderName)/Tests/Tests.csproj'
     arguments: '--configuration $(buildConfiguration)'
   displayName: 'dotnet test $(buildConfiguration)'
 
@@ -29,16 +24,16 @@ steps:
   inputs:
     command: 'build'
     arguments: '--configuration $(buildConfiguration)'
-    projects: '$(projectName)/$(projectName).csproj'
+    projects: '$(folderName)/$(projectName)/$(projectName).csproj'
   displayName: 'dotnet build $(buildConfiguration)'
   
 - task: DotNetCoreCLI@2
   displayName: dotnet pack
   inputs:
     command: pack
-    projects: '$(projectName)/$(projectName).csproj'
+    projects: '$(folderName)/$(projectName)/$(projectName).csproj'
     arguments: --configuration $(BuildConfiguration)
-    searchPatternPack: '$(projectName)/$(projectName).csproj'
+    searchPatternPack: '$(folderName)/$(projectName)/$(projectName).csproj'
     nobuild: true
     versioningScheme: byBuildNumber
     buildProperties: platform=anycpu
