@@ -64,11 +64,10 @@ steps:
     SessionTimeout: '60'
     MaxConcurrency: '50'
     MaxRetryAttempts: '5'
-      
-# - task: NuGetCommand@2
-#   displayName: 'nuget push'
-#   inputs:
-#     command: 'push'
-#     packagesToPush: '/home/vsts/work/1/a/*.nupkg'
-#     nuGetFeedType: 'internal'
-#     publishVstsFeed: 'ab71e721-8bf3-4593-ad79-ef477a915924'
+- task: NuGetCommand@2
+  displayName: 'nuget push'
+  inputs:
+          command: 'push'
+          packagesToPush: '/home/vsts/work/1/a/*.nupkg'
+          nuGetFeedType: 'external'
+          publishFeedCredentials: 'MPS GSDKs'
