@@ -1,0 +1,79 @@
+trigger:
+  branches:
+    include:
+    - main
+  paths:
+    include:
+    - /csharp/
+
+name: $(Year:yyyy).$(Month).$(DayOfMonth)$(Rev:.r)-beta
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+  buildConfiguration: 'Release'
+  projectName: 'GSDK_CSharp_Standard'
+
+steps:
+- task: DotNetCoreCLI@2
+  name: 'test'
+  inputs:
+    command: 'test'
+    projects: 'Tests/Tests.csproj'
+    arguments: '--configuration $(buildConfiguration)'
+  displayName: 'dotnet test $(buildConfiguration)'
+
+- task: DotNetCoreCLI@2
+  name: 'build'
+  inputs:
+    command: 'build'
+    arguments: '--configuration $(buildConfiguration)'
+    projects: '$(projectName)/$(projectName).csproj'
+  displayName: 'dotnet build $(buildConfiguration)'
+  
+- task: DotNetCoreCLI@2
+  displayName: dotnet pack
+  inputs:
+    command: pack
+    projects: '$(projectName)/$(projectName).csproj'
+    arguments: --configuration $(BuildConfiguration)
+    searchPatternPack: '$(projectName)/$(projectName).csproj'
+    nobuild: true
+    versioningScheme: byBuildNumber
+    buildProperties: platform=anycpu
+    
+- task: EsrpCodeSigning@2
+  inputs:
+    FolderPath: '/home/vsts/work/1/a/'
+    ConnectedServiceName: 'Thunderhead Code-Sign service'
+    Pattern: '*.nupkg'
+    signConfigType: 'inlineSignParams'
+    inlineOperation: |
+      [
+       {
+       "keyCode": "CP-401405",
+       "operationSetCode": "NuGetSign",
+       "parameters": [ ],
+       "toolName": "sign",
+       "toolVersion": "1.0"
+       },
+       {
+       "keyCode": "CP-401405",
+       "operationSetCode": "NuGetVerify",
+       "parameters": [ ],
+       "toolName": "sign",
+       "toolVersion": "1.0"
+       }
+      ]
+    SessionTimeout: '60'
+    MaxConcurrency: '50'
+    MaxRetryAttempts: '5'
+      
+# - task: NuGetCommand@2
+#   displayName: 'nuget push'
+#   inputs:
+#     command: 'push'
+#     packagesToPush: '/home/vsts/work/1/a/*.nupkg'
+#     nuGetFeedType: 'internal'
+#     publishVstsFeed: 'ab71e721-8bf3-4593-ad79-ef477a915924'
