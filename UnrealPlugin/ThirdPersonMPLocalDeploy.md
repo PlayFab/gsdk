@@ -81,7 +81,7 @@ For the purposes of this guide, the parts of the json file obscured by ```...```
 	* When true, everything is built and run in a docker container, rather than on the local machine context
 	* This guide covers the scenario when RunContainer is false, so that we can more easily debug the server process
 	* Setting this to true requires a Shipping Server build, additional [Windows](https://docs.adamrehn.com/ue4-docker/configuration/configuring-windows-server) or [Linux](https://unrealcontainers.com/blog/identifying-application-runtime-dependencies/) DLLs, and [Docker for Windows](https://www.docker.com/products/docker-desktop)
-* OutputFolder: "<Local absolute path that will be used to store the required output artifacts>"
+* OutputFolder: ```"<Local absolute path that will be used to store the required output artifacts>"```
     * This location must be fully defined, and a valid directory must exist at this location.
 * AssetDetails/LocalFilePath: <PATH TO ZIP>
 	* This location must be fully defined, and a valid zip file must exist at this location
