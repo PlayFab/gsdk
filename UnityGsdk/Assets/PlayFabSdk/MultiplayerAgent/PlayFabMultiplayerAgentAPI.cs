@@ -320,11 +320,11 @@ namespace PlayFab
                     _configMap.Add(SessionCookieKey, heartBeat.SessionConfig.SessionCookie);
 
                     // add any metadata fields
-                    if(heartBeat.SessionConfig.Metadata != null)
+                    if (heartBeat.SessionConfig.Metadata != null)
                     {
                         foreach (KeyValuePair<string, string> kvp in heartBeat.SessionConfig.Metadata)
                         {
-                            if(_configMap.ContainsKey(kvp.Key))
+                            if (_configMap.ContainsKey(kvp.Key))
                             {
                                 // this should not happen, but logging just in case
                                 Debug.LogWarning($"Metadata key {kvp.Key} already exists in config map. Will not overwrite.");
