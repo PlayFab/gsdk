@@ -91,6 +91,7 @@ namespace Microsoft
                     }
                     catch (const GSDKInitializationException &ex)
                     {
+                        UNREFERENCED_PARAMETER(ex);
                         // We expect to throw this exception, since the heartbeat endpoint isn't set
                     }
                 }
@@ -106,6 +107,7 @@ namespace Microsoft
                     }
                     catch (const GSDKInitializationException &ex)
                     {
+                        UNREFERENCED_PARAMETER(ex);
                         // We expect to throw this exception, since the server id isn't set
                     }
                 }
