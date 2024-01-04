@@ -169,7 +169,7 @@ namespace PlayFab
 
         public static IList<string> GetInitialPlayers()
         {
-            return new List<string>(SessionConfig.InitialPlayers);
+            return SessionConfig.InitialPlayers is null ? new List<string>() : new List<string>(SessionConfig.InitialPlayers);
         }
 
         // LogMessage uses the Debug.Log method to log a message to the console.
@@ -280,7 +280,13 @@ namespace PlayFab
          
            
         }
-        private static void ProcessAgentResponse(HeartbeatResponse heartBeat)
+
+#if UNIT_TESTING
+        public
+#else
+        private
+#endif
+        static void ProcessAgentResponse(HeartbeatResponse heartBeat)
         {
             SessionConfig.CopyNonNullFields(heartBeat.SessionConfig);
             
@@ -372,6 +378,17 @@ namespace PlayFab
                     CurrentState.CurrentGameState);
             }
         }
+
+#if UNIT_TESTING
+        public static void ResetAgent()
+        {
+            _configMap = null;
+            SessionConfig.InitialPlayers = null;
+
+            UnityEngine.Object.Destroy(_agentView);
+            _agentView = null;
+        }
+#endif
     }
 }
 
