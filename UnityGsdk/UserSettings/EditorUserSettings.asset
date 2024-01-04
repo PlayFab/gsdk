@@ -6,7 +6,7 @@ EditorUserSettings:
   serializedVersion: 4
   m_ConfigSettings:
     RecentlyUsedSceneGuid-0:
-      value: 01045553520c0c0c080b097147730d44124f492e7e2b7f3428704f32b1b5636d
+      value: 065756575450085a0808097b40200644424e1e297e2923607b7d4d31b5b26d3b
       flags: 0
     RecentlyUsedSceneGuid-1:
       value: 0702035e5c0c5c59580f0920427b594446151a787c7971607a714965b2e3656f
@@ -19,7 +19,7 @@ EditorUserSettings:
   m_VCDebugCmd: 0
   m_VCDebugOut: 0
   m_SemanticMergeMode: 2
-  m_DesiredImportWorkerCount: 5
+  m_DesiredImportWorkerCount: 2
   m_StandbyImportWorkerCount: 2
   m_IdleImportWorkerShutdownDelay: 60000
   m_VCShowFailedCheckout: 1

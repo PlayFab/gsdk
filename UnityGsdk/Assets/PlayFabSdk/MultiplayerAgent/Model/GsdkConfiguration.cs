@@ -4,7 +4,7 @@
     using System.Collections.Generic;
     using Helpers;
 
-    internal class GSDKConfiguration
+    public class GSDKConfiguration
     {
         private const string TITLE_ID_ENV_VAR = "PF_TITLE_ID";
         private const string BUILD_ID_ENV_VAR = "PF_BUILD_ID";
