@@ -13,6 +13,7 @@ using static UnityEditor.Experimental.GraphView.GraphView;
 using System.Threading;
 using System.Threading.Tasks;
 
+#if UNIT_TESTING
 public class GSDKTests
 {
     private readonly string ConfigFilePath = Application.dataPath + "/Tests/testConfig.json";
@@ -155,8 +156,8 @@ public class GSDKTests
 
         List<ConnectedPlayer> players = new()
         {
-            new() { PlayerId = "player1" },
-            new() { PlayerId = "player2" }
+            new("player1"),
+            new("player2")
         };
 
         PlayFabMultiplayerAgentAPI.UpdateConnectedPlayers(players);
@@ -410,4 +411,4 @@ public class GSDKTests
         yield return null;
     }
 }
- 
+#endif
