@@ -111,7 +111,11 @@ struct FHeartbeatResponse
 	FDateTime NextScheduledMaintenanceUtc;
 };
 
-class FGSDKInternal
+class
+#if WITH_DEV_AUTOMATION_TESTS
+	PLAYFABGSDK_API
+#endif
+	FGSDKInternal
 {
 public:
 	// These must be public for unique_ptr to work
@@ -153,8 +157,8 @@ public:
 	FOnReadyForPlayers OnReadyForPlayers;
 	FOnMaintenance OnMaintenance;
 	FOnHealthCheck OnHealthCheck;
-private:
 
+private:
 	#define ADD_OPERATION_MAP(VAR) ReturnMap.Add(TEXT(#VAR), EOperation::VAR);
 	static TMap<FString, EOperation> InitializeOperationMap()
 	{
@@ -209,13 +213,16 @@ private:
 	void SendHeartbeat();
 	void ReceiveHeartbeat();
 
-	// These two methods are used for unit testing as well as regular operation.
-	FString EncodeHeartbeatRequest();
-	void DecodeHeartbeatResponse(const FString& ResponseJson);
-	int32 NextHeartbeatIntervalMs;
 
 	FDateTime ParseDate(const FString& DateStr);
 
-
 	void TriggerShutdown();
+
+#if WITH_DEV_AUTOMATION_TESTS
+public:
+#endif
+	int32 NextHeartbeatIntervalMs;
+	// These two methods are used for unit testing as well as regular operation.
+	FString EncodeHeartbeatRequest();
+	void DecodeHeartbeatResponse(const FString& ResponseJson);
 };

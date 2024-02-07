@@ -91,6 +91,7 @@ FGSDKInternal::FGSDKInternal()
 	HttpHeaders.Add(TEXT("Accept"), TEXT("application/json"));
 	HttpHeaders.Add(TEXT("Content-Type"), TEXT("application/json; charset=utf-8"));
 
+#if !WITH_DEV_AUTOMATION_TESTS
 	SignalHeartbeatEvent->Reset();
 
 	KeepHeartbeatRunning = ConfigPtr->ShouldHeartbeat();
@@ -101,6 +102,7 @@ FGSDKInternal::FGSDKInternal()
 			HeartbeatAsyncTaskFunction();
 		}
 	);
+#endif
 }
 
 FGSDKInternal::~FGSDKInternal()
@@ -352,7 +354,16 @@ void FGSDKInternal::DecodeHeartbeatResponse(const FString& ResponseJson)
 
 	if (HeartbeatResponseJson->HasField(TEXT("operation")))
 	{
-		EOperation NextOperation = OperationMap[HeartbeatResponseJson->GetStringField(TEXT("operation"))];
+		auto operation = HeartbeatResponseJson->GetStringField(TEXT("operation"));
+
+		if (!OperationMap.Contains(operation))
+		{
+			UE_LOG(LogPlayFabGSDK, Error, TEXT("An error occured while processing heartbeat operation."));
+			UE_LOG(LogPlayFabGSDK, Error, TEXT("Message: %s"), *ResponseJson);
+			return;
+		}
+
+		EOperation NextOperation = OperationMap[operation];
 
 		bool bWasOperationValid = true;
 
@@ -366,14 +377,18 @@ void FGSDKInternal::DecodeHeartbeatResponse(const FString& ResponseJson)
 		{
 			if (HeartbeatRequest.CurrentGameState != EGameState::Active)
 			{
+#if !WITH_DEV_AUTOMATION_TESTS
 				AsyncTask(ENamedThreads::GameThread, [this]()
-				{
-					SetState(EGameState::Active);
-					if (this->OnServerActive.IsBound())
 					{
-						this->OnServerActive.Execute();
-					}
-				});
+#endif
+						SetState(EGameState::Active);
+						if (this->OnServerActive.IsBound())
+						{
+							this->OnServerActive.Execute();
+						}
+#if !WITH_DEV_AUTOMATION_TESTS
+					});
+#endif
 			}
 			break;
 		}
@@ -484,12 +499,16 @@ void FGSDKInternal::SetConnectedPlayers(const TArray<FConnectedPlayer>& CurrentC
 void FGSDKInternal::ReadyForPlayers()
 {
 	UE_LOG(LogPlayFabGSDK, Display, TEXT("ReadyForPlayers, setting game state to StandingBy!"));
+#if !WITH_DEV_AUTOMATION_TESTS
 	AsyncTask(ENamedThreads::GameThread, [this]()
 	{
+#endif
 		SetState(EGameState::StandingBy);
 		if (OnReadyForPlayers.IsBound())
 		{
 			OnReadyForPlayers.Execute();
 		}
+#if !WITH_DEV_AUTOMATION_TESTS
 	});
+#endif
 }

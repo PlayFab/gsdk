@@ -6,7 +6,11 @@
 
 #include "GameServerConnectionInfo.h"
 
-class FConfiguration
+class
+#if WITH_DEV_AUTOMATION_TESTS && 0
+	PLAYFABGSDK_API
+#endif
+	FConfiguration
 {
 public:
 	virtual ~FConfiguration() = default;
@@ -39,7 +43,11 @@ protected:
 	static constexpr const TCHAR* SHARED_CONTENT_FOLDER_ENV_VAR = TEXT("SHARED_CONTENT_FOLDER");
 };
 
-class FConfigurationBase : public FConfiguration
+class
+#if WITH_DEV_AUTOMATION_TESTS
+	PLAYFABGSDK_API
+#endif
+FConfigurationBase : public FConfiguration
 {
 public:
 	FConfigurationBase();
@@ -90,7 +98,11 @@ private:
 	FGameServerConnectionInfo ConnectionInfo;
 };
 
-class FJsonFileConfiguration : public FConfigurationBase
+class
+#if WITH_DEV_AUTOMATION_TESTS
+	PLAYFABGSDK_API
+#endif
+	FJsonFileConfiguration : public FConfigurationBase
 {
 public:
 	FJsonFileConfiguration(const FString& FileName);
@@ -107,7 +119,9 @@ public:
 	virtual const FString& GetFullyQualifiedDomainName() override;
 	virtual const FGameServerConnectionInfo& GetGameServerConnectionInfo() override;
 
-private:
+protected:
+	FJsonFileConfiguration() = default;
+
 	FString HeartbeatEndpoint;
 	FString ServerId;
 	FString LogFolder;

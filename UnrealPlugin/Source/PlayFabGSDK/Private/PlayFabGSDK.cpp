@@ -2,7 +2,7 @@
 
 #include "PlayFabGSDK.h"
 
-#if UE_SERVER
+#if UE_SERVER || WITH_DEV_AUTOMATION_TESTS
 	#define PLAYFAB_GSDK_SERVER true
 #else
 	#define PLAYFAB_GSDK_SERVER false
@@ -21,6 +21,12 @@ DEFINE_LOG_CATEGORY(LogPlayFabGSDK);
 #define LOCTEXT_NAMESPACE "FPlayFabGSDKModule"
 
 void FPlayFabGSDKModule::StartupModule()
+#if WITH_DEV_AUTOMATION_TESTS
+{
+}
+
+void FPlayFabGSDKModule::ManualStartupModule()
+#endif
 {
 #if PLAYFAB_GSDK_SERVER
 	if (FParse::Param(FCommandLine::Get(), TEXT("noGSDK")) || FParse::Param(FCommandLine::Get(), TEXT("nogsdk")))
@@ -60,7 +66,7 @@ void FPlayFabGSDKModule::StartupModule()
 			return OnHealthCheck.Execute();
 		}
 
-		return false;
+		return true;
 	});
 	GSDKInternal->OnMaintenance.BindLambda([this](const FDateTime& Time)
 	{
@@ -142,6 +148,19 @@ const TArray<FString> FPlayFabGSDKModule::GetInitialPlayers()
 	return TArray<FString>();
 #endif
 }
+
+#if WITH_DEV_AUTOMATION_TESTS
+void FPlayFabGSDKModule::ResetInternalState()
+{
+	GSDKInternal.Reset(nullptr);
+
+	OnShutdown.Unbind();
+	OnServerActive.Unbind();
+	OnReadyForPlayers.Unbind();
+	OnHealthCheck.Unbind();
+	OnMaintenance.Unbind();
+}
+#endif
 
 #undef LOCTEXT_NAMESPACE
 

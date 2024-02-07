@@ -15,13 +15,22 @@ DECLARE_LOG_CATEGORY_EXTERN(LogPlayFabGSDK, Log, All);
 
 
 
-class FPlayFabGSDKModule : public IModuleInterface
+class
+#if WITH_DEV_AUTOMATION_TESTS
+	PLAYFABGSDK_API
+#endif
+	FPlayFabGSDKModule : public IModuleInterface
 {
 public:
 
 	/** IModuleInterface implementation */
 	virtual void StartupModule() override;
 	virtual void ShutdownModule() override;
+
+#if WITH_DEV_AUTOMATION_TESTS
+	void ManualStartupModule();
+	void ResetInternalState();
+#endif
 
 	static FPlayFabGSDKModule& Get() { return FModuleManager::LoadModuleChecked<FPlayFabGSDKModule>(TEXT("PlayFabGSDK"));}
 
@@ -96,8 +105,9 @@ public:
 	static constexpr const TCHAR* SESSION_COOKIE_KEY = TEXT("sessionCookie");
 	static constexpr const TCHAR* SESSION_ID_KEY = TEXT("sessionId";)
 
+#if !WITH_DEV_AUTOMATION_TESTS
 private:
-
+#endif
 	TUniquePtr<FGSDKInternal> GSDKInternal = nullptr;
 
 	bool NoGSDK = false;
