@@ -279,165 +279,165 @@ void FGSDKInternal::DecodeHeartbeatResponse(const FString& ResponseJson)
 		return;
 	}
 
-	try
+	if (HeartbeatResponseJson->HasField(TEXT("sessionConfig")))
 	{
-		if (HeartbeatResponseJson->HasField(TEXT("sessionConfig")))
+		TSharedPtr<FJsonObject> SessionConfigJson = HeartbeatResponseJson->GetObjectField(TEXT("sessionConfig"));
+
+		// Update initial players only if this is the first time populating it.
+		if (InitialPlayers.Num() == 0 && SessionConfigJson->HasField(TEXT("initialPlayers")))
 		{
-			TSharedPtr<FJsonObject> SessionConfigJson = HeartbeatResponseJson->GetObjectField(TEXT("sessionConfig"));
+			TArray<TSharedPtr<FJsonValue>> PlayersJson = SessionConfigJson->GetArrayField(TEXT("initialPlayers"));
 
-			// Update initial players only if this is the first time populating it.
-			if (InitialPlayers.Num() == 0 && SessionConfigJson->HasField(TEXT("initialPlayers")))
+			for (auto PlayerJson : PlayersJson)
 			{
-				TArray<TSharedPtr<FJsonValue>> PlayersJson = SessionConfigJson->GetArrayField(TEXT("initialPlayers"));
+				InitialPlayers.Add(PlayerJson->AsString());
+			}
+		}
 
-				for (auto PlayerJson : PlayersJson)
+		const bool hasConfigValues = SessionConfigJson->Values.Num() > 0;
+		const bool hasMetaData = SessionConfigJson->HasField(TEXT("metadata"));
+
+		if (hasConfigValues || hasMetaData)
+		{
+			FScopeLock ScopeLock(&ConfigMutex);
+
+			for (const auto& SessionConfigJsonValue : SessionConfigJson->Values)
+			{
+				FString ValueString;
+				if (SessionConfigJsonValue.Value->TryGetString(ValueString))
 				{
-					InitialPlayers.Add(PlayerJson->AsString());
+					if (ConfigSettings.Contains(SessionConfigJsonValue.Key))
+					{
+						ConfigSettings[SessionConfigJsonValue.Key] = ValueString;
+					}
+					else
+					{
+						ConfigSettings.Add(SessionConfigJsonValue.Key, ValueString);
+					}
 				}
 			}
 
-			const bool hasConfigValues = SessionConfigJson->Values.Num() > 0;
-			const bool hasMetaData = SessionConfigJson->HasField(TEXT("metadata"));
-
-			if (hasConfigValues || hasMetaData)
+			if (hasMetaData)
 			{
-				FScopeLock ScopeLock(&ConfigMutex);
+				TSharedPtr<FJsonObject> MetaDatasJson = SessionConfigJson->GetObjectField(TEXT("metadata"));
 
-				for (const auto& SessionConfigJsonValue : SessionConfigJson->Values)
+				for (const auto& MetaDataJson : MetaDatasJson->Values)
 				{
 					FString ValueString;
-					if (SessionConfigJsonValue.Value->TryGetString(ValueString))
+					if (MetaDataJson.Value->TryGetString(ValueString))
 					{
-						if (ConfigSettings.Contains(SessionConfigJsonValue.Key))
+						if (ConfigSettings.Contains(MetaDataJson.Key))
 						{
-							ConfigSettings[SessionConfigJsonValue.Key] = ValueString;
+							ConfigSettings[MetaDataJson.Key] = ValueString;
 						}
 						else
 						{
-							ConfigSettings.Add(SessionConfigJsonValue.Key, ValueString);
+							ConfigSettings.Add(MetaDataJson.Key, ValueString);
 						}
 					}
 				}
+			}
+		}
+	}
 
-				if (hasMetaData)
-				{
-					TSharedPtr<FJsonObject> MetaDatasJson = SessionConfigJson->GetObjectField(TEXT("metadata"));
+	if (HeartbeatResponseJson->HasField(TEXT("nextScheduledMaintenanceUtc")))
+	{
+		FDateTime NextMaintenance = ParseDate(HeartbeatResponseJson->GetStringField(TEXT("nextScheduledMaintenanceUtc")));
+		FTimespan Diff = NextMaintenance - CachedScheduledMaintenance;
 
-					for (const auto& MetaDataJson : MetaDatasJson->Values)
+		if (OnMaintenance.IsBound() && (!Diff.IsZero() || CachedScheduledMaintenance.GetTicks()))
+		{
+			OnMaintenance.Execute(NextMaintenance);
+			CachedScheduledMaintenance = NextMaintenance;
+		}
+	}
+
+	if (HeartbeatResponseJson->HasField(TEXT("operation")))
+	{
+		auto operation = HeartbeatResponseJson->GetStringField(TEXT("operation"));
+
+		if (!OperationMap.Contains(operation))
+		{
+			UE_LOG(LogPlayFabGSDK, Error, TEXT("An error occured while processing heartbeat operation."));
+			UE_LOG(LogPlayFabGSDK, Error, TEXT("Message: %s"), *ResponseJson);
+			return;
+		}
+
+		EOperation NextOperation = OperationMap[operation];
+
+		bool bWasOperationValid = true;
+
+		switch (NextOperation)
+		{
+		case EOperation::Continue:
+		{
+			break;
+		}
+		case EOperation::Active:
+		{
+			if (HeartbeatRequest.CurrentGameState != EGameState::Active)
+			{
+#if !WITH_DEV_AUTOMATION_TESTS
+				AsyncTask(ENamedThreads::GameThread, [this]()
 					{
-						FString ValueString;
-						if (MetaDataJson.Value->TryGetString(ValueString))
+#endif
+						SetState(EGameState::Active);
+						if (this->OnServerActive.IsBound())
 						{
-							if (ConfigSettings.Contains(MetaDataJson.Key))
-							{
-								ConfigSettings[MetaDataJson.Key] = ValueString;
-							}
-							else
-							{
-								ConfigSettings.Add(MetaDataJson.Key, ValueString);
-							}
+							this->OnServerActive.Execute();
 						}
-					}
-				}
-			}
-		}
-
-		if (HeartbeatResponseJson->HasField(TEXT("nextScheduledMaintenanceUtc")))
-		{
-			FDateTime NextMaintenance = ParseDate(HeartbeatResponseJson->GetStringField(TEXT("nextScheduledMaintenanceUtc")));
-			FTimespan Diff = NextMaintenance - CachedScheduledMaintenance;
-
-			if (OnMaintenance.IsBound() && (!Diff.IsZero() || CachedScheduledMaintenance.GetTicks()))
-			{
-				OnMaintenance.Execute(NextMaintenance);
-				CachedScheduledMaintenance = NextMaintenance;
-			}
-		}
-
-		if (HeartbeatResponseJson->HasField(TEXT("operation")))
-		{
-			EOperation NextOperation = OperationMap[HeartbeatResponseJson->GetStringField(TEXT("operation"))];
-
-			bool bWasOperationValid = true;
-
-			switch (NextOperation)
-			{
-			case EOperation::Continue:
-			{
-				break;
-			}
-			case EOperation::Active:
-			{
-				if (HeartbeatRequest.CurrentGameState != EGameState::Active)
-				{
 #if !WITH_DEV_AUTOMATION_TESTS
-					AsyncTask(ENamedThreads::GameThread, [this]()
-						{
+					});
 #endif
-							SetState(EGameState::Active);
-							if (this->OnServerActive.IsBound())
-							{
-								this->OnServerActive.Execute();
-							}
-#if !WITH_DEV_AUTOMATION_TESTS
-						});
-#endif
-				}
-				break;
 			}
-			case EOperation::Terminate:
+			break;
+		}
+		case EOperation::Terminate:
+		{
+			if (HeartbeatRequest.CurrentGameState != EGameState::Terminating)
 			{
-				if (HeartbeatRequest.CurrentGameState != EGameState::Terminating)
-				{
-					SetState(EGameState::Terminating);
+				SetState(EGameState::Terminating);
 
-					UE_LOG(LogPlayFabGSDK, Warning, TEXT("Received Termination State"));
-					TriggerShutdown();
-				}
-				break;
+				UE_LOG(LogPlayFabGSDK, Warning, TEXT("Received Termination State"));
+				TriggerShutdown();
 			}
-			default:
-			{
-				UE_LOG(LogPlayFabGSDK, Error, TEXT("Unhandled operation received: %s"), OperationNames[static_cast<int32>(NextOperation)]);
-				bWasOperationValid = false;
-				break;
-			}
-			}
-
-			if (!bWasOperationValid)
-			{
-				UnexpectedOperationsErrorCount++;
-
-				// Too many unexpected operations have been sent, time to shut down
-				if (UnexpectedOperationsErrorCount >= MaximumUnexpectedOperationsErrorCount)
-				{
-					UE_LOG(LogPlayFabGSDK, Error, TEXT("Too many unexpected operations received. Shutting down!"));
-					TriggerShutdown();
-				}
-			}
-			else
-			{
-				UnexpectedOperationsErrorCount = 0;
-			}
+			break;
+		}
+		default:
+		{
+			UE_LOG(LogPlayFabGSDK, Error, TEXT("Unhandled operation received: %s"), OperationNames[static_cast<int32>(NextOperation)]);
+			bWasOperationValid = false;
+			break;
+		}
 		}
 
-		if (HeartbeatResponseJson->HasField(TEXT("nextHeartbeatIntervalMs")))
+		if (!bWasOperationValid)
 		{
-			NextHeartbeatIntervalMs = HeartbeatResponseJson->GetNumberField(TEXT("nextHeartbeatIntervalMs"));
+			UnexpectedOperationsErrorCount++;
 
-
-			NextHeartbeatIntervalMs = FMath::Max(MinimumHeartbeatInterval, NextHeartbeatIntervalMs);
+			// Too many unexpected operations have been sent, time to shut down
+			if (UnexpectedOperationsErrorCount >= MaximumUnexpectedOperationsErrorCount)
+			{
+				UE_LOG(LogPlayFabGSDK, Error, TEXT("Too many unexpected operations received. Shutting down!"));
+				TriggerShutdown();
+			}
 		}
 		else
 		{
-			NextHeartbeatIntervalMs = MinimumHeartbeatInterval;
+			UnexpectedOperationsErrorCount = 0;
 		}
 	}
-	catch (std::exception& ex)
+
+	if (HeartbeatResponseJson->HasField(TEXT("nextHeartbeatIntervalMs")))
 	{
-		UE_LOG(LogPlayFabGSDK, Error, TEXT("An error occured while processing heartbeat."));
-		UE_LOG(LogPlayFabGSDK, Error, TEXT("%s"), ex.what());
-		UE_LOG(LogPlayFabGSDK, Error, TEXT("Message: %s"), ResponseJson);
+		NextHeartbeatIntervalMs = HeartbeatResponseJson->GetNumberField(TEXT("nextHeartbeatIntervalMs"));
+
+
+		NextHeartbeatIntervalMs = FMath::Max(MinimumHeartbeatInterval, NextHeartbeatIntervalMs);
+	}
+	else
+	{
+		NextHeartbeatIntervalMs = MinimumHeartbeatInterval;
 	}
 }
 
