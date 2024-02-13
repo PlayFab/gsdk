@@ -24,6 +24,7 @@ void UTestGameInstance::Init()
     UGSDKUtils::RegisterGSDKReadyForPlayers(OnGSDKReadyForPlayers);
 
 #if UE_SERVER
+    UE_LOG(LogPlayFabGSDKGameInstance, Warning, TEXT("Reached Init!"));
     UGSDKUtils::SetDefaultServerHostPort();
 #endif
 }

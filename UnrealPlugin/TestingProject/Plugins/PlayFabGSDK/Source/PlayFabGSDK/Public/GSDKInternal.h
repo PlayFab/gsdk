@@ -112,7 +112,7 @@ struct FHeartbeatResponse
 };
 
 class
-#if WITH_DEV_AUTOMATION_TESTS
+#if (WITH_DEV_AUTOMATION_TESTS && WITH_EDITOR)
 	PLAYFABGSDK_API
 #endif
 	FGSDKInternal
@@ -218,7 +218,7 @@ private:
 
 	void TriggerShutdown();
 
-#if WITH_DEV_AUTOMATION_TESTS
+#if (WITH_DEV_AUTOMATION_TESTS && WITH_EDITOR)
 public:
 #endif
 	int32 NextHeartbeatIntervalMs;

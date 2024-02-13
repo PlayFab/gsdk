@@ -2,7 +2,7 @@
 
 #include "PlayFabGSDK.h"
 
-#if UE_SERVER || WITH_DEV_AUTOMATION_TESTS
+#if UE_SERVER || (WITH_DEV_AUTOMATION_TESTS && WITH_EDITOR)
 	#define PLAYFAB_GSDK_SERVER true
 #else
 	#define PLAYFAB_GSDK_SERVER false
@@ -21,7 +21,7 @@ DEFINE_LOG_CATEGORY(LogPlayFabGSDK);
 #define LOCTEXT_NAMESPACE "FPlayFabGSDKModule"
 
 void FPlayFabGSDKModule::StartupModule()
-#if WITH_DEV_AUTOMATION_TESTS
+#if (WITH_DEV_AUTOMATION_TESTS && WITH_EDITOR)
 {
 }
 
@@ -149,7 +149,7 @@ const TArray<FString> FPlayFabGSDKModule::GetInitialPlayers()
 #endif
 }
 
-#if WITH_DEV_AUTOMATION_TESTS
+#if (WITH_DEV_AUTOMATION_TESTS && WITH_EDITOR)
 void FPlayFabGSDKModule::ResetInternalState()
 {
 	GSDKInternal.Reset(nullptr);

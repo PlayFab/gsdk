@@ -6,11 +6,7 @@
 
 #include "GameServerConnectionInfo.h"
 
-class
-#if WITH_DEV_AUTOMATION_TESTS && 0
-	PLAYFABGSDK_API
-#endif
-	FConfiguration
+class FConfiguration
 {
 public:
 	virtual ~FConfiguration() = default;
@@ -44,7 +40,7 @@ protected:
 };
 
 class
-#if WITH_DEV_AUTOMATION_TESTS
+#if (WITH_DEV_AUTOMATION_TESTS && WITH_EDITOR)
 	PLAYFABGSDK_API
 #endif
 FConfigurationBase : public FConfiguration
@@ -99,7 +95,7 @@ private:
 };
 
 class
-#if WITH_DEV_AUTOMATION_TESTS
+#if (WITH_DEV_AUTOMATION_TESTS && WITH_EDITOR)
 	PLAYFABGSDK_API
 #endif
 	FJsonFileConfiguration : public FConfigurationBase
