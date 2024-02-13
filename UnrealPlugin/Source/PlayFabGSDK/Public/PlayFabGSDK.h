@@ -16,7 +16,7 @@ DECLARE_LOG_CATEGORY_EXTERN(LogPlayFabGSDK, Log, All);
 
 
 class
-#if WITH_DEV_AUTOMATION_TESTS
+#if (WITH_DEV_AUTOMATION_TESTS && WITH_EDITOR)
 	PLAYFABGSDK_API
 #endif
 	FPlayFabGSDKModule : public IModuleInterface
@@ -27,7 +27,7 @@ public:
 	virtual void StartupModule() override;
 	virtual void ShutdownModule() override;
 
-#if WITH_DEV_AUTOMATION_TESTS
+#if (WITH_DEV_AUTOMATION_TESTS && WITH_EDITOR)
 	void ManualStartupModule();
 	void ResetInternalState();
 #endif
@@ -105,7 +105,7 @@ public:
 	static constexpr const TCHAR* SESSION_COOKIE_KEY = TEXT("sessionCookie");
 	static constexpr const TCHAR* SESSION_ID_KEY = TEXT("sessionId";)
 
-#if !WITH_DEV_AUTOMATION_TESTS
+#if !(WITH_DEV_AUTOMATION_TESTS && WITH_EDITOR)
 private:
 #endif
 	TUniquePtr<FGSDKInternal> GSDKInternal = nullptr;

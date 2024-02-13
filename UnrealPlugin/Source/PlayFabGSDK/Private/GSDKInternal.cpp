@@ -91,7 +91,7 @@ FGSDKInternal::FGSDKInternal()
 	HttpHeaders.Add(TEXT("Accept"), TEXT("application/json"));
 	HttpHeaders.Add(TEXT("Content-Type"), TEXT("application/json; charset=utf-8"));
 
-#if !WITH_DEV_AUTOMATION_TESTS
+#if !(WITH_DEV_AUTOMATION_TESTS && WITH_EDITOR)
 	SignalHeartbeatEvent->Reset();
 
 	KeepHeartbeatRunning = ConfigPtr->ShouldHeartbeat();
@@ -276,6 +276,7 @@ void FGSDKInternal::DecodeHeartbeatResponse(const FString& ResponseJson)
 	if (!FJsonSerializer::Deserialize(Reader, HeartbeatResponseJson))
 	{
 		UE_LOG(LogPlayFabGSDK, Error, TEXT("Failed to parse heartbeat"));
+		UE_LOG(LogPlayFabGSDK, Error, TEXT("%s"), *ResponseJson);
 		return;
 	}
 
@@ -377,7 +378,7 @@ void FGSDKInternal::DecodeHeartbeatResponse(const FString& ResponseJson)
 		{
 			if (HeartbeatRequest.CurrentGameState != EGameState::Active)
 			{
-#if !WITH_DEV_AUTOMATION_TESTS
+#if !(WITH_DEV_AUTOMATION_TESTS && WITH_EDITOR)
 				AsyncTask(ENamedThreads::GameThread, [this]()
 					{
 #endif
@@ -386,7 +387,7 @@ void FGSDKInternal::DecodeHeartbeatResponse(const FString& ResponseJson)
 						{
 							this->OnServerActive.Execute();
 						}
-#if !WITH_DEV_AUTOMATION_TESTS
+#if !(WITH_DEV_AUTOMATION_TESTS && WITH_EDITOR)
 					});
 #endif
 			}
@@ -499,7 +500,7 @@ void FGSDKInternal::SetConnectedPlayers(const TArray<FConnectedPlayer>& CurrentC
 void FGSDKInternal::ReadyForPlayers()
 {
 	UE_LOG(LogPlayFabGSDK, Display, TEXT("ReadyForPlayers, setting game state to StandingBy!"));
-#if !WITH_DEV_AUTOMATION_TESTS
+#if !(WITH_DEV_AUTOMATION_TESTS && WITH_EDITOR)
 	AsyncTask(ENamedThreads::GameThread, [this]()
 	{
 #endif
@@ -508,7 +509,7 @@ void FGSDKInternal::ReadyForPlayers()
 		{
 			OnReadyForPlayers.Execute();
 		}
-#if !WITH_DEV_AUTOMATION_TESTS
+#if !(WITH_DEV_AUTOMATION_TESTS && WITH_EDITOR)
 	});
 #endif
 }
