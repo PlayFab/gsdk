@@ -74,7 +74,7 @@ bool TestConfiguration::SerializeToFile(const FString& filePath)
 
     // Serialize game certificates
     TSharedPtr<FJsonObject> gameCertsObject = MakeShareable(new FJsonObject);
-    for (auto& cert : GameCerts)
+    for (const auto& cert : GameCerts)
     {
         gameCertsObject->SetStringField(cert.Key, cert.Value);
     }
@@ -82,7 +82,7 @@ bool TestConfiguration::SerializeToFile(const FString& filePath)
 
     // Serialize build metadata
     TSharedPtr<FJsonObject> metadataObject = MakeShareable(new FJsonObject);
-    for (auto& meta : Metadata)
+    for (const auto& meta : Metadata)
     {
         metadataObject->SetStringField(meta.Key, meta.Value);
     }
@@ -90,7 +90,7 @@ bool TestConfiguration::SerializeToFile(const FString& filePath)
 
     // Serialize game ports
     TSharedPtr<FJsonObject> portsObject = MakeShareable(new FJsonObject);
-    for (auto& port : Ports)
+    for (const auto& port : Ports)
     {
         portsObject->SetStringField(port.Key, port.Value);
     }
@@ -102,7 +102,7 @@ bool TestConfiguration::SerializeToFile(const FString& filePath)
 
     // Serialize game ports configuration
     TArray<TSharedPtr<FJsonValue>> gamePortsConfiguration;
-    for (auto& portConfig : ConnectionInfo.GamePortsConfiguration)
+    for (const auto& portConfig : ConnectionInfo.GamePortsConfiguration)
     {
         TSharedPtr<FJsonObject> portObject = MakeShareable(new FJsonObject);
         portObject->SetStringField("name", portConfig.Name);

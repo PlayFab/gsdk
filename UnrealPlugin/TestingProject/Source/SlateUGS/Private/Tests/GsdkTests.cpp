@@ -19,7 +19,14 @@ const FString region = "testRegion";
 TestConfiguration config;
 FEventRef readyForPlayers{ EEventMode::ManualReset };
 FEventRef shutdownCalled{ EEventMode::ManualReset };
+void SerializeConfigAndStartModule();
 END_DEFINE_SPEC(AutomationSpec)
+
+void AutomationSpec::SerializeConfigAndStartModule()
+{
+    config.SerializeToFile(ConfigFilePath);
+    FPlayFabGSDKModule::Get().ManualStartupModule();
+}
 
 void AutomationSpec::Define()
 {
@@ -33,6 +40,10 @@ void AutomationSpec::Define()
                     FPlatformMisc::SetEnvironmentVar(TEXT("GSDK_CONFIG_FILE"), *ConfigFilePath);
                     
                     config = TestConfiguration();
+                    config.SetHeartbeatEndpoint(heartbeatEndpoint);
+                    config.SetServerId(serverId);
+                    config.SetLogFolder(logFolder);
+                    config.SetSharedContentFolder(sharedContentFolder);
                 });
 
             AfterEach([this]()
@@ -47,10 +58,6 @@ void AutomationSpec::Define()
 
             It("ConfigAllSetInitializesFine", [this]()
                 {
-                    config.SetHeartbeatEndpoint(heartbeatEndpoint);
-                    config.SetServerId(serverId);
-                    config.SetLogFolder(logFolder);
-                    config.SetSharedContentFolder(sharedContentFolder);
                     config.SetCertificateFolder(certFolder);
 
                     TMap<FString, FString> gameCerts = TMap<FString, FString>();
@@ -68,9 +75,7 @@ void AutomationSpec::Define()
                     ports.Add("port2", "2222");
                     config.SetGamePorts(ports);
 
-                    config.SerializeToFile(ConfigFilePath);
-
-                    FPlayFabGSDKModule::Get().ManualStartupModule();
+                    SerializeConfigAndStartModule();
 
                     TestEqual("heartbeat endpoint", heartbeatEndpoint, FPlayFabGSDKModule::Get().GetConfigValue("gsmsBaseUrl"));
                     TestEqual("cert folder", certFolder, FPlayFabGSDKModule::Get().GetConfigValue("certificateFolder"));
@@ -91,40 +96,31 @@ void AutomationSpec::Define()
 
             It("LogFolderNotSetInitializesFine", [this]()
                 {
-                    config.SetHeartbeatEndpoint(heartbeatEndpoint);
-                    config.SetServerId(serverId);
-                    config.SetSharedContentFolder(sharedContentFolder);
+                    FString emptyString;
+                    emptyString.Empty();
 
-                    config.SerializeToFile(ConfigFilePath);
+                    config.SetLogFolder(emptyString);
 
-                    FPlayFabGSDKModule::Get().ManualStartupModule();
+                    SerializeConfigAndStartModule();
 
                     TestEqual("get log folder works", "", UGSDKUtils::GetLogsDirectory());
                 });
 
             It("SharedContentFolderNotSetInitializesFine", [this]()
                 {
-                    config.SetHeartbeatEndpoint(heartbeatEndpoint);
-                    config.SetServerId(serverId);
-                    config.SetLogFolder(logFolder);
+                    FString emptyString;
+                    emptyString.Empty();
 
-                    config.SerializeToFile(ConfigFilePath);
-
-                    FPlayFabGSDKModule::Get().ManualStartupModule();
+                    config.SetSharedContentFolder(emptyString);
+                    
+                    SerializeConfigAndStartModule();
 
                     TestEqual("get shared content folder works", "", UGSDKUtils::GetSharedContentDirectory());
                 });
 
             It("EncodeGameStateAsValidJson", [this]()
                 {
-                    config.SetHeartbeatEndpoint(heartbeatEndpoint);
-                    config.SetServerId(serverId);
-                    config.SetLogFolder(logFolder);
-                    config.SetSharedContentFolder(sharedContentFolder);
-
-                    config.SerializeToFile(ConfigFilePath);
-
-                    FPlayFabGSDKModule::Get().ManualStartupModule();
+                    SerializeConfigAndStartModule();
 
                     // Test Initial State
                     TSharedPtr<FJsonObject> jsonHeartbeatRequest = MakeShareable(new FJsonObject());
@@ -167,14 +163,7 @@ void AutomationSpec::Define()
 
             It("DecodeAgentResponseJsonCorrectly", [this]()
                 {
-                    config.SetHeartbeatEndpoint(heartbeatEndpoint);
-                    config.SetServerId(serverId);
-                    config.SetLogFolder(logFolder);
-                    config.SetSharedContentFolder(sharedContentFolder);
-
-                    config.SerializeToFile(ConfigFilePath);
-
-                    FPlayFabGSDKModule::Get().ManualStartupModule();
+                    SerializeConfigAndStartModule();
 
                     FDateTime maintenanceTime;
                     FPlayFabGSDKModule::Get().OnMaintenance.BindLambda([&maintenanceTime](const FDateTime& time) -> void { maintenanceTime = time; });
@@ -205,14 +194,7 @@ void AutomationSpec::Define()
 
             It("JsonDoesntCrashWhenInvalidJson", [this]()
                 {
-                    config.SetHeartbeatEndpoint(heartbeatEndpoint);
-                    config.SetServerId(serverId);
-                    config.SetLogFolder(logFolder);
-                    config.SetSharedContentFolder(sharedContentFolder);
-
-                    config.SerializeToFile(ConfigFilePath);
-
-                    FPlayFabGSDKModule::Get().ManualStartupModule();
+                    SerializeConfigAndStartModule();
 
                     FString responseJson =
                         R"({
@@ -235,14 +217,7 @@ void AutomationSpec::Define()
 
             It("ReturnInitialPlayerListFromJson", [this]()
                 {
-                    config.SetHeartbeatEndpoint(heartbeatEndpoint);
-                    config.SetServerId(serverId);
-                    config.SetLogFolder(logFolder);
-                    config.SetSharedContentFolder(sharedContentFolder);
-
-                    config.SerializeToFile(ConfigFilePath);
-
-                    FPlayFabGSDKModule::Get().ManualStartupModule();
+                    SerializeConfigAndStartModule();
 
                     TestEqual("InitialPlayer list is empty before allocation.", UGSDKUtils::GetInitialPlayers().Num(), 0);
 
@@ -279,14 +254,7 @@ void AutomationSpec::Define()
 
             It("ReturnSessionMetadataFromJson", [this]()
                 {
-                    config.SetHeartbeatEndpoint(heartbeatEndpoint);
-                    config.SetServerId(serverId);
-                    config.SetLogFolder(logFolder);
-                    config.SetSharedContentFolder(sharedContentFolder);
-
-                    config.SerializeToFile(ConfigFilePath);
-
-                    FPlayFabGSDKModule::Get().ManualStartupModule();
+                    SerializeConfigAndStartModule();
 
                     TestEqual("InitialPlayer list is empty before allocation.", UGSDKUtils::GetInitialPlayers().Num(), 0);
 
@@ -312,14 +280,7 @@ void AutomationSpec::Define()
 
             It("AgentOperationStateChangesHandledCorrectly", [this]()
                 {
-                    config.SetHeartbeatEndpoint(heartbeatEndpoint);
-                    config.SetServerId(serverId);
-                    config.SetLogFolder(logFolder);
-                    config.SetSharedContentFolder(sharedContentFolder);
-
-                    config.SerializeToFile(ConfigFilePath);
-
-                    FPlayFabGSDKModule::Get().ManualStartupModule();
+                    SerializeConfigAndStartModule();
 
                     FPlayFabGSDKModule::Get().OnReadyForPlayers.BindLambda([this]() -> void { readyForPlayers->Trigger(); });
 
