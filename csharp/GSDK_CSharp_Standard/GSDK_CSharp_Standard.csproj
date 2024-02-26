@@ -3,17 +3,17 @@
   <PropertyGroup>
     <Title>PlayFab C# Gameserver SDK</Title>
     <Company>Microsoft</Company>
-    <Copyright>Copyright (c) 2020 Microsoft</Copyright>
+    <Copyright>© Microsoft Corporation. All rights reserved.</Copyright>
     <Description>SDK for making calls against PlayFab Multiplayer Servers Control Plane</Description>
-    <Authors>PlayFab</Authors>
-    <Version>0.0.0.0-beta</Version>
+    <Authors>Microsoft</Authors>
+    <Version>0.0.0.0</Version>
     <FileVersion>$(Version)</FileVersion>
     <PackageTags>GSDK Playfab Multiplayer Servers</PackageTags>
     <PackageLicenseUrl>http://www.apache.org/licenses/LICENSE-2.0</PackageLicenseUrl>
-    <PackageProjectUrl>https://github.com/PlayFab/gsdk</PackageProjectUrl>
+    <PackageProjectUrl>https://learn.microsoft.com/en-us/gaming/playfab/features/multiplayer/servers/</PackageProjectUrl>
     <PackageDescription>Enables PlayFab game servers to interact with PlayFab control systems, accept players and send heartbeats.</PackageDescription>
     <PackageReleaseNotes>Release of the C# Game Server SDK for use with PlayFab Multiplayer Servers.</PackageReleaseNotes>
-    <PackageIconUrl>https://playfab.com/assets/img/playfab-mark.png</PackageIconUrl>
+    <PackageIcon>https://playfab.com/assets/img/playfab-mark.png</PackageIcon>
     <PackageId>com.playfab.csharpgsdk</PackageId>
     <Platforms>AnyCPU;x64</Platforms>
   </PropertyGroup>
@@ -29,6 +29,9 @@
   </PropertyGroup>
   <PropertyGroup>
     <DocumentationFile>Microsoft.Playfab.Gaming.GSDK.CSharp.xml</DocumentationFile>
+    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+    <RepositoryUrl>https://github.com/PlayFab/gsdk</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
