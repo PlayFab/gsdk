@@ -173,7 +173,7 @@ namespace PlayFab
         }
 
         // LogMessage uses the Debug.Log method to log a message to the console.
-        // Unity game server process must be started with the "-logfile" parameter to send logs to standard output, where they will be captured when the game server process exits
+        // Unity game server process must be started with the "-logfile -" parameter to send logs to standard output, where they will be captured when the game server process exits
         public static void LogMessage(string message)
         {
             Debug.Log(message);
