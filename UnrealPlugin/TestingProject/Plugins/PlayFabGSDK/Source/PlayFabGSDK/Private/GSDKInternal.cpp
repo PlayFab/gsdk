@@ -353,6 +353,42 @@ void FGSDKInternal::DecodeHeartbeatResponse(const FString& ResponseJson)
 		}
 	}
 
+	if (HeartbeatResponseJson->HasField(TEXT("maintenanceSchedule")))
+	{
+		FMaintenanceSchedule schedule{};
+		TSharedPtr<FJsonObject> scheduleJson = HeartbeatResponseJson->GetObjectField(TEXT("maintenanceSchedule"));
+
+		schedule.DocumentIncarnation = scheduleJson->GetStringField(TEXT("DocumentIncarnation"));
+
+		for (const auto& maintenanceEvent : scheduleJson->GetArrayField(TEXT("Events")))
+        {
+            TSharedPtr<FJsonObject> eventJson = maintenanceEvent->AsObject();
+
+            FMaintenanceEvent eventData{};
+			eventData.EventId = eventJson->GetStringField(TEXT("EventId"));
+            eventData.EventType = eventJson->GetStringField(TEXT("EventType"));
+            eventData.ResourceType = eventJson->GetStringField(TEXT("ResourceType"));
+			TArray<FString> resources{};
+			for (const auto& resource : eventJson->GetArrayField(TEXT("Resources")))
+			{
+				resources.Add(resource->AsString());
+			}
+			eventData.Resources = resources;
+			eventData.EventStatus = eventJson->GetStringField(TEXT("EventStatus"));
+			eventData.NotBefore = ParseDate(eventJson->GetStringField(TEXT("NotBefore")));
+			eventData.Description = eventJson->GetStringField(TEXT("Description"));
+			eventData.EventSource = eventJson->GetStringField(TEXT("EventSource"));
+			eventData.DurationInSeconds = eventJson->GetIntegerField(TEXT("DurationInSeconds"));
+
+            schedule.Events.Add(eventData);
+        }
+
+		if (OnMaintenanceV2.IsBound())
+		{
+			OnMaintenanceV2.Execute(schedule);
+		}
+	}
+
 	if (HeartbeatResponseJson->HasField(TEXT("operation")))
 	{
 		auto operation = HeartbeatResponseJson->GetStringField(TEXT("operation"));
@@ -445,7 +481,9 @@ void FGSDKInternal::DecodeHeartbeatResponse(const FString& ResponseJson)
 FDateTime FGSDKInternal::ParseDate(const FString& DateStr)
 {
 	FDateTime OutDateTime;
-	return FDateTime::ParseHttpDate(DateStr, OutDateTime);
+	FDateTime::ParseIso8601(*DateStr, OutDateTime);
+
+	return OutDateTime;
 }
 
 void FGSDKInternal::TriggerShutdown()

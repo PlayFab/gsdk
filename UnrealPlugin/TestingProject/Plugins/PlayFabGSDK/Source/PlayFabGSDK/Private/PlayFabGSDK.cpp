@@ -75,6 +75,13 @@ void FPlayFabGSDKModule::ManualStartupModule()
 			OnMaintenance.Execute(Time);
 		}
 	});
+	GSDKInternal->OnMaintenanceV2.BindLambda([this](const FMaintenanceSchedule& schedule)
+		{
+			if (OnMaintenanceV2.IsBound())
+			{
+				OnMaintenanceV2.Execute(schedule);
+			}
+		});
 #endif
 }
 

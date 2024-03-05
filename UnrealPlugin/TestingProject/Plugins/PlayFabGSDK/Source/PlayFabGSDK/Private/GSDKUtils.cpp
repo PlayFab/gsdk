@@ -157,6 +157,23 @@ void UGSDKUtils::RegisterGSDKMaintenanceDelegate(const FOnGSDKMaintenance_Dyn& O
 	});
 }
 
+void UGSDKUtils::RegisterGSDKMaintenanceV2Delegate(const FOnGSDKMaintenanceV2_Dyn& OnGSDKMaintenanceV2Delegate)
+{
+	if (FPlayFabGSDKModule::Get().OnMaintenanceV2.IsBound())
+	{
+		UE_LOG(LogPlayFabGSDK, Error, TEXT("GSDK MaintenanceV2 Delegate is already bound! Will unbind the old binding!"));
+	}
+
+	FPlayFabGSDKModule::Get().OnMaintenanceV2.Unbind();
+	FPlayFabGSDKModule::Get().OnMaintenanceV2.BindLambda([OnGSDKMaintenanceV2Delegate](const FMaintenanceSchedule& MaintenanceSchedule)
+		{
+			if (OnGSDKMaintenanceV2Delegate.IsBound())
+			{
+				OnGSDKMaintenanceV2Delegate.Execute(MaintenanceSchedule);
+			}
+		});
+}
+
 FString UGSDKUtils::GetConfigValue(const FString& Key)
 {
 	return FPlayFabGSDKModule::Get().GetConfigValue(Key);

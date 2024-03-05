@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 
 #include "ConnectedPlayer.h"
+#include "MaintenanceSchedule.h"
 #include "GameServerConnectionInfo.h"
 #include "GSDKInternal.h"
 
@@ -60,6 +61,7 @@ protected:
 	DECLARE_DELEGATE(FOnReadyForPlayers);
 	DECLARE_DELEGATE_RetVal(bool, FOnHealthCheck);
 	DECLARE_DELEGATE_OneParam(FOnMaintenance, const FDateTime&)
+	DECLARE_DELEGATE_OneParam(FOnMaintenanceV2, const FMaintenanceSchedule&)
 
 public:
 	/// <summary>Gets called if the server is shutting us down</summary>
@@ -74,8 +76,11 @@ public:
 	/// <summary>Gets called when the agent needs to check on the game's health</summary>
 	FOnHealthCheck OnHealthCheck;
 
-	/// <summary>Gets called if the server is getting a scheduled maintenance, it will get the UTC time of the maintenance event as an argument.</summary>
+	/// <summary>DEPRECATED Use OnMaintenanceV2. Gets called if the server is getting a scheduled maintenance, it will get the UTC time of the maintenance event as an argument.</summary>
 	FOnMaintenance OnMaintenance;
+
+	/// <summary>Gets called if the server is getting a scheduled maintenance, it will get the maintenance schedule as an argument.</summary>
+	FOnMaintenanceV2 OnMaintenanceV2;
 
 	/// <summary>Returns a path to the directory where logs will be mapped to the VM host</summary>
 	const FString GetLogsDirectory();
