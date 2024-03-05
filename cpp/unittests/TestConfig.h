@@ -24,6 +24,7 @@ namespace Microsoft
                             const std::unordered_map<std::string, std::string> & ports = std::unordered_map<std::string, std::string>(),
                             const std::string & ipv4Address = std::string() = std::string(),
                             const std::string & domainName = std::string() = std::string(),
+                            const std::string & vmId = std::string() = std::string(),
                             const GameServerConnectionInfo & connectionInfo = GameServerConnectionInfo());
 
                 const std::string &getHeartbeatEndpoint();
@@ -39,6 +40,7 @@ namespace Microsoft
                 const std::unordered_map<std::string, std::string> &getGamePorts();
                 const std::string &getPublicIpV4Address();
                 const std::string &getFullyQualifiedDomainName();
+                const std::string &getVmId();
                 const GameServerConnectionInfo &getGameServerConnectionInfo();
                 bool shouldLog();
                 bool shouldHeartbeat();
@@ -57,6 +59,7 @@ namespace Microsoft
                 std::string m_region;
                 std::string m_ipv4Address;
                 std::string m_domainName;
+                std::string m_vmId;
                 GameServerConnectionInfo m_connectionInfo;
             };
         }

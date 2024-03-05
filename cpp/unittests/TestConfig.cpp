@@ -14,6 +14,7 @@ Microsoft::Azure::Gaming::TestConfig::TestConfig(   const std::string & heartbea
                                                     const std::unordered_map<std::string, std::string> & ports,
                                                     const std::string & ipv4Address,
                                                     const std::string & domainName,
+                                                    const std::string & vmId,
                                                     const GameServerConnectionInfo & connectionInfo)
 {
     m_heartbeatEndpoint = heartbeatEndpoint;
@@ -29,6 +30,7 @@ Microsoft::Azure::Gaming::TestConfig::TestConfig(   const std::string & heartbea
     m_ports = ports;
     m_ipv4Address = ipv4Address;
     m_domainName = domainName;
+    m_vmId = vmId;
     m_connectionInfo = connectionInfo;
 }
 
@@ -105,6 +107,11 @@ const std::string &Microsoft::Azure::Gaming::TestConfig::getPublicIpV4Address()
 const std::string &Microsoft::Azure::Gaming::TestConfig::getFullyQualifiedDomainName()
 {
     return m_domainName;
+}
+
+const std::string &Microsoft::Azure::Gaming::TestConfig::getVmId()
+{
+    return m_vmId;
 }
 
 const Microsoft::Azure::Gaming::GameServerConnectionInfo &Microsoft::Azure::Gaming::TestConfig::getGameServerConnectionInfo()

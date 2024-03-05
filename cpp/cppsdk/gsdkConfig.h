@@ -21,6 +21,7 @@ namespace Microsoft
                 virtual const std::string &getTitleId() = 0;
                 virtual const std::string &getBuildId() = 0;
                 virtual const std::string &getRegion() = 0;
+                virtual const std::string &getVmId() = 0;
                 virtual const std::unordered_map<std::string, std::string> &getBuildMetadata() = 0;
                 virtual const std::unordered_map<std::string, std::string> &getGamePorts() = 0;
                 virtual const std::string &getPublicIpV4Address() = 0;
@@ -36,6 +37,7 @@ namespace Microsoft
                 static constexpr const char* TITLE_ID_ENV_VAR = "PF_TITLE_ID";
                 static constexpr const char* BUILD_ID_ENV_VAR = "PF_BUILD_ID";
                 static constexpr const char* REGION_ENV_VAR = "PF_REGION";
+                static constexpr const char* VM_ID_ENV_VAR = "PF_VM_ID";
                 static constexpr const char* SHARED_CONTENT_FOLDER_ENV_VAR = "SHARED_CONTENT_FOLDER";
             };
 
@@ -72,6 +74,7 @@ namespace Microsoft
                 const std::unordered_map<std::string, std::string> &getGamePorts();
                 const std::string &getPublicIpV4Address();
                 const std::string &getFullyQualifiedDomainName();
+                const std::string &getVmId();
                 const GameServerConnectionInfo &getGameServerConnectionInfo();
 
             private:
@@ -85,6 +88,7 @@ namespace Microsoft
                 std::unordered_map<std::string, std::string> m_ports;
                 std::string m_ipv4Address;
                 std::string m_domainName;
+                std::string m_vmId;
                 GameServerConnectionInfo m_connectionInfo;
             };
 
@@ -103,6 +107,7 @@ namespace Microsoft
                 const std::unordered_map<std::string, std::string> &getGamePorts();
                 const std::string &getPublicIpV4Address();
                 const std::string &getFullyQualifiedDomainName();
+                const std::string &getVmId();
                 const GameServerConnectionInfo &getGameServerConnectionInfo();
 
             private:
@@ -116,6 +121,7 @@ namespace Microsoft
                 std::unordered_map<std::string, std::string> m_ports;
                 std::string m_ipv4Address;
                 std::string m_domainName;
+                std::string m_vmId;
                 GameServerConnectionInfo m_connectionInfo;
             };
         }

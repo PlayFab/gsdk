@@ -23,6 +23,7 @@ public:
 	virtual const TMap<FString, FString>& GetGamePorts() = 0;
 	virtual const FString& GetPublicIpV4Address() = 0;
 	virtual const FString& GetFullyQualifiedDomainName() = 0;
+	virtual const FString& GetVmId() = 0;
 	virtual const FGameServerConnectionInfo& GetGameServerConnectionInfo() = 0;
 	virtual bool ShouldLog() = 0;
 	virtual bool ShouldHeartbeat() = 0;
@@ -36,6 +37,7 @@ protected:
 	static constexpr const TCHAR* TITLE_ID_ENV_VAR = TEXT("PF_TITLE_ID");
 	static constexpr const TCHAR* BUILD_ID_ENV_VAR = TEXT("PF_BUILD_ID");
 	static constexpr const TCHAR* REGION_ENV_VAR = TEXT("PF_REGION");
+	static constexpr const TCHAR* VM_ID_ENV_VAR = TEXT("PF_VM_ID");
 	static constexpr const TCHAR* SHARED_CONTENT_FOLDER_ENV_VAR = TEXT("SHARED_CONTENT_FOLDER");
 };
 
@@ -78,6 +80,7 @@ public:
 	virtual const TMap<FString, FString>& GetGamePorts() override;
 	virtual const FString& GetPublicIpV4Address() override;
 	virtual const FString& GetFullyQualifiedDomainName() override;
+	virtual const FString& GetVmId() override;
 	virtual const FGameServerConnectionInfo& GetGameServerConnectionInfo() override;
 
 private:
@@ -91,6 +94,7 @@ private:
 	TMap<FString, FString> Ports;
 	FString Ipv4Address;
 	FString DomainName;
+	FString VmId;
 	FGameServerConnectionInfo ConnectionInfo;
 };
 
@@ -113,6 +117,7 @@ public:
 	virtual const TMap<FString, FString>& GetGamePorts() override;
 	virtual const FString& GetPublicIpV4Address() override;
 	virtual const FString& GetFullyQualifiedDomainName() override;
+	virtual const FString& GetVmId() override;
 	virtual const FGameServerConnectionInfo& GetGameServerConnectionInfo() override;
 
 protected:
@@ -128,5 +133,6 @@ protected:
 	TMap<FString, FString> Ports;
 	FString Ipv4Address;
 	FString DomainName;
+	FString VmId;
 	FGameServerConnectionInfo ConnectionInfo;
 };

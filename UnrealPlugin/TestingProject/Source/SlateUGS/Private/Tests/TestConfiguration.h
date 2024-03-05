@@ -22,6 +22,7 @@ public:
 	void SetGamePorts(TMap<FString, FString> ports);
 	void SetPublicIpV4Address(FString ipv4Address);
 	void SetFullyQualifiedDomainName(FString domainName);
+	void SetVmId(FString vmId);
 	void SetGameServerConnectionInfo(FGameServerConnectionInfo connectionInfo);
 
 	bool SerializeToFile(const FString& fileName);

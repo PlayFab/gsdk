@@ -55,6 +55,11 @@ void TestConfiguration::SetFullyQualifiedDomainName(FString domainName)
 	DomainName = domainName;
 }
 
+void TestConfiguration::SetVmId(FString vmId)
+{
+	VmId = vmId;
+}
+
 void TestConfiguration::SetGameServerConnectionInfo(FGameServerConnectionInfo connectionInfo)
 {
 	ConnectionInfo = connectionInfo;
@@ -71,6 +76,7 @@ bool TestConfiguration::SerializeToFile(const FString& filePath)
 	jsonObject->SetStringField("sharedContentFolder", SharedContentFolder);
 	jsonObject->SetStringField("publicIpV4Address", Ipv4Address);
 	jsonObject->SetStringField("fullyQualifiedDomainName", DomainName);
+	jsonObject->SetStringField("vmId", VmId);
 
 	// Serialize game certificates
 	TSharedPtr<FJsonObject> gameCertsObject = MakeShareable(new FJsonObject);

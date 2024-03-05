@@ -55,6 +55,7 @@ FEnvironmentVariableConfiguration::FEnvironmentVariableConfiguration()
 	ServerId = UGSDKInternalUtils::GetEnvironmentVariable(SERVER_ID_ENV_VAR);
 	LogFolder = UGSDKInternalUtils::GetEnvironmentVariable(LOG_FOLDER_ENV_VAR);
 	SharedContentFolder = UGSDKInternalUtils::GetEnvironmentVariable(SHARED_CONTENT_FOLDER_ENV_VAR);
+	VmId = UGSDKInternalUtils::GetEnvironmentVariable(VM_ID_ENV_VAR);
 
 	// Game cert support was added once we switched to a json config, so we don't have values for them
 }
@@ -107,6 +108,11 @@ const FString& FEnvironmentVariableConfiguration::GetPublicIpV4Address()
 const FString& FEnvironmentVariableConfiguration::GetFullyQualifiedDomainName()
 {
 	return DomainName;
+}
+
+const FString& FEnvironmentVariableConfiguration::GetVmId()
+{
+	return VmId;
 }
 
 const FGameServerConnectionInfo& FEnvironmentVariableConfiguration::GetGameServerConnectionInfo()
@@ -189,6 +195,11 @@ FJsonFileConfiguration::FJsonFileConfiguration(const FString& FileName)
 		DomainName = ConfigJson->GetStringField(TEXT("fullyQualifiedDomainName"));
 	}
 
+	if (ConfigJson->HasField(TEXT("vmId")))
+	{
+		VmId = ConfigJson->GetStringField(TEXT("vmId"));
+	}
+
 	if (ConfigJson->HasField(TEXT("gameServerConnectionInfo")))
 	{
 		TSharedPtr<FJsonObject> ConnectionInfoJson = ConfigJson->GetObjectField(TEXT("gameServerConnectionInfo"));
@@ -260,6 +271,11 @@ const FString& FJsonFileConfiguration::GetPublicIpV4Address()
 const FString& FJsonFileConfiguration::GetFullyQualifiedDomainName()
 {
 	return DomainName;
+}
+
+const FString& FJsonFileConfiguration::GetVmId()
+{
+	return VmId;
 }
 
 const FGameServerConnectionInfo& FJsonFileConfiguration::GetGameServerConnectionInfo()
