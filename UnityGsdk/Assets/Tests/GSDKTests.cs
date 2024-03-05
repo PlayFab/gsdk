@@ -219,6 +219,80 @@ public class GSDKTests
     }
 
     [Test]
+    public void GameState_MaintV2_CallbackInvoked()
+    {
+        _testConfig = new()
+        {
+            HeartbeatEndpoint = "testEndpoint",
+            SessionHostId = "testServerId",
+            LogFolder = "testLogFolder",
+            SharedContentFolder = "testSharedContentFolder"
+        };
+
+        string json = _jsonInstance.SerializeObject(_testConfig);
+        File.WriteAllText(ConfigFilePath, json);
+
+        PlayFabMultiplayerAgentAPI.Start();
+
+        MaintenanceSchedule schedule = new();
+        PlayFabMultiplayerAgentAPI.OnMaintenanceV2Callback += (MaintenanceSchedule maintenanceSchedule) =>
+        {
+            schedule = maintenanceSchedule;
+        };
+
+        string responseJson = @"
+            {
+                ""operation"" : ""Active"",
+                ""sessionConfig"" : 
+                {
+                    ""sessionId"" : ""eca7e870-da2e-45f9-bb66-30d89064313a"",
+                    ""sessionCookie"" : ""OreoCookie""
+                },
+                ""maintenanceSchedule"": 
+                {
+                    ""DocumentIncarnation"": ""IncarnationID"",
+                    ""Events"": 
+                    [
+                        {
+                            ""EventId"": ""eventID"",
+                            ""EventType"": ""Reboot"",
+                            ""ResourceType"": ""VirtualMachine"",
+                            ""Resources"": 
+                            [
+                                ""resourceName""
+                            ],
+                            ""EventStatus"": ""Scheduled"",
+                            ""NotBefore"": ""2018-04-12T16:58:30.1458776Z"",
+                            ""Description"": ""eventDescription"",
+                            ""EventSource"": ""Platform"",
+                            ""DurationInSeconds"": 3600
+                        }
+                    ]
+                },
+                ""nextHeartbeatIntervalMs"" : 30000
+            }";
+
+        var response = _jsonInstance.DeserializeObject<HeartbeatResponse>(responseJson);
+        PlayFabMultiplayerAgentAPI.ProcessAgentResponse(response);
+
+        var expectedTime = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+        expectedTime = expectedTime.AddSeconds(1523552310).AddTicks(1458776);
+
+        Assert.AreEqual("IncarnationID", schedule.DocumentIncarnation, "Verify maintenance V2 callback with correct document incarnation was called.");
+        Assert.AreEqual(1, schedule.Events.Count, "Verify maintenance V2 callback with correct event list size was called.");
+        Assert.AreEqual("eventID", schedule.Events[0].EventId, "Verify maintenance V2 callback with correct event id was called.");
+        Assert.AreEqual("Reboot", schedule.Events[0].EventType, "Verify maintenance V2 callback with correct event type was called.");
+        Assert.AreEqual("VirtualMachine", schedule.Events[0].ResourceType, "Verify maintenance V2 callback with correct resource type was called.");
+        Assert.AreEqual(1, schedule.Events[0].Resources.Count, "Verify maintenance V2 callback with correct resource list size was called.");
+        Assert.AreEqual("resourceName", schedule.Events[0].Resources[0], "Verify maintenance V2 callback with correct resource was called.");
+        Assert.AreEqual("Scheduled", schedule.Events[0].EventStatus, "Verify maintenance V2 callback with correct status was called.");
+        Assert.AreEqual(expectedTime, schedule.Events[0].NotBefore, "Verify maintenance V2 callback with correct time was called.");
+        Assert.AreEqual("eventDescription", schedule.Events[0].Description, "Verify maintenance V2 callback with correct description was called.");
+        Assert.AreEqual("Platform", schedule.Events[0].EventSource, "Verify maintenance V2 callback with correct source was called.");
+        Assert.AreEqual(3600, schedule.Events[0].DurationInSeconds, "Verify maintenance V2 callback with correct duration was called.");
+    }
+
+    [Test]
     public void JsonDoesntCrashWhenInvalidJson()
     {
         string responseJson = @"
