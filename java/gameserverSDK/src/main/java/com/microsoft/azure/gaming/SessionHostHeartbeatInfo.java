@@ -42,6 +42,11 @@ class SessionHostHeartbeatInfo {
      */
     private ZonedDateTime nextScheduledMaintenanceUtc;
 
+    /**
+     * Schedule of upcoming maintenance events from Azure
+     */
+    private MaintenanceSchedule maintenanceSchedule;
+
     protected SessionHostStatus getCurrentGameState() { return currentGameState; }
 
     protected void setCurrentGameState(SessionHostStatus newSessionHostStatus)
@@ -89,10 +94,17 @@ class SessionHostHeartbeatInfo {
     }
 
     protected ZonedDateTime getNextScheduledMaintenanceUtc() { return nextScheduledMaintenanceUtc; }
-
+    
     protected void setNextScheduledMaintenanceUtc(ZonedDateTime nextScheduledMaintenanceUtc)
     {
         this.nextScheduledMaintenanceUtc = nextScheduledMaintenanceUtc;
+    }
+
+    protected MaintenanceSchedule getMaintenanceSchedule() { return maintenanceSchedule; }
+
+    protected void setMaintenanceSchedule(MaintenanceSchedule maintenanceSchedule)
+    {
+        this.maintenanceSchedule = maintenanceSchedule;
     }
 
 }

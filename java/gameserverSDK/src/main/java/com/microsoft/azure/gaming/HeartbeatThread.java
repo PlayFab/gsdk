@@ -41,6 +41,7 @@ class HeartbeatThread implements Runnable {
     private Runnable shutdownCallback;
     private Supplier<GameHostHealth> healthCallback;
     private Consumer<ZonedDateTime> maintenanceCallback;
+    private Consumer<MaintenanceSchedule> maintenanceV2Callback;
     private ZonedDateTime lastScheduledMaintenanceUtc;
     private final Semaphore transitionToActive = new Semaphore(0);
     private final Semaphore signalHeartbeat = new Semaphore(0);
@@ -149,6 +150,11 @@ class HeartbeatThread implements Runnable {
         this.maintenanceCallback = callback;
     }
 
+    protected synchronized void registerMaintenanceV2Callback(Consumer<MaintenanceSchedule> callback)
+    {
+        this.maintenanceV2Callback = callback;
+    }
+
     protected Map<String, String> getConfigSettings() {
         // This is used by GameserverSDK.java when a user wants a copy of the current config settings
         // Note that a copy constructor uses an iterator, and even with Synchronized Collections, we
@@ -215,6 +221,14 @@ class HeartbeatThread implements Runnable {
                 {
                     callback.accept(nextMaintenance); // should this be in a new thread?
                     this.lastScheduledMaintenanceUtc = nextMaintenance; // cache it, since we only want to notify once
+                }
+
+                Consumer<MaintenanceSchedule> maintV2Callback = this.maintenanceV2Callback;
+                MaintenanceSchedule schedule = sessionInfo.getMaintenanceSchedule();
+
+                if (maintV2Callback != null && schedule != null)
+                {
+                    maintV2Callback.accept(schedule);
                 }
 
                 // If Terminating, send a last heartbeat that we're done and exit the loop
@@ -296,7 +310,7 @@ class HeartbeatThread implements Runnable {
         // Create a gson object that knows how to handle LocalDateTime
         Gson gson = new GsonBuilder().registerTypeAdapter(ZonedDateTime.class, (JsonDeserializer<ZonedDateTime>) (json, type, jsonDeserializationContext) ->
                         ZonedDateTime.parse(json.getAsJsonPrimitive().getAsString()).withZoneSameLocal(ZoneId.of("UTC"))).create();
-
+        
         StatusLine statusLine = response.getStatusLine();
         HttpEntity entity = response.getEntity();
         if (statusLine.getStatusCode() >= 300) {
