@@ -355,6 +355,41 @@ namespace Microsoft
                         }
                     }
 
+                    if (heartbeatResponse.isMember("maintenanceSchedule"))
+                    {
+                        auto temp = m_maintenanceV2Callback;
+
+                        Json::Value scheduleJson = heartbeatResponse["maintenanceSchedule"];
+                        MaintenanceSchedule schedule{};
+                        schedule.m_documentIncarnation = scheduleJson["DocumentIncarnation"].asString();
+
+                        for (const auto& eventJson : scheduleJson["Events"])
+                        {
+                            MaintenanceEvent eventData{};
+                            eventData.m_eventId = eventJson["EventId"].asString();
+                            eventData.m_eventType = eventJson["EventType"].asString();
+                            eventData.m_resourceType = eventJson["ResourceType"].asString();
+                            std::vector<std::string> resources{};
+                            for (const auto& resource : eventJson["Resources"])
+                            {
+                                resources.push_back(resource.asString());
+                            }
+                            eventData.m_resources = resources;
+                            eventData.m_eventStatus = eventJson["EventStatus"].asString();
+                            eventData.m_notBefore = parseDate(eventJson["NotBefore"].asCString());
+                            eventData.m_description = eventJson["Description"].asString();
+                            eventData.m_eventSource = eventJson["EventSource"].asString();
+                            eventData.m_durationInSeconds = eventJson["DurationInSeconds"].asInt();
+
+                            schedule.m_events.push_back(eventData);
+                        }
+
+                        if (temp != nullptr)
+                        {
+                            temp(schedule);
+                        }
+                    }
+
                     if (heartbeatResponse.isMember("operation"))
                     {
                         try
@@ -490,6 +525,11 @@ namespace Microsoft
             void GSDK::registerMaintenanceCallback(std::function< void(const tm&) > callback)
             {
                 GSDKInternal::get().m_maintenanceCallback = callback;
+            }
+
+            void GSDK::registerMaintenanceV2Callback(std::function<void(const MaintenanceSchedule&)> callback)
+            {
+                GSDKInternal::get().m_maintenanceV2Callback = callback;
             }
 
             unsigned int GSDK::logMessage(const std::string& message)

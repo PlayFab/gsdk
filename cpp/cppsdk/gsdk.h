@@ -27,6 +27,27 @@ namespace Microsoft
                 }
             };
 
+            class MaintenanceEvent
+            {
+            public:
+                std::string m_eventId;
+                std::string m_eventType;
+                std::string m_resourceType;
+                std::vector<std::string> m_resources;
+                std::string m_eventStatus;
+                tm m_notBefore;
+                std::string m_description;
+                std::string m_eventSource;
+                int m_durationInSeconds;
+            };
+
+            class MaintenanceSchedule
+            {
+            public:
+                std::string m_documentIncarnation;
+                std::vector<MaintenanceEvent> m_events;
+            };
+
             /// <summary>
             /// A class that captures details about a game server port.
             /// </summary>
@@ -113,8 +134,17 @@ namespace Microsoft
                 /// <summary>Gets called when the agent needs to check on the game's health</summary>
                 static void registerHealthCallback(std::function<bool()> callback);
 
-                /// <summary>Gets called if the server is getting a scheduled maintenance, it will get the UTC time of the maintenance event as an argument.</summary>
-                static void registerMaintenanceCallback(std::function<void(const tm &)> callback);
+                /// <summary>DEPRECATED Gets called if the server is getting a scheduled maintenance, it will get the UTC time of the maintenance event as an argument.</summary>
+                __declspec(deprecated) static void registerMaintenanceCallback(std::function<void(const tm &)> callback);
+
+                /// <summary>
+                /// Gets called if the server is getting a scheduled maintenance,
+                /// it will get an array of scheduled events as an argument.
+                /// </summary>
+                /// <remarks>
+                /// https://learn.microsoft.com/azure/virtual-machines/windows/scheduled-events#event-properties
+                /// </remarks>
+                static void registerMaintenanceV2Callback(std::function<void(const MaintenanceSchedule&)> callback);
 
                 /// <summary>outputs a message to the log</summary>
                 static unsigned int logMessage(const std::string &message);
