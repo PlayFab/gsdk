@@ -10,6 +10,13 @@
 #include <vector>
 #include <stdexcept>
 
+#ifdef _WIN32
+#define DEPRECATED __declspec(deprecated)
+#elif defined(__GNUC__) || defined(__clang__)
+#define DEPRECATED __attribute__((deprecated))
+#endif
+
+
 namespace Microsoft
 {
     namespace Azure
@@ -135,7 +142,7 @@ namespace Microsoft
                 static void registerHealthCallback(std::function<bool()> callback);
 
                 /// <summary>DEPRECATED Gets called if the server is getting a scheduled maintenance, it will get the UTC time of the maintenance event as an argument.</summary>
-                __declspec(deprecated) static void registerMaintenanceCallback(std::function<void(const tm &)> callback);
+                DEPRECATED static void registerMaintenanceCallback(std::function<void(const tm &)> callback);
 
                 /// <summary>
                 /// Gets called if the server is getting a scheduled maintenance,
