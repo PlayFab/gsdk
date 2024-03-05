@@ -9,11 +9,10 @@
     <Version>0.0.0.0</Version>
     <FileVersion>$(Version)</FileVersion>
     <PackageTags>GSDK Playfab Multiplayer Servers</PackageTags>
-    <PackageLicenseUrl>http://www.apache.org/licenses/LICENSE-2.0</PackageLicenseUrl>
-    <PackageProjectUrl>https://learn.microsoft.com/en-us/gaming/playfab/features/multiplayer/servers/</PackageProjectUrl>
+    <PackageProjectUrl>https://learn.microsoft.com/gaming/playfab/features/multiplayer/servers/</PackageProjectUrl>
     <PackageDescription>Enables PlayFab game servers to interact with PlayFab control systems, accept players and send heartbeats.</PackageDescription>
     <PackageReleaseNotes>Release of the C# Game Server SDK for use with PlayFab Multiplayer Servers.</PackageReleaseNotes>
-    <PackageIcon>https://playfab.com/assets/img/playfab-mark.png</PackageIcon>
+    <PackageIcon>playfab-mark.png</PackageIcon>
     <PackageId>com.playfab.csharpgsdk</PackageId>
     <Platforms>AnyCPU;x64</Platforms>
   </PropertyGroup>
@@ -36,5 +35,11 @@
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="System.Net.Http" Version="4.3.4" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="assets\playfab-mark.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
   </ItemGroup>
 </Project>

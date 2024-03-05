@@ -11,6 +11,9 @@
         [JsonProperty(PropertyName = "nextScheduledMaintenanceUtc")]
         public string NextScheduledMaintenanceUtc { get; set; }
 
+        [JsonProperty(PropertyName = "maintenanceSchedule")]
+        public MaintenanceSchedule MaintenanceSchedule { get; set; }
+
         [JsonProperty(PropertyName = "operation", ItemConverterType = typeof(StringEnumConverter))]
         public GameOperation Operation { get; set; }
     }

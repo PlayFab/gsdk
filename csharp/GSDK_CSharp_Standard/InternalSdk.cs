@@ -52,6 +52,7 @@ namespace Microsoft.Playfab.Gaming.GSDK.CSharp
         public Action ShutdownCallback { get; set; }
         public Func<bool> HealthCallback { get; set; }
         public Action<DateTimeOffset> MaintenanceCallback { get; set; }
+        public Action<MaintenanceSchedule> MaintenanceV2Callback { get; set; }
 
         public InternalSdk(ISystemOperations systemOperationsWrapper = null, IHttpClientFactory httpClientFactory = null)
         {
@@ -258,6 +259,11 @@ namespace Microsoft.Playfab.Gaming.GSDK.CSharp
                         _cachedScheduleMaintDate = scheduledMaintDate;
                     }
                 }
+            }
+
+            if (response.MaintenanceSchedule != null)
+            {
+                MaintenanceV2Callback?.Invoke(response.MaintenanceSchedule);
             }
 
             switch (response.Operation)
