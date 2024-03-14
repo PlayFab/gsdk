@@ -32,6 +32,7 @@ namespace Microsoft.Playfab.Gaming.GSDK.CSharp.Test
             _mockSystemOperations.Setup(op => op.FileExists(ConfigFilePath)).Returns(true);
             _mockSystemOperations.Setup(op => op.FileReadAllText(ConfigFilePath)).Returns(() => JsonConvert.SerializeObject(_testConfiguration));
 
+            _mockHttpClient.Setup(x => x.SendInfoAsync(It.IsAny<string>())).Returns(Task.CompletedTask);
             _mockHttpClient.Setup(x => x.SendHeartbeatAsync(It.IsAny<HeartbeatRequest>()))
                 .Returns(Task.FromResult(new HeartbeatResponse()));
             _mockHttpClientFactory.Setup(x => x.CreateInstance(It.IsAny<string>())).Returns(() => _mockHttpClient.Object);

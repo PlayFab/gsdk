@@ -98,6 +98,20 @@ namespace Microsoft.Playfab.Gaming.GSDK.CSharp
             _signalHeartbeatEvent.Reset();
             TransitionToActiveEvent.Reset();
 
+            Task.Run(() => StartAsync($"http://{heartbeatEndpoint}/v1/metrics/{serverId}/gsdkinfo"));
+        }
+
+        private async void StartAsync(string url)
+        {
+            try
+            {
+                await _httpClient.SendInfoAsync(url);
+            }
+            catch (Exception ex)
+            {
+                Logger.Log($"Cannot send GSDK info: {ex.Message}\r\n\r\n{ex}");
+            }
+
             _heartbeatTask = Task.Run(HeartbeatAsync);
         }
 
