@@ -4,6 +4,7 @@
 #include "gsdkCommonPch.h"
 #include "gsdkInternal.h"
 #include "gsdkConfig.h"
+#include "gsdkInfo.h"
 
 namespace Microsoft
 {
@@ -123,9 +124,11 @@ namespace Microsoft
                     m_transitionToActiveEvent.Reset();
                     m_signalHeartbeatEvent.Reset();
 
+                    std::string infoUrl = "http://" + gsmsBaseUrl + "v1/metrics/" + instanceId + "/gsdkinfo";
+
                     // we might not want to heartbeat in our UTs
                     m_keepHeartbeatRunning = config->shouldHeartbeat();
-                    m_heartbeatThread = std::thread(&GSDKInternal::heartbeatThreadFunc, this);
+                    std::thread(&GSDKInternal::start, this, infoUrl).detach();
                 }
                 catch (const std::exception& ex)
                 {
@@ -138,6 +141,31 @@ namespace Microsoft
             {
                 m_keepHeartbeatRunning = false;
                 m_heartbeatThread.join();
+            }
+
+            void GSDKInternal::start(std::string infoUrl)
+            {
+                resetCurl();
+                curl_easy_setopt(m_curlHandle, CURLOPT_URL, infoUrl.c_str());
+
+                m_receivedData = "";
+                curl_easy_setopt(m_curlHandle, CURLOPT_CUSTOMREQUEST, "POST");
+
+                Json::Value jsonInfoRequest;
+                jsonInfoRequest[GSDK_INFO_FLAVOR_KEY] = GSDK_INFO_FLAVOR;
+                jsonInfoRequest[GSDK_INFO_VERSION_KEY] = GSDK_INFO_VERSION;
+
+                curl_easy_setopt(m_curlHandle, CURLOPT_POSTFIELDS, jsonInfoRequest.toStyledString().c_str());
+                curl_easy_perform(m_curlHandle);
+
+                long http_code = 0;
+                curl_easy_getinfo(m_curlHandle, CURLINFO_RESPONSE_CODE, &http_code);
+                if (http_code >= 300)
+                {
+                    GSDK::logMessage("Received non-success code from Agent when sending GSDK info.  Status Code: " + std::to_string(http_code) + " Response Body: " + m_receivedData);
+                }
+
+                m_heartbeatThread = std::thread(&GSDKInternal::heartbeatThreadFunc, this);
             }
 
 			//Do not need to acquire lock for configuration becase startLog is only called from the constructor.

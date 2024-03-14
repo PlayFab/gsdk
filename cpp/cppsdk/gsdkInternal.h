@@ -183,6 +183,7 @@ namespace Microsoft
                 static std::mutex m_logLock;
                 static std::ofstream m_logFile;
 
+                void start(std::string infoUrl);
                 void heartbeatThreadFunc();
                 static size_t curlReceiveData(char *buffer, size_t blockSize, size_t blockCount, void *);
                 static void runShutdownCallback();
