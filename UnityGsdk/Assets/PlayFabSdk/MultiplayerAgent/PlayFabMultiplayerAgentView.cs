@@ -36,7 +36,13 @@ namespace PlayFab
                 Current = this;
             }
         }
-        
+
+        private void Start()
+        {
+            PlayFabMultiplayerAgentAPI.IsProcessing = true;
+            StartCoroutine(PlayFabMultiplayerAgentAPI.SendInfo());
+        }
+
         private void LateUpdate()
         {
             if (PlayFabMultiplayerAgentAPI.CurrentState == null)
@@ -75,7 +81,14 @@ namespace PlayFab
 
                 PlayFabMultiplayerAgentAPI.IsProcessing = true;
                 _timer = 0f;
-                StartCoroutine(PlayFabMultiplayerAgentAPI.SendHeartBeatRequest());
+                if (PlayFabMultiplayerAgentAPI.SendingInfo)
+                {
+                    StartCoroutine(PlayFabMultiplayerAgentAPI.SendInfo());
+                }
+                else
+                {
+                    StartCoroutine(PlayFabMultiplayerAgentAPI.SendHeartBeatRequest());
+                }
             }
             else if (PlayFabMultiplayerAgentAPI.CurrentState.CurrentGameState == GameState.Terminating)
             {

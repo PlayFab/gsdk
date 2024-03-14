@@ -58,6 +58,7 @@ namespace PlayFab
         public static SessionConfig SessionConfig = new SessionConfig();
         public static HeartbeatRequest CurrentState = new HeartbeatRequest();
         public static ErrorStates CurrentErrorState = ErrorStates.Ok;
+        public static bool SendingInfo = true;
         public static bool IsProcessing;
         public static bool IsDebugging = true;
         public static event OnShutdownEventk OnShutDownCallback;
@@ -177,6 +178,95 @@ namespace PlayFab
         public static void LogMessage(string message)
         {
             Debug.Log(message);
+        }
+
+        public static IEnumerator SendInfo()
+        {
+            string payload = _jsonInstance.SerializeObject(new GSDKInfo());
+            if (string.IsNullOrEmpty(payload) || string.IsNullOrEmpty(_baseUrl))
+            {
+                yield break;
+            }
+
+            byte[] payloadBytes = Encoding.UTF8.GetBytes(payload);
+
+            if (IsDebugging)
+            {
+                Debug.Log($"state: {CurrentState}, info payload: {payload}");
+            }
+
+            using (UnityWebRequest req = new UnityWebRequest(_baseUrl, UnityWebRequest.kHttpVerbPOST))
+            {
+                req.SetRequestHeader("Accept", "application/json");
+                req.SetRequestHeader("Content-Type", "application/json");
+                req.uploadHandler = new UploadHandlerRaw(payloadBytes) { contentType = "application/json" };
+                yield return req.SendWebRequest();
+
+                if (req.result == UnityWebRequest.Result.ConnectionError || req.result == UnityWebRequest.Result.ProtocolError)
+                {
+                    Guid guid = Guid.NewGuid();
+                    Debug.LogFormat("Error sending info: {0} - {1}", req.error, guid.ToString());
+                    //Exponential backoff for 30 minutes for retries.
+                    switch (CurrentErrorState)
+                    {
+                        case ErrorStates.Ok:
+                            CurrentErrorState = ErrorStates.Retry30S;
+                            if (IsDebugging)
+                            {
+                                Debug.Log("Retrying info in 30s");
+                            }
+
+                            break;
+                        case ErrorStates.Retry30S:
+                            CurrentErrorState = ErrorStates.Retry5M;
+                            if (IsDebugging)
+                            {
+                                Debug.Log("Retrying info in 5m");
+                            }
+
+                            break;
+                        case ErrorStates.Retry5M:
+                            CurrentErrorState = ErrorStates.Retry10M;
+                            if (IsDebugging)
+                            {
+                                Debug.Log("Retrying info in 10m");
+                            }
+
+                            break;
+                        case ErrorStates.Retry10M:
+                            CurrentErrorState = ErrorStates.Retry15M;
+                            if (IsDebugging)
+                            {
+                                Debug.Log("Retrying info in 15m");
+                            }
+
+                            break;
+                        case ErrorStates.Retry15M:
+                            CurrentErrorState = ErrorStates.Cancelled;
+                            if (IsDebugging)
+                            {
+                                Debug.Log("Agent reconnection cannot be established - cancelling");
+                            }
+
+                            break;
+                    }
+
+                    if (OnAgentErrorCallback != null)
+                    {
+                        OnAgentErrorCallback.Invoke(req.error);
+                    }
+
+                    IsProcessing = false;
+                }
+                else // success path
+                {
+                    CurrentErrorState = ErrorStates.Ok;
+                    SendingInfo = false;
+                    IsProcessing = false;
+                }
+            }
+
+
         }
 
         public static IEnumerator SendHeartBeatRequest()
