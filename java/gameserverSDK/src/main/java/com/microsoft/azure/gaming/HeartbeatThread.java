@@ -89,6 +89,33 @@ class HeartbeatThread implements Runnable {
         // Send an initial heartbeat here in the constructor so that we can fail
         // quickly if the Agent is unreachable.
         try {
+            Gson gson = new Gson();
+            Retryer<Void> retryer = RetryerBuilder.<Void>newBuilder()
+                    .retryIfExceptionOfType(IOException.class)
+                    .retryIfExceptionOfType(HttpResponseException.class)
+                    .retryIfRuntimeException()
+                    .withStopStrategy(StopStrategies.stopAfterAttempt(MAXIMUM_NUM_HEARTBEAT_RETRIES))
+                    .withWaitStrategy(WaitStrategies.incrementingWait(WAIT_TIME_BETWEEN_HEARTBEAT_RETRIES_MILLISECONDS, TimeUnit.MILLISECONDS, 0, TimeUnit.MILLISECONDS))
+                    .build();
+
+            URI infoUri = new URIBuilder()
+                    .setScheme("http")
+                    .setHost(agentEndpoint)
+                    .setPath("v1/metrics/" + serverId + "/gsdkinfo")
+                    .build();
+
+            GSDKInfo info = new GSDKInfo();
+    
+            retryer.call(() -> {
+                Request.Post(infoUri)
+                        .bodyString(gson.toJson(info), ContentType.APPLICATION_JSON)
+                        .connectTimeout(HEARTBEAT_TIMEOUT_MILLISECONDS)
+                        .socketTimeout(HEARTBEAT_TIMEOUT_MILLISECONDS)
+                        .execute().handleResponse(HeartbeatThread::handleInfoResponse);
+
+                return null;
+            });
+
             this.agentUri = new URIBuilder()
                     .setScheme("http")
                     .setHost(agentEndpoint)
@@ -314,6 +341,18 @@ class HeartbeatThread implements Runnable {
 
         InputStreamReader reader = new InputStreamReader(entity.getContent());
         return gson.fromJson(reader, SessionHostHeartbeatInfo.class);
+    }
+
+    private static Void handleInfoResponse(HttpResponse response) throws IOException {
+        StatusLine statusLine = response.getStatusLine();
+        if (statusLine.getStatusCode() >= 300) {
+            Logger.Instance().LogWarning("Received non-success code from Agent.  Status Code: " + statusLine.getStatusCode() + ".  Reason: " + statusLine.getReasonPhrase());
+            throw new HttpResponseException(
+                    statusLine.getStatusCode(),
+                    statusLine.getReasonPhrase());
+        }
+
+        return null;
     }
 
     /**
