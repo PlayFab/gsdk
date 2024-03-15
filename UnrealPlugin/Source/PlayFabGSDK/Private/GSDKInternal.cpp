@@ -12,6 +12,7 @@
 #include "Misc/Paths.h"
 #include "Logging/LogMacros.h"
 #include "HAL/Event.h"
+#include "GSDKInfo.h"
 
 FGSDKInternal::FGSDKInternal()
 	: SignalHeartbeatEvent(FPlatformProcess::GetSynchEventFromPool(false))
@@ -85,6 +86,7 @@ FGSDKInternal::FGSDKInternal()
 	UE_LOG(LogPlayFabGSDK, Log, TEXT("Server Instance Id: %s"), *ServerId);
 
 	HeartbeatUrl = FString::Printf(TEXT("http://%s/v1/sessionHosts/%s"), *HeartbeatEndpoint, *ServerId);
+	FString infoUrl = FString::Printf(TEXT("http://%s/v1/metrics/%s/gsdkinfo"), *HeartbeatEndpoint, *ServerId);
 
 	CachedScheduledMaintenance = FDateTime(0);
 
@@ -99,6 +101,39 @@ FGSDKInternal::FGSDKInternal()
 	HeartbeatThread = Async(EAsyncExecution::Thread,
 		[this]()
 		{
+			TSharedRef<IHttpRequest, ESPMode::ThreadSafe> Request = FHttpModule::Get().CreateRequest();
+			for (const auto& HttpHeader : HttpHeaders)
+			{
+				Request->SetHeader(HttpHeader.Key, HttpHeader.Value);
+			}
+
+			TSharedPtr<FJsonObject> infoJson = MakeShared<FJsonObject>();
+
+			infoJson->SetStringField(TEXT(GSDK_INFO_FLAVOR_KEY), GSDK_INFO_FLAVOR);
+			infoJson->SetStringField(TEXT(GSDK_INFO_VERSION_KEY), GSDK_INFO_VERSION);
+
+			FString infoString;
+			TSharedRef<TJsonWriter<>> Writer = TJsonWriterFactory<>::Create(&infoString);
+			FJsonSerializer::Serialize(infoJson.ToSharedRef(), Writer);
+
+			Request->SetURL(infoUrl);
+			Request->SetVerb(TEXT("POST"));
+			Request->SetContentAsString(infoString);
+
+			{
+				FScopeLock ScopeLock(&HeartbeatMutex);
+			}
+
+			Request->ProcessRequest();
+			FHttpModule::Get().GetHttpManager().Flush(true);
+
+			const FHttpResponsePtr Response = Request->GetResponse();
+			if (Response.IsValid() && Response->GetResponseCode() >= 300)
+			{
+				UE_LOG(LogPlayFabGSDK, Error, TEXT("Received non-success code from Agent when sending info.  Status Code: %d Response Body: %s"), Response->GetResponseCode(), *ContentString);
+				continue;
+			}
+
 			HeartbeatAsyncTaskFunction();
 		}
 	);
