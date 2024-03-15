@@ -58,7 +58,6 @@ namespace PlayFab
         public static SessionConfig SessionConfig = new SessionConfig();
         public static HeartbeatRequest CurrentState = new HeartbeatRequest();
         public static ErrorStates CurrentErrorState = ErrorStates.Ok;
-        public static bool SendingInfo = true;
         public static bool IsProcessing;
         public static bool IsDebugging = true;
         public static event OnShutdownEventk OnShutDownCallback;
@@ -206,67 +205,14 @@ namespace PlayFab
                 {
                     Guid guid = Guid.NewGuid();
                     Debug.LogFormat("Error sending info: {0} - {1}", req.error, guid.ToString());
-                    //Exponential backoff for 30 minutes for retries.
-                    switch (CurrentErrorState)
-                    {
-                        case ErrorStates.Ok:
-                            CurrentErrorState = ErrorStates.Retry30S;
-                            if (IsDebugging)
-                            {
-                                Debug.Log("Retrying info in 30s");
-                            }
-
-                            break;
-                        case ErrorStates.Retry30S:
-                            CurrentErrorState = ErrorStates.Retry5M;
-                            if (IsDebugging)
-                            {
-                                Debug.Log("Retrying info in 5m");
-                            }
-
-                            break;
-                        case ErrorStates.Retry5M:
-                            CurrentErrorState = ErrorStates.Retry10M;
-                            if (IsDebugging)
-                            {
-                                Debug.Log("Retrying info in 10m");
-                            }
-
-                            break;
-                        case ErrorStates.Retry10M:
-                            CurrentErrorState = ErrorStates.Retry15M;
-                            if (IsDebugging)
-                            {
-                                Debug.Log("Retrying info in 15m");
-                            }
-
-                            break;
-                        case ErrorStates.Retry15M:
-                            CurrentErrorState = ErrorStates.Cancelled;
-                            if (IsDebugging)
-                            {
-                                Debug.Log("Agent reconnection cannot be established - cancelling");
-                            }
-
-                            break;
-                    }
-
-                    if (OnAgentErrorCallback != null)
-                    {
-                        OnAgentErrorCallback.Invoke(req.error);
-                    }
-
                     IsProcessing = false;
                 }
-                else // success path
+                else
                 {
                     CurrentErrorState = ErrorStates.Ok;
-                    SendingInfo = false;
                     IsProcessing = false;
                 }
             }
-
-
         }
 
         public static IEnumerator SendHeartBeatRequest()

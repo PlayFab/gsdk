@@ -86,35 +86,28 @@ class HeartbeatThread implements Runnable {
         Logger.Instance().Log("VM Agent Endpoint: " + agentEndpoint);
         Logger.Instance().Log("Instance Id: " + serverId);
 
+        try {
+            URI infoUri = new URIBuilder()
+            .setScheme("http")
+            .setHost(agentEndpoint)
+            .setPath("v1/metrics/" + serverId + "/gsdkinfo")
+            .build();
+            
+            Gson gson = new Gson();
+            GSDKInfo info = new GSDKInfo();
+
+            Request.Post(infoUri)
+                    .bodyString(gson.toJson(info), ContentType.APPLICATION_JSON)
+                    .connectTimeout(HEARTBEAT_TIMEOUT_MILLISECONDS)
+                    .socketTimeout(HEARTBEAT_TIMEOUT_MILLISECONDS)
+                    .execute().handleResponse(HeartbeatThread::handleInfoResponse);
+        } catch (Exception e) {
+            Logger.Instance().LogError("Failed to contact Agent when sending info.");
+        }
+
         // Send an initial heartbeat here in the constructor so that we can fail
         // quickly if the Agent is unreachable.
         try {
-            Gson gson = new Gson();
-            Retryer<Void> retryer = RetryerBuilder.<Void>newBuilder()
-                    .retryIfExceptionOfType(IOException.class)
-                    .retryIfExceptionOfType(HttpResponseException.class)
-                    .retryIfRuntimeException()
-                    .withStopStrategy(StopStrategies.stopAfterAttempt(MAXIMUM_NUM_HEARTBEAT_RETRIES))
-                    .withWaitStrategy(WaitStrategies.incrementingWait(WAIT_TIME_BETWEEN_HEARTBEAT_RETRIES_MILLISECONDS, TimeUnit.MILLISECONDS, 0, TimeUnit.MILLISECONDS))
-                    .build();
-
-            URI infoUri = new URIBuilder()
-                    .setScheme("http")
-                    .setHost(agentEndpoint)
-                    .setPath("v1/metrics/" + serverId + "/gsdkinfo")
-                    .build();
-
-            GSDKInfo info = new GSDKInfo();
-    
-            retryer.call(() -> {
-                Request.Post(infoUri)
-                        .bodyString(gson.toJson(info), ContentType.APPLICATION_JSON)
-                        .connectTimeout(HEARTBEAT_TIMEOUT_MILLISECONDS)
-                        .socketTimeout(HEARTBEAT_TIMEOUT_MILLISECONDS)
-                        .execute().handleResponse(HeartbeatThread::handleInfoResponse);
-
-                return null;
-            });
 
             this.agentUri = new URIBuilder()
                     .setScheme("http")

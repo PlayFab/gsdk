@@ -81,14 +81,7 @@ namespace PlayFab
 
                 PlayFabMultiplayerAgentAPI.IsProcessing = true;
                 _timer = 0f;
-                if (PlayFabMultiplayerAgentAPI.SendingInfo)
-                {
-                    StartCoroutine(PlayFabMultiplayerAgentAPI.SendInfo());
-                }
-                else
-                {
-                    StartCoroutine(PlayFabMultiplayerAgentAPI.SendHeartBeatRequest());
-                }
+                StartCoroutine(PlayFabMultiplayerAgentAPI.SendHeartBeatRequest());
             }
             else if (PlayFabMultiplayerAgentAPI.CurrentState.CurrentGameState == GameState.Terminating)
             {
