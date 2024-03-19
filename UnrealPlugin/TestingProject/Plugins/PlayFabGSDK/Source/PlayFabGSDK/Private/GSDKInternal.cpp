@@ -120,10 +120,6 @@ FGSDKInternal::FGSDKInternal()
 			Request->SetVerb(TEXT("POST"));
 			Request->SetContentAsString(infoString);
 
-			{
-				FScopeLock ScopeLock(&HeartbeatMutex);
-			}
-
 			Request->ProcessRequest();
 			FHttpModule::Get().GetHttpManager().Flush(true);
 
@@ -131,7 +127,6 @@ FGSDKInternal::FGSDKInternal()
 			if (Response.IsValid() && Response->GetResponseCode() >= 300)
 			{
 				UE_LOG(LogPlayFabGSDK, Error, TEXT("Received non-success code from Agent when sending info.  Status Code: %d Response Body: %s"), Response->GetResponseCode(), *ContentString);
-				continue;
 			}
 
 			HeartbeatAsyncTaskFunction();

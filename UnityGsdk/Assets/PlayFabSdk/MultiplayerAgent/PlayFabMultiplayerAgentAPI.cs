@@ -47,6 +47,8 @@ namespace PlayFab
 
         private static string _baseUrl = string.Empty;
 
+        private static string _sendUrl = string.Empty;
+
         private static GSDKConfiguration _gsdkconfig;
 
         private static IDictionary<string, string> _configMap;
@@ -82,6 +84,7 @@ namespace PlayFab
             }
 
             _baseUrl = string.Format("http://{0}/v1/sessionHosts/{1}/heartbeats", _gsdkconfig.HeartbeatEndpoint, _gsdkconfig.SessionHostId);
+            _sendUrl = string.Format("http://{0}/v1/metrics/{1}/gsdkinfo", _gsdkconfig.HeartbeatEndpoint, _gsdkconfig.SessionHostId);
             CurrentState.CurrentGameState = GameState.Initializing;
             CurrentErrorState = ErrorStates.Ok;
             CurrentState.CurrentPlayers = new List<ConnectedPlayer>();
@@ -194,7 +197,7 @@ namespace PlayFab
                 Debug.Log($"state: {CurrentState}, info payload: {payload}");
             }
 
-            using (UnityWebRequest req = new UnityWebRequest(_baseUrl, UnityWebRequest.kHttpVerbPOST))
+            using (UnityWebRequest req = new UnityWebRequest(_sendUrl, UnityWebRequest.kHttpVerbPOST))
             {
                 req.SetRequestHeader("Accept", "application/json");
                 req.SetRequestHeader("Content-Type", "application/json");
@@ -203,8 +206,7 @@ namespace PlayFab
 
                 if (req.result == UnityWebRequest.Result.ConnectionError || req.result == UnityWebRequest.Result.ProtocolError)
                 {
-                    Guid guid = Guid.NewGuid();
-                    Debug.LogFormat("Error sending info: {0} - {1}", req.error, guid.ToString());
+                    Debug.LogFormat("Error sending info: {0}", req.error);
                     IsProcessing = false;
                 }
                 else
@@ -240,8 +242,7 @@ namespace PlayFab
 
                 if (req.result == UnityWebRequest.Result.ConnectionError || req.result == UnityWebRequest.Result.ProtocolError)
                 {
-                    Guid guid = Guid.NewGuid();
-                    Debug.LogFormat("CurrentError: {0} - {1}", req.error, guid.ToString());
+                    Debug.LogFormat("CurrentError: {0}", req.error);
                     //Exponential backoff for 30 minutes for retries.
                     switch (CurrentErrorState)
                     {
