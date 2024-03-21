@@ -47,7 +47,7 @@ namespace PlayFab
 
         private static string _baseUrl = string.Empty;
 
-        private static string _sendUrl = string.Empty;
+        private static string _infoUrl = string.Empty;
 
         private static GSDKConfiguration _gsdkconfig;
 
@@ -84,7 +84,7 @@ namespace PlayFab
             }
 
             _baseUrl = string.Format("http://{0}/v1/sessionHosts/{1}/heartbeats", _gsdkconfig.HeartbeatEndpoint, _gsdkconfig.SessionHostId);
-            _sendUrl = string.Format("http://{0}/v1/metrics/{1}/gsdkinfo", _gsdkconfig.HeartbeatEndpoint, _gsdkconfig.SessionHostId);
+            _infoUrl = string.Format("http://{0}/v1/metrics/{1}/gsdkinfo", _gsdkconfig.HeartbeatEndpoint, _gsdkconfig.SessionHostId);
             CurrentState.CurrentGameState = GameState.Initializing;
             CurrentErrorState = ErrorStates.Ok;
             CurrentState.CurrentPlayers = new List<ConnectedPlayer>();
@@ -185,7 +185,7 @@ namespace PlayFab
         public static IEnumerator SendInfo()
         {
             string payload = _jsonInstance.SerializeObject(new GSDKInfo());
-            if (string.IsNullOrEmpty(payload) || string.IsNullOrEmpty(_baseUrl))
+            if (string.IsNullOrEmpty(payload) || string.IsNullOrEmpty(_infoUrl))
             {
                 yield break;
             }
@@ -197,7 +197,7 @@ namespace PlayFab
                 Debug.Log($"state: {CurrentState}, info payload: {payload}");
             }
 
-            using (UnityWebRequest req = new UnityWebRequest(_sendUrl, UnityWebRequest.kHttpVerbPOST))
+            using (UnityWebRequest req = new UnityWebRequest(_infoUrl, UnityWebRequest.kHttpVerbPOST))
             {
                 req.SetRequestHeader("Accept", "application/json");
                 req.SetRequestHeader("Content-Type", "application/json");
