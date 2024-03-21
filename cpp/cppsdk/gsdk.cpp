@@ -124,7 +124,7 @@ namespace Microsoft
                     m_transitionToActiveEvent.Reset();
                     m_signalHeartbeatEvent.Reset();
 
-                    std::string infoUrl = "http://" + gsmsBaseUrl + "v1/metrics/" + instanceId + "/gsdkinfo";
+                    std::string infoUrl = "http://" + gsmsBaseUrl + "/v1/metrics/" + instanceId + "/gsdkinfo";
 
                     // we might not want to heartbeat in our UTs
                     m_keepHeartbeatRunning = config->shouldHeartbeat();
@@ -184,7 +184,8 @@ namespace Microsoft
                 jsonInfoRequest[GSDK_INFO_FLAVOR_KEY] = GSDK_INFO_FLAVOR;
                 jsonInfoRequest[GSDK_INFO_VERSION_KEY] = GSDK_INFO_VERSION;
 
-                curl_easy_setopt(m_curlHandle, CURLOPT_POSTFIELDS, jsonInfoRequest.toStyledString().c_str());
+                std::string infoRequest = jsonInfoRequest.toStyledString();
+                curl_easy_setopt(m_curlHandle, CURLOPT_POSTFIELDS, infoRequest.c_str());
                 curl_easy_perform(m_curlHandle);
 
                 long http_code = 0;
