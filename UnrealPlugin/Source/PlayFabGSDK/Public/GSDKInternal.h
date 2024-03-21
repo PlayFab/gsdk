@@ -203,7 +203,7 @@ private:
 
 	TArray<FString> InitialPlayers;
 
-	void HeartbeatAsyncTaskFunction();
+	void HeartbeatAsyncTaskFunction(FString infoUrl);
 	mutable FCriticalSection ConfigMutex;
 
 	FCriticalSection HeartbeatMutex;

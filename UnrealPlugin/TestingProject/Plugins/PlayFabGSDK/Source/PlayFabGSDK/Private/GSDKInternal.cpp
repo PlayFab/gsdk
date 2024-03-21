@@ -5,6 +5,7 @@
 #include "GSDKConfiguration.h"
 #include "GSDKInternalUtils.h"
 #include "HttpModule.h"
+#include "HttpManager.h"
 #include "Async/Async.h"
 #include "Json.h"
 #include "PlayFabGSDK.h"
@@ -99,37 +100,9 @@ FGSDKInternal::FGSDKInternal()
 	KeepHeartbeatRunning = ConfigPtr->ShouldHeartbeat();
 
 	HeartbeatThread = Async(EAsyncExecution::Thread,
-		[this]()
+		[this, infoUrl]()
 		{
-			TSharedRef<IHttpRequest, ESPMode::ThreadSafe> Request = FHttpModule::Get().CreateRequest();
-			for (const auto& HttpHeader : HttpHeaders)
-			{
-				Request->SetHeader(HttpHeader.Key, HttpHeader.Value);
-			}
-
-			TSharedPtr<FJsonObject> infoJson = MakeShared<FJsonObject>();
-
-			infoJson->SetStringField(TEXT(GSDK_INFO_FLAVOR_KEY), GSDK_INFO_FLAVOR);
-			infoJson->SetStringField(TEXT(GSDK_INFO_VERSION_KEY), GSDK_INFO_VERSION);
-
-			FString infoString;
-			TSharedRef<TJsonWriter<>> Writer = TJsonWriterFactory<>::Create(&infoString);
-			FJsonSerializer::Serialize(infoJson.ToSharedRef(), Writer);
-
-			Request->SetURL(infoUrl);
-			Request->SetVerb(TEXT("POST"));
-			Request->SetContentAsString(infoString);
-
-			Request->ProcessRequest();
-			FHttpModule::Get().GetHttpManager().Flush(true);
-
-			const FHttpResponsePtr Response = Request->GetResponse();
-			if (Response.IsValid() && Response->GetResponseCode() >= 300)
-			{
-				UE_LOG(LogPlayFabGSDK, Error, TEXT("Received non-success code from Agent when sending info.  Status Code: %d Response Body: %s"), Response->GetResponseCode(), *ContentString);
-			}
-
-			HeartbeatAsyncTaskFunction();
+			HeartbeatAsyncTaskFunction(infoUrl);
 		}
 	);
 #endif
@@ -149,8 +122,38 @@ FGSDKInternal::~FGSDKInternal()
 	}
 }
 
-void FGSDKInternal::HeartbeatAsyncTaskFunction()
+void FGSDKInternal::HeartbeatAsyncTaskFunction(FString infoUrl)
 {
+	SignalHeartbeatEvent->Wait(NextHeartbeatIntervalMs);
+
+	TSharedRef<IHttpRequest, ESPMode::ThreadSafe> Request = FHttpModule::Get().CreateRequest();
+	for (const auto& HttpHeader : HttpHeaders)
+	{
+		Request->SetHeader(HttpHeader.Key, HttpHeader.Value);
+	}
+
+	TSharedPtr<FJsonObject> infoJson = MakeShared<FJsonObject>();
+
+	infoJson->SetStringField(TEXT(GSDK_INFO_FLAVOR_KEY), GSDK_INFO_FLAVOR);
+	infoJson->SetStringField(TEXT(GSDK_INFO_VERSION_KEY), GSDK_INFO_VERSION);
+
+	FString infoString;
+	TSharedRef<TJsonWriter<>> Writer = TJsonWriterFactory<>::Create(&infoString);
+	FJsonSerializer::Serialize(infoJson.ToSharedRef(), Writer);
+
+	Request->SetURL(infoUrl);
+	Request->SetVerb(TEXT("POST"));
+	Request->SetContentAsString(infoString);
+
+	Request->ProcessRequest();
+	FHttpModule::Get().GetHttpManager().Flush(true);
+
+	const FHttpResponsePtr Response = Request->GetResponse();
+	if (Response.IsValid() && Response->GetResponseCode() >= 300)
+	{
+		UE_LOG(LogPlayFabGSDK, Error, TEXT("Received non-success code from Agent when sending info.  Status Code: %d"), Response->GetResponseCode());
+	}
+
 	while (KeepHeartbeatRunning)
 	{
 		if (SignalHeartbeatEvent->Wait(NextHeartbeatIntervalMs))
