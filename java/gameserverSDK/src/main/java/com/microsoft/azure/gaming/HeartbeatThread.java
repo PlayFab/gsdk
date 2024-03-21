@@ -90,7 +90,7 @@ class HeartbeatThread implements Runnable {
             URI infoUri = new URIBuilder()
                     .setScheme("http")
                     .setHost(agentEndpoint)
-                    .setPath("v1/metrics/" + serverId + "/gsdkinfo")
+                    .setPath("/v1/metrics/" + serverId + "/gsdkinfo")
                     .build();
             
             Gson gson = new Gson();
