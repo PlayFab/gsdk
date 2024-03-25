@@ -86,9 +86,29 @@ class HeartbeatThread implements Runnable {
         Logger.Instance().Log("VM Agent Endpoint: " + agentEndpoint);
         Logger.Instance().Log("Instance Id: " + serverId);
 
+        try {
+            URI infoUri = new URIBuilder()
+                    .setScheme("http")
+                    .setHost(agentEndpoint)
+                    .setPath("/v1/metrics/" + serverId + "/gsdkinfo")
+                    .build();
+            
+            Gson gson = new Gson();
+            GSDKInfo info = new GSDKInfo();
+
+            Request.Post(infoUri)
+                    .bodyString(gson.toJson(info), ContentType.APPLICATION_JSON)
+                    .connectTimeout(HEARTBEAT_TIMEOUT_MILLISECONDS)
+                    .socketTimeout(HEARTBEAT_TIMEOUT_MILLISECONDS)
+                    .execute().handleResponse(HeartbeatThread::handleInfoResponse);
+        } catch (Exception e) {
+            Logger.Instance().LogError("Failed to contact Agent when sending info.");
+        }
+
         // Send an initial heartbeat here in the constructor so that we can fail
         // quickly if the Agent is unreachable.
         try {
+
             this.agentUri = new URIBuilder()
                     .setScheme("http")
                     .setHost(agentEndpoint)
@@ -314,6 +334,18 @@ class HeartbeatThread implements Runnable {
 
         InputStreamReader reader = new InputStreamReader(entity.getContent());
         return gson.fromJson(reader, SessionHostHeartbeatInfo.class);
+    }
+
+    private static Void handleInfoResponse(HttpResponse response) throws IOException {
+        StatusLine statusLine = response.getStatusLine();
+        if (statusLine.getStatusCode() >= 300) {
+            Logger.Instance().LogWarning("Received non-success code from Agent.  Status Code: " + statusLine.getStatusCode() + ".  Reason: " + statusLine.getReasonPhrase());
+            throw new HttpResponseException(
+                    statusLine.getStatusCode(),
+                    statusLine.getReasonPhrase());
+        }
+
+        return null;
     }
 
     /**

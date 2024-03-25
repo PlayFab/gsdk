@@ -4,6 +4,7 @@
 #include "gsdkCommonPch.h"
 #include "gsdkInternal.h"
 #include "gsdkConfig.h"
+#include "gsdkInfo.h"
 
 namespace Microsoft
 {
@@ -123,9 +124,11 @@ namespace Microsoft
                     m_transitionToActiveEvent.Reset();
                     m_signalHeartbeatEvent.Reset();
 
+                    std::string infoUrl = "http://" + gsmsBaseUrl + "/v1/metrics/" + instanceId + "/gsdkinfo";
+
                     // we might not want to heartbeat in our UTs
                     m_keepHeartbeatRunning = config->shouldHeartbeat();
-                    m_heartbeatThread = std::thread(&GSDKInternal::heartbeatThreadFunc, this);
+                    m_heartbeatThread = std::thread(&GSDKInternal::heartbeatThreadFunc, this, infoUrl);
                 }
                 catch (const std::exception& ex)
                 {
@@ -169,8 +172,29 @@ namespace Microsoft
                 m_logFile.open(logPath.c_str(), std::ofstream::out);
             }
 
-            void GSDKInternal::heartbeatThreadFunc()
+            void GSDKInternal::heartbeatThreadFunc(std::string infoUrl)
             {
+                resetCurl();
+                curl_easy_setopt(m_curlHandle, CURLOPT_URL, infoUrl.c_str());
+
+                m_receivedData = "";
+                curl_easy_setopt(m_curlHandle, CURLOPT_CUSTOMREQUEST, "POST");
+
+                Json::Value jsonInfoRequest;
+                jsonInfoRequest[GSDK_INFO_FLAVOR_KEY] = GSDK_INFO_FLAVOR;
+                jsonInfoRequest[GSDK_INFO_VERSION_KEY] = GSDK_INFO_VERSION;
+
+                std::string infoRequest = jsonInfoRequest.toStyledString();
+                curl_easy_setopt(m_curlHandle, CURLOPT_POSTFIELDS, infoRequest.c_str());
+                curl_easy_perform(m_curlHandle);
+
+                long http_code = 0;
+                curl_easy_getinfo(m_curlHandle, CURLINFO_RESPONSE_CODE, &http_code);
+                if (http_code >= 300)
+                {
+                    GSDK::logMessage("Received non-success code from Agent when sending GSDK info.  Status Code: " + std::to_string(http_code) + " Response Body: " + m_receivedData);
+                }
+
                 while (m_keepHeartbeatRunning)
                 {
                     if (m_signalHeartbeatEvent.Wait(m_nextHeartbeatIntervalMs))
