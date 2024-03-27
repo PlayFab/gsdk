@@ -107,6 +107,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="gsdkInfo.h" />
     <ClInclude Include="include\playfab\PlayFabAdminApi.h" />
     <ClInclude Include="include\playfab\PlayFabAdminDataModels.h" />
     <ClInclude Include="include\playfab\PlayFabBaseModel.h" />

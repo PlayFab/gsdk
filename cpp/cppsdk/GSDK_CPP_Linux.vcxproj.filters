@@ -108,6 +108,9 @@
     <ClInclude Include="include\playfab\PlayFabError.h">
       <Filter>Header Files\playfab</Filter>
     </ClInclude>
+    <ClInclude Include="gsdkInfo.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="gsdkSampleConfigLinux.json" />
