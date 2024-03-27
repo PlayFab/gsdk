@@ -159,9 +159,24 @@ public class GameserverSDK {
      * Registers a function that will be called when the Agent tells us a scheduled
      * maintenance is coming up, we will pass in the UTC Datetime of the maintenance event
      * @param callback the function we will call on a new scheduled maintenance
+     * @deprecated Use registerMaintenanceV2Callback to get more information from maintenance events
+     * @see #registerMaintenanceV2Callback(Consumer)
      */
+    @Deprecated
     public static void registerMaintenanceCallback(Consumer<ZonedDateTime> callback){
         heartbeatThread.registerMaintenanceCallback(callback);
+    }
+
+    /**
+     * Registers a function that gets called if the server is getting a scheduled maintenance,
+     * it will get the maintenance event info as the following arguments:
+     * EventId, EventType, ResourceType, AffectedResources, EventStatus,
+     * NotBefore, EventSource, DurationInSeconds
+     * @see https://learn.microsoft.com/azure/virtual-machines/windows/scheduled-events#event-properties
+     * @param callback the function we will call on a new scheduled maintenance
+     */
+    public static void registerMaintenanceV2Callback(Consumer<MaintenanceSchedule> callback){
+        heartbeatThread.registerMaintenanceV2Callback(callback);
     }
 
     /**

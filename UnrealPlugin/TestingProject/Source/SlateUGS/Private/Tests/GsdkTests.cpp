@@ -186,10 +186,75 @@ void AutomationSpec::Define()
                     EGameState gameState = FPlayFabGSDKModule::Get().GSDKInternal->GetHeartbeatRequest().CurrentGameState;
                     TestEqual("Verify session id was captured from the heartbeat.", UGSDKUtils::GetMatchId(), "eca7e870-da2e-45f9-bb66-30d89064313a");
                     TestEqual("Verify session cookie was captured from the heartbeat.", UGSDKUtils::GetMatchSessionCookie(), "OreoCookie");
-                    // TODO: Consider later
-                    // TestEqual("Verify maintenance callback with correct time was called.", maintenanceTime.GetTicks(), 1523552310LL);
+                    TestEqual("Verify maintenance callback with correct time was called.", maintenanceTime.ToUnixTimestamp(), 1523552310LL);
                     TestEqual("Verify state was changed.", EGameState::Active, gameState);
                     TestEqual("Verify heartbeat interval was captured from the heartbeat", 30000, FPlayFabGSDKModule::Get().GSDKInternal->NextHeartbeatIntervalMs);
+                });
+
+            It("GameState_MaintV2_CallbackInvoked", [this]()
+                {
+                    SerializeConfigAndStartModule();
+
+                    FMaintenanceSchedule schedule;
+                    FPlayFabGSDKModule::Get().OnMaintenanceV2.BindLambda([&schedule](const FMaintenanceSchedule& maintenanceSchedule) -> void 
+                        { 
+                            schedule = maintenanceSchedule; 
+                        });
+
+                    FString responseJson =
+                        R"({
+                                "operation":"Active",
+                                "sessionConfig":
+                                {
+                                    "sessionId":"eca7e870-da2e-45f9-bb66-30d89064313a",
+                                    "sessionCookie":"OreoCookie"
+                                },
+                                "maintenanceSchedule": 
+                                {
+                                    "DocumentIncarnation": "IncarnationID",
+                                    "Events": 
+                                    [
+                                        {
+                                            "EventId": "eventID",
+                                            "EventType": "Reboot",
+                                            "ResourceType": "VirtualMachine",
+                                            "Resources": 
+                                            [
+                                                "resourceName"
+                                            ],
+                                            "EventStatus": "Scheduled",
+                                            "NotBefore": "2018-04-12T16:58:30.1458776Z",
+                                            "Description": "eventDescription",
+                                            "EventSource": "Platform",
+                                            "DurationInSeconds": 3600
+                                        }
+                                    ]
+                                },
+                                "nextHeartbeatIntervalMs":30000
+                        })";
+
+                    FPlayFabGSDKModule::Get().GSDKInternal->DecodeHeartbeatResponse(responseJson);
+
+                    TestEqual("Verify maintenance V2 callback with correct document incarnation was called.", schedule.DocumentIncarnation, "IncarnationID");
+                    TestEqual("Verify maintenance V2 callback with correct event list size was called.", schedule.Events.Num(), 1);
+                    if (schedule.Events.Num() == 0)
+                    {
+                        return;
+                    }
+                    TestEqual("Verify maintenance V2 callback with correct event id was called.", schedule.Events[0].EventId, "eventID");
+                    TestEqual("Verify maintenance V2 callback with correct event type was called.", schedule.Events[0].EventType, "Reboot");
+                    TestEqual("Verify maintenance V2 callback with correct resource type was called.", schedule.Events[0].ResourceType, "VirtualMachine");
+                    TestEqual("Verify maintenance V2 callback with correct resource list size was called.", schedule.Events[0].Resources.Num(), 1);
+                    if (schedule.Events[0].Resources.Num() == 0)
+                    {
+                        return;
+                    }
+                    TestEqual("Verify maintenance V2 callback with correct resource was called.", schedule.Events[0].Resources[0], "resourceName");
+                    TestEqual("Verify maintenance V2 callback with correct status was called.", schedule.Events[0].EventStatus, "Scheduled");
+                    TestEqual("Verify maintenance V2 callback with correct time was called.", schedule.Events[0].NotBefore.ToUnixTimestamp(), 1523552310LL);
+                    TestEqual("Verify maintenance V2 callback with correct description was called.", schedule.Events[0].Description, "eventDescription");
+                    TestEqual("Verify maintenance V2 callback with correct source was called.", schedule.Events[0].EventSource, "Platform");
+                    TestEqual("Verify maintenance V2 callback with correct duration was called.", schedule.Events[0].DurationInSeconds, 3600);
                 });
 
             It("JsonDoesntCrashWhenInvalidJson", [this]()

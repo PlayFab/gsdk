@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 
 #include "ConnectedPlayer.h"
+#include "MaintenanceSchedule.h"
 #include "GameServerConnectionInfo.h"
 #include "HAL/Event.h"
 #include "HAL/CriticalSection.h"
@@ -151,11 +152,13 @@ public:
 	DECLARE_DELEGATE(FOnReadyForPlayers);
 	DECLARE_DELEGATE_RetVal(bool, FOnHealthCheck);
 	DECLARE_DELEGATE_OneParam(FOnMaintenance, const FDateTime&)
+	DECLARE_DELEGATE_OneParam(FOnMaintenanceV2, const FMaintenanceSchedule&)
 
 	FOnShutdown OnShutdown;
 	FOnServerActive OnServerActive;
 	FOnReadyForPlayers OnReadyForPlayers;
 	FOnMaintenance OnMaintenance;
+	FOnMaintenanceV2 OnMaintenanceV2;
 	FOnHealthCheck OnHealthCheck;
 
 private:

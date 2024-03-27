@@ -1,5 +1,6 @@
 ﻿namespace Microsoft.Playfab.Gaming.GSDK.CSharp
 {
+    using Microsoft.Playfab.Gaming.GSDK.CSharp.Model;
     using System;
     using System.Collections.Generic;
     
@@ -132,15 +133,32 @@
         }
 
         /// <summary>
+        /// DEPRECATED Use RegisterMaintenanceV2Callback instead.
         /// Gets called if the server is getting a scheduled maintenance,
         /// it will get the UTC Datetime of the maintenance event as an argument.
         /// </summary>
         /// <param name="callback">The callback</param>
+        [Obsolete]
         public static void RegisterMaintenanceCallback(Action<DateTimeOffset> callback)
         {
             _internalSdk.Start();
 
             _internalSdk.MaintenanceCallback = callback;
+        }
+
+        /// <summary>
+        /// Gets called if the server is getting a scheduled maintenance,
+        /// it will get the maintenance event as an argument.
+        /// </summary>
+        /// <remarks>
+        /// https://learn.microsoft.com/azure/virtual-machines/windows/scheduled-events#event-properties
+        /// </remarks>
+        /// <param name="callback">The callback</param>
+        public static void RegisterMaintenanceV2Callback(Action<MaintenanceSchedule> callback)
+        {
+            _internalSdk.Start();
+
+            _internalSdk.MaintenanceV2Callback = callback;
         }
 
         /// <summary>
