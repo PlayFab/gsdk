@@ -385,25 +385,25 @@ namespace Microsoft
 
                         Json::Value scheduleJson = heartbeatResponse["maintenanceSchedule"];
                         MaintenanceSchedule schedule{};
-                        schedule.m_documentIncarnation = scheduleJson["DocumentIncarnation"].asString();
+                        schedule.m_documentIncarnation = scheduleJson["documentIncarnation"].asString();
 
-                        for (const auto& eventJson : scheduleJson["Events"])
+                        for (const auto& eventJson : scheduleJson["events"])
                         {
                             MaintenanceEvent eventData{};
-                            eventData.m_eventId = eventJson["EventId"].asString();
-                            eventData.m_eventType = eventJson["EventType"].asString();
-                            eventData.m_resourceType = eventJson["ResourceType"].asString();
+                            eventData.m_eventId = eventJson["eventId"].asString();
+                            eventData.m_eventType = eventJson["eventType"].asString();
+                            eventData.m_resourceType = eventJson["resourceType"].asString();
                             std::vector<std::string> resources{};
-                            for (const auto& resource : eventJson["Resources"])
+                            for (const auto& resource : eventJson["resources"])
                             {
                                 resources.push_back(resource.asString());
                             }
                             eventData.m_resources = resources;
-                            eventData.m_eventStatus = eventJson["EventStatus"].asString();
-                            eventData.m_notBefore = parseDate(eventJson["NotBefore"].asCString());
-                            eventData.m_description = eventJson["Description"].asString();
-                            eventData.m_eventSource = eventJson["EventSource"].asString();
-                            eventData.m_durationInSeconds = eventJson["DurationInSeconds"].asInt();
+                            eventData.m_eventStatus = eventJson["eventStatus"].asString();
+                            eventData.m_notBefore = parseDate(eventJson["notBefore"].asCString());
+                            eventData.m_description = eventJson["description"].asString();
+                            eventData.m_eventSource = eventJson["eventSource"].asString();
+                            eventData.m_durationInSeconds = eventJson["durationInSeconds"].asInt();
 
                             schedule.m_events.push_back(eventData);
                         }
