@@ -9,31 +9,23 @@ import com.google.gson.annotations.SerializedName;
 
 public class MaintenanceEvent {
     
-    @SerializedName("EventId")
     private String eventId;
 
-    @SerializedName("EventType")
     private String eventType;
 
-    @SerializedName("ResourceType")
     private String resourceType;
 
-    @SerializedName("Resources")
+    @SerializedName(value = "Resources")
     private List<String> resources;
 
-    @SerializedName("EventStatus")
     private String eventStatus;
 
-    @SerializedName("NotBefore")
     private ZonedDateTime notBefore;
 
-    @SerializedName("Description")
     private String description;
 
-    @SerializedName("EventSource")
     private String eventSource;
 
-    @SerializedName("DurationInSeconds")
     private int durationInSeconds;
 
     public String getEventId() {

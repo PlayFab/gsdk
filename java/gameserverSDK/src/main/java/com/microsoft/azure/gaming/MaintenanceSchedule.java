@@ -5,10 +5,9 @@ import com.google.gson.annotations.SerializedName;
 
 public class MaintenanceSchedule {
     
-    @SerializedName("DocumentIncarnation")
     private String documentIncarnation;
 
-    @SerializedName("Events")
+    @SerializedName(value = "Events")
     private List<MaintenanceEvent> events;
 
     public String getDocumentIncarnation() {
