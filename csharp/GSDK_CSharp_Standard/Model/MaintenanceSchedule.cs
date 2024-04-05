@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace Microsoft.Playfab.Gaming.GSDK.CSharp.Model
