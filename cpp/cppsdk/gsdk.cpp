@@ -387,14 +387,14 @@ namespace Microsoft
                         MaintenanceSchedule schedule{};
                         schedule.m_documentIncarnation = scheduleJson["documentIncarnation"].asString();
 
-                        for (const auto& eventJson : scheduleJson["events"])
+                        for (const auto& eventJson : scheduleJson["Events"])
                         {
                             MaintenanceEvent eventData{};
                             eventData.m_eventId = eventJson["eventId"].asString();
                             eventData.m_eventType = eventJson["eventType"].asString();
                             eventData.m_resourceType = eventJson["resourceType"].asString();
                             std::vector<std::string> resources{};
-                            for (const auto& resource : eventJson["resources"])
+                            for (const auto& resource : eventJson["Resources"])
                             {
                                 resources.push_back(resource.asString());
                             }
