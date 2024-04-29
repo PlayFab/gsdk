@@ -146,12 +146,23 @@ void FGSDKInternal::HeartbeatAsyncTaskFunction(FString infoUrl)
 	Request->SetContentAsString(infoString);
 
 	Request->ProcessRequest();
-	FHttpModule::Get().GetHttpManager().Flush(true);
 
-	const FHttpResponsePtr Response = Request->GetResponse();
-	if (Response.IsValid() && Response->GetResponseCode() >= 300)
+	bool bReceivedResponse = false;
+	Request->OnProcessRequestComplete().BindLambda([&bReceivedResponse](FHttpRequestPtr Request, FHttpResponsePtr Response, bool bConnectedSuccessfully)
 	{
-		UE_LOG(LogPlayFabGSDK, Error, TEXT("Received non-success code from Agent when sending info.  Status Code: %d"), Response->GetResponseCode());
+		bReceivedResponse = true;
+	});
+	
+	while (!bReceivedResponse)
+	{
+		// Keep waiting.
+		SignalHeartbeatEvent->Wait(NextHeartbeatIntervalMs);
+	}
+	
+	const FHttpResponsePtr Result = Request->GetResponse();
+	if (Result.IsValid() && Result->GetResponseCode() >= 300)
+	{
+		UE_LOG(LogPlayFabGSDK, Error, TEXT("Received non-success code from Agent when sending info.  Status Code: %d"), Result->GetResponseCode());
 	}
 
 	while (KeepHeartbeatRunning)
