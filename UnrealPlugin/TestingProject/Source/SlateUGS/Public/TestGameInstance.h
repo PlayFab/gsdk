@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Engine/GameInstance.h"
+#include "GSDKUtils.h"
 #include "TestGameInstance.generated.h"
 
 DECLARE_LOG_CATEGORY_EXTERN(LogPlayFabGSDKGameInstance, Log, All);
@@ -32,4 +33,7 @@ protected:
 
     UFUNCTION()
     void OnGSDKReadyForPlayers();
+
+    UFUNCTION()
+    void OnGSDKMaintenanceV2(const FMaintenanceSchedule& schedule);
 };

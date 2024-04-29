@@ -2,8 +2,6 @@
 
 
 #include "TestGameInstance.h"
-#include "PlayFabGSDK.h"
-#include "GSDKUtils.h"
 
 DEFINE_LOG_CATEGORY(LogPlayFabGSDKGameInstance);
 
@@ -17,11 +15,14 @@ void UTestGameInstance::Init()
     OnGSDKServerActive.BindDynamic(this, &UTestGameInstance::OnGSDKServerActive);
     FOnGSDKReadyForPlayers_Dyn OnGSDKReadyForPlayers;
     OnGSDKReadyForPlayers.BindDynamic(this, &UTestGameInstance::OnGSDKReadyForPlayers);
+    FOnGSDKMaintenanceV2_Dyn OnGSDKMaintenanceV2;
+    OnGSDKMaintenanceV2.BindDynamic(this, &UTestGameInstance::OnGSDKMaintenanceV2);
 
     UGSDKUtils::RegisterGSDKShutdownDelegate(OnGsdkShutdown);
     UGSDKUtils::RegisterGSDKHealthCheckDelegate(OnGsdkHealthCheck);
     UGSDKUtils::RegisterGSDKServerActiveDelegate(OnGSDKServerActive);
     UGSDKUtils::RegisterGSDKReadyForPlayers(OnGSDKReadyForPlayers);
+    UGSDKUtils::RegisterGSDKMaintenanceV2Delegate(OnGSDKMaintenanceV2);
 
 #if UE_SERVER
     UE_LOG(LogPlayFabGSDKGameInstance, Warning, TEXT("Reached Init!"));
@@ -66,4 +67,14 @@ void UTestGameInstance::OnGSDKReadyForPlayers()
      * initialization completes.
      */
     UE_LOG(LogPlayFabGSDKGameInstance, Warning, TEXT("Finished Initialization - Moving to StandBy!"));
+}
+
+void UTestGameInstance::OnGSDKMaintenanceV2(const FMaintenanceSchedule& schedule)
+{
+    /**
+    * Server recieved a maintenance event.
+    * Optional: Add in the implementation any code that is needed for the game server when
+    * this transition occurs.
+    */
+    UE_LOG(LogPlayFabGSDKGameInstance, Warning, TEXT("Recieved maintenance event: %s, %s, %s"), *schedule.Events[0].EventType, *schedule.Events[0].EventStatus, *schedule.Events[0].EventSource);
 }
