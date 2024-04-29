@@ -1,4 +1,4 @@
-﻿// Copyright (C) Microsoft Corporation. All rights reserved.
+// Copyright (C) Microsoft Corporation. All rights reserved.
 
 #pragma once
 
@@ -12,15 +12,15 @@ struct FMaintenanceEvent
 	GENERATED_BODY()
 public:
 	UPROPERTY(BlueprintReadWrite)
-    FString EventId;
-    FString EventType;
-    FString ResourceType;
-    TArray<FString> Resources;
-    FString EventStatus;
-    FDateTime NotBefore;
-    FString Description;
-    FString EventSource;
-    int DurationInSeconds;
+	FString EventId;
+	FString EventType;
+	FString ResourceType;
+	TArray<FString> Resources;
+	FString EventStatus;
+	FDateTime NotBefore;
+	FString Description;
+	FString EventSource;
+	int DurationInSeconds;
 };
 
 USTRUCT(BlueprintType)
@@ -29,6 +29,6 @@ struct FMaintenanceSchedule
 	GENERATED_BODY()
 public:
 	UPROPERTY(BlueprintReadWrite)
-    FString DocumentIncarnation;
-    TArray<FMaintenanceEvent> Events;
+	FString DocumentIncarnation;
+	TArray<FMaintenanceEvent> Events;
 };

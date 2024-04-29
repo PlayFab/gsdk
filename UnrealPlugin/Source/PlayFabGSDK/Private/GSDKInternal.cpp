@@ -1,4 +1,4 @@
-﻿// Copyright (C) Microsoft Corporation. All rights reserved.
+// Copyright (C) Microsoft Corporation. All rights reserved.
 
 #include "GSDKInternal.h"
 
@@ -405,13 +405,13 @@ void FGSDKInternal::DecodeHeartbeatResponse(const FString& ResponseJson)
 		schedule.DocumentIncarnation = scheduleJson->GetStringField(TEXT("DocumentIncarnation"));
 
 		for (const auto& maintenanceEvent : scheduleJson->GetArrayField(TEXT("Events")))
-        {
-            TSharedPtr<FJsonObject> eventJson = maintenanceEvent->AsObject();
+		{
+			TSharedPtr<FJsonObject> eventJson = maintenanceEvent->AsObject();
 
-            FMaintenanceEvent eventData{};
+			FMaintenanceEvent eventData{};
 			eventData.EventId = eventJson->GetStringField(TEXT("EventId"));
-            eventData.EventType = eventJson->GetStringField(TEXT("EventType"));
-            eventData.ResourceType = eventJson->GetStringField(TEXT("ResourceType"));
+			eventData.EventType = eventJson->GetStringField(TEXT("EventType"));
+			eventData.ResourceType = eventJson->GetStringField(TEXT("ResourceType"));
 			TArray<FString> resources{};
 			for (const auto& resource : eventJson->GetArrayField(TEXT("Resources")))
 			{
@@ -424,8 +424,8 @@ void FGSDKInternal::DecodeHeartbeatResponse(const FString& ResponseJson)
 			eventData.EventSource = eventJson->GetStringField(TEXT("EventSource"));
 			eventData.DurationInSeconds = eventJson->GetIntegerField(TEXT("DurationInSeconds"));
 
-            schedule.Events.Add(eventData);
-        }
+			schedule.Events.Add(eventData);
+		}
 
 		if (OnMaintenanceV2.IsBound())
 		{

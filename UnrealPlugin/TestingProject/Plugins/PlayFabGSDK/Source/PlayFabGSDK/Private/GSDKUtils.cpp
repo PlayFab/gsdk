@@ -1,4 +1,4 @@
-﻿// Copyright (C) Microsoft Corporation. All rights reserved.
+// Copyright (C) Microsoft Corporation. All rights reserved.
 
 #include "GSDKUtils.h"
 
@@ -117,7 +117,7 @@ void UGSDKUtils::RegisterGSDKReadyForPlayers(const FOnGSDKReadyForPlayers_Dyn& O
 		if (OnGSDKReadyForPlayersDelegate.IsBound())
 		{
 			OnGSDKReadyForPlayersDelegate.Execute();
-	    }
+		}
 	});
 }
 

@@ -1,4 +1,4 @@
-﻿// Copyright (C) Microsoft Corporation. All rights reserved.
+// Copyright (C) Microsoft Corporation. All rights reserved.
 
 #pragma once
 
@@ -115,8 +115,8 @@ public:
 	/// Register the GSDK MaintenanceV2 Delegate, which gets called if the VM this server is running on expects to go into Maintenance soon
 	/// </summary>
 	/// <remarks>
-    /// https://learn.microsoft.com/azure/virtual-machines/windows/scheduled-events#event-properties
-    /// </remarks>
+	/// https://learn.microsoft.com/azure/virtual-machines/windows/scheduled-events#event-properties
+	/// </remarks>
 	UFUNCTION(BlueprintCallable, Category = "PlayFab|GSDK|Callbacks")
 	static void RegisterGSDKMaintenanceV2Delegate(const FOnGSDKMaintenanceV2_Dyn& OnGSDKMaintenanceV2Delegate);
 

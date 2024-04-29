@@ -18,22 +18,23 @@ class SLATEUGS_API UTestGameInstance : public UGameInstance
 	GENERATED_BODY()
 
 public:
-    virtual void Init() override;
-    virtual void OnStart() override;
+	virtual void Init() override;
+	virtual void OnStart() override;
 
 protected:
-    UFUNCTION()
-    void OnGSDKShutdown();
+	UFUNCTION()
+	void OnGSDKShutdown();
 
-    UFUNCTION()
-    bool OnGSDKHealthCheck();
+	UFUNCTION()
+	bool OnGSDKHealthCheck();
 
-    UFUNCTION()
-    void OnGSDKServerActive();
+	UFUNCTION()
+	void OnGSDKServerActive();
 
-    UFUNCTION()
-    void OnGSDKReadyForPlayers();
+	UFUNCTION()
+	void OnGSDKReadyForPlayers();
 
-    UFUNCTION()
-    void OnGSDKMaintenanceV2(const FMaintenanceSchedule& schedule);
+	UFUNCTION()
+	void OnGSDKMaintenanceV2(const FMaintenanceSchedule& schedule);
 };
+
