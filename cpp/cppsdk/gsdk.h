@@ -45,7 +45,7 @@ namespace Microsoft
                 tm m_notBefore;
                 std::string m_description;
                 std::string m_eventSource;
-                int m_durationInSeconds;
+                uint32_t m_durationInSeconds;
             };
 
             class MaintenanceSchedule
