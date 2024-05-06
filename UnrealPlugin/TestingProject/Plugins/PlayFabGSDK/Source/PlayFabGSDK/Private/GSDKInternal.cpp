@@ -1,4 +1,4 @@
-﻿// Copyright (C) Microsoft Corporation. All rights reserved.
+// Copyright (C) Microsoft Corporation. All rights reserved.
 
 #include "GSDKInternal.h"
 
@@ -146,12 +146,23 @@ void FGSDKInternal::HeartbeatAsyncTaskFunction(FString infoUrl)
 	Request->SetContentAsString(infoString);
 
 	Request->ProcessRequest();
-	FHttpModule::Get().GetHttpManager().Flush(true);
 
-	const FHttpResponsePtr Response = Request->GetResponse();
-	if (Response.IsValid() && Response->GetResponseCode() >= 300)
+	bool bReceivedResponse = false;
+	Request->OnProcessRequestComplete().BindLambda([&bReceivedResponse](FHttpRequestPtr Request, FHttpResponsePtr Response, bool bConnectedSuccessfully)
 	{
-		UE_LOG(LogPlayFabGSDK, Error, TEXT("Received non-success code from Agent when sending info.  Status Code: %d"), Response->GetResponseCode());
+		bReceivedResponse = true;
+	});
+	
+	while (!bReceivedResponse)
+	{
+		// Keep waiting.
+		SignalHeartbeatEvent->Wait(NextHeartbeatIntervalMs);
+	}
+	
+	const FHttpResponsePtr Result = Request->GetResponse();
+	if (Result.IsValid() && Result->GetResponseCode() >= 300)
+	{
+		UE_LOG(LogPlayFabGSDK, Error, TEXT("Received non-success code from Agent when sending info.  Status Code: %d"), Result->GetResponseCode());
 	}
 
 	while (KeepHeartbeatRunning)
@@ -386,6 +397,42 @@ void FGSDKInternal::DecodeHeartbeatResponse(const FString& ResponseJson)
 		}
 	}
 
+	if (HeartbeatResponseJson->HasField(TEXT("maintenanceSchedule")))
+	{
+		FMaintenanceSchedule schedule{};
+		TSharedPtr<FJsonObject> scheduleJson = HeartbeatResponseJson->GetObjectField(TEXT("maintenanceSchedule"));
+
+		schedule.DocumentIncarnation = scheduleJson->GetStringField(TEXT("DocumentIncarnation"));
+
+		for (const auto& maintenanceEvent : scheduleJson->GetArrayField(TEXT("Events")))
+		{
+			TSharedPtr<FJsonObject> eventJson = maintenanceEvent->AsObject();
+
+			FMaintenanceEvent eventData{};
+			eventData.EventId = eventJson->GetStringField(TEXT("EventId"));
+			eventData.EventType = eventJson->GetStringField(TEXT("EventType"));
+			eventData.ResourceType = eventJson->GetStringField(TEXT("ResourceType"));
+			TArray<FString> resources{};
+			for (const auto& resource : eventJson->GetArrayField(TEXT("Resources")))
+			{
+				resources.Add(resource->AsString());
+			}
+			eventData.Resources = resources;
+			eventData.EventStatus = eventJson->GetStringField(TEXT("EventStatus"));
+			eventData.NotBefore = ParseDate(eventJson->GetStringField(TEXT("NotBefore")));
+			eventData.Description = eventJson->GetStringField(TEXT("Description"));
+			eventData.EventSource = eventJson->GetStringField(TEXT("EventSource"));
+			eventData.DurationInSeconds = eventJson->GetIntegerField(TEXT("DurationInSeconds"));
+
+			schedule.Events.Add(eventData);
+		}
+
+		if (OnMaintenanceV2.IsBound())
+		{
+			OnMaintenanceV2.Execute(schedule);
+		}
+	}
+
 	if (HeartbeatResponseJson->HasField(TEXT("operation")))
 	{
 		auto operation = HeartbeatResponseJson->GetStringField(TEXT("operation"));
@@ -478,7 +525,9 @@ void FGSDKInternal::DecodeHeartbeatResponse(const FString& ResponseJson)
 FDateTime FGSDKInternal::ParseDate(const FString& DateStr)
 {
 	FDateTime OutDateTime;
-	return FDateTime::ParseHttpDate(DateStr, OutDateTime);
+	FDateTime::ParseIso8601(*DateStr, OutDateTime);
+
+	return OutDateTime;
 }
 
 void FGSDKInternal::TriggerShutdown()

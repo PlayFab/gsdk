@@ -37,6 +37,8 @@ namespace PlayFab
 
         public delegate void OnMaintenanceEvent(DateTime? NextScheduledMaintenanceUtc);
 
+        public delegate void OnMaintenanceV2Event(MaintenanceSchedule schedule);
+
         public delegate void OnSessionConfigUpdate(SessionConfig sessionConfig);
 
         public delegate void OnServerActiveEvent();
@@ -64,6 +66,7 @@ namespace PlayFab
         public static bool IsDebugging = true;
         public static event OnShutdownEventk OnShutDownCallback;
         public static event OnMaintenanceEvent OnMaintenanceCallback;
+        public static event OnMaintenanceV2Event OnMaintenanceV2Callback;
         public static event OnAgentCommunicationErrorEvent OnAgentErrorCallback;
         public static event OnServerActiveEvent OnServerActiveCallback;
 
@@ -356,6 +359,11 @@ namespace PlayFab
                         OnMaintenanceCallback.Invoke(scheduledMaintDate);
                     }
                 }
+            }
+
+            if (OnMaintenanceV2Callback != null && heartBeat.MaintenanceSchedule != null)
+            {
+                OnMaintenanceV2Callback.Invoke(heartBeat.MaintenanceSchedule);
             }
 
             switch (heartBeat.Operation)

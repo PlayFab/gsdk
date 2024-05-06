@@ -172,6 +172,64 @@ namespace Microsoft
                     Assert::AreEqual(GSDKInternal::m_instance->m_nextHeartbeatIntervalMs, 30000, L"Verify heartbeat interval was captured from the heartbeat");
                 }
 
+                TEST_METHOD(GameState_MaintV2_CallbackInvoked)
+                {
+                    GSDKInternal::testConfiguration = std::make_unique<TestConfig>("heartbeatEndpoint", "serverId", "logFolder", "sharedContentFolder");
+                    GSDK::start();
+
+                    MaintenanceSchedule schedule;
+                    GSDK::registerMaintenanceV2Callback([&schedule](MaintenanceSchedule maintenanceSchedule) -> void
+                        {
+                            schedule = maintenanceSchedule;
+                        });
+
+                    std::string responseJson =
+                        R"({
+                                "operation":"Active",
+                                "sessionConfig":
+                                {
+                                    "sessionId":"eca7e870-da2e-45f9-bb66-30d89064313a",
+                                    "sessionCookie":"OreoCookie"
+                                },
+                                "maintenanceSchedule": 
+                                {
+                                    "DocumentIncarnation": "IncarnationID",
+                                    "Events": 
+                                    [
+                                        {
+                                            "EventId": "eventID",
+                                            "EventType": "Reboot",
+                                            "ResourceType": "VirtualMachine",
+                                            "Resources": 
+                                            [
+                                                "resourceName"
+                                            ],
+                                            "EventStatus": "Scheduled",
+                                            "NotBefore": "2018-04-12T16:58:30.1458776Z",
+                                            "Description": "eventDescription",
+                                            "EventSource": "Platform",
+                                            "DurationInSeconds": 3600
+                                        }
+                                    ]
+                                },
+                                "nextHeartbeatIntervalMs":30000
+                        }")";
+                    GSDKInternal::m_instance->decodeHeartbeatResponse(responseJson);
+
+                    Assert::AreEqual("IncarnationID", schedule.m_documentIncarnation.c_str(), L"Verify maintenance V2 callback with correct document incarnation was called.");
+                    Assert::AreEqual(size_t{ 1 }, schedule.m_events.size(), L"Verify maintenance V2 callback with correct event list size was called.");
+                    Assert::AreEqual("eventID", schedule.m_events[0].m_eventId.c_str(), L"Verify maintenance V2 callback with correct event id was called.");
+                    Assert::AreEqual("Reboot", schedule.m_events[0].m_eventType.c_str(), L"Verify maintenance V2 callback with correct event type was called.");
+                    Assert::AreEqual("VirtualMachine", schedule.m_events[0].m_resourceType.c_str(), L"Verify maintenance V2 callback with correct resource type was called.");
+                    Assert::AreEqual(size_t{ 1 }, schedule.m_events[0].m_resources.size(), L"Verify maintenance V2 callback with correct resource list size was called.");
+                    Assert::AreEqual("resourceName", schedule.m_events[0].m_resources[0].c_str(), L"Verify maintenance V2 callback with correct resource was called.");
+                    Assert::AreEqual("Scheduled", schedule.m_events[0].m_eventStatus.c_str(), L"Verify maintenance V2 callback with correct status was called.");
+                    Assert::AreEqual(1523552310LL, _mkgmtime(&schedule.m_events[0].m_notBefore), L"Verify maintenance V2 callback with correct time was called.");
+                    Assert::AreEqual("eventDescription", schedule.m_events[0].m_description.c_str(), L"Verify maintenance V2 callback with correct description was called.");
+                    Assert::AreEqual("Platform", schedule.m_events[0].m_eventSource.c_str(), L"Verify maintenance V2 callback with correct source was called.");
+                    Assert::AreEqual(3600, schedule.m_events[0].m_durationInSeconds, L"Verify maintenance V2 callback with correct duration was called.");
+                }
+
                 TEST_METHOD(DecodeAgentResponse_JsonDoesntCrash)
                 {
                     GSDKInternal::testConfiguration = std::make_unique<TestConfig>("heartbeatEndpoint", "serverId", "logFolder", "sharedContentFolder");

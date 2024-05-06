@@ -60,6 +60,11 @@ void maintenanceScheduled(tm t)
     isMaintenancedScheduled = true;
 }
 
+void maintenanceV2Scheduled(Microsoft::Azure::Gaming::MaintenanceSchedule schedule)
+{
+    printf("GSDK maintenanceV2 scheduled with %s, %s, %s\n", schedule.m_events[0].m_eventType.c_str(), schedule.m_events[0].m_eventStatus.c_str(), schedule.m_events[0].m_eventSource.c_str());
+}
+
 std::string escape(std::string const &s)
 {
     std::size_t n = s.length();
@@ -323,7 +328,8 @@ int main(int argc, char* argv[])
         Microsoft::Azure::Gaming::GSDK::start();
         Microsoft::Azure::Gaming::GSDK::registerShutdownCallback(&inShutdown);
         Microsoft::Azure::Gaming::GSDK::registerHealthCallback(&isHealthy);
-        Microsoft::Azure::Gaming::GSDK::registerMaintenanceCallback(&maintenanceScheduled);
+        //Microsoft::Azure::Gaming::GSDK::registerMaintenanceCallback(&maintenanceScheduled);
+        Microsoft::Azure::Gaming::GSDK::registerMaintenanceV2Callback(&maintenanceV2Scheduled);
 
         // Grab asset files
         std::ifstream assetFileTextStream(getExecutableDirectory() + "\\" + assetFileTextPath);

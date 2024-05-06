@@ -28,6 +28,9 @@ public class Main {
                 System.out.println("There is a new scheduled maintenance happening at: "
                                     + maintenance.withZoneSameInstant(ZoneId.systemDefault()).toString());
             });
+            GameserverSDK.registerMaintenanceV2Callback((schedule) -> {
+                System.out.println("GSDK maintenanceV2 scheduled with" + schedule.getMaintenanceEvents().get(0).getEventType() + "," + schedule.getMaintenanceEvents().get(0).getEventStatus() + "," + schedule.getMaintenanceEvents().get(0).getEventSource());
+            });
             GameserverSDK.readyForPlayers();
 
             ArrayList<ConnectedPlayer> players = new ArrayList<ConnectedPlayer>();

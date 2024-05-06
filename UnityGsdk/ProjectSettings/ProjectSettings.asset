@@ -563,8 +563,10 @@ PlayerSettings:
   webGLMemoryGeometricGrowthCap: 96
   webGLPowerPreference: 2
   scriptingDefineSymbols:
+    Server: ENABLE_PLAYFABSERVER_API;UNIT_TESTING
     Standalone: ENABLE_PLAYFABSERVER_API;UNIT_TESTING
-  additionalCompilerArguments: {}
+  additionalCompilerArguments:
+    Server: []
   platformArchitecture: {}
   scriptingBackend: {}
   il2cppCompilerConfiguration: {}

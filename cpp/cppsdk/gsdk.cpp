@@ -240,10 +240,10 @@ namespace Microsoft
 
                 jsonHeartbeatRequest["CurrentGameState"] = GameStateNames[static_cast<int>(m_heartbeatRequest.m_currentGameState)];
 
-                auto temp = m_healthCallback;
-                if (temp != nullptr)
+                auto healthCallback = m_healthCallback;
+                if (healthCallback != nullptr)
                 {
-                    m_heartbeatRequest.m_isGameHealthy = temp();
+                    m_heartbeatRequest.m_isGameHealthy = healthCallback();
                 }
                 jsonHeartbeatRequest["CurrentGameHealth"] = m_heartbeatRequest.m_isGameHealthy ? "Healthy" : "Unhealthy";
 
@@ -303,10 +303,10 @@ namespace Microsoft
 
             void GSDKInternal::runShutdownCallback()
             {
-                std::function<void()> temp = get().m_shutdownCallback;
-                if (temp != nullptr)
+                std::function<void()> shutdownCallback = get().m_shutdownCallback;
+                if (shutdownCallback != nullptr)
                 {
-                    temp();
+                    shutdownCallback();
                 }
                 get().m_keepHeartbeatRunning = false;
             }
@@ -369,13 +369,48 @@ namespace Microsoft
                         time_t nextMaintenanceTime = cGSDKUtils::tm2timet_utc(&nextMaintenance);
                         time_t cachedMaintenanceTime = cGSDKUtils::tm2timet_utc(&m_cachedScheduledMaintenance);
                         double diff = difftime(nextMaintenanceTime, cachedMaintenanceTime);
-                        auto temp = m_maintenanceCallback;
+                        auto maintCallback = m_maintenanceCallback;
 
                         // If the cached time converted to -1, it means we haven't cached anything yet
-                        if (temp != nullptr && (static_cast<int>(diff) != 0 || cachedMaintenanceTime == -1))
+                        if (maintCallback != nullptr && (static_cast<int>(diff) != 0 || cachedMaintenanceTime == -1))
                         {
-                            temp(nextMaintenance);
+                            maintCallback(nextMaintenance);
                             m_cachedScheduledMaintenance = nextMaintenance; // cache it so we only notify once
+                        }
+                    }
+
+                    if (heartbeatResponse.isMember("maintenanceSchedule"))
+                    {
+                        auto maintV2Callback = m_maintenanceV2Callback;
+
+                        Json::Value scheduleJson = heartbeatResponse["maintenanceSchedule"];
+                        MaintenanceSchedule schedule{};
+                        schedule.m_documentIncarnation = scheduleJson["documentIncarnation"].asString();
+
+                        for (const auto& eventJson : scheduleJson["Events"])
+                        {
+                            MaintenanceEvent eventData{};
+                            eventData.m_eventId = eventJson["eventId"].asString();
+                            eventData.m_eventType = eventJson["eventType"].asString();
+                            eventData.m_resourceType = eventJson["resourceType"].asString();
+                            std::vector<std::string> resources{};
+                            for (const auto& resource : eventJson["Resources"])
+                            {
+                                resources.push_back(resource.asString());
+                            }
+                            eventData.m_resources = resources;
+                            eventData.m_eventStatus = eventJson["eventStatus"].asString();
+                            eventData.m_notBefore = parseDate(eventJson["notBefore"].asCString());
+                            eventData.m_description = eventJson["description"].asString();
+                            eventData.m_eventSource = eventJson["eventSource"].asString();
+                            eventData.m_durationInSeconds = eventJson["durationInSeconds"].asInt();
+
+                            schedule.m_events.push_back(eventData);
+                        }
+
+                        if (maintV2Callback != nullptr)
+                        {
+                            maintV2Callback(schedule);
                         }
                     }
 
@@ -514,6 +549,11 @@ namespace Microsoft
             void GSDK::registerMaintenanceCallback(std::function< void(const tm&) > callback)
             {
                 GSDKInternal::get().m_maintenanceCallback = callback;
+            }
+
+            void GSDK::registerMaintenanceV2Callback(std::function<void(const MaintenanceSchedule&)> callback)
+            {
+                GSDKInternal::get().m_maintenanceV2Callback = callback;
             }
 
             unsigned int GSDK::logMessage(const std::string& message)

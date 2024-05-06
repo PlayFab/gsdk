@@ -1,10 +1,11 @@
-﻿// Copyright (C) Microsoft Corporation. All rights reserved.
+// Copyright (C) Microsoft Corporation. All rights reserved.
 
 #pragma once
 
 #include "CoreMinimal.h"
 
 #include "ConnectedPlayer.h"
+#include "MaintenanceSchedule.h"
 #include "GameServerConnectionInfo.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
 
@@ -15,6 +16,7 @@ DECLARE_DYNAMIC_DELEGATE(FOnGSDKServerActive_Dyn);
 DECLARE_DYNAMIC_DELEGATE(FOnGSDKReadyForPlayers_Dyn);
 DECLARE_DYNAMIC_DELEGATE_RetVal(bool, FOnGSDKHealthCheck_Dyn);
 DECLARE_DYNAMIC_DELEGATE_OneParam(FOnGSDKMaintenance_Dyn, const FDateTime&, MaintenanceTime);
+DECLARE_DYNAMIC_DELEGATE_OneParam(FOnGSDKMaintenanceV2_Dyn, const FMaintenanceSchedule&, MaintenanceSchedule);
 
 /**
  *
@@ -103,9 +105,20 @@ public:
 	UFUNCTION(BlueprintCallable, Category="PlayFab|GSDK|Callbacks")
 	static void RegisterGSDKHealthCheckDelegate(const FOnGSDKHealthCheck_Dyn& OnGSDKHealthCheckDelegate);
 
-	// Register the GSDK Maintenance Delegate, which gets called if the VM this server is running on expects to go into Maintenance soon
-	UFUNCTION(BlueprintCallable, Category="PlayFab|GSDK|Callbacks")
+	/// <summary>
+	/// DEPRECATED Use RegisterGSDKMaintenanceV2Delegate. Register the GSDK Maintenance Delegate, which gets called if the VM this server is running on expects to go into Maintenance soon.
+	/// </summary>
+	UFUNCTION(BlueprintCallable, Category="PlayFab|GSDK|Callbacks", meta=(DeprecatedFunction, DeprecationMessage="Use RegisterGSDKMaintenanceV2Delegate."))
 	static void RegisterGSDKMaintenanceDelegate(const FOnGSDKMaintenance_Dyn& OnGSDKMaintenanceDelegate);
+
+	/// <summary>
+	/// Register the GSDK MaintenanceV2 Delegate, which gets called if the VM this server is running on expects to go into Maintenance soon
+	/// </summary>
+	/// <remarks>
+	/// https://learn.microsoft.com/azure/virtual-machines/windows/scheduled-events#event-properties
+	/// </remarks>
+	UFUNCTION(BlueprintCallable, Category = "PlayFab|GSDK|Callbacks")
+	static void RegisterGSDKMaintenanceV2Delegate(const FOnGSDKMaintenanceV2_Dyn& OnGSDKMaintenanceV2Delegate);
 
 	/// Read the port information from MPS, and assign the default server hosting port if applicable
 	UFUNCTION(BlueprintCallable, Category = "PlayFab|GSDK|SetDefaultServerHostPort")
