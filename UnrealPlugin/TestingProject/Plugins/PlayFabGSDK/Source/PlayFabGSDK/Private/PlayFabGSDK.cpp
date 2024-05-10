@@ -132,8 +132,9 @@ const FString FPlayFabGSDKModule::GetLogsDirectory()
 #if PLAYFAB_GSDK_SERVER
 	if (NoGSDK) return TEXT("");
 	return GSDKInternal->GetConfigValue(LOG_FOLDER_KEY);
-#endif
+#else
 	return TEXT("");
+#endif
 }
 
 const FString FPlayFabGSDKModule::GetSharedContentDirectory()
@@ -141,9 +142,9 @@ const FString FPlayFabGSDKModule::GetSharedContentDirectory()
 #if PLAYFAB_GSDK_SERVER
 	if (NoGSDK) return TEXT("");
 	return GSDKInternal->GetConfigValue(SHARED_CONTENT_FOLDER_KEY);
-#endif
-
+#else
 	return TEXT("");
+#endif
 }
 
 const TArray<FString> FPlayFabGSDKModule::GetInitialPlayers()
