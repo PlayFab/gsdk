@@ -20,7 +20,7 @@ public:
 	FDateTime NotBefore;
 	FString Description;
 	FString EventSource;
-	int DurationInSeconds;
+	uint32_t DurationInSeconds;
 };
 
 USTRUCT(BlueprintType)
