@@ -4,7 +4,7 @@
 PlayerSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 26
-  productGUID: e385e3649c70e254981ef23d5786062a
+  productGUID: 
   AndroidProfiler: 0
   AndroidFilterTouchesWhenObscured: 0
   AndroidEnableSustainedPerformanceMode: 0
@@ -244,7 +244,7 @@ PlayerSettings:
   iOSAutomaticallyDetectAndAddCapabilities: 1
   appleEnableProMotion: 0
   shaderPrecisionModel: 0
-  clonedFromGUID: 00000000000000000000000000000000
+  clonedFromGUID: 
   templatePackageId: 
   templateDefaultScene: 
   useCustomMainManifest: 0
@@ -463,7 +463,7 @@ PlayerSettings:
   ps4NPTitleSecret: 
   ps4NPTrophyPackPath: 
   ps4ParentalLevel: 11
-  ps4ContentID: ED1633-NPXX51362_00-0000000000000000
+  ps4ContentID: 
   ps4Category: 0
   ps4MasterVersion: 01.00
   ps4AppVersion: 01.00
@@ -499,7 +499,7 @@ PlayerSettings:
   ps4GarlicHeapSize: 2048
   ps4ProGarlicHeapSize: 2560
   playerPrefsMaxSize: 32768
-  ps4Passcode: frAQBc8Wsa1xVPfvJcrgRYwTiizs2trQ
+  ps4Passcode: 
   ps4pnSessions: 1
   ps4pnPresence: 1
   ps4pnFriends: 1
