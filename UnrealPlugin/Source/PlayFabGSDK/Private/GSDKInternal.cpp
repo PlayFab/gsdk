@@ -60,6 +60,7 @@ FGSDKInternal::FGSDKInternal()
 	ConfigSettings.Add(FPlayFabGSDKModule::REGION_KEY, ConfigPtr->GetRegion());
 	ConfigSettings.Add(FPlayFabGSDKModule::PUBLIC_IP_V4_ADDRESS_KEY, ConfigPtr->GetPublicIpV4Address());
 	ConfigSettings.Add(FPlayFabGSDKModule::FULLY_QUALIFIED_DOMAIN_NAME_KEY, ConfigPtr->GetFullyQualifiedDomainName());
+	ConfigSettings.Add(FPlayFabGSDKModule::VM_ID_KEY, ConfigPtr->GetVmId());
 
 	if (ConfigSettings[FPlayFabGSDKModule::HEARTBEAT_ENDPOINT_KEY].IsEmpty() || ConfigSettings[FPlayFabGSDKModule::SERVER_ID_KEY].IsEmpty())
 	{

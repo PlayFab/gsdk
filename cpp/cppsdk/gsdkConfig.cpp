@@ -43,6 +43,7 @@ Microsoft::Azure::Gaming::EnvironmentVariableConfiguration::EnvironmentVariableC
     m_serverId = cGSDKUtils::getEnvironmentVariable(Configuration::SERVER_ID_ENV_VAR);
     m_logFolder = cGSDKUtils::getEnvironmentVariable(Configuration::LOG_FOLDER_ENV_VAR);
     m_sharedContentFolder = cGSDKUtils::getEnvironmentVariable(Configuration::SHARED_CONTENT_FOLDER_ENV_VAR);
+    m_vmId = cGSDKUtils::getEnvironmentVariable(Configuration::VM_ID_ENV_VAR);
 
     // Game cert support was added once we switched to a json config, so we don't have values for them
 }
@@ -96,6 +97,11 @@ const std::string &Microsoft::Azure::Gaming::EnvironmentVariableConfiguration::g
 const std::string &Microsoft::Azure::Gaming::EnvironmentVariableConfiguration::getFullyQualifiedDomainName()
 {
     return m_domainName;
+}
+
+const std::string& Microsoft::Azure::Gaming::EnvironmentVariableConfiguration::getVmId()
+{
+    return m_vmId;
 }
 
 const Microsoft::Azure::Gaming::GameServerConnectionInfo &Microsoft::Azure::Gaming::EnvironmentVariableConfiguration::getGameServerConnectionInfo()
@@ -166,6 +172,11 @@ Microsoft::Azure::Gaming::JsonFileConfiguration::JsonFileConfiguration(const std
             if (configFile.isMember("fullyQualifiedDomainName"))
             {
                 m_domainName = configFile["fullyQualifiedDomainName"].asString();
+            }
+
+            if (configFile.isMember("vmId"))
+            {
+                m_vmId = configFile["vmId"].asString();
             }
 
             if (configFile.isMember("gameServerConnectionInfo"))
@@ -242,6 +253,11 @@ const std::string &Microsoft::Azure::Gaming::JsonFileConfiguration::getPublicIpV
 const std::string &Microsoft::Azure::Gaming::JsonFileConfiguration::getFullyQualifiedDomainName()
 {
     return m_domainName;
+}
+
+const std::string& Microsoft::Azure::Gaming::JsonFileConfiguration::getVmId()
+{
+    return m_vmId;
 }
 
 const Microsoft::Azure::Gaming::GameServerConnectionInfo &Microsoft::Azure::Gaming::JsonFileConfiguration::getGameServerConnectionInfo()

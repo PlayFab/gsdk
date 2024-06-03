@@ -78,6 +78,7 @@ namespace Microsoft
                 m_configSettings[GSDK::TITLE_ID_KEY] = config->getTitleId();
                 m_configSettings[GSDK::BUILD_ID_KEY] = config->getBuildId();
                 m_configSettings[GSDK::REGION_KEY] = config->getRegion();
+                m_configSettings[GSDK::VM_ID_KEY] = config->getVmId();
                 m_configSettings[GSDK::PUBLIC_IP_V4_ADDRESS_KEY] = config->getPublicIpV4Address();
                 m_configSettings[GSDK::FULLY_QUALIFIED_DOMAIN_NAME_KEY] = config->getFullyQualifiedDomainName();
 
