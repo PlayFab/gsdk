@@ -6,6 +6,11 @@
     [Serializable]
     public class ConnectedPlayer
     {
+        public ConnectedPlayer()
+        {
+
+        }
+
         public ConnectedPlayer(string playerid)
         {
             PlayerId = playerid;

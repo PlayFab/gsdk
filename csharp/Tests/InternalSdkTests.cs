@@ -32,6 +32,7 @@ namespace Microsoft.Playfab.Gaming.GSDK.CSharp.Test
             _mockSystemOperations.Setup(op => op.FileExists(ConfigFilePath)).Returns(true);
             _mockSystemOperations.Setup(op => op.FileReadAllText(ConfigFilePath)).Returns(() => JsonConvert.SerializeObject(_testConfiguration));
 
+            _mockHttpClient.Setup(x => x.SendInfoAsync(It.IsAny<string>())).Returns(Task.CompletedTask);
             _mockHttpClient.Setup(x => x.SendHeartbeatAsync(It.IsAny<HeartbeatRequest>()))
                 .Returns(Task.FromResult(new HeartbeatResponse()));
             _mockHttpClientFactory.Setup(x => x.CreateInstance(It.IsAny<string>())).Returns(() => _mockHttpClient.Object);
@@ -168,6 +169,68 @@ namespace Microsoft.Playfab.Gaming.GSDK.CSharp.Test
                     DateTimeStyles.RoundtripKind));
 
 
+        }
+
+        [TestMethod]
+        public void GameState_MaintV2_CallbackInvoked()
+        {
+            _testConfiguration = new
+            {
+                heartbeatEndpoint = "heartbeatendpoint",
+                sessionHostId = "serverid"
+            };
+
+            _mockHttpClient.Setup(x => x.SendHeartbeatAsync(It.IsAny<HeartbeatRequest>()))
+                .ReturnsAsync(new HeartbeatResponse
+                {
+                    Operation = GameOperation.Continue,
+                    MaintenanceSchedule = new()
+                    {
+                        DocumentIncarnation = "IncarnationID",
+                        Events = new List<MaintenanceEvent>
+                        {
+                            new()
+                            {
+                                EventId = "eventID",
+                                EventType = "Reboot",
+                                ResourceType = "VirtualMachine",
+                                Resources = new List<string> { "resourceName" },
+                                EventStatus = "Scheduled",
+                                NotBefore = DateTime.Parse("2018-11-12T04:11:14Z", null, DateTimeStyles.RoundtripKind),
+                                Description = "eventDescription",
+                                EventSource = "Platform",
+                                DurationInSeconds = 3600
+                            }
+                        }
+                    }
+                });
+
+            MaintenanceSchedule schedule = new();
+            ManualResetEvent evt = new(false);
+
+            var sdk = new InternalSdk(_mockSystemOperations.Object, _mockHttpClientFactory.Object)
+            {
+                MaintenanceV2Callback = (maintSchedule) =>
+                {
+                    schedule = maintSchedule;
+                    evt.Set();
+                }
+            };
+
+            sdk.Start(false);
+
+            evt.WaitOne();
+            
+            schedule.Events[0].EventId.Should().Be("eventID");
+            schedule.Events[0].EventType.Should().Be("Reboot");
+            schedule.Events[0].ResourceType.Should().Be("VirtualMachine");
+            schedule.Events[0].Resources.Should().HaveCount(1);
+            schedule.Events[0].Resources[0].Should().Be("resourceName");
+            schedule.Events[0].EventStatus.Should().Be("Scheduled");
+            schedule.Events[0].NotBefore.Should().Be(DateTime.Parse("2018-11-12T04:11:14Z", null, DateTimeStyles.RoundtripKind));
+            schedule.Events[0].Description.Should().Be("eventDescription");
+            schedule.Events[0].EventSource.Should().Be("Platform");
+            schedule.Events[0].DurationInSeconds.Should().Be(3600);
         }
 
         [TestMethod]

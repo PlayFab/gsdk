@@ -20,6 +20,7 @@ namespace WinTestRunnerGame
     using EntityKey = PlayFab.AuthenticationModels.EntityKey;
     using ConnectedPlayer = Microsoft.Playfab.Gaming.GSDK.CSharp.ConnectedPlayer;
     using System.Reflection;
+    using Microsoft.Playfab.Gaming.GSDK.CSharp.Model;
 
     public class SessionCookie
     {
@@ -78,7 +79,10 @@ namespace WinTestRunnerGame
             _nextMaintenance = time;
         }
         
-        
+        static void OnMaintenanceV2Scheduled(MaintenanceSchedule schedule)
+        {
+            LogMessage($"GSDK maintenanceV2 scheduled with {schedule.Events[0].EventType}, {schedule.Events[0].EventStatus}, {schedule.Events[0].EventSource}");
+        }
 
         static void Main(string[] args)
         {
@@ -92,7 +96,8 @@ namespace WinTestRunnerGame
                 GameserverSDK.Start(true);
                 GameserverSDK.RegisterShutdownCallback(OnShutdown);
                 GameserverSDK.RegisterHealthCallback(GetGameHealth);
-                GameserverSDK.RegisterMaintenanceCallback(OnMaintenanceScheduled);
+                //GameserverSDK.RegisterMaintenanceCallback(OnMaintenanceScheduled);
+                GameserverSDK.RegisterMaintenanceV2Callback(OnMaintenanceV2Scheduled);
 
                 IDictionary<string, string> gsdkConfiguration = GameserverSDK.getConfigSettings();
                 if (gsdkConfiguration.TryGetValue("RealPort", out string listeningPortString))

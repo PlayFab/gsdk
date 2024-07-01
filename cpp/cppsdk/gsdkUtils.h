@@ -28,7 +28,9 @@ typedef unsigned int HRESULT;
 
 #define WIDE2(x) L##x
 #define WIDECHAR(x) WIDE2(x)
+#ifndef __WFUNCTION__
 #define __WFUNCTION__ WIDECHAR(__func__)
+#endif
 
 inline std::string WSTR2STR(const std::wstring &wstr) { return std::string(wstr.begin(), wstr.end()); }
 inline std::string WCHAR2STR(const wchar_t *wcharPtr) { std::wstring wstr(wcharPtr); return std::string(wstr.begin(), wstr.end()); }

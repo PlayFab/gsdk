@@ -37,6 +37,8 @@ namespace PlayFab
 
         public delegate void OnMaintenanceEvent(DateTime? NextScheduledMaintenanceUtc);
 
+        public delegate void OnMaintenanceV2Event(MaintenanceSchedule schedule);
+
         public delegate void OnSessionConfigUpdate(SessionConfig sessionConfig);
 
         public delegate void OnServerActiveEvent();
@@ -46,6 +48,8 @@ namespace PlayFab
         private const string GsdkConfigFileEnvVarKey = "GSDK_CONFIG_FILE";
 
         private static string _baseUrl = string.Empty;
+
+        private static string _infoUrl = string.Empty;
 
         private static GSDKConfiguration _gsdkconfig;
 
@@ -62,6 +66,7 @@ namespace PlayFab
         public static bool IsDebugging = true;
         public static event OnShutdownEventk OnShutDownCallback;
         public static event OnMaintenanceEvent OnMaintenanceCallback;
+        public static event OnMaintenanceV2Event OnMaintenanceV2Callback;
         public static event OnAgentCommunicationErrorEvent OnAgentErrorCallback;
         public static event OnServerActiveEvent OnServerActiveCallback;
 
@@ -82,6 +87,7 @@ namespace PlayFab
             }
 
             _baseUrl = string.Format("http://{0}/v1/sessionHosts/{1}/heartbeats", _gsdkconfig.HeartbeatEndpoint, _gsdkconfig.SessionHostId);
+            _infoUrl = string.Format("http://{0}/v1/metrics/{1}/gsdkinfo", _gsdkconfig.HeartbeatEndpoint, _gsdkconfig.SessionHostId);
             CurrentState.CurrentGameState = GameState.Initializing;
             CurrentErrorState = ErrorStates.Ok;
             CurrentState.CurrentPlayers = new List<ConnectedPlayer>();
@@ -169,7 +175,49 @@ namespace PlayFab
 
         public static IList<string> GetInitialPlayers()
         {
-            return new List<string>(SessionConfig.InitialPlayers);
+            return SessionConfig.InitialPlayers is null ? new List<string>() : new List<string>(SessionConfig.InitialPlayers);
+        }
+
+        // LogMessage uses the Debug.Log method to log a message to the console.
+        // Unity game server process must be started with the "-logfile -" parameter to send logs to standard output, where they will be captured when the game server process exits
+        public static void LogMessage(string message)
+        {
+            Debug.Log(message);
+        }
+
+        public static IEnumerator SendInfo()
+        {
+            string payload = _jsonInstance.SerializeObject(new GSDKInfo());
+            if (string.IsNullOrEmpty(payload) || string.IsNullOrEmpty(_infoUrl))
+            {
+                yield break;
+            }
+
+            byte[] payloadBytes = Encoding.UTF8.GetBytes(payload);
+
+            if (IsDebugging)
+            {
+                Debug.Log($"state: {CurrentState}, info payload: {payload}");
+            }
+
+            using (UnityWebRequest req = new UnityWebRequest(_infoUrl, UnityWebRequest.kHttpVerbPOST))
+            {
+                req.SetRequestHeader("Accept", "application/json");
+                req.SetRequestHeader("Content-Type", "application/json");
+                req.uploadHandler = new UploadHandlerRaw(payloadBytes) { contentType = "application/json" };
+                yield return req.SendWebRequest();
+
+                if (req.result == UnityWebRequest.Result.ConnectionError || req.result == UnityWebRequest.Result.ProtocolError)
+                {
+                    Debug.LogFormat("Error sending info: {0}", req.error);
+                    IsProcessing = false;
+                }
+                else
+                {
+                    CurrentErrorState = ErrorStates.Ok;
+                    IsProcessing = false;
+                }
+            }
         }
 
         public static IEnumerator SendHeartBeatRequest()
@@ -197,8 +245,7 @@ namespace PlayFab
 
                 if (req.result == UnityWebRequest.Result.ConnectionError || req.result == UnityWebRequest.Result.ProtocolError)
                 {
-                    Guid guid = Guid.NewGuid();
-                    Debug.LogFormat("CurrentError: {0} - {1}", req.error, guid.ToString());
+                    Debug.LogFormat("CurrentError: {0}", req.error);
                     //Exponential backoff for 30 minutes for retries.
                     switch (CurrentErrorState)
                     {
@@ -273,7 +320,13 @@ namespace PlayFab
          
            
         }
-        private static void ProcessAgentResponse(HeartbeatResponse heartBeat)
+
+#if UNIT_TESTING
+        public
+#else
+        private
+#endif
+        static void ProcessAgentResponse(HeartbeatResponse heartBeat)
         {
             SessionConfig.CopyNonNullFields(heartBeat.SessionConfig);
             
@@ -306,6 +359,11 @@ namespace PlayFab
                         OnMaintenanceCallback.Invoke(scheduledMaintDate);
                     }
                 }
+            }
+
+            if (OnMaintenanceV2Callback != null && heartBeat.MaintenanceSchedule != null)
+            {
+                OnMaintenanceV2Callback.Invoke(heartBeat.MaintenanceSchedule);
             }
 
             switch (heartBeat.Operation)
@@ -365,6 +423,17 @@ namespace PlayFab
                     CurrentState.CurrentGameState);
             }
         }
+
+#if UNIT_TESTING
+        public static void ResetAgent()
+        {
+            _configMap = null;
+            SessionConfig.InitialPlayers = null;
+
+            UnityEngine.Object.Destroy(_agentView);
+            _agentView = null;
+        }
+#endif
     }
 }
 

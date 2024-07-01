@@ -41,6 +41,7 @@ class HeartbeatThread implements Runnable {
     private Runnable shutdownCallback;
     private Supplier<GameHostHealth> healthCallback;
     private Consumer<ZonedDateTime> maintenanceCallback;
+    private Consumer<MaintenanceSchedule> maintenanceV2Callback;
     private ZonedDateTime lastScheduledMaintenanceUtc;
     private final Semaphore transitionToActive = new Semaphore(0);
     private final Semaphore signalHeartbeat = new Semaphore(0);
@@ -86,9 +87,29 @@ class HeartbeatThread implements Runnable {
         Logger.Instance().Log("VM Agent Endpoint: " + agentEndpoint);
         Logger.Instance().Log("Instance Id: " + serverId);
 
+        try {
+            URI infoUri = new URIBuilder()
+                    .setScheme("http")
+                    .setHost(agentEndpoint)
+                    .setPath("/v1/metrics/" + serverId + "/gsdkinfo")
+                    .build();
+            
+            Gson gson = new Gson();
+            GSDKInfo info = new GSDKInfo();
+
+            Request.Post(infoUri)
+                    .bodyString(gson.toJson(info), ContentType.APPLICATION_JSON)
+                    .connectTimeout(HEARTBEAT_TIMEOUT_MILLISECONDS)
+                    .socketTimeout(HEARTBEAT_TIMEOUT_MILLISECONDS)
+                    .execute().handleResponse(HeartbeatThread::handleInfoResponse);
+        } catch (Exception e) {
+            Logger.Instance().LogError("Failed to contact Agent when sending info.");
+        }
+
         // Send an initial heartbeat here in the constructor so that we can fail
         // quickly if the Agent is unreachable.
         try {
+
             this.agentUri = new URIBuilder()
                     .setScheme("http")
                     .setHost(agentEndpoint)
@@ -147,6 +168,11 @@ class HeartbeatThread implements Runnable {
     protected synchronized void registerMaintenanceCallback(Consumer<ZonedDateTime> callback)
     {
         this.maintenanceCallback = callback;
+    }
+
+    protected synchronized void registerMaintenanceV2Callback(Consumer<MaintenanceSchedule> callback)
+    {
+        this.maintenanceV2Callback = callback;
     }
 
     protected Map<String, String> getConfigSettings() {
@@ -215,6 +241,14 @@ class HeartbeatThread implements Runnable {
                 {
                     callback.accept(nextMaintenance); // should this be in a new thread?
                     this.lastScheduledMaintenanceUtc = nextMaintenance; // cache it, since we only want to notify once
+                }
+
+                Consumer<MaintenanceSchedule> maintV2Callback = this.maintenanceV2Callback;
+                MaintenanceSchedule schedule = sessionInfo.getMaintenanceSchedule();
+
+                if (maintV2Callback != null && schedule != null)
+                {
+                    maintV2Callback.accept(schedule);
                 }
 
                 // If Terminating, send a last heartbeat that we're done and exit the loop
@@ -296,7 +330,7 @@ class HeartbeatThread implements Runnable {
         // Create a gson object that knows how to handle LocalDateTime
         Gson gson = new GsonBuilder().registerTypeAdapter(ZonedDateTime.class, (JsonDeserializer<ZonedDateTime>) (json, type, jsonDeserializationContext) ->
                         ZonedDateTime.parse(json.getAsJsonPrimitive().getAsString()).withZoneSameLocal(ZoneId.of("UTC"))).create();
-
+        
         StatusLine statusLine = response.getStatusLine();
         HttpEntity entity = response.getEntity();
         if (statusLine.getStatusCode() >= 300) {
@@ -314,6 +348,18 @@ class HeartbeatThread implements Runnable {
 
         InputStreamReader reader = new InputStreamReader(entity.getContent());
         return gson.fromJson(reader, SessionHostHeartbeatInfo.class);
+    }
+
+    private static Void handleInfoResponse(HttpResponse response) throws IOException {
+        StatusLine statusLine = response.getStatusLine();
+        if (statusLine.getStatusCode() >= 300) {
+            Logger.Instance().LogWarning("Received non-success code from Agent.  Status Code: " + statusLine.getStatusCode() + ".  Reason: " + statusLine.getReasonPhrase());
+            throw new HttpResponseException(
+                    statusLine.getStatusCode(),
+                    statusLine.getReasonPhrase());
+        }
+
+        return null;
     }
 
     /**

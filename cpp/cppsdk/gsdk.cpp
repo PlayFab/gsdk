@@ -4,6 +4,7 @@
 #include "gsdkCommonPch.h"
 #include "gsdkInternal.h"
 #include "gsdkConfig.h"
+#include "gsdkInfo.h"
 
 namespace Microsoft
 {
@@ -77,6 +78,7 @@ namespace Microsoft
                 m_configSettings[GSDK::TITLE_ID_KEY] = config->getTitleId();
                 m_configSettings[GSDK::BUILD_ID_KEY] = config->getBuildId();
                 m_configSettings[GSDK::REGION_KEY] = config->getRegion();
+                m_configSettings[GSDK::VM_ID_KEY] = config->getVmId();
                 m_configSettings[GSDK::PUBLIC_IP_V4_ADDRESS_KEY] = config->getPublicIpV4Address();
                 m_configSettings[GSDK::FULLY_QUALIFIED_DOMAIN_NAME_KEY] = config->getFullyQualifiedDomainName();
 
@@ -123,9 +125,11 @@ namespace Microsoft
                     m_transitionToActiveEvent.Reset();
                     m_signalHeartbeatEvent.Reset();
 
+                    std::string infoUrl = "http://" + gsmsBaseUrl + "/v1/metrics/" + instanceId + "/gsdkinfo";
+
                     // we might not want to heartbeat in our UTs
                     m_keepHeartbeatRunning = config->shouldHeartbeat();
-                    m_heartbeatThread = std::thread(&GSDKInternal::heartbeatThreadFunc, this);
+                    m_heartbeatThread = std::thread(&GSDKInternal::heartbeatThreadFunc, this, infoUrl);
                 }
                 catch (const std::exception& ex)
                 {
@@ -169,8 +173,29 @@ namespace Microsoft
                 m_logFile.open(logPath.c_str(), std::ofstream::out);
             }
 
-            void GSDKInternal::heartbeatThreadFunc()
+            void GSDKInternal::heartbeatThreadFunc(std::string infoUrl)
             {
+                resetCurl();
+                curl_easy_setopt(m_curlHandle, CURLOPT_URL, infoUrl.c_str());
+
+                m_receivedData = "";
+                curl_easy_setopt(m_curlHandle, CURLOPT_CUSTOMREQUEST, "POST");
+
+                Json::Value jsonInfoRequest;
+                jsonInfoRequest[GSDK_INFO_FLAVOR_KEY] = GSDK_INFO_FLAVOR;
+                jsonInfoRequest[GSDK_INFO_VERSION_KEY] = GSDK_INFO_VERSION;
+
+                std::string infoRequest = jsonInfoRequest.toStyledString();
+                curl_easy_setopt(m_curlHandle, CURLOPT_POSTFIELDS, infoRequest.c_str());
+                curl_easy_perform(m_curlHandle);
+
+                long http_code = 0;
+                curl_easy_getinfo(m_curlHandle, CURLINFO_RESPONSE_CODE, &http_code);
+                if (http_code >= 300)
+                {
+                    GSDK::logMessage("Received non-success code from Agent when sending GSDK info.  Status Code: " + std::to_string(http_code) + " Response Body: " + m_receivedData);
+                }
+
                 while (m_keepHeartbeatRunning)
                 {
                     if (m_signalHeartbeatEvent.Wait(m_nextHeartbeatIntervalMs))
@@ -216,10 +241,10 @@ namespace Microsoft
 
                 jsonHeartbeatRequest["CurrentGameState"] = GameStateNames[static_cast<int>(m_heartbeatRequest.m_currentGameState)];
 
-                auto temp = m_healthCallback;
-                if (temp != nullptr)
+                auto healthCallback = m_healthCallback;
+                if (healthCallback != nullptr)
                 {
-                    m_heartbeatRequest.m_isGameHealthy = temp();
+                    m_heartbeatRequest.m_isGameHealthy = healthCallback();
                 }
                 jsonHeartbeatRequest["CurrentGameHealth"] = m_heartbeatRequest.m_isGameHealthy ? "Healthy" : "Unhealthy";
 
@@ -279,10 +304,10 @@ namespace Microsoft
 
             void GSDKInternal::runShutdownCallback()
             {
-                std::function<void()> temp = get().m_shutdownCallback;
-                if (temp != nullptr)
+                std::function<void()> shutdownCallback = get().m_shutdownCallback;
+                if (shutdownCallback != nullptr)
                 {
-                    temp();
+                    shutdownCallback();
                 }
                 get().m_keepHeartbeatRunning = false;
             }
@@ -345,13 +370,48 @@ namespace Microsoft
                         time_t nextMaintenanceTime = cGSDKUtils::tm2timet_utc(&nextMaintenance);
                         time_t cachedMaintenanceTime = cGSDKUtils::tm2timet_utc(&m_cachedScheduledMaintenance);
                         double diff = difftime(nextMaintenanceTime, cachedMaintenanceTime);
-                        auto temp = m_maintenanceCallback;
+                        auto maintCallback = m_maintenanceCallback;
 
                         // If the cached time converted to -1, it means we haven't cached anything yet
-                        if (temp != nullptr && (static_cast<int>(diff) != 0 || cachedMaintenanceTime == -1))
+                        if (maintCallback != nullptr && (static_cast<int>(diff) != 0 || cachedMaintenanceTime == -1))
                         {
-                            temp(nextMaintenance);
+                            maintCallback(nextMaintenance);
                             m_cachedScheduledMaintenance = nextMaintenance; // cache it so we only notify once
+                        }
+                    }
+
+                    if (heartbeatResponse.isMember("maintenanceSchedule"))
+                    {
+                        auto maintV2Callback = m_maintenanceV2Callback;
+
+                        Json::Value scheduleJson = heartbeatResponse["maintenanceSchedule"];
+                        MaintenanceSchedule schedule{};
+                        schedule.m_documentIncarnation = scheduleJson["documentIncarnation"].asString();
+
+                        for (const auto& eventJson : scheduleJson["Events"])
+                        {
+                            MaintenanceEvent eventData{};
+                            eventData.m_eventId = eventJson["eventId"].asString();
+                            eventData.m_eventType = eventJson["eventType"].asString();
+                            eventData.m_resourceType = eventJson["resourceType"].asString();
+                            std::vector<std::string> resources{};
+                            for (const auto& resource : eventJson["Resources"])
+                            {
+                                resources.push_back(resource.asString());
+                            }
+                            eventData.m_resources = resources;
+                            eventData.m_eventStatus = eventJson["eventStatus"].asString();
+                            eventData.m_notBefore = parseDate(eventJson["notBefore"].asCString());
+                            eventData.m_description = eventJson["description"].asString();
+                            eventData.m_eventSource = eventJson["eventSource"].asString();
+                            eventData.m_durationInSeconds = eventJson["durationInSeconds"].asInt();
+
+                            schedule.m_events.push_back(eventData);
+                        }
+
+                        if (maintV2Callback != nullptr)
+                        {
+                            maintV2Callback(schedule);
                         }
                     }
 
@@ -490,6 +550,11 @@ namespace Microsoft
             void GSDK::registerMaintenanceCallback(std::function< void(const tm&) > callback)
             {
                 GSDKInternal::get().m_maintenanceCallback = callback;
+            }
+
+            void GSDK::registerMaintenanceV2Callback(std::function<void(const MaintenanceSchedule&)> callback)
+            {
+                GSDKInternal::get().m_maintenanceV2Callback = callback;
             }
 
             unsigned int GSDK::logMessage(const std::string& message)

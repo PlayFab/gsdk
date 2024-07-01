@@ -41,6 +41,7 @@ static int server_fd;
 void inShutdown()
 {
     printf("GSDK is shutting me down!!!\n");
+    fflush(stdout);
     isShutdown = true;
 
     if (!delayShutdown)
@@ -58,6 +59,12 @@ void maintenanceScheduled(tm t)
 {
     nextMaintenance = mktime(&t);
     isMaintenancedScheduled = true;
+}
+
+void maintenanceV2Scheduled(Microsoft::Azure::Gaming::MaintenanceSchedule schedule)
+{
+    printf("GSDK maintenanceV2 scheduled with %s, %s, %s\n", schedule.m_events[0].m_eventType.c_str(), schedule.m_events[0].m_eventStatus.c_str(), schedule.m_events[0].m_eventSource.c_str());
+    fflush(stdout);
 }
 
 std::string escape(std::string const &s)
@@ -104,11 +111,13 @@ void processRequests()
         if ((new_socket = accept(server_fd, (sockaddr*)&address, &addrlen)) < 0)
         {
             perror("accept");
+            fflush(stdout);
             exit(EXIT_FAILURE);
         }
 
         valread = recv(new_socket, buffer, sizeof(buffer), 0);
         printf("HTTP:Received %.*s\n", valread, buffer);
+        fflush(stdout);
 
         // For each request, "add" a connected player
         players.push_back(Microsoft::Azure::Gaming::ConnectedPlayer("gamer" + std::to_string(requestCount)));
@@ -257,6 +266,7 @@ bool DoesCertificateExist(std::string expectedThumbprint)
                 &cbData))
             {
                 printf("Call #1 to GetCertContextProperty failed.");
+                fflush(stdout);
                 continue;
             }
 
@@ -323,7 +333,8 @@ int main(int argc, char* argv[])
         Microsoft::Azure::Gaming::GSDK::start();
         Microsoft::Azure::Gaming::GSDK::registerShutdownCallback(&inShutdown);
         Microsoft::Azure::Gaming::GSDK::registerHealthCallback(&isHealthy);
-        Microsoft::Azure::Gaming::GSDK::registerMaintenanceCallback(&maintenanceScheduled);
+        //Microsoft::Azure::Gaming::GSDK::registerMaintenanceCallback(&maintenanceScheduled);
+        Microsoft::Azure::Gaming::GSDK::registerMaintenanceV2Callback(&maintenanceV2Scheduled);
 
         // Grab asset files
         std::ifstream assetFileTextStream(getExecutableDirectory() + "\\" + assetFileTextPath);
@@ -341,6 +352,7 @@ int main(int argc, char* argv[])
         if ((server_fd = socket(AF_INET, SOCK_STREAM, 0)) == 0)
         {
             perror("socket failed");
+            fflush(stdout);
             exit(EXIT_FAILURE);
         }
 
@@ -348,6 +360,7 @@ int main(int argc, char* argv[])
         if (setsockopt(server_fd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt)))
         {
             perror("setsockopt");
+            fflush(stdout);
             exit(EXIT_FAILURE);
         }
         address.sin_family = AF_INET;
@@ -357,12 +370,14 @@ int main(int argc, char* argv[])
         if (bind(server_fd, (struct sockaddr *)&address, sizeof(address)) < 0)
         {
             perror("bind failed");
+            fflush(stdout);
             exit(EXIT_FAILURE);
         }
 
         if (listen(server_fd, SOMAXCONN) < 0)
         {
             perror("listen");
+            fflush(stdout);
             exit(EXIT_FAILURE);
         }
 
@@ -378,6 +393,7 @@ int main(int argc, char* argv[])
     catch (const std::exception &ex)
     {
         printf("Exception encountered: %s", ex.what());
+        fflush(stdout);
         Microsoft::Azure::Gaming::GSDK::logMessage(ex.what());
     }
 

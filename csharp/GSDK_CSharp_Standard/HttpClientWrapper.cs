@@ -10,6 +10,7 @@
     internal interface IHttpClient
     {
         Task<HeartbeatResponse> SendHeartbeatAsync(HeartbeatRequest request);
+        Task SendInfoAsync(string url);
     }
 
     internal class HttpClientWrapper : IHttpClient
@@ -45,6 +46,21 @@
                 await responseMessage.Content.ReadAsStringAsync());
 
             return response;
+        }
+
+        public async Task SendInfoAsync(string url)
+        {
+            string formattedText = JsonConvert.SerializeObject(new GSDKInfo(), Formatting.Indented);
+            HttpRequestMessage requestMessage = new HttpRequestMessage
+            {
+                Method = new HttpMethod("POST"),
+                RequestUri = new Uri(url),
+                Content = new StringContent(formattedText, Encoding.UTF8, "application/json")
+            };
+
+            HttpResponseMessage responseMessage = await _client.SendAsync(requestMessage);
+
+            responseMessage.EnsureSuccessStatusCode();
         }
     }
 }

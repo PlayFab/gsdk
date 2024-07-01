@@ -52,7 +52,8 @@ namespace Microsoft.Playfab.Gaming.GSDK.CSharp
 
             long datePart = DateTime.UtcNow.ToFileTime();
             string fileName = Path.Combine(_logFolder, $"GSDK_output_{datePart}.txt");
-            _logWriter = new StreamWriter(File.OpenWrite(fileName));
+            FileStream fileStream = File.Open(fileName, FileMode.OpenOrCreate, FileAccess.Write, FileShare.Read);
+            _logWriter = new StreamWriter(fileStream);
         }
     }
 }

@@ -36,7 +36,13 @@ namespace PlayFab
                 Current = this;
             }
         }
-        
+
+        private void Start()
+        {
+            PlayFabMultiplayerAgentAPI.IsProcessing = true;
+            StartCoroutine(PlayFabMultiplayerAgentAPI.SendInfo());
+        }
+
         private void LateUpdate()
         {
             if (PlayFabMultiplayerAgentAPI.CurrentState == null)

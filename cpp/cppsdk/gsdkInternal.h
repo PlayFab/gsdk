@@ -147,6 +147,7 @@ namespace Microsoft
                 std::function<void()> m_shutdownCallback;
                 std::function<bool()> m_healthCallback;
                 std::function<void(const tm &)> m_maintenanceCallback;
+                std::function<void(const MaintenanceSchedule&)> m_maintenanceV2Callback;
 
                 GameServerConnectionInfo m_connectionInfo;
                 std::unordered_map<std::string, std::string> m_configSettings;
@@ -183,7 +184,7 @@ namespace Microsoft
                 static std::mutex m_logLock;
                 static std::ofstream m_logFile;
 
-                void heartbeatThreadFunc();
+                void heartbeatThreadFunc(std::string infoUrl);
                 static size_t curlReceiveData(char *buffer, size_t blockSize, size_t blockCount, void *);
                 static void runShutdownCallback();
                 
