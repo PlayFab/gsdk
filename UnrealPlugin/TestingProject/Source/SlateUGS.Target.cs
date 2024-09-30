@@ -8,7 +8,7 @@ public class SlateUGSTarget : TargetRules
 	public SlateUGSTarget(TargetInfo Target) : base(Target)
 	{
 		Type = TargetType.Game;
-		DefaultBuildSettings = BuildSettingsVersion.V2;
+		DefaultBuildSettings = BuildSettingsVersion.Latest;
 
 		ExtraModuleNames.AddRange( new string[] { "SlateUGS" } );
 	}
