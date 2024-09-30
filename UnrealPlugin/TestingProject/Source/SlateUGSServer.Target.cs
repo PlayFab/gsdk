@@ -6,10 +6,11 @@ using System;
 
 public class SlateUGSServerTarget : TargetRules
 {
-    public SlateUGSServerTarget(TargetInfo Target) : base(Target)
-    {
-        Type = TargetType.Server;
-        DefaultBuildSettings = BuildSettingsVersion.V2;
-        ExtraModuleNames.Add("SlateUGS");
-    }
+	public SlateUGSServerTarget(TargetInfo Target) : base(Target)
+	{
+		Type = TargetType.Server;
+		DefaultBuildSettings = BuildSettingsVersion.Latest;
+
+		ExtraModuleNames.Add("SlateUGS");
+	}
 }
