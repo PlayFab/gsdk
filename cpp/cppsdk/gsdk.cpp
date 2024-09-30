@@ -141,7 +141,10 @@ namespace Microsoft
             GSDKInternal::~GSDKInternal()
             {
                 m_keepHeartbeatRunning = false;
-                m_heartbeatThread.join();
+                if (m_heartbeatThread.joinable())
+                {
+                    m_heartbeatThread.join();
+                }
             }
 
 			//Do not need to acquire lock for configuration becase startLog is only called from the constructor.
@@ -508,6 +511,18 @@ namespace Microsoft
             {
                 GSDKInternal::m_debug = debugLogs;
                 GSDKInternal::get();
+            }
+
+            void GSDK::reset()
+            {
+                GSDKInternal::get().m_keepHeartbeatRunning = false;
+
+                if (GSDKInternal::get().m_heartbeatThread.joinable())
+                {
+                    GSDKInternal::get().m_heartbeatThread.join();
+                }
+
+                GSDKInternal::m_instance.reset();
             }
 
             bool GSDK::readyForPlayers()
