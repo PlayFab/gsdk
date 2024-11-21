@@ -10,3 +10,6 @@ Yup, PlayFab SDK and GSDK would reside in different folders in your Unity projec
 
 You can drag the `PlayFabSDK` folder to your Unity project. After that, you need to enable the scripring directive `ENABLE_PLAYFABSERVER_API` on your Build settings, like in [this screenshot](https://user-images.githubusercontent.com/8256138/81462605-a6d7ac80-9168-11ea-9748-110ed01095c2.png)
 
+### Heartbeats are failing when I run in container mode (no heartbeat error), what should I do?
+
+GSDK sends game server heartbeats to the PlayFab VmAgent process (which is in the same VM as the game server) using plain HTTP calls. Unity disallows that by default, but you can enable it in "project settings > player > other settings > allow downloads over http".
