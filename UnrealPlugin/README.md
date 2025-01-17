@@ -5,7 +5,7 @@ This article describes how to integrate PlayFab Multiplayer Server SDK (GSDK) Un
 This plugin offers both a Blueprint API and a C++ API. The Blueprint API still requires your Unreal Project to be a C++ project, and will not work on a Blueprint only project. If it is currently a Blueprint only project, then you need to convert to a C++ project beforehand, before adding the plugin.
 
 
-**The current implementation has been tested for the following versions: 5.2, 5.3, and 5.4.**
+**The current implementation has been tested for the following versions: 5.3, 5.4, and 5.5.**
 
 The sample game these instructions were created with was called ThirdPersonMP, so replace anywhere you see that with your game name.
 
