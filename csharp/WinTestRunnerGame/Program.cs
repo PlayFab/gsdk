@@ -109,7 +109,7 @@ namespace WinTestRunnerGame
                 _listener.Prefixes.Add(address);
                 _listener.Start();
 
-                string applicationDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+                string applicationDirectory = AppContext.BaseDirectory;
                 if (File.Exists(Path.Combine(applicationDirectory, AssetFilePath)))
                 {
                     _assetFileText = File.ReadAllText(Path.Combine(applicationDirectory, AssetFilePath));
