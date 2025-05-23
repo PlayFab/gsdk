@@ -526,7 +526,7 @@ namespace Microsoft
                 return GSDKInternal::get().m_connectionInfo;
             }
 
-            const std::unordered_map<std::string, std::string> &GSDK::getConfigSettings()
+            std::unordered_map<std::string, std::string> GSDK::getConfigSettings()
             {
 				std::lock_guard<std::mutex> lock(GSDKInternal::get().m_configMutex);
                 return GSDKInternal::get().m_configSettings;
@@ -565,19 +565,16 @@ namespace Microsoft
                 return 0;
             }
 
-            const std::string &GSDK::getLogsDirectory()
+            std::string GSDK::getLogsDirectory()
             {
-                // Declare as static so that it doesn't live on the stack (since we're returning a reference)
-                static const std::string empty = "";
-
 				std::lock_guard<std::mutex> lock(GSDKInternal::get().m_configMutex);
 
-                const std::unordered_map<std::string, std::string> config = GSDKInternal::get().m_configSettings;
+                const std::unordered_map<std::string, std::string>& config = GSDKInternal::get().m_configSettings;
                 auto it = config.find(GSDK::LOG_FOLDER_KEY);
 
                 if (it == config.end())
                 {
-                    return empty;
+                    return "";
                 }
                 else
                 {
@@ -585,20 +582,17 @@ namespace Microsoft
                 }
             }
 
-            const std::string &GSDK::getSharedContentDirectory()
+            std::string GSDK::getSharedContentDirectory()
             {
-                // Declare as static so that it doesn't live on the stack (since we're returning a reference)
-                static const std::string empty = "";
-
 				std::lock_guard<std::mutex> lock(GSDKInternal::get().m_configMutex);
 
-				const std::unordered_map<std::string, std::string> config = GSDKInternal::get().m_configSettings;
+				const std::unordered_map<std::string, std::string>& config = GSDKInternal::get().m_configSettings;
 
                 auto it = config.find(GSDK::SHARED_CONTENT_FOLDER_KEY);
 
                 if (it == config.end())
                 {
-                    return empty;
+                    return "";
                 }
                 else
                 {
