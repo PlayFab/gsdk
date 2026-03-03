@@ -19,7 +19,7 @@ jobs:
         uses: microsoft/setup-msbuild@v2
 
       - name: Build
-        run: msbuild cpp\GSDK.sln /p:Configuration=Release /p:Platform=x64 /p:WindowsTargetPlatformVersion=10.0
+        run: msbuild cpp\GSDK.sln /t:GSDK_CPP_UnitTests /p:Configuration=Release /p:Platform=x64 /p:WindowsTargetPlatformVersion=10.0
 
       - name: Test
         shell: pwsh

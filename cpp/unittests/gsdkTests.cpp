@@ -227,7 +227,7 @@ namespace Microsoft
                     Assert::AreEqual(1523552310LL, _mkgmtime(&schedule.m_events[0].m_notBefore), L"Verify maintenance V2 callback with correct time was called.");
                     Assert::AreEqual("eventDescription", schedule.m_events[0].m_description.c_str(), L"Verify maintenance V2 callback with correct description was called.");
                     Assert::AreEqual("Platform", schedule.m_events[0].m_eventSource.c_str(), L"Verify maintenance V2 callback with correct source was called.");
-                    Assert::AreEqual(3600, schedule.m_events[0].m_durationInSeconds, L"Verify maintenance V2 callback with correct duration was called.");
+                    Assert::AreEqual(3600u, schedule.m_events[0].m_durationInSeconds, L"Verify maintenance V2 callback with correct duration was called.");
                 }
 
                 TEST_METHOD(DecodeAgentResponse_JsonDoesntCrash)
