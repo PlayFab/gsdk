@@ -1,0 +1,28 @@
+name: Java GSDK Tests
+
+on:
+  pull_request:
+    paths:
+      - 'java/**'
+      - '.github/workflows/java-tests.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '8'
+
+      - name: Build
+        run: cd java && ./gradlew build
+
+      - name: Test
+        run: cd java && ./gradlew :gameserverSDK:test
