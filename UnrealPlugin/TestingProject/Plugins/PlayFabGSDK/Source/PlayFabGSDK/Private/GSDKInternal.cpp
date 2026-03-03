@@ -242,24 +242,35 @@ void FGSDKInternal::ReceiveHeartbeat()
 	for (int i = 0; i < TempHeartbeats.Num(); i++)
 	{
 		FHttpRequestPtr EachHeartbeat = TempHeartbeats[i];
+
+		// Skip requests that haven't completed yet
+		EHttpRequestStatus::Type RequestStatus = EachHeartbeat->GetStatus();
+		if (RequestStatus == EHttpRequestStatus::Processing || RequestStatus == EHttpRequestStatus::NotStarted)
+		{
+			continue;
+		}
+
+		// Request has completed (success or failure), mark for removal
+		killIndex = i;
+
 		const FHttpResponsePtr Response = EachHeartbeat->GetResponse();
 		if (!Response.IsValid())
 		{
 			continue;
 		}
 
+		if (Response->GetResponseCode() < 200 || Response->GetResponseCode() >= 300)
+		{
+			UE_LOG(LogPlayFabGSDK, Error, TEXT("Received non-success code from Agent.  Status Code: %d Response Body: %s"), Response->GetResponseCode(), *Response->GetContentAsString());
+			continue;
+		}
+
 		FString ContentString = Response->GetContentAsString();
-		if (ContentString.Len() != Response->GetContentLength())
+		if (ContentString.IsEmpty())
 		{
 			continue;
 		}
 
-		killIndex = i;
-		if (Response->GetResponseCode() >= 300)
-		{
-			UE_LOG(LogPlayFabGSDK, Error, TEXT("Received non-success code from Agent.  Status Code: %d Response Body: %s"), Response->GetResponseCode(), *ContentString);
-			continue;
-		}
 		// A trivial optimization to shortcut some work near shutdown time
 		if (this->KeepHeartbeatRunning)
 		{
