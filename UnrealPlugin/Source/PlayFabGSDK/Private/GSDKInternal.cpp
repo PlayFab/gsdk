@@ -243,11 +243,13 @@ void FGSDKInternal::ReceiveHeartbeat()
 	{
 		FHttpRequestPtr EachHeartbeat = TempHeartbeats[i];
 
-		// Skip requests that haven't completed yet
+		// Stop processing if this request hasn't completed yet, since the
+		// killIndex-based removal below removes all entries from 0..killIndex
+		// and we must not skip over incomplete earlier requests.
 		EHttpRequestStatus::Type RequestStatus = EachHeartbeat->GetStatus();
 		if (RequestStatus == EHttpRequestStatus::Processing || RequestStatus == EHttpRequestStatus::NotStarted)
 		{
-			continue;
+			break;
 		}
 
 		// Request has completed (success or failure), mark for removal
