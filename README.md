@@ -15,6 +15,27 @@ PlayFab Game Server SDK for C#, C++, and Java environments.  The GSDK is used to
 
 Check the [gsdkSamples](https://github.com/PlayFab/gsdkSamples) repo.
 
+## AI Skill: Validate Your GSDK Integration
+
+This repo includes a **[validate-gsdk](.github/skills/validate-gsdk/)** [Agent Skill](https://agentskills.io) that checks your GSDK integration for common mistakes — missing callbacks, threading issues, deprecated APIs, and more. It works with **GitHub Copilot** and **Claude Code**.
+
+To use it, copy the skill into your game server project:
+
+```bash
+# GitHub Copilot
+cp -r path/to/gsdk/.github/skills/validate-gsdk .github/skills/
+
+# Claude Code
+cp -r path/to/gsdk/.github/skills/validate-gsdk .claude/skills/
+```
+
+Then ask your AI assistant:
+```
+Use the /validate-gsdk skill to check my GSDK integration.
+```
+
+See the [skill README](.github/skills/validate-gsdk/README.md) for full details and example output.
+
 ## Contact Us
 
 We love to hear from our developer community!
@@ -22,7 +43,7 @@ Do you have ideas on how we can make our products and services better?
 
 Our Developer Success Team can assist with answering any questions as well as process any feedback you have about PlayFab services.
 
-[Forums, Support and Knowledge Base](https://community.playfab.com/index.html)
+[Microsoft Game Dev Discord](https://aka.ms/msftgamedevdiscord)
 
 ## Contributing
 
