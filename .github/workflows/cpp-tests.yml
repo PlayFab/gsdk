@@ -1,0 +1,29 @@
+name: C++ GSDK Tests
+
+on:
+  pull_request:
+    paths:
+      - 'cpp/**'
+      - '.github/workflows/cpp-tests.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Add MSBuild to PATH
+        uses: microsoft/setup-msbuild@v2
+
+      - name: Build
+        run: msbuild cpp\GSDK.sln /t:GSDK_CPP_UnitTests /p:Configuration=Release /p:Platform=x64 /p:WindowsTargetPlatformVersion=10.0
+
+      - name: Test
+        shell: pwsh
+        run: |
+          $env:PATH += ";$pwd\cpp\dependencies\libcurl-vc15-x64-release-dll-ssl-dll-ipv6-sspi\bin;$pwd\cpp\dependencies\openssl"
+          $vsInstallPath = & "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe" -latest -property installationPath
+          & "$vsInstallPath\Common7\IDE\CommonExtensions\Microsoft\TestWindow\vstest.console.exe" "cpp\x64\Release\GSDKCPPUnitTests\GSDK_CPP_UnitTests.dll" /Platform:x64

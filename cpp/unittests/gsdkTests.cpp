@@ -193,22 +193,22 @@ namespace Microsoft
                                 },
                                 "maintenanceSchedule": 
                                 {
-                                    "DocumentIncarnation": "IncarnationID",
+                                    "documentIncarnation": "IncarnationID",
                                     "Events": 
                                     [
                                         {
-                                            "EventId": "eventID",
-                                            "EventType": "Reboot",
-                                            "ResourceType": "VirtualMachine",
+                                            "eventId": "eventID",
+                                            "eventType": "Reboot",
+                                            "resourceType": "VirtualMachine",
                                             "Resources": 
                                             [
                                                 "resourceName"
                                             ],
-                                            "EventStatus": "Scheduled",
-                                            "NotBefore": "2018-04-12T16:58:30.1458776Z",
-                                            "Description": "eventDescription",
-                                            "EventSource": "Platform",
-                                            "DurationInSeconds": 3600
+                                            "eventStatus": "Scheduled",
+                                            "notBefore": "2018-04-12T16:58:30.1458776Z",
+                                            "description": "eventDescription",
+                                            "eventSource": "Platform",
+                                            "durationInSeconds": 3600
                                         }
                                     ]
                                 },
@@ -227,7 +227,7 @@ namespace Microsoft
                     Assert::AreEqual(1523552310LL, _mkgmtime(&schedule.m_events[0].m_notBefore), L"Verify maintenance V2 callback with correct time was called.");
                     Assert::AreEqual("eventDescription", schedule.m_events[0].m_description.c_str(), L"Verify maintenance V2 callback with correct description was called.");
                     Assert::AreEqual("Platform", schedule.m_events[0].m_eventSource.c_str(), L"Verify maintenance V2 callback with correct source was called.");
-                    Assert::AreEqual(3600, schedule.m_events[0].m_durationInSeconds, L"Verify maintenance V2 callback with correct duration was called.");
+                    Assert::AreEqual(3600u, schedule.m_events[0].m_durationInSeconds, L"Verify maintenance V2 callback with correct duration was called.");
                 }
 
                 TEST_METHOD(DecodeAgentResponse_JsonDoesntCrash)
