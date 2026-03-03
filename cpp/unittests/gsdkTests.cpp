@@ -193,22 +193,22 @@ namespace Microsoft
                                 },
                                 "maintenanceSchedule": 
                                 {
-                                    "DocumentIncarnation": "IncarnationID",
+                                    "documentIncarnation": "IncarnationID",
                                     "Events": 
                                     [
                                         {
-                                            "EventId": "eventID",
-                                            "EventType": "Reboot",
-                                            "ResourceType": "VirtualMachine",
+                                            "eventId": "eventID",
+                                            "eventType": "Reboot",
+                                            "resourceType": "VirtualMachine",
                                             "Resources": 
                                             [
                                                 "resourceName"
                                             ],
-                                            "EventStatus": "Scheduled",
-                                            "NotBefore": "2018-04-12T16:58:30.1458776Z",
-                                            "Description": "eventDescription",
-                                            "EventSource": "Platform",
-                                            "DurationInSeconds": 3600
+                                            "eventStatus": "Scheduled",
+                                            "notBefore": "2018-04-12T16:58:30.1458776Z",
+                                            "description": "eventDescription",
+                                            "eventSource": "Platform",
+                                            "durationInSeconds": 3600
                                         }
                                     ]
                                 },
