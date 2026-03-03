@@ -320,6 +320,9 @@ gradle-app.setting
 
 ## End Android
 
+# GSDK log output files generated during tests
+GSDK_output_*.txt
+
 # Maven
 /java/gameserverSDK/target/*
 pom.xml.releaseBackup
