@@ -1,0 +1,25 @@
+name: Unreal GSDK Tests
+
+on:
+  pull_request:
+    paths:
+      - 'UnrealPlugin/**'
+      - '.github/workflows/unreal-tests.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Configure CMake
+        run: cmake -S UnrealPlugin/Tests -B UnrealPlugin/Tests/build
+
+      - name: Build
+        run: cmake --build UnrealPlugin/Tests/build
+
+      - name: Test
+        run: ctest --test-dir UnrealPlugin/Tests/build --output-on-failure
