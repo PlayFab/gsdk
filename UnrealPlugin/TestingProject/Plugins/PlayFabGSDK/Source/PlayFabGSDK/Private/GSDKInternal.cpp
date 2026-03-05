@@ -203,6 +203,12 @@ void FGSDKInternal::StartLog()
 
 void FGSDKInternal::SendHeartbeat()
 {
+	if (!FModuleManager::Get().IsModuleLoaded(TEXT("HTTP")))
+	{
+		UE_LOG(LogPlayFabGSDK, Warning, TEXT("HTTP module is not loaded, skipping heartbeat."));
+		return;
+	}
+
 	TSharedRef<IHttpRequest, ESPMode::ThreadSafe> Request = FHttpModule::Get().CreateRequest();
 	for (const auto& HttpHeader : HttpHeaders)
 	{
