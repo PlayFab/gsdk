@@ -41,18 +41,6 @@ func ready_for_players() -> bool:
 	return _internal.current_game_state == PlayFabGsdkTypes.GameState.ACTIVE
 
 
-## [b]Experimental[/b] — Transitions the game server state to Active.[br]
-## Only works when the game server is in StandingBy state.
-## Returns [code]true[/code] on success, [code]false[/code] on failure.
-func mark_allocated() -> bool:
-	if _internal.current_game_state != PlayFabGsdkTypes.GameState.STANDING_BY:
-		push_error("GSDK: Game server is not in the StandingBy state to be marked allocated")
-		return false
-	_internal.current_game_state = PlayFabGsdkTypes.GameState.ACTIVE
-	_internal.transition_to_active.emit()
-	return true
-
-
 ## Logs a message to the GSDK log output.
 func log_message(message: String) -> void:
 	_internal.start_internal()

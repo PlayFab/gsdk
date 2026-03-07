@@ -2,8 +2,6 @@
 
 This is an implementation of the PlayFab Game Server SDK (GSDK) for the [Godot Engine](https://godotengine.org/) (4.x) using GDScript. It's considered experimental and is not yet ready for production use or supported. Expect bugs and breaking changes :)
 
-This version of GSDK is similar to the existing ones (C#, Java, C++, Go), apart from the fact that it contains a `mark_allocated()` method which internally sets the game server to active.
-
 ## Requirements
 
 - Godot Engine 4.x
@@ -31,8 +29,6 @@ Alternatively, you can manually add the autoload:
 ## Things to remember
 
 - `ready_for_players()` is async. It blocks using `await` until the game server transitions to Active. Use `await PlayFabGSDK.ready_for_players()`.
-- `mark_allocated()` works only when the game server is in StandingBy state. Call `ready_for_players()` first (without `await`) to transition to StandingBy, then call `mark_allocated()` while `ready_for_players()` is still waiting for activation. For the time being, this method *should not* be used since it requires configuration settings on the Multiplayer Servers backend for each title.
-- `RequestMultiplayerServer` API must *not* be called on a Build that uses `mark_allocated()`. It will probably work on the server side, but there is a small chance of concurrency issues if the two operations (`RequestMultiplayerServer` and `mark_allocated`) happen at the same time.
 
 ## Configuration
 
@@ -77,35 +73,6 @@ func _on_shutdown() -> void:
 
 func _on_maintenance(maintenance_time: String) -> void:
     PlayFabGSDK.log_message("Maintenance scheduled at: %s" % maintenance_time)
-```
-
-### Using `mark_allocated()` (Experimental)
-
-```gdscript
-extends Node
-
-func _ready() -> void:
-    PlayFabGSDK.register_health_callback(func() -> bool: return true)
-    PlayFabGSDK.register_shutdown_callback(func() -> void:
-        PlayFabGSDK.log_message("Shutting down")
-    )
-    PlayFabGSDK.start()
-
-    # Schedule mark_allocated to fire after 300 seconds (runs concurrently)
-    _schedule_mark_allocated()
-
-    # ready_for_players transitions to StandingBy and awaits Active
-    PlayFabGSDK.log_message("Before ReadyForPlayers")
-    var is_active := await PlayFabGSDK.ready_for_players()
-    PlayFabGSDK.log_message("After ReadyForPlayers, active: %s" % str(is_active))
-
-# Called without await so it runs concurrently with ready_for_players
-func _schedule_mark_allocated() -> void:
-    await get_tree().create_timer(300.0).timeout
-    PlayFabGSDK.log_message("Marking allocated")
-    var success := PlayFabGSDK.mark_allocated()
-    if not success:
-        PlayFabGSDK.log_message("Failed to mark allocated")
 ```
 
 ### Updating Connected Players
