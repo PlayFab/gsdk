@@ -149,7 +149,10 @@ func _update_state_from_heartbeat(response: Dictionary) -> void:
 		if session_config.has("initialPlayers") and session_config["initialPlayers"] is Array:
 			var players: Array = session_config["initialPlayers"]
 			if players.size() > 0:
-				initial_players = PackedStringArray(players)
+				var string_players: PackedStringArray = []
+				for p in players:
+					string_players.append(str(p))
+				initial_players = string_players
 
 		if session_config.has("metadata") and session_config["metadata"] is Dictionary:
 			var metadata: Dictionary = session_config["metadata"]

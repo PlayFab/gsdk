@@ -12,7 +12,8 @@ func initialize(directory: String) -> void:
 		DirAccess.make_dir_recursive_absolute(directory)
 
 	var timestamp := int(Time.get_unix_time_from_system())
-	var filename := "%s/GSDK_output_%d.txt" % [directory, timestamp]
+	var pid := OS.get_process_id()
+	var filename := "%s/GSDK_output_%d_%d.txt" % [directory, timestamp, pid]
 	_log_file = FileAccess.open(filename, FileAccess.WRITE)
 	if _log_file == null:
 		push_error("GSDK: Failed to open log file: %s" % filename)

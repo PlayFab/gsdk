@@ -31,7 +31,7 @@ Alternatively, you can manually add the autoload:
 ## Things to remember
 
 - `ready_for_players()` is async. It blocks using `await` until the game server transitions to Active. Use `await PlayFabGSDK.ready_for_players()`.
-- `mark_allocated()` works only when the game server is in StandingBy state, so it should be called after `ready_for_players()` is called. For the time being, this method *should not* be used since it requires configuration settings on the Multiplayer Servers backend for each title.
+- `mark_allocated()` works only when the game server is in StandingBy state. Call `ready_for_players()` first (without `await`) to transition to StandingBy, then call `mark_allocated()` while `ready_for_players()` is still waiting for activation. For the time being, this method *should not* be used since it requires configuration settings on the Multiplayer Servers backend for each title.
 - `RequestMultiplayerServer` API must *not* be called on a Build that uses `mark_allocated()`. It will probably work on the server side, but there is a small chance of concurrency issues if the two operations (`RequestMultiplayerServer` and `mark_allocated`) happen at the same time.
 
 ## Configuration
@@ -90,10 +90,17 @@ func _ready() -> void:
         PlayFabGSDK.log_message("Shutting down")
     )
     PlayFabGSDK.start()
-    _do_mark_allocated()
 
-func _do_mark_allocated() -> void:
-    # Start a timer to mark allocated after some condition is met
+    # Schedule mark_allocated to fire after 300 seconds (runs concurrently)
+    _schedule_mark_allocated()
+
+    # ready_for_players transitions to StandingBy and awaits Active
+    PlayFabGSDK.log_message("Before ReadyForPlayers")
+    var is_active := await PlayFabGSDK.ready_for_players()
+    PlayFabGSDK.log_message("After ReadyForPlayers, active: %s" % str(is_active))
+
+# Called without await so it runs concurrently with ready_for_players
+func _schedule_mark_allocated() -> void:
     await get_tree().create_timer(300.0).timeout
     PlayFabGSDK.log_message("Marking allocated")
     var success := PlayFabGSDK.mark_allocated()
