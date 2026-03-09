@@ -1,10 +1,10 @@
+extends Node
 ## PlayFab Game Server SDK (GSDK) for Godot Engine.
 ##
 ## Add this script as an Autoload singleton named "PlayFabGSDK" in your Godot project,
 ## either manually or by enabling the PlayFab GSDK plugin.
 ## This provides the public API for integrating your Godot game server with
 ## PlayFab Multiplayer Servers.
-extends Node
 
 var _internal: Node = null
 
@@ -37,7 +37,7 @@ func ready_for_players() -> bool:
 	_internal.start_internal()
 	if _internal.current_game_state != PlayFabGsdkTypes.GameState.ACTIVE:
 		_internal.current_game_state = PlayFabGsdkTypes.GameState.STANDING_BY
-		await _internal.transition_to_active
+		await _internal.transitioned_to_active
 	return _internal.current_game_state == PlayFabGsdkTypes.GameState.ACTIVE
 
 

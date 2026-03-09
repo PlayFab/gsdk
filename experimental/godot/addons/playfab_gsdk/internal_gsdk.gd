@@ -1,12 +1,12 @@
+extends Node
 ## Internal GSDK implementation.
 ##
 ## Handles heartbeat communication with the PlayFab Multiplayer Servers agent,
 ## game server state management, and configuration loading. This script is used
 ## internally by [code]gsdk.gd[/code] and should not be used directly.
-extends Node
 
 ## Emitted when the game server transitions to the Active state.
-signal transition_to_active
+signal transitioned_to_active
 
 var current_game_state: PlayFabGsdkTypes.GameState = PlayFabGsdkTypes.GameState.INVALID
 var configuration: Dictionary = {}
@@ -20,7 +20,7 @@ var cached_scheduled_maintenance_utc: String = ""
 var debug_logs: bool = false
 
 var _started: bool = false
-var _logger = preload("gsdk_logger.gd").new()
+var _logger := preload("gsdk_logger.gd").new()
 var _heartbeat_timer: Timer = null
 var _http_request: HTTPRequest = null
 var _heartbeat_endpoint: String = ""
@@ -87,7 +87,7 @@ func _send_heartbeat() -> void:
 	var players_array: Array = []
 	for player in connected_players:
 		if player is Dictionary:
-			players_array.append({"PlayerId": player.get("PlayerId", "")})
+			players_array.append({ "PlayerId": player.get("PlayerId", "") })
 
 	var heartbeat_request := {
 		"CurrentGameState": PlayFabGsdkTypes.game_state_to_string(current_game_state),
@@ -111,7 +111,10 @@ func _send_heartbeat() -> void:
 		_pending_heartbeat = false
 
 
-func _on_heartbeat_response(result: int, response_code: int, _headers: PackedStringArray, body: PackedByteArray) -> void:
+func _on_heartbeat_response(
+		result: int, response_code: int,
+		_headers: PackedStringArray, body: PackedByteArray
+) -> void:
 	_pending_heartbeat = false
 
 	if result != HTTPRequest.RESULT_SUCCESS:
@@ -176,7 +179,7 @@ func _update_state_from_heartbeat(response: Dictionary) -> void:
 			PlayFabGsdkTypes.GameOperation.ACTIVE:
 				if current_game_state != PlayFabGsdkTypes.GameState.ACTIVE:
 					current_game_state = PlayFabGsdkTypes.GameState.ACTIVE
-					transition_to_active.emit()
+					transitioned_to_active.emit()
 					_send_heartbeat()
 			PlayFabGsdkTypes.GameOperation.TERMINATE:
 				if current_game_state != PlayFabGsdkTypes.GameState.TERMINATING:
@@ -185,7 +188,7 @@ func _update_state_from_heartbeat(response: Dictionary) -> void:
 					if shutdown_callback.is_valid():
 						shutdown_callback.call()
 					# Unblock ready_for_players() if it is waiting
-					transition_to_active.emit()
+					transitioned_to_active.emit()
 
 
 func _load_configuration() -> String:
@@ -234,7 +237,8 @@ func _create_config_map() -> Dictionary:
 	cmap[PlayFabGsdkTypes.SERVER_ID_KEY] = str(configuration.get("sessionHostId", ""))
 	cmap[PlayFabGsdkTypes.VM_ID_KEY] = str(configuration.get("vmId", ""))
 	cmap[PlayFabGsdkTypes.LOG_FOLDER_KEY] = str(configuration.get("logFolder", ""))
-	cmap[PlayFabGsdkTypes.SHARED_CONTENT_FOLDER_KEY] = str(configuration.get("sharedContentFolder", ""))
+	var shared := str(configuration.get("sharedContentFolder", ""))
+	cmap[PlayFabGsdkTypes.SHARED_CONTENT_FOLDER_KEY] = shared
 	cmap[PlayFabGsdkTypes.CERTIFICATE_FOLDER_KEY] = str(configuration.get("certificateFolder", ""))
 	cmap[PlayFabGsdkTypes.TITLE_ID_KEY] = OS.get_environment("PF_TITLE_ID")
 	cmap[PlayFabGsdkTypes.BUILD_ID_KEY] = OS.get_environment("PF_BUILD_ID")
