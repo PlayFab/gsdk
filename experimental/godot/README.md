@@ -85,6 +85,29 @@ PlayFabGSDK.update_connected_players([
 ])
 ```
 
+## Running Tests
+
+Unit tests use the [GUT (Godot Unit Testing)](https://github.com/bitwes/Gut) framework.
+
+### Setup
+
+1. Install GUT in your Godot project. The easiest way is via the [Godot Asset Library](https://godotengine.org/asset-library/asset/1709):
+   - In the Godot Editor: **AssetLib > Search "GUT" > Download and Install**
+   - Or manually: clone [bitwes/Gut](https://github.com/bitwes/Gut) into `addons/gut/`
+2. Enable the GUT plugin: **Project > Project Settings > Plugins > Gut > Enable**
+
+### Running from the Editor
+
+1. Open the GUT panel: **Project > Tools > GUT**
+2. Set the test directory to `res://tests/`
+3. Click **Run All**
+
+### Running from the Command Line
+
+```bash
+godot --headless -s addons/gut/gut_cmdln.gd -gdir=res://tests/ -gexit
+```
+
 ### Getting Configuration
 
 ```gdscript
