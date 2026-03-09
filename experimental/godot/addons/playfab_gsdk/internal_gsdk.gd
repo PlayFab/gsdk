@@ -237,8 +237,9 @@ func _create_config_map() -> Dictionary:
 	cmap[PlayFabGsdkTypes.SERVER_ID_KEY] = str(configuration.get("sessionHostId", ""))
 	cmap[PlayFabGsdkTypes.VM_ID_KEY] = str(configuration.get("vmId", ""))
 	cmap[PlayFabGsdkTypes.LOG_FOLDER_KEY] = str(configuration.get("logFolder", ""))
-	var shared := str(configuration.get("sharedContentFolder", ""))
-	cmap[PlayFabGsdkTypes.SHARED_CONTENT_FOLDER_KEY] = shared
+	var shared_content_folder := str(
+			configuration.get("sharedContentFolder", ""))
+	cmap[PlayFabGsdkTypes.SHARED_CONTENT_FOLDER_KEY] = shared_content_folder
 	cmap[PlayFabGsdkTypes.CERTIFICATE_FOLDER_KEY] = str(configuration.get("certificateFolder", ""))
 	cmap[PlayFabGsdkTypes.TITLE_ID_KEY] = OS.get_environment("PF_TITLE_ID")
 	cmap[PlayFabGsdkTypes.BUILD_ID_KEY] = OS.get_environment("PF_BUILD_ID")
