@@ -1,22 +1,22 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "TestGameInstance.h"
+#include "TestGameInstanceGSDK.h"
 
 DEFINE_LOG_CATEGORY(LogPlayFabGSDKGameInstance);
 
-void UTestGameInstance::Init()
+void UTestGameInstanceGSDK::Init()
 {
 	FOnGSDKShutdown_Dyn OnGsdkShutdown;
-	OnGsdkShutdown.BindDynamic(this, &UTestGameInstance::OnGSDKShutdown);
+	OnGsdkShutdown.BindDynamic(this, &UTestGameInstanceGSDK::OnGSDKShutdown);
 	FOnGSDKHealthCheck_Dyn OnGsdkHealthCheck;
-	OnGsdkHealthCheck.BindDynamic(this, &UTestGameInstance::OnGSDKHealthCheck);
+	OnGsdkHealthCheck.BindDynamic(this, &UTestGameInstanceGSDK::OnGSDKHealthCheck);
 	FOnGSDKServerActive_Dyn OnGSDKServerActive;
-	OnGSDKServerActive.BindDynamic(this, &UTestGameInstance::OnGSDKServerActive);
+	OnGSDKServerActive.BindDynamic(this, &UTestGameInstanceGSDK::OnGSDKServerActive);
 	FOnGSDKReadyForPlayers_Dyn OnGSDKReadyForPlayers;
-	OnGSDKReadyForPlayers.BindDynamic(this, &UTestGameInstance::OnGSDKReadyForPlayers);
+	OnGSDKReadyForPlayers.BindDynamic(this, &UTestGameInstanceGSDK::OnGSDKReadyForPlayers);
 	FOnGSDKMaintenanceV2_Dyn OnGSDKMaintenanceV2;
-	OnGSDKMaintenanceV2.BindDynamic(this, &UTestGameInstance::OnGSDKMaintenanceV2);
+	OnGSDKMaintenanceV2.BindDynamic(this, &UTestGameInstanceGSDK::OnGSDKMaintenanceV2);
 
 	UGSDKUtils::RegisterGSDKShutdownDelegate(OnGsdkShutdown);
 	UGSDKUtils::RegisterGSDKHealthCheckDelegate(OnGsdkHealthCheck);
@@ -30,25 +30,25 @@ void UTestGameInstance::Init()
 #endif
 }
 
-void UTestGameInstance::OnStart()
+void UTestGameInstanceGSDK::OnStart()
 {
 	UE_LOG(LogPlayFabGSDKGameInstance, Warning, TEXT("Reached onStart!"));
 	UGSDKUtils::ReadyForPlayers();
 }
 
-void UTestGameInstance::OnGSDKShutdown()
+void UTestGameInstanceGSDK::OnGSDKShutdown()
 {
 	UE_LOG(LogPlayFabGSDKGameInstance, Warning, TEXT("Shutdown!"));
 	FPlatformMisc::RequestExit(false);
 }
 
-bool UTestGameInstance::OnGSDKHealthCheck()
+bool UTestGameInstanceGSDK::OnGSDKHealthCheck()
 {
 	UE_LOG(LogPlayFabGSDKGameInstance, Warning, TEXT("Healthy!"));
 	return true;
 }
 
-void UTestGameInstance::OnGSDKServerActive()
+void UTestGameInstanceGSDK::OnGSDKServerActive()
 {
 	/**
 	 * Server is transitioning to an active state.
@@ -58,7 +58,7 @@ void UTestGameInstance::OnGSDKServerActive()
 	UE_LOG(LogPlayFabGSDKGameInstance, Warning, TEXT("Active!"));
 }
 
-void UTestGameInstance::OnGSDKReadyForPlayers()
+void UTestGameInstanceGSDK::OnGSDKReadyForPlayers()
 {
 	/**
 	 * Server is transitioning to a StandBy state. Game initialization is complete and the game is ready
@@ -69,7 +69,7 @@ void UTestGameInstance::OnGSDKReadyForPlayers()
 	UE_LOG(LogPlayFabGSDKGameInstance, Warning, TEXT("Finished Initialization - Moving to StandBy!"));
 }
 
-void UTestGameInstance::OnGSDKMaintenanceV2(const FMaintenanceSchedule& schedule)
+void UTestGameInstanceGSDK::OnGSDKMaintenanceV2(const FMaintenanceSchedule& schedule)
 {
 	/**
 	* Server recieved a maintenance event.
