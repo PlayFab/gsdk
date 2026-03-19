@@ -29,7 +29,7 @@ Follow these steps to add the Unreal GSDK to your project:
 
 * Go to your Unreal game project
 * Open File Explorer and create a **Plugins** folder in your games' root directory. In the Plugins folder, create a folder called **PlayFabGSDK.**
-* Go to **{depot}\\GSDK\\gsdk\\UnrealPlugin**. Drag all the files from the **UnrealPlugin** folder into the **Plugins/PlayFabGSDK** folder.
+* Go to **{depot}\\GSDK\\gsdk\\UnrealPlugin**. Copy the **Source** folder, the **Resources** folder, and the **PlayFabGSDK.uplugin** file into the **Plugins/PlayFabGSDK** folder. You do not need the `Tests/`, `TestingProject/`, or `Documentation/` directories.
 * Lastly, open your game project's **.uproject** file in a text editor of your choice. In the plugins array, add the "PlayFabGSDK" plugin.
 
 See the example below:

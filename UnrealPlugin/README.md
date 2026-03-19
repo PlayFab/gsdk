@@ -9,6 +9,16 @@ This plugin offers both a Blueprint API and a C++ API. The Blueprint API still r
 
 The sample game these instructions were created with was called ThirdPersonMP, so replace anywhere you see that with your game name.
 
+## Plugin files
+
+When integrating the GSDK plugin into your Unreal project, you only need to copy the following into your project's `Plugins/PlayFabGSDK` folder:
+
+* `Source/` — Plugin source code
+* `Resources/` — Plugin resources
+* `PlayFabGSDK.uplugin` — Plugin descriptor
+
+> **Note:** The `Tests/`, `TestingProject/`, and `Documentation/` directories, along with the markdown and license files in this folder, are used for GSDK development and CI only. They are **not needed** when using the plugin in your game project and should not be copied.
+
 ## Requirements
 
 * Download Visual Studio. The [community version](https://visualstudio.microsoft.com/vs/community/) is free.
