@@ -5,7 +5,7 @@
 #include "CoreMinimal.h"
 #include "Engine/GameInstance.h"
 #include "GSDKUtils.h"
-#include "TestGameInstance.generated.h"
+#include "TestGameInstanceGSDk.generated.h"
 
 DECLARE_LOG_CATEGORY_EXTERN(LogPlayFabGSDKGameInstance, Log, All);
 
@@ -13,7 +13,7 @@ DECLARE_LOG_CATEGORY_EXTERN(LogPlayFabGSDKGameInstance, Log, All);
  * 
  */
 UCLASS()
-class SLATEUGS_API UTestGameInstance : public UGameInstance
+class SLATEUGS_API UTestGameInstanceGSDK : public UGameInstance
 {
 	GENERATED_BODY()
 
