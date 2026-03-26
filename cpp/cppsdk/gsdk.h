@@ -131,6 +131,9 @@ namespace Microsoft
                 /// <param name="debugLogs">Enables outputting additional logs to the GSDK log file.</param>
                 static void start(bool debugLogs = false);
 
+                /// <summary>Resets the GSDK state, joining all threads, requires start to be called before use again</summary>
+                static void reset();
+
                 /// <summary>Tells the Xcloud service information on who is connected.</summary>
                 /// <param name="currentlyConnectedPlayers"></param>
                 static void updateConnectedPlayers(const std::vector<ConnectedPlayer> &currentlyConnectedPlayers);
