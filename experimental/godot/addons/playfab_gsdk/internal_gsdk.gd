@@ -190,8 +190,10 @@ func _update_state_from_heartbeat(response: Dictionary) -> void:
 	var maintenance_time := ""
 	if response.has("maintenanceSchedule") and response["maintenanceSchedule"] is Dictionary:
 		var schedule: Dictionary = response["maintenanceSchedule"]
-		if schedule.has("events") and schedule["events"] is Array:
-			var events: Array = schedule["events"]
+		# Check both "Events" (JsonProperty override) and "events" (camelCase)
+		var events_key := "Events" if schedule.has("Events") else "events"
+		if schedule.has(events_key) and schedule[events_key] is Array:
+			var events: Array = schedule[events_key]
 			if events.size() > 0 and events[0] is Dictionary:
 				var first_event: Dictionary = events[0]
 				if first_event.has("notBefore"):

@@ -8,7 +8,7 @@ var _log_file: FileAccess = null
 
 ## Initializes the logger by opening a log file in the specified directory.
 func initialize(directory: String) -> void:
-	if not DirAccess.dir_exists(directory):
+	if not DirAccess.dir_exists_absolute(directory):
 		DirAccess.make_dir_recursive_absolute(directory)
 
 	var timestamp := int(Time.get_unix_time_from_system())
