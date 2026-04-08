@@ -1,0 +1,16 @@
+; Engine configuration file.
+; It's best edited using the editor UI and not directly,
+; but it can also be manually edited with care.
+
+[application]
+
+config/name="PlayFab GSDK Tests"
+config/features=PackedStringArray("4.4")
+
+[autoload]
+
+PlayFabGSDK="*res://addons/playfab_gsdk/gsdk.gd"
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/playfab_gsdk/plugin.cfg")
