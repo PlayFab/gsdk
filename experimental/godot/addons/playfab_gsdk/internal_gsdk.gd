@@ -25,6 +25,7 @@ var _heartbeat_timer: Timer = null
 var _http_request: HTTPRequest = null
 var _heartbeat_endpoint: String = ""
 var _pending_heartbeat: bool = false
+var _gsdkinfo_http_request: HTTPRequest = null
 
 
 ## Initializes the GSDK: loads configuration, sets up the heartbeat timer and
@@ -67,7 +68,30 @@ func start_internal() -> void:
 	_http_request.request_completed.connect(_on_heartbeat_response)
 	add_child(_http_request)
 
+	# Report GSDK version info (best-effort, matches C#/Java SDK behavior)
+	_gsdkinfo_http_request = HTTPRequest.new()
+	_gsdkinfo_http_request.request_completed.connect(_on_gsdkinfo_response)
+	add_child(_gsdkinfo_http_request)
+	_send_gsdkinfo(heartbeat_endpoint, server_id)
+
 	_started = true
+
+
+func _send_gsdkinfo(heartbeat_endpoint: String, server_id: String) -> void:
+	var url := "http://%s/v1/metrics/%s/gsdkinfo" % [heartbeat_endpoint, server_id]
+	var body := JSON.stringify({ "Flavor": "Godot", "Version": "1.0.0" })
+	var headers := PackedStringArray(["Content-Type: application/json"])
+	var error := _gsdkinfo_http_request.request(url, headers, HTTPClient.METHOD_POST, body)
+	if error != OK:
+		_logger.log_warn("Failed to send GSDK info: %s" % str(error))
+
+
+func _on_gsdkinfo_response(
+		result: int, response_code: int,
+		_headers: PackedStringArray, _body: PackedByteArray
+) -> void:
+	if result != HTTPRequest.RESULT_SUCCESS or response_code < 200 or response_code >= 300:
+		_logger.log_warn("GSDK info report failed (non-fatal): result=%d code=%d" % [result, response_code])
 
 
 func _on_heartbeat_timer() -> void:
@@ -162,13 +186,22 @@ func _update_state_from_heartbeat(response: Dictionary) -> void:
 			for key in metadata:
 				config_map[key] = str(metadata[key])
 
-	# Process scheduled maintenance
-	if response.has("nextScheduledMaintenanceUtc"):
-		var maintenance_time := str(response["nextScheduledMaintenanceUtc"])
-		if maintenance_time != "" and maintenance_time != cached_scheduled_maintenance_utc:
-			cached_scheduled_maintenance_utc = maintenance_time
-			if maintenance_callback.is_valid():
-				maintenance_callback.call(maintenance_time)
+	# Process scheduled maintenance (new format first, legacy fallback)
+	var maintenance_time := ""
+	if response.has("maintenanceSchedule") and response["maintenanceSchedule"] is Dictionary:
+		var schedule: Dictionary = response["maintenanceSchedule"]
+		if schedule.has("events") and schedule["events"] is Array:
+			var events: Array = schedule["events"]
+			if events.size() > 0 and events[0] is Dictionary:
+				var first_event: Dictionary = events[0]
+				if first_event.has("notBefore"):
+					maintenance_time = str(first_event["notBefore"])
+	if maintenance_time == "" and response.has("nextScheduledMaintenanceUtc"):
+		maintenance_time = str(response["nextScheduledMaintenanceUtc"])
+	if maintenance_time != "" and maintenance_time != cached_scheduled_maintenance_utc:
+		cached_scheduled_maintenance_utc = maintenance_time
+		if maintenance_callback.is_valid():
+			maintenance_callback.call(maintenance_time)
 
 	# Process operation from agent
 	if response.has("operation"):
@@ -244,7 +277,7 @@ func _create_config_map() -> Dictionary:
 	cmap[PlayFabGsdkTypes.TITLE_ID_KEY] = OS.get_environment("PF_TITLE_ID")
 	cmap[PlayFabGsdkTypes.BUILD_ID_KEY] = OS.get_environment("PF_BUILD_ID")
 	cmap[PlayFabGsdkTypes.REGION_KEY] = OS.get_environment("PF_REGION")
-	cmap[PlayFabGsdkTypes.IPV4_ADDRESS_KEY] = str(configuration.get("IpV4Address", ""))
+	cmap[PlayFabGsdkTypes.IPV4_ADDRESS_KEY] = str(configuration.get("publicIpV4Address", ""))
 	cmap[PlayFabGsdkTypes.FQDN_KEY] = str(configuration.get("fullyQualifiedDomainName", ""))
 
 	return cmap

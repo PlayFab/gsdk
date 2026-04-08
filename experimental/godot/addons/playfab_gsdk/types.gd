@@ -38,7 +38,7 @@ const TITLE_ID_KEY := "titleId"
 const BUILD_ID_KEY := "buildId"
 const REGION_KEY := "region"
 const VM_ID_KEY := "vmId"
-const IPV4_ADDRESS_KEY := "IpV4Address"
+const IPV4_ADDRESS_KEY := "publicIpV4Address"
 const FQDN_KEY := "fullyQualifiedDomainName"
 
 

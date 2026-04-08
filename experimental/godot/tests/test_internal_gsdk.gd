@@ -29,7 +29,7 @@ func test_create_config_map_extracts_all_fields() -> void:
 		"logFolder": "/tmp/logs",
 		"sharedContentFolder": "/shared",
 		"certificateFolder": "/certs",
-		"IpV4Address": "10.0.0.1",
+		"publicIpV4Address": "10.0.0.1",
 		"fullyQualifiedDomainName": "test.playfab.com",
 		"gameCertificates": { "cert1": "/path/to/cert" },
 		"buildMetadata": { "version": "1.0" },
@@ -247,6 +247,46 @@ func test_heartbeat_processes_maintenance_callback() -> void:
 		_internal.cached_scheduled_maintenance_utc,
 		"2026-01-15T10:00:00Z",
 	)
+
+
+func test_heartbeat_processes_maintenance_schedule() -> void:
+	var received_time := ""
+	_internal.maintenance_callback = func(time: String) -> void:
+		received_time = time
+	_internal._update_state_from_heartbeat({
+		"maintenanceSchedule": {
+			"events": [
+				{
+					"eventId": "evt-1",
+					"eventType": "Reboot",
+					"notBefore": "2026-02-20T14:00:00Z",
+					"description": "Scheduled reboot",
+				},
+			],
+		},
+	})
+	assert_eq(received_time, "2026-02-20T14:00:00Z")
+	assert_eq(
+		_internal.cached_scheduled_maintenance_utc,
+		"2026-02-20T14:00:00Z",
+	)
+
+
+func test_heartbeat_maintenance_schedule_takes_precedence() -> void:
+	var received_time := ""
+	_internal.maintenance_callback = func(time: String) -> void:
+		received_time = time
+	_internal._update_state_from_heartbeat({
+		"maintenanceSchedule": {
+			"events": [
+				{
+					"notBefore": "2026-03-01T08:00:00Z",
+				},
+			],
+		},
+		"nextScheduledMaintenanceUtc": "2026-01-15T10:00:00Z",
+	})
+	assert_eq(received_time, "2026-03-01T08:00:00Z")
 
 
 func test_heartbeat_maintenance_not_called_if_unchanged() -> void:

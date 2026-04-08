@@ -98,5 +98,5 @@ func test_config_key_constants() -> void:
 	assert_eq(PlayFabGsdkTypes.BUILD_ID_KEY, "buildId")
 	assert_eq(PlayFabGsdkTypes.REGION_KEY, "region")
 	assert_eq(PlayFabGsdkTypes.VM_ID_KEY, "vmId")
-	assert_eq(PlayFabGsdkTypes.IPV4_ADDRESS_KEY, "IpV4Address")
+	assert_eq(PlayFabGsdkTypes.IPV4_ADDRESS_KEY, "publicIpV4Address")
 	assert_eq(PlayFabGsdkTypes.FQDN_KEY, "fullyQualifiedDomainName")
