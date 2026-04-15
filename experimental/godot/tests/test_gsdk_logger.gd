@@ -14,7 +14,7 @@ func before_each() -> void:
 
 func after_each() -> void:
 	_logger = null
-	if _test_dir != "" and DirAccess.dir_exists(_test_dir):
+	if _test_dir != "" and DirAccess.dir_exists_absolute(_test_dir):
 		var dir := DirAccess.open(_test_dir)
 		if dir != null:
 			dir.list_dir_begin()
@@ -27,9 +27,9 @@ func after_each() -> void:
 
 
 func test_initialize_creates_directory() -> void:
-	assert_false(DirAccess.dir_exists(_test_dir))
+	assert_false(DirAccess.dir_exists_absolute(_test_dir))
 	_logger.initialize(_test_dir)
-	assert_true(DirAccess.dir_exists(_test_dir))
+	assert_true(DirAccess.dir_exists_absolute(_test_dir))
 
 
 func test_initialize_creates_log_file() -> void:

@@ -35,7 +35,7 @@ func test_create_config_map_extracts_all_fields() -> void:
 		"buildMetadata": { "version": "1.0" },
 		"gamePorts": { "game_port": "7777" },
 	}
-	var config := _internal._create_config_map()
+	var config: Dictionary = _internal._create_config_map()
 
 	assert_eq(config[PlayFabGsdkTypes.HEARTBEAT_ENDPOINT_KEY], "localhost:56001")
 	assert_eq(config[PlayFabGsdkTypes.SERVER_ID_KEY], "test-host-id")
@@ -52,7 +52,7 @@ func test_create_config_map_extracts_all_fields() -> void:
 
 func test_create_config_map_handles_missing_optional_fields() -> void:
 	_internal.configuration = {}
-	var config := _internal._create_config_map()
+	var config: Dictionary = _internal._create_config_map()
 
 	assert_eq(config[PlayFabGsdkTypes.HEARTBEAT_ENDPOINT_KEY], "")
 	assert_eq(config[PlayFabGsdkTypes.SERVER_ID_KEY], "")
@@ -68,7 +68,7 @@ func test_create_config_map_skips_non_dict_game_certs() -> void:
 	_internal.configuration = {
 		"gameCertificates": "not_a_dict",
 	}
-	var config := _internal._create_config_map()
+	var config: Dictionary = _internal._create_config_map()
 	# Should not crash and should not contain gameCertificates entries
 	assert_false(config.has("not_a_dict"))
 
@@ -77,7 +77,7 @@ func test_create_config_map_skips_non_dict_build_metadata() -> void:
 	_internal.configuration = {
 		"buildMetadata": 42,
 	}
-	var config := _internal._create_config_map()
+	var config: Dictionary = _internal._create_config_map()
 	assert_eq(config[PlayFabGsdkTypes.HEARTBEAT_ENDPOINT_KEY], "")
 
 
@@ -85,7 +85,7 @@ func test_create_config_map_skips_non_dict_game_ports() -> void:
 	_internal.configuration = {
 		"gamePorts": [],
 	}
-	var config := _internal._create_config_map()
+	var config: Dictionary = _internal._create_config_map()
 	assert_eq(config[PlayFabGsdkTypes.HEARTBEAT_ENDPOINT_KEY], "")
 
 
