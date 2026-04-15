@@ -1,0 +1,40 @@
+name: Godot GSDK Tests
+
+on:
+  pull_request:
+    paths:
+      - 'experimental/godot/**'
+      - '.github/workflows/godot-tests.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Godot
+        uses: chickensoft-games/setup-godot@v2
+        with:
+          version: 4.4.1
+          use-dotnet: false
+          include-templates: false
+
+      - name: Install GUT
+        working-directory: experimental/godot
+        run: |
+          GUT_VERSION="9.4.0"
+          curl -sL "https://github.com/bitwes/Gut/archive/refs/tags/v${GUT_VERSION}.tar.gz" -o gut.tar.gz
+          tar -xzf gut.tar.gz
+          cp -r "Gut-${GUT_VERSION}/addons/gut" addons/gut
+          rm -rf gut.tar.gz "Gut-${GUT_VERSION}"
+
+      - name: Import Godot project
+        working-directory: experimental/godot
+        run: godot --headless --import --quit || true
+
+      - name: Run tests
+        working-directory: experimental/godot
+        run: godot --headless -s addons/gut/gut_cmdln.gd -gdir=res://tests/ -ginclude_subdirs -gexit
