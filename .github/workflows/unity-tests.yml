@@ -24,4 +24,4 @@ jobs:
         run: dotnet build UnityGsdk/Tests/Tests.csproj
 
       - name: Test
-        run: dotnet test UnityGsdk/Tests/Tests.csproj
+        run: dotnet test UnityGsdk/Tests/Tests.csproj --no-build

@@ -136,6 +136,10 @@ namespace PlayFab.MultiplayerAgent.Tests
         [TestMethod]
         public void ReadConfiguration_EnvironmentVariables_Captured()
         {
+            string originalTitleId = Environment.GetEnvironmentVariable("PF_TITLE_ID");
+            string originalBuildId = Environment.GetEnvironmentVariable("PF_BUILD_ID");
+            string originalRegion = Environment.GetEnvironmentVariable("PF_REGION");
+
             Environment.SetEnvironmentVariable("PF_TITLE_ID", "testTitleId");
             Environment.SetEnvironmentVariable("PF_BUILD_ID", "testBuildId");
             Environment.SetEnvironmentVariable("PF_REGION", "testRegion");
@@ -149,9 +153,9 @@ namespace PlayFab.MultiplayerAgent.Tests
             }
             finally
             {
-                Environment.SetEnvironmentVariable("PF_TITLE_ID", null);
-                Environment.SetEnvironmentVariable("PF_BUILD_ID", null);
-                Environment.SetEnvironmentVariable("PF_REGION", null);
+                Environment.SetEnvironmentVariable("PF_TITLE_ID", originalTitleId);
+                Environment.SetEnvironmentVariable("PF_BUILD_ID", originalBuildId);
+                Environment.SetEnvironmentVariable("PF_REGION", originalRegion);
             }
         }
 
