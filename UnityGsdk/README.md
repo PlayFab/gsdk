@@ -8,11 +8,13 @@ Yup, PlayFab SDK and GSDK would reside in different folders in your Unity projec
 
 ### What do I need to do in order to use the Unity GSDK in a new project? 
 
-You can drag the `PlayFabSDK` folder to your Unity project. After that, you need to enable the scripting directive `ENABLE_PLAYFABSERVER_API` on your Build settings, like in [this screenshot](https://user-images.githubusercontent.com/8256138/81462605-a6d7ac80-9168-11ea-9748-110ed01095c2.png)
+You can drag the `Assets/PlayFabSdk` folder to your Unity project. After that, you need to enable the scripting directive `ENABLE_PLAYFABSERVER_API` on your Build settings, like in [this screenshot](https://user-images.githubusercontent.com/8256138/81462605-a6d7ac80-9168-11ea-9748-110ed01095c2.png).
 
-### What is the `Tests/` folder?
+### What is the top-level `Tests/` folder?
 
-The `Tests/` folder contains unit tests used during development and CI. You do **not** need to include it when integrating the Unity GSDK into your project.
+The `Tests/` folder at the root of `UnityGsdk/` (next to `Assets/`) contains a standalone .NET (MSTest) project used by SDK maintainers and CI to validate the GSDK source files outside of the Unity engine. Because it lives **outside** the `Assets/` folder, the Unity Editor does not import or compile it, and it has no effect on your game project. You do **not** need to copy it when integrating the Unity GSDK — only the `Assets/PlayFabSdk` folder is required.
+
+> Note: this is different from `Assets/Tests/`, which is an in-engine NUnit test assembly gated behind the `UNIT_TESTING` define and only compiled when that define is set.
 
 ### Heartbeats are failing when I run in container mode (no heartbeat error), what should I do?
 
