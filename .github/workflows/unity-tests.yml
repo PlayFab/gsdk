@@ -1,0 +1,27 @@
+name: Unity GSDK Tests
+
+on:
+  pull_request:
+    paths:
+      - 'UnityGsdk/**'
+      - '.github/workflows/unity-tests.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Build
+        run: dotnet build UnityGsdk/Tests/Tests.csproj
+
+      - name: Test
+        run: dotnet test UnityGsdk/Tests/Tests.csproj --no-build
