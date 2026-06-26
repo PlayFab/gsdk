@@ -189,7 +189,7 @@ namespace PlayFab
         curl_easy_setopt(reqContainer.curlHandle, CURLOPT_WRITEFUNCTION, CurlReceiveData);
 
         // Send
-        curl_easy_setopt(reqContainer.curlHandle, CURLOPT_SSL_VERIFYPEER, false); // TODO: Replace this with a ca-bundle ref???
+        curl_easy_setopt(reqContainer.curlHandle, CURLOPT_SSL_VERIFYPEER, true);
         const auto res = curl_easy_perform(reqContainer.curlHandle);
         if (res != CURLE_OK)
         {
