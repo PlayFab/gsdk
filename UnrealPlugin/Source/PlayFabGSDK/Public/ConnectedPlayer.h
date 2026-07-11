@@ -11,6 +11,6 @@ struct FConnectedPlayer
 {
 	GENERATED_BODY()
 public:
-	UPROPERTY(BlueprintReadWrite)
+	UPROPERTY(BlueprintReadWrite, Category = "PlayFab GSDK")
 	FString PlayerId;
 };

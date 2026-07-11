@@ -2,6 +2,7 @@
 
 #include "GSDKUtils.h"
 
+#include "Engine/EngineBaseTypes.h"
 #include "PlayFabGSDK.h"
 
 const FGameServerConnectionInfo UGSDKUtils::GetGameServerConnectionInfo()

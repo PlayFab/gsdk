@@ -7,13 +7,17 @@
 #include "HttpModule.h"
 #include "HttpManager.h"
 #include "Async/Async.h"
-#include "Json.h"
+#include "Dom/JsonObject.h"
 #include "PlayFabGSDK.h"
 #include "Interfaces/IHttpResponse.h"
 #include "Misc/Paths.h"
 #include "Logging/LogMacros.h"
 #include "HAL/Event.h"
+#include "HAL/PlatformFileManager.h"
 #include "GSDKInfo.h"
+#include "Serialization/JsonReader.h"
+#include "Serialization/JsonSerializer.h"
+#include "Serialization/JsonWriter.h"
 
 FGSDKInternal::FGSDKInternal()
 	: SignalHeartbeatEvent(FPlatformProcess::GetSynchEventFromPool(false))
@@ -352,13 +356,14 @@ void FGSDKInternal::DecodeHeartbeatResponse(const FString& ResponseJson)
 				FString ValueString;
 				if (SessionConfigJsonValue.Value->TryGetString(ValueString))
 				{
-					if (ConfigSettings.Contains(SessionConfigJsonValue.Key))
+					const FString ConfigKey(SessionConfigJsonValue.Key.ToView());
+					if (ConfigSettings.Contains(ConfigKey))
 					{
-						ConfigSettings[SessionConfigJsonValue.Key] = ValueString;
+						ConfigSettings[ConfigKey] = ValueString;
 					}
 					else
 					{
-						ConfigSettings.Add(SessionConfigJsonValue.Key, ValueString);
+						ConfigSettings.Add(ConfigKey, ValueString);
 					}
 				}
 			}
@@ -372,13 +377,14 @@ void FGSDKInternal::DecodeHeartbeatResponse(const FString& ResponseJson)
 					FString ValueString;
 					if (MetaDataJson.Value->TryGetString(ValueString))
 					{
-						if (ConfigSettings.Contains(MetaDataJson.Key))
+						const FString ConfigKey(MetaDataJson.Key.ToView());
+						if (ConfigSettings.Contains(ConfigKey))
 						{
-							ConfigSettings[MetaDataJson.Key] = ValueString;
+							ConfigSettings[ConfigKey] = ValueString;
 						}
 						else
 						{
-							ConfigSettings.Add(MetaDataJson.Key, ValueString);
+							ConfigSettings.Add(ConfigKey, ValueString);
 						}
 					}
 				}
