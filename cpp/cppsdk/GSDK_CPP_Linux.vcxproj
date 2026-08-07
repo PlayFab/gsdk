@@ -108,20 +108,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="gsdkInfo.h" />
-    <ClInclude Include="include\playfab\PlayFabAdminApi.h" />
-    <ClInclude Include="include\playfab\PlayFabAdminDataModels.h" />
-    <ClInclude Include="include\playfab\PlayFabBaseModel.h" />
-    <ClInclude Include="include\playfab\PlayFabClientApi.h" />
-    <ClInclude Include="include\playfab\PlayFabClientDataModels.h" />
-    <ClInclude Include="include\playfab\PlayFabEntityApi.h" />
-    <ClInclude Include="include\playfab\PlayFabEntityDataModels.h" />
-    <ClInclude Include="include\playfab\PlayFabError.h" />
-    <ClInclude Include="include\playfab\PlayFabHttp.h" />
-    <ClInclude Include="include\playfab\PlayFabMatchmakerApi.h" />
-    <ClInclude Include="include\playfab\PlayFabMatchmakerDataModels.h" />
-    <ClInclude Include="include\playfab\PlayFabServerApi.h" />
-    <ClInclude Include="include\playfab\PlayFabServerDataModels.h" />
-    <ClInclude Include="include\playfab\PlayFabSettings.h" />
     <ClInclude Include="gsdkConfig.h" />
     <ClInclude Include="ManualResetEvent.h" />
     <ClInclude Include="gsdk.h" />
@@ -137,14 +123,6 @@
     <ClCompile Include="gsdk.cpp" />
     <ClCompile Include="gsdkLog.cpp" />
     <ClCompile Include="gsdkUtils.cpp" />
-    <ClCompile Include="source\playfab\PlayFabAdminApi.cpp" />
-    <ClCompile Include="source\playfab\PlayFabClientApi.cpp" />
-    <ClCompile Include="source\playfab\PlayFabEntityApi.cpp" />
-    <ClCompile Include="source\playfab\PlayFabError.cpp" />
-    <ClCompile Include="source\playfab\PlayFabHttp.cpp" />
-    <ClCompile Include="source\playfab\PlayFabMatchmakerApi.cpp" />
-    <ClCompile Include="source\playfab\PlayFabServerApi.cpp" />
-    <ClCompile Include="source\playfab\PlayFabSettings.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="gsdkSampleConfigLinux.json">

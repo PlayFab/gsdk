@@ -9,6 +9,7 @@
 #include <exception>
 #include <vector>
 #include <stdexcept>
+#include <cstdint>
 
 #ifdef _WIN32
 #define DEPRECATED __declspec(deprecated)
