@@ -9,8 +9,13 @@
 #include <exception>
 #include <vector>
 #include <stdexcept>
+// Both spellings are included deliberately. This public header uses uint32_t and
+// tm unqualified, which only the C compatibility headers guarantee, while the
+// C++ headers guarantee the std-qualified names consumers may prefer.
 #include <cstdint>
 #include <ctime>
+#include <stdint.h>
+#include <time.h>
 
 #ifdef _WIN32
 #define DEPRECATED __declspec(deprecated)
