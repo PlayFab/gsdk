@@ -10,6 +10,7 @@
 #include <vector>
 #include <stdexcept>
 #include <cstdint>
+#include <ctime>
 
 #ifdef _WIN32
 #define DEPRECATED __declspec(deprecated)

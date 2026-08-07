@@ -3,6 +3,7 @@
 
 #include <ctime>
 #include <cstdio>
+#include <cstdlib>
 #include "gsdk.h"
 
 void inShutdown()
