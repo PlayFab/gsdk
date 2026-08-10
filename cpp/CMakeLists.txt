@@ -27,8 +27,7 @@ add_library(GSDK_CPP
 )
 
 target_include_directories(GSDK_CPP PRIVATE
-    cppsdk
-    cppsdk/include)
+    cppsdk)
 
 set_target_properties(GSDK_CPP PROPERTIES CXX_STANDARD 14)
 
