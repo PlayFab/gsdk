@@ -143,6 +143,10 @@ namespace Microsoft
                 static void updateConnectedPlayers(const std::vector<ConnectedPlayer> &currentlyConnectedPlayers);
 
                 /// <summary>Gets called if the server is shutting us down</summary>
+                /// <remarks>
+                /// Runs on a GSDK thread. To end the process from here, signal your main thread to return or call std::quick_exit().
+                /// std::exit() runs static destructors and stdio cleanup while your other threads keep running, which can deadlock.
+                /// </remarks>
                 static void registerShutdownCallback(std::function<void()> callback);
 
                 /// <summary>Gets called when the agent needs to check on the game's health</summary>

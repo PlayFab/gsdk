@@ -46,7 +46,9 @@ void inShutdown()
 
     if (!delayShutdown)
     {
-        std::exit(0);
+        // quick_exit, not exit: exit() would run static destructors, and destroying processRequestsThread waits for
+        // processRequests(), which never returns.
+        std::quick_exit(0);
     }
 }
 
@@ -205,7 +207,8 @@ void processRequests()
         // If we were shutdown, that was the last reply we would send
         if (isShutdown)
         {
-            std::exit(0);
+            fflush(stdout); // quick_exit doesn't flush; see inShutdown() for why it's used
+            std::quick_exit(0);
         }
     }
 }
