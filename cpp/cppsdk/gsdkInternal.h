@@ -154,6 +154,10 @@ namespace Microsoft
                 tm m_cachedScheduledMaintenance;
 
                 std::atomic<bool> m_keepHeartbeatRunning;
+
+                // Set by stopThreads(). Unlike clearing m_keepHeartbeatRunning (done once the shutdown callback returns, which
+                // still lets one last heartbeat go out), nothing else is sent after this.
+                std::atomic<bool> m_stopRequested{ false };
                 
                 // NOTE: DO NOT make this a std::future instead of a std::thread.
                 // 
@@ -164,7 +168,9 @@ namespace Microsoft
                 // join on the std::thread doesn't hang, it seems to understand the thread exited.
                 std::thread m_heartbeatThread;
 
-                std::future<void> m_shutdownThread;
+                // Runs the shutdown callback. A std::thread, not a std::future from std::async: when the callback calls exit(),
+                // as our test apps do, stopThreads() runs on this very thread and must not wait for itself.
+                std::thread m_shutdownThread;
 
                 CURL *m_curlHandle; // only valid for heartbeat thread
                 curl_slist *m_curlHttpHeaders; // only valid for heartbeat thread
@@ -177,16 +183,18 @@ namespace Microsoft
 
                 std::vector<std::string> m_initialPlayers;
 
-                static std::unique_ptr<GSDKInternal> m_instance;
+                static std::unique_ptr<GSDKInternal>& m_instance; // never destroyed, see gsdk.cpp
                 static std::mutex m_gsdkInitMutex;
 
                 static volatile long long m_exitStatus;
                 static std::mutex m_logLock;
-                static std::ofstream m_logFile;
+                static std::ofstream& m_logFile; // never destroyed, see gsdk.cpp
 
                 void heartbeatThreadFunc(std::string infoUrl);
                 static size_t curlReceiveData(char *buffer, size_t blockSize, size_t blockCount, void *);
-                static void runShutdownCallback();
+                void runShutdownCallback();
+                void stopThreads(); // Joins our threads (detaching the calling one, if it's ours). Safe to call more than once.
+                static void stopThreadsAtExit();
                 
                 static bool m_debug;
 

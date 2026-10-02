@@ -6,6 +6,8 @@
 #include "gsdkConfig.h"
 #include "gsdkInfo.h"
 
+#include <cstdlib>
+
 namespace Microsoft
 {
     namespace Azure
@@ -13,11 +15,15 @@ namespace Microsoft
         namespace Gaming
         {
             constexpr int c_minHeartbeatIntervalMs = 1000;
-            std::unique_ptr<GSDKInternal> GSDKInternal::m_instance = nullptr;
+
+            // m_instance and m_logFile are intentionally never destroyed; the OS reclaims them. Destroying them at exit can
+            // happen after the game has torn down something they depend on (e.g. a custom allocator their memory came from),
+            // and game threads may still call into GSDK while the process exits. Our own threads are stopped by stopThreadsAtExit().
+            std::unique_ptr<GSDKInternal>& GSDKInternal::m_instance = *new std::unique_ptr<GSDKInternal>();
             std::mutex GSDKInternal::m_gsdkInitMutex;
             volatile long long GSDKInternal::m_exitStatus = 0;
             std::mutex GSDKInternal::m_logLock;
-            std::ofstream GSDKInternal::m_logFile;
+            std::ofstream& GSDKInternal::m_logFile = *new std::ofstream();
             bool GSDKInternal::m_debug = false;
             std::unique_ptr<Configuration> GSDKInternal::testConfiguration = nullptr;
 
@@ -140,8 +146,7 @@ namespace Microsoft
 
             GSDKInternal::~GSDKInternal()
             {
-                m_keepHeartbeatRunning = false;
-                m_heartbeatThread.join();
+                stopThreads();
             }
 
 			//Do not need to acquire lock for configuration becase startLog is only called from the constructor.
@@ -198,10 +203,16 @@ namespace Microsoft
 
                 while (m_keepHeartbeatRunning)
                 {
-                    if (m_signalHeartbeatEvent.Wait(m_nextHeartbeatIntervalMs))
+                    if (m_signalHeartbeatEvent.Wait(m_nextHeartbeatIntervalMs) && !m_stopRequested)
                     {
                         if (m_debug) GSDK::logMessage("State transition signaled an early heartbeat.");
                         m_signalHeartbeatEvent.Reset(); // We've handled this signal, so reset the event
+                    }
+
+                    // stopThreads() signals the event to wake us up early; nothing is sent after that.
+                    if (m_stopRequested)
+                    {
+                        break;
                     }
 
                     sendHeartbeat();
@@ -304,12 +315,72 @@ namespace Microsoft
 
             void GSDKInternal::runShutdownCallback()
             {
-                std::function<void()> shutdownCallback = get().m_shutdownCallback;
+                std::function<void()> shutdownCallback = m_shutdownCallback;
                 if (shutdownCallback != nullptr)
                 {
-                    shutdownCallback();
+                    // An exception escaping a std::thread terminates the process. (It used to be captured, unread, by the
+                    // std::future this ran under.) As before, heartbeats keep going if the callback throws.
+                    try
+                    {
+                        shutdownCallback();
+                    }
+                    catch (const std::exception& ex)
+                    {
+                        GSDK::logMessage(std::string("Shutdown callback threw an exception: ") + ex.what());
+                        return;
+                    }
+                    catch (...)
+                    {
+                        GSDK::logMessage("Shutdown callback threw an unknown exception.");
+                        return;
+                    }
                 }
-                get().m_keepHeartbeatRunning = false;
+                m_keepHeartbeatRunning = false;
+            }
+
+            // A thread can't join itself, which is where we are when a callback running on it calls exit().
+            static void joinUnlessCurrentThread(std::thread& thread)
+            {
+                if (!thread.joinable())
+                {
+                    return;
+                }
+
+                if (thread.get_id() == std::this_thread::get_id())
+                {
+                    thread.detach();
+                }
+                else
+                {
+                    thread.join();
+                }
+            }
+
+            void GSDKInternal::stopThreads()
+            {
+                m_stopRequested = true;
+                m_keepHeartbeatRunning = false;
+                m_signalHeartbeatEvent.Signal(); // Wake the heartbeat thread instead of waiting out the heartbeat interval
+
+                joinUnlessCurrentThread(m_heartbeatThread);
+
+                // The heartbeat thread starts the shutdown thread, so only look at it once the heartbeat thread is done.
+                joinUnlessCurrentThread(m_shutdownThread);
+            }
+
+            void GSDKInternal::stopThreadsAtExit()
+            {
+                GSDKInternal* instance = nullptr;
+                {
+                    std::lock_guard<std::mutex> lock(m_gsdkInitMutex);
+                    instance = m_instance.get();
+                }
+
+                // Not holding the lock while joining: the heartbeat thread takes it in curlReceiveData().
+                if (instance != nullptr)
+                {
+                    instance->stopThreads();
+                }
             }
 
             void GSDKInternal::decodeHeartbeatResponse(const std::string& responseJson)
@@ -443,7 +514,13 @@ namespace Microsoft
                                 {
                                     setState(GameState::Terminating);
                                     m_transitionToActiveEvent.Signal();
-                                    m_shutdownThread = std::async(std::launch::async, &runShutdownCallback);
+
+                                    // We can get here again if the game calls readyForPlayers() after being terminated.
+                                    if (m_shutdownThread.joinable())
+                                    {
+                                        m_shutdownThread.join();
+                                    }
+                                    m_shutdownThread = std::thread(&GSDKInternal::runShutdownCallback, this);
                                 }
                                 break;
                             default:
@@ -500,6 +577,12 @@ namespace Microsoft
                 if (!m_instance)
                 {
                     m_instance = std::make_unique<GSDKInternal>();
+
+                    // At exit, atexit handlers and static destructors run in reverse order of registration/construction.
+                    // Registering once the first instance exists (normally from GSDK::start() in main) stops our threads
+                    // before anything set up earlier - ours or the game's - is torn down.
+                    static const bool registeredAtExit = std::atexit(&GSDKInternal::stopThreadsAtExit) == 0;
+                    (void)registeredAtExit;
                 }
                 return *m_instance;
             }
