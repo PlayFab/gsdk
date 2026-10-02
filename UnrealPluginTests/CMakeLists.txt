@@ -3,7 +3,7 @@
 # Builds the Unreal GSDK plugin sources and its automation tests against a small Unreal Engine API shim, so they run
 # without Unreal Engine (see README.md). Two configurations of the same plugin sources are built:
 #   GSDKAutomationTests - the editor automation test build (WITH_DEV_AUTOMATION_TESTS && WITH_EDITOR), running the
-#                         spec in TestingProject/Source/SlateUGS/Private/Tests/GsdkTests.cpp unmodified.
+#                         spec in UnrealPlugin/TestingProject/Source/SlateUGS/Private/Tests/GsdkTests.cpp unmodified.
 #   GSDKServerTests     - the dedicated server build (UE_SERVER), running end-to-end tests in ServerTests/ that drive
 #                         the real heartbeat thread against a fake agent.
 
@@ -17,7 +17,7 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 find_package(Threads REQUIRED)
 enable_testing()
 
-set(UNREAL_PLUGIN_DIR "${CMAKE_CURRENT_SOURCE_DIR}/..")
+set(UNREAL_PLUGIN_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../UnrealPlugin")
 set(PLUGIN_MODULE_DIR "${UNREAL_PLUGIN_DIR}/Source/PlayFabGSDK")
 set(TESTING_PROJECT_TESTS_DIR "${UNREAL_PLUGIN_DIR}/TestingProject/Source/SlateUGS/Private/Tests")
 

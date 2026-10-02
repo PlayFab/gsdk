@@ -58,7 +58,7 @@ Finally, you're ready to [create game servers in the cloud](ThirdPersonMPCloudDe
 
 ## Plugin tests
 
-The `Tests/` folder builds the plugin and its automation tests with a plain C++ compiler, against a small emulation of the Unreal Engine APIs the plugin uses, so they run in CI without Unreal Engine. It's only for SDK maintainers, and you don't need it in your game project. See [Tests/README.md](Tests/README.md).
+The [`UnrealPluginTests`](../UnrealPluginTests) folder at the root of this repository builds the plugin and its automation tests with a plain C++ compiler, against a small emulation of the Unreal Engine APIs the plugin uses, so they run in CI without Unreal Engine. It's only for SDK maintainers, and it lives outside this folder so it isn't copied into your game project with the plugin. See [UnrealPluginTests/README.md](../UnrealPluginTests/README.md).
 
 # Acknowledgements
 

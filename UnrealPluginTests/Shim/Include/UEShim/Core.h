@@ -1,7 +1,7 @@
 // Copyright (C) Microsoft Corporation. All rights reserved.
 
 // Minimal emulation of the Unreal Engine Core APIs used by the PlayFab GSDK plugin and its automation tests, so the
-// unmodified plugin sources and tests compile and run with a plain C++ compiler (see UnrealPlugin/Tests/README.md).
+// unmodified plugin sources and tests compile and run with a plain C++ compiler (see UnrealPluginTests/README.md).
 // This is NOT Unreal Engine: only what the GSDK uses is emulated, mirroring UE semantics where they matter
 // (TCHAR is a wide character type, FString comparisons and TMap<FString, ...> lookups are case-insensitive,
 // UE_LOG/FString::Printf require TEXT() format strings, MoveTemp rejects const objects and rvalues, ...).

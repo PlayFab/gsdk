@@ -1,11 +1,11 @@
 # Unreal GSDK tests without Unreal Engine
 
-This folder builds the Unreal GSDK plugin and its automation tests with a plain C++ compiler, so they run on any machine and in CI (`.github/workflows/unreal-tests.yml`) without installing Unreal Engine. It's only for SDK maintainers. You don't need it in your game project, and Unreal Build Tool ignores it if you copy it there (it has no `.Build.cs`).
+This folder builds the Unreal GSDK plugin in [`../UnrealPlugin`](../UnrealPlugin) and its automation tests with a plain C++ compiler, so they run on any machine and in CI (`.github/workflows/unreal-tests.yml`) without installing Unreal Engine. It's only for SDK maintainers. It's kept outside `UnrealPlugin/` so that it isn't copied into game projects along with the plugin.
 
 It compiles, **unmodified**:
 
-- the plugin sources in [`../Source/PlayFabGSDK`](../Source/PlayFabGSDK), and
-- the automation spec [`../TestingProject/Source/SlateUGS/Private/Tests/GsdkTests.cpp`](../TestingProject/Source/SlateUGS/Private/Tests/GsdkTests.cpp), the same spec the TestingProject runs in the editor,
+- the plugin sources in [`../UnrealPlugin/Source/PlayFabGSDK`](../UnrealPlugin/Source/PlayFabGSDK), and
+- the automation spec [`../UnrealPlugin/TestingProject/Source/SlateUGS/Private/Tests/GsdkTests.cpp`](../UnrealPlugin/TestingProject/Source/SlateUGS/Private/Tests/GsdkTests.cpp), the same spec the TestingProject runs in the editor,
 
 against [`Shim/`](Shim), a small emulation of the Unreal Engine APIs the plugin uses: `FString`, `TArray`, `TMap`, shared pointers, `TFunction`/`TUniqueFunction`, delegates, `UE_LOG`, `FEvent`/`FScopeLock`, `Async`/`AsyncTask`, the Json and HTTP modules, the module manager, and the automation spec framework (`BEGIN_DEFINE_SPEC`, `Describe`, `It`, `TestEqual`, `AddExpectedError`, ...).
 
@@ -21,15 +21,15 @@ Two executables are built from the same plugin sources:
 You need CMake 3.20+ and a C++20 compiler (GCC, Clang or MSVC). From the repository root:
 
 ```bash
-cmake -S UnrealPlugin/Tests -B UnrealPlugin/Tests/build
-cmake --build UnrealPlugin/Tests/build --config Release
-ctest --test-dir UnrealPlugin/Tests/build -C Release --output-on-failure
+cmake -S UnrealPluginTests -B UnrealPluginTests/build
+cmake --build UnrealPluginTests/build --config Release
+ctest --test-dir UnrealPluginTests/build -C Release --output-on-failure
 ```
 
 To run some of the tests, pass filters to an executable. As with `Automation RunTests`, a test runs if its full name contains one of the filters:
 
 ```bash
-UnrealPlugin/Tests/build/GSDKAutomationTests GSDK.Tests.ActiveResponseBurst
+UnrealPluginTests/build/GSDKAutomationTests GSDK.Tests.ActiveResponseBurst
 ```
 
 ## About the shim
