@@ -9,7 +9,9 @@
 void inShutdown()
 {
     printf("GSDK is shutting me down!!!\n");
-    std::exit(0);
+    // quick_exit, not exit: main() is blocked in getchar(), and exit()'s stdio cleanup would wait for it to release stdin.
+    fflush(stdout);
+    std::quick_exit(0);
 }
 
 bool isHealthy()

@@ -461,6 +461,44 @@ namespace Microsoft
                     Assert::IsTrue(shutdownCalled, L"Verify our shutdown callback was called.");
                 }
 
+                TEST_METHOD(ShutdownCallbackThatThrowsDoesNotCrash)
+                {
+                    GSDKInternal::testConfiguration = std::make_unique<TestConfig>("heartbeatEndpoint", "serverId", "logFolder", "sharedContentFolder");
+                    GSDK::start();
+
+                    std::atomic<bool> shutdownCalled{ false };
+                    GSDK::registerShutdownCallback([&shutdownCalled]() -> void
+                    {
+                        shutdownCalled = true;
+                        throw std::runtime_error("game failed to shut down");
+                    });
+
+                    GSDKInternal::m_instance->decodeHeartbeatResponse(R"({ "operation":"Terminate" })");
+
+                    // Destroying GSDK waits for the shutdown callback. An exception escaping it would terminate the process.
+                    GSDKInternal::m_instance.reset();
+
+                    Assert::IsTrue(shutdownCalled, L"Verify our shutdown callback was called.");
+                }
+
+                TEST_METHOD(DestroyingGsdkWaitsForShutdownCallback)
+                {
+                    GSDKInternal::testConfiguration = std::make_unique<TestConfig>("heartbeatEndpoint", "serverId", "logFolder", "sharedContentFolder");
+                    GSDK::start();
+
+                    std::atomic<bool> shutdownFinished{ false };
+                    GSDK::registerShutdownCallback([&shutdownFinished]() -> void
+                    {
+                        std::this_thread::sleep_for(std::chrono::milliseconds(200));
+                        shutdownFinished = true;
+                    });
+
+                    GSDKInternal::m_instance->decodeHeartbeatResponse(R"({ "operation":"Terminate" })");
+                    GSDKInternal::m_instance.reset();
+
+                    Assert::IsTrue(shutdownFinished, L"Verify GSDK waited for the shutdown callback to finish.");
+                }
+
             private:
                 Json::Value parseJson(std::string jsonStr)
                 {
