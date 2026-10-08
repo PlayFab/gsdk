@@ -11,6 +11,7 @@
 #include "HAL/CriticalSection.h"
 #include "Interfaces/IHttpRequest.h"
 #include "Misc/OutputDeviceFile.h"
+#include "Templates/Function.h"
 
 #define MAKE_ENUM(VAR) VAR,
 #define MAKE_STRINGS(VAR) TEXT(#VAR),
@@ -139,7 +140,8 @@ public:
 	}
 
 	FString GetConfigValue(const FString& Key) const;
-	void SetState(EGameState State);
+	// Returns true if the state changed.
+	bool SetState(EGameState State);
 	void SetConnectedPlayers(const TArray<FConnectedPlayer>& CurrentConnectedPlayers);
 
 	// Sets state to StandBy to mark end of server initialization. Name follows convention of GSDK where once
@@ -221,6 +223,9 @@ private:
 
 	void TriggerShutdown();
 
+	// Runs Task on the game thread. Editor automation test builds run it inline, unless a test installed GameThreadDispatcherForTests.
+	void RunOnGameThread(TUniqueFunction<void()> Task);
+
 #if (WITH_DEV_AUTOMATION_TESTS && WITH_EDITOR)
 public:
 #endif
@@ -228,4 +233,10 @@ public:
 	// These two methods are used for unit testing as well as regular operation.
 	FString EncodeHeartbeatRequest();
 	void DecodeHeartbeatResponse(const FString& ResponseJson);
+
+#if (WITH_DEV_AUTOMATION_TESTS && WITH_EDITOR)
+	// Test-only: when set, RunOnGameThread hands tasks to this dispatcher instead of running them inline,
+	// so a test decides when the "game thread" work runs.
+	TFunction<void(TUniqueFunction<void()>)> GameThreadDispatcherForTests;
+#endif
 };

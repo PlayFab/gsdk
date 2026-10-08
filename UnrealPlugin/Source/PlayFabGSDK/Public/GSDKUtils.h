@@ -91,7 +91,7 @@ public:
 	static void RegisterGSDKShutdownDelegate(const FOnGSDKShutdown_Dyn& OnGSDKShutdownDelegate);
 
 	/// Register the GSDK Transition To Active State Delegate to get notified when the server
-	/// transitions from StandBy / Waiting to Active
+	/// transitions from StandBy / Waiting to Active. The delegate is called once, on the game thread.
 	UFUNCTION(BlueprintCallable, Category = "PlayFab|GSDK|Callbacks")
 	static void RegisterGSDKServerActiveDelegate(const FOnGSDKServerActive_Dyn& OnGSDKServerActiveDelegate);
 	

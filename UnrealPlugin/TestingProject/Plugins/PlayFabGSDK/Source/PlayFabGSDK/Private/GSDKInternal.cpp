@@ -457,20 +457,17 @@ void FGSDKInternal::DecodeHeartbeatResponse(const FString& ResponseJson)
 		}
 		case EOperation::Active:
 		{
-			if (HeartbeatRequest.CurrentGameState != EGameState::Active)
+			// The agent answers "Active" to every heartbeat until we report Active, so several of these responses can be
+			// decoded before the game thread runs. Change the state here, atomically, and only dispatch the callback.
+			if (SetState(EGameState::Active))
 			{
-#if !(WITH_DEV_AUTOMATION_TESTS && WITH_EDITOR)
-				AsyncTask(ENamedThreads::GameThread, [this]()
+				RunOnGameThread([this]()
 					{
-#endif
-						SetState(EGameState::Active);
 						if (this->OnServerActive.IsBound())
 						{
 							this->OnServerActive.Execute();
 						}
-#if !(WITH_DEV_AUTOMATION_TESTS && WITH_EDITOR)
 					});
-#endif
 			}
 			break;
 		}
@@ -563,7 +560,7 @@ FString FGSDKInternal::GetConfigValue(const FString& Key) const
 	return TEXT("");
 }
 
-void FGSDKInternal::SetState(EGameState State)
+bool FGSDKInternal::SetState(EGameState State)
 {
 	FScopeLock ScopeLock(&StateMutex);
 
@@ -571,7 +568,26 @@ void FGSDKInternal::SetState(EGameState State)
 	{
 		HeartbeatRequest.CurrentGameState = State;
 		SignalHeartbeatEvent->Trigger();
+		return true;
 	}
+
+	return false;
+}
+
+void FGSDKInternal::RunOnGameThread(TUniqueFunction<void()> Task)
+{
+#if (WITH_DEV_AUTOMATION_TESTS && WITH_EDITOR)
+	if (GameThreadDispatcherForTests)
+	{
+		GameThreadDispatcherForTests(MoveTemp(Task));
+	}
+	else
+	{
+		Task();
+	}
+#else
+	AsyncTask(ENamedThreads::GameThread, MoveTemp(Task));
+#endif
 }
 
 void FGSDKInternal::SetConnectedPlayers(const TArray<FConnectedPlayer>& CurrentConnectedPlayers)

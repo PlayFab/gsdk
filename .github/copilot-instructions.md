@@ -103,6 +103,6 @@ All SDKs expose the same callback hooks:
 
 - **Static/singleton API**: All SDKs expose a static class (`GSDK`, `GameserverSDK`, `PlayFabMultiplayerAgentAPI`) — no instantiation needed.
 - **Namespaces**: `Microsoft.Azure.Gaming` (C++/C#), `com.microsoft.azure.gaming` (Java).
-- **Version format**: `MAJOR.MINOR.YYMMDD[suffix]` — the `updateVersion.js` script increments minor and sets today's date as build number.
+- **Version format**: Package versions (the C++, C# and Java `version.txt` files) use `MAJOR.MINOR.YYMMDD[suffix]`; the `updateVersion.js` script increments the minor version and sets today's date as the build number. Other version strings don't use this format, for example the version each SDK reports to the agent in its GSDK info (such as `2.0.0`) and the Unreal plugin's `.uplugin` version.
 - **NuGet/Maven packages**: C++ published as `com.playfab.cppgsdk.v140`, C# as `com.playfab.csharpgsdk`, Java as `com.playfab:gameserverSDK`.
 - **Go SDK** (`experimental/go/`) is experimental and not production-ready.

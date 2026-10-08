@@ -67,7 +67,7 @@ public:
 	/// <summary>Gets called if the server is shutting us down</summary>
 	FOnShutdown OnShutdown;
 
-	/// </summary>Gets called when the server moves to an active state</summary>
+	/// <summary>Gets called once, on the game thread, when the server moves to an active state (is allocated)</summary>
 	FOnServerActive OnServerActive;	
 
 	/// </summary>Gets called when the server is ready to move from initialization to standby</summary>

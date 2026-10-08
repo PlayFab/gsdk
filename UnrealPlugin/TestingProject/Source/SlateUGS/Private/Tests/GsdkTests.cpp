@@ -19,13 +19,35 @@ const FString region = "testRegion";
 TestConfiguration config;
 FEventRef readyForPlayers{ EEventMode::ManualReset };
 FEventRef shutdownCalled{ EEventMode::ManualReset };
+TArray<TUniqueFunction<void()>> QueuedGameThreadTasks;
 void SerializeConfigAndStartModule();
+void InstallQueuingGameThreadDispatcher();
+void RunQueuedGameThreadTasks();
 END_DEFINE_SPEC(AutomationSpec)
 
 void AutomationSpec::SerializeConfigAndStartModule()
 {
 	config.SerializeToFile(ConfigFilePath);
 	FPlayFabGSDKModule::Get().ManualStartupModule();
+}
+
+// Makes the GSDK queue its game thread work (like AsyncTask on a busy game thread) until RunQueuedGameThreadTasks is called.
+void AutomationSpec::InstallQueuingGameThreadDispatcher()
+{
+	FPlayFabGSDKModule::Get().GSDKInternal->GameThreadDispatcherForTests = [this](TUniqueFunction<void()> Task)
+	{
+		QueuedGameThreadTasks.Add(MoveTemp(Task));
+	};
+}
+
+void AutomationSpec::RunQueuedGameThreadTasks()
+{
+	while (QueuedGameThreadTasks.Num() > 0)
+	{
+		TUniqueFunction<void()> Task = MoveTemp(QueuedGameThreadTasks[0]);
+		QueuedGameThreadTasks.RemoveAt(0);
+		Task();
+	}
 }
 
 void AutomationSpec::Define()
@@ -44,10 +66,16 @@ void AutomationSpec::Define()
 					config.SetServerId(serverId);
 					config.SetLogFolder(logFolder);
 					config.SetSharedContentFolder(sharedContentFolder);
+
+					// These events are shared by all tests and are manual-reset, so each test must start with them cleared.
+					readyForPlayers->Reset();
+					shutdownCalled->Reset();
 				});
 
 			AfterEach([this]()
 				{
+					// Drop game thread work a test didn't run; it points at the GSDK instance that is reset below.
+					QueuedGameThreadTasks.Empty();
 					FPlayFabGSDKModule::Get().ResetInternalState();
 
 					if (FPaths::FileExists(ConfigFilePath))
@@ -401,6 +429,83 @@ void AutomationSpec::Define()
 
 					FPlayFabGSDKModule::Get().GSDKInternal->DecodeHeartbeatResponse(responseJson);
 
+					TestTrue("Verify our shutdown callback was called.", shutdownCalled->Wait(FTimespan(0, 1, 0)));
+				});
+
+			It("ActiveResponseBurstInvokesOnServerActiveOnce", [this]()
+				{
+					SerializeConfigAndStartModule();
+					InstallQueuingGameThreadDispatcher();
+
+					int32 serverActiveCount = 0;
+					FPlayFabGSDKModule::Get().OnServerActive.BindLambda([&serverActiveCount]() -> void { serverActiveCount++; });
+
+					FPlayFabGSDKModule::Get().GSDKInternal->SetState(EGameState::StandingBy);
+
+					// The agent answers "Active" to every heartbeat until we report Active, so a backlog of these
+					// responses can be decoded before the game thread gets to run.
+					FString responseJson =
+						R"({
+								"operation":"Active"
+						})";
+
+					FPlayFabGSDKModule::Get().GSDKInternal->DecodeHeartbeatResponse(responseJson);
+
+					EGameState gameState = FPlayFabGSDKModule::Get().GSDKInternal->GetHeartbeatRequest().CurrentGameState;
+					TestEqual("Verify state changed to Active on the first Active response.", gameState, EGameState::Active);
+
+					TSharedPtr<FJsonObject> jsonHeartbeatRequest = MakeShareable(new FJsonObject());
+					TSharedRef<TJsonReader<>> jsonReader = TJsonReaderFactory<>::Create(FPlayFabGSDKModule::Get().GSDKInternal->EncodeHeartbeatRequest());
+					if (!FJsonSerializer::Deserialize(jsonReader, jsonHeartbeatRequest))
+					{
+						TestTrue("Failed to parse heartbeat request", false);
+						return;
+					}
+
+					TestEqual("Verify the next heartbeat reports Active.", jsonHeartbeatRequest->GetStringField("CurrentGameState"), "Active");
+
+					for (int32 i = 1; i < 10; i++)
+					{
+						FPlayFabGSDKModule::Get().GSDKInternal->DecodeHeartbeatResponse(responseJson);
+					}
+
+					TestEqual("Verify OnServerActive did not run before the game thread ran.", serverActiveCount, 0);
+
+					RunQueuedGameThreadTasks();
+
+					TestEqual("Verify OnServerActive ran exactly once.", serverActiveCount, 1);
+				});
+
+			It("QueuedActiveCallbackDoesNotRevertTermination", [this]()
+				{
+					SerializeConfigAndStartModule();
+					InstallQueuingGameThreadDispatcher();
+
+					FPlayFabGSDKModule::Get().OnShutdown.BindLambda([this]() -> void { shutdownCalled->Trigger(); });
+
+					FString responseJson =
+						R"({
+								"operation":"Active"
+						})";
+
+					FPlayFabGSDKModule::Get().GSDKInternal->DecodeHeartbeatResponse(responseJson);
+
+					// Terminate is handled on the heartbeat thread, before the game thread runs the queued Active work.
+					responseJson =
+						R"({
+								"operation":"Terminate"
+						})";
+
+					AddExpectedError("Received Termination State");
+
+					FPlayFabGSDKModule::Get().GSDKInternal->DecodeHeartbeatResponse(responseJson);
+
+					RunQueuedGameThreadTasks();
+
+					EGameState gameState = FPlayFabGSDKModule::Get().GSDKInternal->GetHeartbeatRequest().CurrentGameState;
+					TestEqual("Verify state stayed as Terminating.", gameState, EGameState::Terminating);
+
+					// Wait for the shutdown task so it doesn't outlive the GSDK instance that AfterEach destroys.
 					TestTrue("Verify our shutdown callback was called.", shutdownCalled->Wait(FTimespan(0, 1, 0)));
 				});
 		});
