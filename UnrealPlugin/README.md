@@ -56,6 +56,10 @@ Once you have any client build, and a "Development Server" build, you can [test 
 
 Finally, you're ready to [create game servers in the cloud](ThirdPersonMPCloudDeploy.md) using PlayFab Multiplayer Services.
 
+## Plugin tests
+
+The [`UnrealPluginTests`](../UnrealPluginTests) folder at the root of this repository builds the plugin and its automation tests with a plain C++ compiler, against a small emulation of the Unreal Engine APIs the plugin uses, so they run in CI without Unreal Engine. It's only for SDK maintainers, and it lives outside this folder so it isn't copied into your game project with the plugin. See [UnrealPluginTests/README.md](../UnrealPluginTests/README.md).
+
 # Acknowledgements
 
 We would like to express our gratitude to the following people and projects for their contributions to this project:

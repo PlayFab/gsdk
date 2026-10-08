@@ -1,0 +1,37 @@
+name: Unreal GSDK Tests
+
+on:
+  pull_request:
+    paths:
+      - 'UnrealPlugin/**'
+      - 'UnrealPluginTests/**'
+      - '.github/workflows/unreal-tests.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+
+      # The tests build UnrealPlugin/Source; the TestingProject keeps its own copy of the plugin that must match it.
+      - name: Check the TestingProject plugin copy is in sync
+        if: runner.os == 'Linux'
+        run: |
+          git diff --no-index --exit-code UnrealPlugin/Source UnrealPlugin/TestingProject/Plugins/PlayFabGSDK/Source
+          git diff --no-index --exit-code UnrealPlugin/PlayFabGSDK.uplugin UnrealPlugin/TestingProject/Plugins/PlayFabGSDK/PlayFabGSDK.uplugin
+
+      - name: Configure
+        run: cmake -S UnrealPluginTests -B UnrealPluginTests/build -DCMAKE_BUILD_TYPE=Release
+
+      - name: Build
+        run: cmake --build UnrealPluginTests/build --config Release --parallel
+
+      - name: Test
+        run: ctest --test-dir UnrealPluginTests/build --build-config Release --output-on-failure
