@@ -16,6 +16,8 @@ Two executables are built from the same plugin sources:
 | `GSDKAutomationTests` | Editor automation tests (`WITH_DEV_AUTOMATION_TESTS && WITH_EDITOR`) | `GsdkTests.cpp` |
 | `GSDKServerTests` | Dedicated server (`UE_SERVER`) | [`ServerTests/`](ServerTests): runs the plugin's real heartbeat thread against a fake agent, with the test thread acting as the game thread |
 
+A third executable, `UEShimTests`, runs [`ShimTests/`](ShimTests): tests of the shim itself, which check that it behaves like Unreal where the plugin's tests rely on it, for example that the Json module rejects the same malformed JSON as Unreal.
+
 ## Running the tests
 
 You need CMake 3.20+ and a C++20 compiler (GCC, Clang or MSVC). From the repository root:
@@ -42,7 +44,7 @@ The shim is not Unreal Engine. It only emulates what the GSDK uses, and it follo
 - A test fails if it records an error, if an unexpected error is logged while it runs, or if a message expected with `AddExpectedError`/`AddExpectedMessage` isn't logged the expected number of times. Expected messages are matched case-insensitively, and expected errors also match warnings.
 - Reflection markup (`UCLASS`, `UPROPERTY`, ...) is ignored, and UObject/Blueprint features aren't available.
 
-If a test passes here but fails in the editor, the editor is right: fix the shim. When the plugin starts using a new Unreal API, add it to the shim.
+If a test passes here but fails in the editor, the editor is right: fix the shim, and add a test for the fix to [`ShimTests/`](ShimTests). When the plugin starts using a new Unreal API, add it to the shim.
 
 ## Running the tests in Unreal Engine
 

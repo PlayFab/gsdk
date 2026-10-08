@@ -6,6 +6,8 @@
 #                         spec in UnrealPlugin/TestingProject/Source/SlateUGS/Private/Tests/GsdkTests.cpp unmodified.
 #   GSDKServerTests     - the dedicated server build (UE_SERVER), running end-to-end tests in ServerTests/ that drive
 #                         the real heartbeat thread against a fake agent.
+# A third executable, UEShimTests, runs ShimTests/: tests of the shim itself, checking that it behaves like Unreal where
+# the plugin's tests rely on it.
 
 cmake_minimum_required(VERSION 3.20)
 project(PlayFabGSDKUnrealTests LANGUAGES CXX)
@@ -65,6 +67,11 @@ add_gsdk_test_executable(GSDKServerTests
     SOURCES ServerTests/HeartbeatServerTests.cpp
     DEFINITIONS WITH_DEV_AUTOMATION_TESTS=0 WITH_EDITOR=0 UE_SERVER=1)
 
+add_executable(UEShimTests ShimTests/JsonTests.cpp Runner/TestMain.cpp)
+target_compile_options(UEShimTests PRIVATE ${UE_SHIM_COMPILE_OPTIONS})
+target_link_libraries(UEShimTests PRIVATE UEShim)
+
 add_test(NAME GSDKAutomationTests COMMAND GSDKAutomationTests)
 add_test(NAME GSDKServerTests COMMAND GSDKServerTests)
-set_tests_properties(GSDKAutomationTests GSDKServerTests PROPERTIES TIMEOUT 120)
+add_test(NAME UEShimTests COMMAND UEShimTests)
+set_tests_properties(GSDKAutomationTests GSDKServerTests UEShimTests PROPERTIES TIMEOUT 120)

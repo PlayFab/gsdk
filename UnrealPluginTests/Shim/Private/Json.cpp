@@ -3,7 +3,6 @@
 #include <cmath>
 #include <cstdio>
 #include <cwchar>
-#include <cwctype>
 #include <string>
 
 #include "ShimInternal.h"
@@ -449,6 +448,21 @@ namespace
 			return true;
 		}
 
+		static bool IsDigit(wchar_t Char) { return Char >= L'0' && Char <= L'9'; }
+
+		// Skips one or more digits. Returns false if there are none.
+		bool SkipDigits()
+		{
+			const std::size_t DigitsStart = Position;
+			while (IsDigit(Peek()))
+			{
+				++Position;
+			}
+			return Position > DigitsStart;
+		}
+
+		// Like Unreal's reader, accepts only numbers that follow the JSON grammar (RFC 8259):
+		// -?(0|[1-9][0-9]*)(\.[0-9]+)?([eE][+-]?[0-9]+)?. Malformed numbers such as 01, 1., .5, +1 and 1e fail the parse.
 		bool ParseNumber(TSharedPtr<FJsonValue>& OutValue)
 		{
 			const std::size_t Start = Position;
@@ -456,16 +470,25 @@ namespace
 			{
 				++Position;
 			}
-			const std::size_t DigitsStart = Position;
-			while (std::iswdigit(static_cast<std::wint_t>(Peek()))) { ++Position; }
-			if (Position == DigitsStart)
+			if (Peek() == L'0')
+			{
+				++Position;
+				if (IsDigit(Peek()))
+				{
+					return false;
+				}
+			}
+			else if (!SkipDigits())
 			{
 				return false;
 			}
 			if (Peek() == L'.')
 			{
 				++Position;
-				while (std::iswdigit(static_cast<std::wint_t>(Peek()))) { ++Position; }
+				if (!SkipDigits())
+				{
+					return false;
+				}
 			}
 			if (Peek() == L'e' || Peek() == L'E')
 			{
@@ -474,7 +497,10 @@ namespace
 				{
 					++Position;
 				}
-				while (std::iswdigit(static_cast<std::wint_t>(Peek()))) { ++Position; }
+				if (!SkipDigits())
+				{
+					return false;
+				}
 			}
 			const std::wstring Number = Text.substr(Start, Position - Start);
 			OutValue = MakeShared<FJsonValueNumber>(std::wcstod(Number.c_str(), nullptr));
