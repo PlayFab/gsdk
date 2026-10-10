@@ -11,7 +11,7 @@ struct FMaintenanceEvent
 {
 	GENERATED_BODY()
 public:
-	UPROPERTY(BlueprintReadWrite)
+	UPROPERTY(BlueprintReadWrite, Category = "PlayFab GSDK")
 	FString EventId;
 	FString EventType;
 	FString ResourceType;
@@ -28,7 +28,7 @@ struct FMaintenanceSchedule
 {
 	GENERATED_BODY()
 public:
-	UPROPERTY(BlueprintReadWrite)
+	UPROPERTY(BlueprintReadWrite, Category = "PlayFab GSDK")
 	FString DocumentIncarnation;
 	TArray<FMaintenanceEvent> Events;
 };

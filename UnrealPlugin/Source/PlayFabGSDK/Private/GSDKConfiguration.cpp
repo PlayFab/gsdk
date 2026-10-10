@@ -4,8 +4,12 @@
 
 #include "GSDKInternalUtils.h"
 #include "PlayFabGSDK.h"
+#include "Dom/JsonObject.h"
 #include "Logging/LogMacros.h"
 #include "Misc/FileHelper.h"
+#include "Misc/Paths.h"
+#include "Serialization/JsonReader.h"
+#include "Serialization/JsonSerializer.h"
 
 FConfigurationBase::FConfigurationBase()
 {
@@ -163,7 +167,7 @@ FJsonFileConfiguration::FJsonFileConfiguration(const FString& FileName)
 		TSharedPtr<FJsonObject> GameCertsJson = ConfigJson->GetObjectField(TEXT("gameCertificates"));
 		for (const auto& GameCert: GameCertsJson->Values)
 		{
-			GameCerts.Add(GameCert.Key, GameCert.Value->AsString());
+			GameCerts.Add(FString(GameCert.Key.ToView()), GameCert.Value->AsString());
 		}
 	}
 
@@ -172,7 +176,7 @@ FJsonFileConfiguration::FJsonFileConfiguration(const FString& FileName)
 		TSharedPtr<FJsonObject> BuildMetaData = ConfigJson->GetObjectField(TEXT("buildMetadata"));
 		for (const auto& BuildMetaDataValue: BuildMetaData->Values)
 		{
-			Metadata.Add(BuildMetaDataValue.Key, BuildMetaDataValue.Value->AsString());
+			Metadata.Add(FString(BuildMetaDataValue.Key.ToView()), BuildMetaDataValue.Value->AsString());
 		}
 	}
 
@@ -181,7 +185,7 @@ FJsonFileConfiguration::FJsonFileConfiguration(const FString& FileName)
 		TSharedPtr<FJsonObject> GamePortsJson = ConfigJson->GetObjectField(TEXT("gamePorts"));
 		for (const auto& GamePortCur: GamePortsJson->Values)
 		{
-			Ports.Add(GamePortCur.Key, GamePortCur.Value->AsString());
+			Ports.Add(FString(GamePortCur.Key.ToView()), GamePortCur.Value->AsString());
 		}
 	}
 

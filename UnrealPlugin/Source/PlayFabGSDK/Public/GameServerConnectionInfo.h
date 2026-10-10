@@ -15,7 +15,7 @@ public:
 	/// <summary>
 	/// The friendly name / identifier for the port, specified by the game developer in the Build configuration.
 	/// </summary>
-	UPROPERTY(BlueprintReadOnly)
+	UPROPERTY(BlueprintReadOnly, Category = "PlayFab GSDK")
 	FString Name;
 
 	/// <summary>
@@ -23,13 +23,13 @@ public:
 	/// For process based servers, this is determined by Control Plane, based on the ports available on the VM.
 	/// For containers, this is specified by the game developer in the Build configuration.
 	/// </summary>
-	UPROPERTY(BlueprintReadOnly)
+	UPROPERTY(BlueprintReadOnly, Category = "PlayFab GSDK")
 	int32 ServerListeningPort = 0;
 
 	/// <summary>
 	/// The public port to which clients should connect (maps internally to <see cref="m_serverListeningPort" />).
 	/// </summary>
-	UPROPERTY(BlueprintReadOnly)
+	UPROPERTY(BlueprintReadOnly, Category = "PlayFab GSDK")
 	int32 ClientConnectionPort = 0;
 };
 
@@ -38,9 +38,9 @@ struct FGameServerConnectionInfo
 {
 	GENERATED_BODY()
 public:
-	UPROPERTY(BlueprintReadOnly)
+	UPROPERTY(BlueprintReadOnly, Category = "PlayFab GSDK")
 	FString PublicIpV4Address;
 
-	UPROPERTY(BlueprintReadOnly)
+	UPROPERTY(BlueprintReadOnly, Category = "PlayFab GSDK")
 	TArray<FGamePort> GamePortsConfiguration;
 };
